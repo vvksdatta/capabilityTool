@@ -2,7 +2,6 @@ package se.bth.didd.wiptool;
 
 import java.io.UnsupportedEncodingException;
 import java.security.Principal;
-
 import org.glassfish.hk2.utilities.binding.AbstractBinder;
 import org.glassfish.jersey.server.filter.RolesAllowedDynamicFeature;
 import org.jose4j.jwt.consumer.JwtContext;
@@ -12,10 +11,8 @@ import com.bazaarvoice.dropwizard.assets.ConfiguredAssetsBundle;
 import com.github.rkmk.mapper.CustomMapperFactory;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
-
 import se.bth.didd.wiptool.api.Login;
 import se.bth.didd.wiptool.auth.AuthFilterUtils;
-import se.bth.didd.wiptool.auth.Secrets;
 import se.bth.didd.wiptool.auth.jwt.User;
 import se.bth.didd.wiptool.resources.CapabilityResource;
 import se.bth.didd.wiptool.resources.IssueResource;
