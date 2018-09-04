@@ -1,0 +1,166 @@
+<style>
+.md-button.md-default-theme.md-primary.md-cancel-button {
+  background: whitesmoke;
+  color: rgb(63,81,181);
+}
+.md-button.md-default-theme.md-primary.md-confirm-button {
+  background: whitesmoke;
+  color: rgb(63,81,181);
+}
+.md-button.md-icon-button {
+  margin: -4px 2px;
+}
+.md-button.md-icon-button {
+  margin: -4px 2px;
+}
+.md-icon-button + .md-datepicker-input-container {
+  margin-left: 0px;
+}
+._md-datepicker-has-triangle-icon {
+  padding-right: 0px;
+  margin-right: 0px;
+}
+.md-datepicker-input {
+  min-width: 80px;
+  color: #555;
+}
+md-autocomplete {
+  height: 35px;
+}
+.md-button.md-default-theme.md-primary.md-fab, .md-button.md-primary.md-fab, .md-button.md-default-theme.md-primary, .md-button.md-default-theme.md-primary.md-raised, .md-button.md-primary, .md-button.md-primary.md-raised {
+  color: rgba(255,255,255,0.87);
+  background-color: rgb(90, 132, 187);
+}
+.md-button.md-default-theme.md-primary.md-fab:not([disabled]).md-focused, .md-button.md-primary.md-fab:not([disabled]).md-focused,.md-button.md-default-theme.md-primary.md-fab:not([disabled]):hover, .md-button.md-primary.md-fab:not([disabled]):hover,.md-button.md-default-theme.md-primary.md-raised:not([disabled]).md-focused, .md-button.md-primary.md-raised:not([disabled]).md-focused,.md-button.md-default-theme.md-primary.md-raised:not([disabled]):hover, .md-button.md-primary.md-raised:not([disabled]):hover {
+  background-color: rgb(90, 132, 187);
+}
+.md-toolbar-tools {
+  min-width: 600px;
+}
+svg:not(:root) {
+  height: 15px;
+}
+</style>
+<script>
+$(".nav-tabs li").eq(0).addClass("active");
+$(".nav-tabs li").eq(1).removeClass("active").addClass("disabledTab");
+$(".nav-tabs li").eq(2).removeClass("active").addClass("disabledTab");
+$(".nav-tabs li").eq(3).removeClass("active").addClass("disabledTab");
+</script>
+<md-content style="overflow: unset;" >
+  <md-whiteframe class="md-whiteframe-18dp"  layout layout-align="center center">
+    <div class="container" id="extras" >
+      <div class="row top-buffer-addProject">
+        <div class="col-xs-7 ">
+          <div class="control-group" >
+            <form class="form-horizontal" name="form" ng-submit="form.$valid && createSprint(sprint) "  novalidate>
+              <fieldset>
+                <!-- Form Name -->
+                <!-- Text input-->
+                <div class="form-group" ng-class="{ 'has-error': form.$submitted && form.sprintName.$invalid }">
+                  <label class="col-sm-3 control-label" for="sprintName">Sprint Name</label>
+                  <div class="col-sm-8">
+                    <input type="text" placeholder="Name of the sprint" id="sprintName" name="sprintName" class="form-control" ng-model="sprint.sprintName" required>
+                    <div ng-messages="form.$submitted && form.sprintName.$error" class="help-block">
+                      <div ng-message="required">Sprint name is required</div>
+                    </div>
+                  </div>
+                </div>
+                <!-- Text input-->
+                <div class="form-group">
+                  <label class="col-sm-3 control-label" for="textinput">Description</label>
+                  <div class="col-sm-8">
+                    <textarea rows="3" cols="50" class="form-control-textarea"  id="sprintDescription" name="sprintDescription" placeholder="Description of the sprint"  ng-model="sprint.sprintDescription" > </textarea>
+                  </div>
+                </div>
+                <div class="form-group col-sm-10"  style="background-color: transparent;padding-left: 0px;" ng-class="{ 'has-error': form.$submitted &&  form.sprintEndDate.$invalid }">
+                  <div  class="col-sm-6 control-label"><label   form-control>Start date</label>
+                    <md-datepicker type="date" id="sprintStartDate"    name="sprintStartDate" class="form-control"   style="padding: 0px 0px;" ng-model="sprint.sprintStartDate" md-placeholder="Start date" md-min-date="minDate" md-max-date="maxDate" md-date-filter="onlyWeekdaysPredicate" required ></md-datepicker>
+                  </div>
+                  <div  class="col-sm-6 control-label"><label   form-control>End date</label>
+                    <md-datepicker    ng-hide="sprint.sprintStartDate"  id="sprintEndDate" name="sprintEndDate" class="form-control"   style="padding: 0px 0px;" ng-model="sprint.sprintEndDate" md-placeholder="End date" disabled ></md-datepicker><md-tooltip ng-hide="sprint.sprintStartDate"md-direction="right"> Select the sprint start date first</md-tooltip>
+                    <md-datepicker type="date" id="sprintEndDate" ng-show="sprint.sprintStartDate"  name="sprintEndDate" class="form-control"   style="padding: 0px 0px;" ng-model="sprint.sprintEndDate" md-placeholder="End date" md-min-date="sprint.sprintStartDate" md-date-filter="onlyWeekdaysPredicate" required ></md-datepicker>
+                  </div>
+                  <div ng-messages="form.$submitted && form.sprintEndDate.$error" class="help-block">
+                    <div style="margin-left: 15px;" ng-message="required">Both the dates are required</div>
+                  </div>
+                  <div ng-messages="form.submitted && form.sprintEndDate.$invalid" class="help-block">
+                    <div style="margin-left: 15px;" ng-message="required">End date can't be before start date</div>
+                  </div>
+                </div>
+                <div class="form-group" ng-class="{ 'has-error': form.$submitted && form.projectId.$invalid }">
+                  <label class="col-sm-3 control-label" for="projectId">Associated project</label>
+                  <div class="col-sm-10" style="padding-left: 0px;">
+                    <div class="col-sm-8">
+                      <select  style="font-size: 17px;min-width: 80px;" id="projectId" name="projectId" class="form-control"  ng-model="sprint.projectId" required>
+                        <option style="font-size: 17px;" value="" disabled selected>Select a project</option>
+                        <option  style="font-size: 17px; " ng-repeat="project in projectsList"   value= {{project.projectId}}> {{project.projectName |capitalize}}</option>
+                      </select>
+                    </div>
+                    <div class="col-sm-8">
+                      <div ng-messages="form.$submitted && form.projectId.$error" class="help-block">
+                        <div ng-message="required">Project selection is required</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="form-group" ng-class="{ 'has-error': form.$submitted && form.sprintEstimatedEffort.$invalid }">
+                  <label class="col-sm-3 control-label" for="textinput">Sprints's estimated effort</label>
+                  <div class="col-sm-10" style="padding-left: 0px;">
+                    <div class="col-sm-8">
+                      <input type="number" min="0" class="form-control" id="sprintEstimatedEffort" name="sprintEstimatedEffort" placeholder="Person-hours"  ng-model="sprint.sprintEstimatedEffort" required>
+                      <div ng-messages="form.$submitted && form.sprintEstimatedEffort.$error" class="help-block">
+                        <div ng-message="required">Estimated effort is required</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="form-group" ng-class="{ 'has-error': form.$submitted && form.selectedDomains.$invalid }">
+                  <label class="col-sm-3 control-label" for="selectedDomains">Associated domain(s)</label>
+                  <div class="col-sm-5">
+                    <div ng-repeat="(key, val) in domainsList">
+                      <md-checkbox type="checkbox" name="selectedDomains" style="margin-bottom: 8px;" class="md-primary" ng-model="formData.selectedDomains[val.domainName]"
+                      ng-required="!someSelected(formData.selectedDomains)">  {{val.domainName}} </md-checkbox>
+                    </div>
+                    <div ng-repeat="(key, val) in extraDomainsList" >
+                      <md-checkbox type="checkbox" name="selectedDomains" style="margin-bottom: 8px;" class="md-primary" ng-model="formData.selectedDomains[val.domainName]"  ng-required="!someSelected(formData.selectedDomains)">  {{val.domainName}} </md-checkbox>
+                    </div>
+                  </div>
+                  <div class="col-sm-5" >
+                    <md-button  ng-click="openDialog($event)" class="add-tab  md-primary md-raised pull-center">Add new domain</md-button>
+                  </div>
+                  <div ng-messages="form.$submitted && form.selectedDomains.$error" class="help-block col-sm-10">
+                    <div ng-message="required">Select atleast one domain</div>
+                  </div>
+                </div>
+                <div class="form-group" ng-class="{ 'has-error': form.$submitted && form.selectedAssets.$invalid }">
+                  <label class="col-sm-3 control-label" for="AssetsInvolved">Assets involved</label>
+                  <div class="col-sm-5">
+                    <div ng-repeat="(key, val) in assetsList">
+                      <md-checkbox type="checkbox" name="selectedAssets" style="margin-bottom: 8px;" class="md-primary" ng-model="formData2.selectedAssets[val.assetName]"ng-required="!someSelected(formData2.selectedAssets)">  {{val.assetName}} </md-checkbox>
+                    </div>
+                    <div ng-repeat="(key, val) in extraAssetsList">
+                      <md-checkbox type="checkbox" name="selectedAssets" style="margin-bottom: 8px;" class="md-primary" ng-model="formData2.selectedAssets[val.assetName]"ng-required="!someSelected(formData2.selectedAssets)">  {{val.assetName}} </md-checkbox>
+                    </div>
+                  </div>
+                  <div class="col-sm-5" >
+                    <md-button  ng-click="openDialog2($event)" class="add-tab  md-primary md-raised pull-center">Add new asset</md-button>
+                  </div>
+                  <div ng-messages="form.$submitted && form.selectedAssets.$error" class="help-block col-sm-10">
+                    <div ng-message="required">Select atleast one asset type</div>
+                  </div>
+                </div>
+                <div >
+                  <div class="pull-right" style="margin-top: 5px;">
+                    <md-button type="submit" style="font-size: 15px; background-color: rgb(90, 132, 187);" class="add-tab md-primary md-raised">Next </md-button>
+                    <md-button class="md-raised" style="font-size: 15px; "  type="reset" ng-click="form.$setPristine();formData.selectedDomains=[];formData2.selectedAssets =[];">Clear </md-button>
+                  </div>
+                </div>
+              </fieldset>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </md-whiteframe>
+</md-content>

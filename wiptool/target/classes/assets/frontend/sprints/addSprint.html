@@ -1,0 +1,21 @@
+<style>
+.disabledTab {
+  background-color: #eee;
+  cursor: no-drop;
+  pointer-events: none;
+}
+.md-headline {
+  font-size: 20px;
+}
+</style>
+<script>
+</script>
+<div ng-controller="sprintRequirementsCtrl">
+  <ul class="nav nav-tabs" style="margin-bottom: 10px;">
+    <li ng-class="getTabClass(1)" ng-click="setActiveTab(1)" ui-sref="management.sprints.addSprint.newSprint" ui-sref-opts="{reload: true}"><a  data-toggle="tab" >Sprint details</a></li>
+    <li ng-class="getTabClass(2)" ng-click="setActiveTab(2)"  ui-sref="management.sprints.addSprint.companyFactors({sprintId: sprintId, projectId: projectId })" ui-sref-opts="{reload: true}" ><a data-toggle="tab" >Company driven factors</a></li>
+    <li ng-class="getTabClass(3)" ng-click="setActiveTab(3)" ui-sref="management.sprints.addSprint.sprintRequirements({sprintId: sprintId, projectId: projectId})" ui-sref-opts="{reload: true}" ><a  data-toggle="tab" >Sprint requirements</a></li>
+    <li ng-class="getTabClass(4)" ng-click="setActiveTab(4)" ui-sref="management.sprints.addSprint.sprintRoles({sprintId: sprintId, projectId: projectId})" ui-sref-opts="{reload: true}" ><a  data-toggle="tab" >Sprint roles</a></li>
+  </ul>
+</div>
+<div ui-view> </div>

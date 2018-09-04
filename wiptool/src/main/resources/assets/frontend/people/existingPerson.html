@@ -1,0 +1,71 @@
+<script>
+$(".nav-tabs li").eq(0).addClass("active");
+$(".nav-tabs li").eq(1).removeClass("active");
+$(".nav-tabs li").eq(2).removeClass("active");
+</script>
+<md-content style="overflow: unset;" >
+	<md-whiteframe class="md-whiteframe-18dp"  layout layout-align="center center">
+		<div class="container" >
+			<div class="row top-buffer-addProject">
+				<div class="col-xs-10" >
+					<form class="form-horizontal" ng-init="readOnly = true" name="form" ng-submit="form.$valid && addPerson(person, readOnly)"  novalidate>
+						<fieldset>
+							<div class="control-group">
+								<div class="col-xs-2 col-md-3 col-md-push-3 pull-right"><md-button ng-click="readOnly=false" style="font-size: 15px; background-color: rgb(90, 132, 187);" class="add-tab md-primary md-raised">Edit </md-button>
+								</div>
+								<!-- Text input-->
+								<div class="form-group" ng-class="{'has-error': form.$submitted && form.firstName.$invalid }">
+									<label class="col-sm-3 control-label" for="textinput">First name</label>
+									<div class="col-sm-5">
+										<input type="text" id="firstName" name="firstName"  placeholder="First name" class="form-control" ng-readonly="readOnly" ng-model="person.firstName" required>
+										<div ng-messages="form.$submitted && form.firstName.$error" class="help-block">
+											<div ng-message="required">First name is required</div>
+										</div>
+									</div>
+								</div>
+								<div class="form-group" ng-class="{ 'has-error': form.$submitted && form.lastName.$invalid }">
+									<label class="col-sm-3 control-label" for="textinput">Last name</label>
+									<div class="col-sm-5">
+										<input type="text" id="lastName" name="lastName"  placeholder="Last name" class="form-control" ng-readonly="readOnly" ng-model="person.lastName" required>
+										<div ng-messages="form.$submitted && form.lastName.$error" class="help-block">
+											<div ng-message="required">Last name is required</div>
+										</div>
+									</div>
+								</div>
+								<div class="form-group" ng-class="{ 'has-error': form.$submitted && form.emailID.$invalid }">
+									<label class="col-sm-3 control-label" for="textinput">Email ID</label>
+									<div class="col-sm-5">
+										<input type="text" id="emailID" name="emailID"  placeholder="Email ID" class="form-control" ng-readonly="readOnly" ng-model="person.emailID" required>
+										<div ng-messages="form.$submitted && form.emailID.$error" class="help-block">
+											<div ng-message="required">Email ID is required</div>
+										</div>
+									</div>
+								</div>
+								<!-- Text input-->
+								<div class="form-group" ng-class="{ 'has-error': form.$submitted && form.selectedRoles.$invalid }">
+									<label class="col-sm-3 control-label" for="textinput">Role(s)</label>
+									<div  class="col-sm-8">
+										<div  ng-repeat="(key, val) in rolesList">
+											<md-checkbox type="checkbox" name="selectedRoles" style="margin-bottom: 8px;" class="md-primary" ng-disabled="readOnly" ng-model="formData.selectedRoles[val.roleName]" ng-required="!someSelected(formData.selectedRoles)">  {{val.roleName}} </md-checkbox>
+										</div>
+										<div ng-messages="form.$submitted && form.selectedRoles.$error" class="help-block">
+											<div ng-message="required">Select atleast one role</div>
+										</div>
+									</div>
+								</div>
+								<div class="form-group">
+									<div class="col-xs-6 col-md-2 col-md-push-3">
+										<div class="pull-right">
+											<md-button type="submit" style="font-size: 15px; background-color: rgb(90, 132, 187);"  class="add-tab md-primary md-raised">Next </md-button>
+											<md-button class="md-raised" style="font-size: 15px; "  type="reset" ng-click="form.$setPristine();selection=[];formData.selectedRoles=[];">Cancel  </md-button>
+										</div>
+									</div>
+								</div>
+							</div>
+						</fieldset>
+					</form>
+				</div>
+			</div>
+		</div>
+	</md-whiteframe>
+</md-content>

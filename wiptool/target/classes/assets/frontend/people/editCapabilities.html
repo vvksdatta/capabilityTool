@@ -1,0 +1,91 @@
+<script>
+$(".nav-tabs li").eq(1).addClass("active");
+$(".nav-tabs li").eq(0).removeClass("active");
+$(".nav-tabs li").eq(2).removeClass("active");
+</script>
+<style>
+</style>
+<md-content style="overflow: unset;" >
+  <md-whiteframe class="md-whiteframe-18dp"  layout layout-align="center center">
+    <div class="container">
+      <form class="form-horizontal"  name="form"  >
+        <fieldset>
+          <div class="control-group">
+            <div class="form-group">
+              <label class="col-sm-2 control-label" style="padding-top: 20px;" for="textinput">Commitment</label>
+              <div class="col-sm-10" >
+                <article >
+                  <rzslider  rz-slider-model="slider1.value"  rz-slider-options="slider1.options"></rzslider>
+                </article>
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="col-sm-2 control-label" style="padding-top: 20px;" for="textinput">Domain knowledge</label>
+              <div class="col-sm-10">
+                <article>
+                  <rzslider  rz-slider-model="slider2.value"  rz-slider-options="slider2.options"></rzslider>
+                </article>
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="col-sm-2 control-label" style="padding-top: 10px;" for="textinput">Person's own interest</label>
+              <div class="col-sm-10">
+                <article>
+                  <rzslider  rz-slider-model="slider3.value"  rz-slider-options="slider3.options"></rzslider>
+                </article>
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="col-sm-2 control-label"  style="padding-top: 10px;" for="textinput">Previous deliverables' quality</label>
+              <div class="col-sm-10">
+                <article>
+                  <rzslider  rz-slider-model="slider4.value"  rz-slider-options="slider4.options"></rzslider>
+                </article>
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="col-sm-2 control-label" style="padding-top: 10px;" for="textinput">Previous projects performance</label>
+              <div class="col-sm-10">
+                <article>
+                  <rzslider  rz-slider-model="slider5.value"  rz-slider-options="slider5.options"></rzslider>
+                </article>
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="col-sm-2 control-label" style="padding-top: 10px;" for="textinput">Programming experience</label>
+              <div class="col-sm-10">
+                <article>
+                  <rzslider  rz-slider-model="slider6.value"  rz-slider-options="slider6.options"></rzslider>
+                </article>
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="col-sm-2 control-label" style="padding-top: 10px;" for="textinput">Programming language knowledge</label>
+              <div class="col-sm-10">
+                <article>
+                  <rzslider  rz-slider-model="slider7.value"  rz-slider-options="slider7.options"></rzslider>
+                </article>
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="col-sm-2 control-label" style="padding-top: 10px;" for="textinput">Understanding software security</label>
+              <div class="col-sm-10">
+                <article>
+                  <rzslider  rz-slider-model="slider8.value"  rz-slider-options="slider8.options"></rzslider>
+                </article>
+              </div>
+            </div>
+            <div class="form-group" style="padding-bottom: 20px;">
+              <div class="col-xs-6 col-md-3 col-md-push-4">
+                <div class="pull-center">
+                  <md-button class="add-tab md-primary md-raised" style="font-size: 15px; background-color: rgb(90, 132, 187);"  type="submit" ng-click="updateCapabilities()">Next</md-button>
+                  <md-button type="reset"  type="reset" style="font-size: 15px; "   ng-click="clearCapabilities()">Cancel </md-button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </fieldset>
+      </form>
+    </div>
+  </md-whiteframe>
+</md-content>

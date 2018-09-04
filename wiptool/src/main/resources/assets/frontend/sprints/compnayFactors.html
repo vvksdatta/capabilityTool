@@ -1,0 +1,116 @@
+<script>
+$(".nav-tabs li").eq(1).addClass("active");
+$(".nav-tabs li").eq(0).removeClass("active");
+$(".nav-tabs li").eq(2).removeClass("active").addClass("disabledTab");
+$(".nav-tabs li").eq(3).removeClass("active").addClass("disabledTab");
+</script>
+<style>
+.md-button.md-default-theme.md-primary.md-cancel-button {
+  background: whitesmoke;
+  color: rgb(63,81,181);
+}
+.md-button.md-default-theme.md-primary.md-confirm-button {
+  background: whitesmoke;
+  color: rgb(63,81,181);
+}
+.md-button.md-icon-button {
+  margin: -4px 2px;
+}
+.md-button.md-icon-button {
+  margin: -4px 2px;
+}
+.md-icon-button + .md-datepicker-input-container {
+  margin-left: 0px;
+}
+md-autocomplete {
+  height: 35px;
+}
+.md-button.md-default-theme.md-primary.md-fab, .md-button.md-primary.md-fab, .md-button.md-default-theme.md-primary, .md-button.md-default-theme.md-primary.md-raised, .md-button.md-primary, .md-button.md-primary.md-raised {
+  color: rgba(255,255,255,0.87);
+  background-color: rgb(90, 132, 187);
+}
+.md-button.md-default-theme.md-primary.md-fab:not([disabled]).md-focused, .md-button.md-primary.md-fab:not([disabled]).md-focused,.md-button.md-default-theme.md-primary.md-fab:not([disabled]):hover, .md-button.md-primary.md-fab:not([disabled]):hover,.md-button.md-default-theme.md-primary.md-raised:not([disabled]).md-focused, .md-button.md-primary.md-raised:not([disabled]).md-focused,.md-button.md-default-theme.md-primary.md-raised:not([disabled]):hover, .md-button.md-primary.md-raised:not([disabled]):hover {
+  background-color: rgb(90, 132, 187);
+}
+.md-toolbar-tools {
+  min-width: 600px;
+}
+svg:not(:root) {
+  height: 15px;
+}
+</style>
+<md-content style="overflow: unset;" >
+  <md-whiteframe class="md-whiteframe-18dp"  layout layout-align="center center">
+    <div class="container" id="extraEnvironments">
+      <form class="form-horizontal"  name="form"  ng-submit="form.$valid && addComapnyDrivenFactors()"  >
+        <fieldset>
+          <div class="control-group">
+            <div class="form-group col-sm-12" ng-class="{ 'has-error': form.$submitted && form.selectedEnvironments.$invalid }">
+              <div style="margin-top: 30px;text-align: center; width:40%" class="col-sm-6 col-md-offset-2 pull-center">
+                <div class="panel panel-default-table panel-table" style="margin-bottom: 0px;" >
+                  <div class="panel-heading">
+                    <h3 class="panel-title control-label"><strong>Develpment Environment </strong></h3>
+                    <input type="text" style="margin-top: 10px;" class="form-control" id="dev-table-filter" data-action="filter"
+                    data-filters="#dev-table" placeholder="Filter development environment"/>
+                    <div class="pull-right">
+                      <span class="clickable filter" data-toggle="tooltip" title="Toggle table filter"
+                      data-container="body"></span>
+                    </div>
+                  </div>
+                  <div class="panel-body" style="overflow-y: auto; max-height: 22vh;">
+                    <table class="table table-hover" id="dev-table">
+                      <tbody>
+                        <tr ng-repeat="(key, val) in developmentEnvironmentsList">
+                          <td>
+                            <md-checkbox type="checkbox" name="selectedEnvironments" style="margin-bottom: 8px;" class="md-primary" ng-model="formData.selectedEnvironments[val.envName]"
+                            ng-required="!someSelected(formData.selectedEnvironments) ">    {{val.envName}} </md-checkbox>
+                          </td>
+                        </tr>
+                        <tr ng-repeat="(key, val) in extraEnvironmentsList">
+                          <td>
+                            <md-checkbox type="checkbox" name="selectedEnvironments" style="margin-bottom: 8px;" class="md-primary" ng-model="formData.selectedEnvironments[val.envName]" ng-required="!someSelected(formData.selectedEnvironments)">    {{val.envName}} </md-checkbox>
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+              <div style="margin-top: 30px;" class="col-sm-2  pull-center">
+                <md-button  ng-click="openDialog($event)" class="add-tab  md-primary md-raised pull-center">Add new environment</md-button>
+              </div>
+              <div ng-messages="form.$submitted && form.selectedEnvironments.$error" class="help-block col-sm-6 col-md-offset-2 pull-center">
+                <div ng-message="required">Select atleast one domain</div>
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="col-sm-2 control-label" style="padding-top: 20px;" for="textinput">Expected coaching potential</label>
+              <div class="col-sm-10" >
+                <article >
+                  <rzslider  rz-slider-model="slider1"  rz-slider-options="companyFactorsSlider.options"></rzslider>
+                </article>
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="col-sm-2 control-label" style="padding-top: 20px;" for="textinput">Expected team knowledge diversity</label>
+              <div class="col-sm-10">
+                <article>
+                  <rzslider  rz-slider-model="slider2"  rz-slider-options="companyFactorsSlider.options"></rzslider>
+                </article>
+              </div>
+            </div>
+            <div class="form-group" style="margin-top: 5px;">
+              <div class="col-xs-6 col-md-3 col-md-push-4">
+                <div class="pull-center">
+                  <md-button type="submit" style="font-size: 15px; background-color: rgb(90, 132, 187);"  class="add-tab md-primary md-raised">Next </md-button>
+                  <md-button class="md-raised" style="font-size: 15px;"  type="reset" ng-click="form.$setPristine();formData.selectedEnvironments =[]; slider1 ='Undefined'; slider2 ='Undefined';">Clear </md-button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </fieldset>
+      </form>
+    </div>
+  </md-whiteframe>
+</md-content>
+<script src="js/searchText.js"> </script>
