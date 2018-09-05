@@ -10,14 +10,14 @@ This application is specially designed to comply with open-source project manage
 
 This Web application is powered by a RESTful API on the backend, developed using Java. On the other hand, the client-side interface of the application(front-end) is developed using AngularJS and HTML. The backend API is further designed to interact with 
 
-* The API of project management tool- [Redmine](http://www.redmine.org/). 
+* RESTful API of project management tool - [Redmine](http://www.redmine.org/). 
 * [PostgreSQL](https://www.postgresql.org/) database to store capability information and project related details from Redmine.
 
 The following figure presents an overview of the architecture of the tool.
 
 <img src="https://github.com/vvksdatta/capabilityTool/blob/master/src/main/resources/assets/frontend/photos/BlockDiagram.png" data-canonical-src="https://github.com/vvksdatta/capabilityTool/blob/master/src/main/resources/assets/frontend/photos/BlockDiagram.png" width="550" height="500"/>
 
-Diving into the details of architecture
+Diving into the details of the architecture
 ---
 **Dropwizard based RESTful API**
 
