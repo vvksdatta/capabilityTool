@@ -19,16 +19,24 @@ The following figure presents an overview of the architecture of the tool.
 
 Diving into the details of the architecture
 ---
+**RESTful API of Redmine**
+
+The right most block in the above listed diagram represents the RESTful API of Redmine. With the help of an administrator's API access-key, it would be possible to communicate with Redmine using REST calls, for fetching and manipulating information of projects, people, issues and other entitities. Thus, the URL of Redmine server and API access-key of administartor are used by another block (**dropwizard based RESTful API**) to communicate with Redmine. These details are refereed from the [configuration file] (https://github.com/vvksdatta/capabilityTool/blob/master/config.yml).  
+
+**PostgreSQL database**
+
+A PostgreSQl database is integrated to the Web application to maintain a copy of information related to various entities on Redmine. This information is necessary in order to further establish relationships between entities like people and different apsects like programming skills, capabilities, etc.  
+
 **Dropwizard based RESTful API**
 
-The central block in the above listed diagram is a key elememt that acts a bridge between [Redmine](http://www.redmine.org/) and [PostgreSQL](https://www.postgresql.org/) database. It is developed using [Dropwizard](https://www.dropwizard.io/1.2.0/docs/) framework, that implements all the functionalities needed for running a Web appliation. Dropwizard bundles multiple libraries together such as: 
+The central block in the above listed diagram is a key elememt that acts as a bridge between [Redmine](http://www.redmine.org/) and [PostgreSQL](https://www.postgresql.org/) database. This block communicates with the RESTful API of Redmine in order to fetch and store information of various entities to the database. The block is developed using [Dropwizard](https://www.dropwizard.io/1.2.0/docs/) framework, that implements all the functionalities needed for running a Web appliation. Dropwizard bundles multiple libraries together such as: 
 
 * [Jetty](http://www.eclipse.org/jetty/) for HTTP services.
 * [Jersey](http://jersey.java.net/) for RESTful web application.
 * [Jackson](https://github.com/FasterXML/jackson) for parsing and generating JSON.
 * [JDBI](http://www.jdbi.org) for database interactions.
-
-With the help of Jersey and Jackson services, the dropwizard project herein hosts multiple resources like projects, sprints, issues, etc. and contains multiple REST end points to serve and manipulate information related to these resources, using HTTP methods (GET, PUT, POSt and DELETE). 
+ 
+With the help of Jersey and Jackson services, the dropwizard project herein hosts multiple resources like projects, sprints, issues, etc. and contains multiple REST end points to serve and manipulate information related to these resources, using HTTP methods (GET, PUT, POST and DELETE). 
 
 Further, the main method of dropwizard project spins up an HTTP server using [Jetty](http://www.eclipse.org/jetty/). This server hosts all the Web pages and other static files associated with the client-side interface of the application(front-end).  
 
