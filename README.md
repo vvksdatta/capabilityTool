@@ -1,14 +1,18 @@
 # wiptool
 
-*A capability-centric Web tool to assist project managers in assembling teams.*
+*A capability-centric Web application to assist project managers in assembling teams.*
 
 Overview
 ---
-This Web application is powered by a RESTful API on the backend. The API is developed using Java whereas, the client-side interface of the application(front-end) is developed using AngularJS and HTML. The backend API is further designed to interact with PostgreSQL database and API of project management tool- Redmine. The following figure presents an overview of the architecture of the tool.
+This Web application enables the integartion of capability assessments with regular project management routines. Such integration gives flexibility to managers for creating projects and keeping track of capabilities, sprint requirements and allocation routines, all from one tool while rest of the team members interact with regular project management platform and devote their complete focus towards accomplishing sprint goals.
+
+This application is specially designed to comply with open-source project management tool [PostgreSQL](https://www.postgresql.org/).  
+
+This Web application is powered by a RESTful API on the backend, developed using Java. On the other hand, the client-side interface of the application(front-end) is developed using AngularJS and HTML. The backend API is further designed to interact with [PostgreSQL](https://www.postgresql.org/) database and API of project management tool- [PostgreSQL](https://www.postgresql.org/). The following figure presents an overview of the architecture of the tool.
 
 <img src="https://github.com/vvksdatta/capabilityTool/blob/master/src/main/resources/assets/frontend/photos/BlockDiagram.png" data-canonical-src="https://github.com/vvksdatta/capabilityTool/blob/master/src/main/resources/assets/frontend/photos/BlockDiagram.png" width="550" height="500"/>
 
-Diving into the details of backend
+Diving into the details of architecture
 ---
 **Dropwizard based RESTful API**
 
@@ -19,6 +23,7 @@ The central block presented in the above listed diagram is a key elememt that ac
 * [Jackson](https://github.com/FasterXML/jackson) for parsing and generating JSON.
 * [JDBI](http://www.jdbi.org) for database interactions.
 
+The main method of dropwizard project spins up an HTTP server using [Jetty](http://www.eclipse.org/jetty/).
 How to start the wiptool application
 ---
 
