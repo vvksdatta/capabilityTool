@@ -25,7 +25,7 @@ The right most block in the above listed diagram represents the RESTful API of R
 
 **PostgreSQL database**
 
-A PostgreSQl database is integrated to the Web application to maintain a copy of information related to various entities on Redmine. This information is necessary in order to further establish relationships between entities like people and different apsects like programming skills, capabilities, etc.  
+A PostgreSQl database is integrated to the Web application to maintain a local copy of information related to various entities on Redmine. This information is necessary in order to further establish relationships between entities like people and different apsects like programming skills, capabilities, etc.  
 
 **Dropwizard based RESTful API**
 
@@ -39,6 +39,9 @@ The central block in the above listed diagram is a key elememt that acts as a br
 With the help of Jersey and Jackson services, the dropwizard project herein hosts multiple resources like projects, sprints, issues, etc. and contains multiple REST end points to serve and manipulate information related to these resources, using HTTP methods (GET, PUT, POST and DELETE). 
 
 Further, the main method of dropwizard project spins up an HTTP server using [Jetty](http://www.eclipse.org/jetty/). This server hosts all the Web pages and other static files associated with the client-side interface of the application(front-end).  
+
+**Users**
+
 
 How to start the wiptool application
 ---
