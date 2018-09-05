@@ -15,7 +15,9 @@ This Web application is powered by a RESTful API on the backend, developed using
 
 The following figure presents an overview of the architecture of the tool.
 
-<img src="https://github.com/vvksdatta/capabilityTool/blob/master/src/main/resources/assets/frontend/photos/BlockDiagram.png" data-canonical-src="https://github.com/vvksdatta/capabilityTool/blob/master/src/main/resources/assets/frontend/photos/BlockDiagram.png" width="550" height="500"/>
+| <img src="https://github.com/vvksdatta/capabilityTool/blob/master/src/main/resources/assets/frontend/photos/BlockDiagram.png" data-canonical-src="https://github.com/vvksdatta/capabilityTool/blob/master/src/main/resources/assets/frontend/photos/BlockDiagram.png" width="550" height="500"/> |
+|:--:| 
+| *Block diagram of Web application* |
 
 Diving into the details of the architecture
 ---
