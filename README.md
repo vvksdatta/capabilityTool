@@ -1,12 +1,15 @@
 # wiptool
 
-*A capability-centric Web tool that can assist project managers in assembling teams.*
+*A capability-centric Web tool to assist project managers in assembling teams.*
 
 Overview
 ---
-This Web application is powered by a RESTful API on the backend. The API is developed using Java whereas, the client-side interface of the application(front-end) is developed using AngularJS and HTML. The backend API is further designed to interact with PostgreSQL database and the API of project management tool- Redmine.
+This Web application is powered by a RESTful API on the backend. The API is developed using Java whereas, the client-side interface of the application(front-end) is developed using AngularJS and HTML. The backend API is further designed to interact with PostgreSQL database and the API of project management tool- Redmine. The following figure presents an overview of the architecture of the tool.
 
 ![alt text](https://github.com/vvksdatta/capabilityTool/blob/master/src/main/resources/assets/frontend/photos/BlockDiagram.png)
+
+Diving into the details
+---
 
 The backend It's a little bit of opinionated glue code which bangs together a set of libraries which have
 historically not sucked:
