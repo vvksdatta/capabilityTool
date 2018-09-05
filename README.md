@@ -28,7 +28,9 @@ The central block in the above listed diagram is a key elememt that acts a bridg
 * [Jackson](https://github.com/FasterXML/jackson) for parsing and generating JSON.
 * [JDBI](http://www.jdbi.org) for database interactions.
 
-The main method of dropwizard project spins up an HTTP server using [Jetty](http://www.eclipse.org/jetty/).
+With the help of Jersey and Jackson services, the dropwizard project herein hosts multiple resources like projects, sprints, issues, etc. and contains multiple REST end points to serve and manipulate information related to these resources, using HTTP methods (GET, PUT, POSt and DELETE). 
+
+Further, the main method of dropwizard project spins up an HTTP server using [Jetty](http://www.eclipse.org/jetty/). This server hosts all the Web pages and other static files associated with the client-side interface of the application(front-end).  
 
 How to start the wiptool application
 ---
