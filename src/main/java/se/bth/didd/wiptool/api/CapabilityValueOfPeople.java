@@ -1,12 +1,9 @@
 package se.bth.didd.wiptool.api;
 
 import java.util.List;
-
 import javax.validation.constraints.NotNull;
-
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.github.rkmk.annotations.ColumnName;
-import com.github.rkmk.annotations.PrimaryKey;
 
 public class CapabilityValueOfPeople {
 	@JsonProperty
@@ -49,8 +46,4 @@ public class CapabilityValueOfPeople {
 	public void setPeople(List<PersonId> people) {
 		this.people = people;
 	}
-
-
-	
-	
 }

@@ -1,17 +1,15 @@
 package se.bth.didd.wiptool.api;
 
 import javax.validation.constraints.NotNull;
-
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.github.rkmk.annotations.ColumnName;
-import com.github.rkmk.annotations.PrimaryKey;
 
 public class SprintRequirementsTabsTemplate {
 	@JsonProperty
 	@NotNull
 	@ColumnName("value")
 	public String value;
-	
+
 	@JsonProperty
 	@ColumnName("sprintRequirementName")
 	public String display;
@@ -20,11 +18,9 @@ public class SprintRequirementsTabsTemplate {
 	@ColumnName("sprintRequirementDescription")
 	public String existingDescription;
 
-	
 	public SprintRequirementsTabsTemplate() {
-		
-	}
 
+	}
 
 	public SprintRequirementsTabsTemplate(String value, String display, String existingDescription) {
 		super();
@@ -33,34 +29,28 @@ public class SprintRequirementsTabsTemplate {
 		this.existingDescription = existingDescription;
 	}
 
-
 	public String getValue() {
 		return value;
 	}
-
 
 	public String getDisplay() {
 		return display;
 	}
 
-
 	public String getExistingDescription() {
 		return existingDescription;
 	}
-
 
 	public void setValue(String value) {
 		this.value = value;
 	}
 
-
 	public void setDisplay(String display) {
 		this.display = display;
 	}
-
 
 	public void setExistingDescription(String existingDescription) {
 		this.existingDescription = existingDescription;
 	}
 
-	}
+}

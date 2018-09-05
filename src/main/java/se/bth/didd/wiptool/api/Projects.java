@@ -6,8 +6,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.github.rkmk.annotations.ColumnName;
 import com.github.rkmk.annotations.PrimaryKey;
 
-/*Project entity which  extends the projectSummary entity.*/
-
 public class Projects {
 
 	@JsonProperty

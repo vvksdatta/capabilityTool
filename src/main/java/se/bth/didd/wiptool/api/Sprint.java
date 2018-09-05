@@ -5,8 +5,6 @@ import javax.validation.constraints.NotNull;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.github.rkmk.annotations.ColumnName;
 
-/*Sprint entity which  extends the SprintsSummary entity.*/
-
 public class Sprint extends SprintNameProgress {
 
 	@NotNull
@@ -199,5 +197,4 @@ public class Sprint extends SprintNameProgress {
 		this.sprintPhase = sprintPhase;
 	}
 	
-
 }

@@ -1,13 +1,8 @@
 package se.bth.didd.wiptool.api;
 
-import java.util.List;
-
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.github.rkmk.annotations.ColumnName;
-import com.github.rkmk.annotations.OneToMany;
 import com.github.rkmk.annotations.PrimaryKey;
-
-/*ProjectMembers entity that holds personID and personName. This has a relation with projectSummaries and project entity. */
 
 public class PersonId {
 	
@@ -16,9 +11,6 @@ public class PersonId {
 	@ColumnName("personId")
 	public Integer personId;
 	
-	
-
-
 	public PersonId(Integer personId) {
 		super();
 		this.personId = personId;
@@ -38,6 +30,5 @@ public class PersonId {
 	public void setPersonId(Integer personId) {
 		this.personId = personId;
 	}
-
 
 }

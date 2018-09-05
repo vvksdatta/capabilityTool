@@ -61,5 +61,4 @@ public class RolesOfPeople {
 		this.roleName = roleName;
 	}
 
-
 }

@@ -4,10 +4,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.github.rkmk.annotations.ColumnName;
 import com.github.rkmk.annotations.PrimaryKey;
 
-/*ProjectMembers entity that holds personID and personName. This has a relation with projectSummaries and project entity. */
-
 public class UserTemplate {
-	
+
 	@JsonProperty
 	@PrimaryKey
 	@ColumnName("userId")
@@ -16,11 +14,11 @@ public class UserTemplate {
 	@JsonProperty
 	@ColumnName("userName")
 	public String userName;
-	
+
 	@JsonProperty
 	@ColumnName("userFirstName")
 	public String userFirstName;
-	
+
 	@JsonProperty
 	@ColumnName("userLastName")
 	public String userLastName;
@@ -28,7 +26,6 @@ public class UserTemplate {
 	@JsonProperty
 	@ColumnName("usermailId")
 	public String usermailId;
-	
 
 	public UserTemplate(Integer userId, String userName, String userFirstName, String userLastName, String usermailId) {
 		super();
@@ -85,5 +82,5 @@ public class UserTemplate {
 	public void setUsermailId(String usermailId) {
 		this.usermailId = usermailId;
 	}
-	
+
 }

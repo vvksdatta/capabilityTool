@@ -1,10 +1,8 @@
 package se.bth.didd.wiptool.api;
 
 import javax.validation.constraints.NotNull;
-
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.github.rkmk.annotations.ColumnName;
-import com.github.rkmk.annotations.PrimaryKey;
 
 public class SprintRequirementUpdate {
 
@@ -33,7 +31,7 @@ public class SprintRequirementUpdate {
 	@JsonProperty
 	@ColumnName("updatedBy")
 	public String updatedBy;
-	
+
 	@JsonProperty
 	@ColumnName("outcome")
 	public String outcome;
@@ -41,8 +39,6 @@ public class SprintRequirementUpdate {
 	public SprintRequirementUpdate() {
 
 	}
-
-	
 
 	public SprintRequirementUpdate(int projectId, int sprintId, String sprintRequirementName, String requirementLevel,
 			String sprintRequirementDescription, String updatedBy, String outcome) {
@@ -55,8 +51,6 @@ public class SprintRequirementUpdate {
 		this.updatedBy = updatedBy;
 		this.outcome = outcome;
 	}
-
-
 
 	public String getSprintRequirementName() {
 		return sprintRequirementName;

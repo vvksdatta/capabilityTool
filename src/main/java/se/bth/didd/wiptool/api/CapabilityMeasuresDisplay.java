@@ -1,10 +1,8 @@
 package se.bth.didd.wiptool.api;
 
 import javax.validation.constraints.NotNull;
-
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.github.rkmk.annotations.ColumnName;
-import com.github.rkmk.annotations.PrimaryKey;
 
 public class CapabilityMeasuresDisplay {
 	@JsonProperty
@@ -42,5 +40,4 @@ public class CapabilityMeasuresDisplay {
 		this.legend = legend;
 	}
 
-	
 }

@@ -8,7 +8,6 @@ import com.github.rkmk.annotations.PrimaryKey;
 
 public class RolesOfPeopleSprint {
 
-	
 	@JsonProperty
 	@PrimaryKey
 	@NotNull

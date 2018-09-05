@@ -6,8 +6,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.github.rkmk.annotations.ColumnName;
 import com.github.rkmk.annotations.PrimaryKey;
 
-/*Project entity which  extends the projectSummary entity.*/
-
 public class NewProject {
 
 	@JsonProperty
@@ -22,7 +20,7 @@ public class NewProject {
 	@JsonProperty
 	@ColumnName("parentProjectId")
 	public Integer parentProjectId;
-	
+
 	@JsonProperty
 	@ColumnName("projectName")
 	public String projectName;
@@ -50,9 +48,6 @@ public class NewProject {
 	@JsonProperty
 	@ColumnName("projectLeader")
 	public Integer projectLeader;
-
-	
-	
 
 	public NewProject(Integer projectId, Integer parentProjectId, String projectName, String projectDescription,
 			Date projectStartDate, Date projectEndDate, Integer projectEstimatedEffort, String projectUpdatedBy,
@@ -105,7 +100,6 @@ public class NewProject {
 		return projectUpdatedBy;
 	}
 
-	
 	public void setProjectId(Integer projectId) {
 		this.projectId = projectId;
 	}
@@ -150,5 +144,4 @@ public class NewProject {
 		this.parentProjectId = parentProjectId;
 	}
 
-	
 }

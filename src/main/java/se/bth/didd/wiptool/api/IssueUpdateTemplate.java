@@ -21,7 +21,6 @@ public class IssueUpdateTemplate {
 	@JsonProperty
 	public Integer personId;
 	
-
 	@JsonProperty
 	@ColumnName("securityRiskAnalysis")
 	public String securityRiskAnalysis;

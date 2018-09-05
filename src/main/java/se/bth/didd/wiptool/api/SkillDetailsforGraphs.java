@@ -1,13 +1,9 @@
 package se.bth.didd.wiptool.api;
 
 import java.util.Date;
-import java.util.List;
-
 import javax.validation.constraints.NotNull;
-
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.github.rkmk.annotations.ColumnName;
-import com.github.rkmk.annotations.PrimaryKey;
 
 public class SkillDetailsforGraphs {
 	@JsonProperty
@@ -71,7 +67,4 @@ public class SkillDetailsforGraphs {
 	public void setLastUpdate(Date lastUpdate) {
 		this.lastUpdate = lastUpdate;
 	}
-
-	
-	
 }

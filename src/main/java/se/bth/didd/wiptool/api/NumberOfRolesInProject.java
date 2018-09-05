@@ -1,7 +1,6 @@
 package se.bth.didd.wiptool.api;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.github.rkmk.annotations.ColumnName;
 
 public class NumberOfRolesInProject extends Roles {
 	@JsonProperty
@@ -12,9 +11,10 @@ public class NumberOfRolesInProject extends Roles {
 		this.numberOfPeople = numberOfPeople;
 	}
 
-public NumberOfRolesInProject(){
-		
+	public NumberOfRolesInProject() {
+
 	}
+
 	public Integer getNumberOfPeople() {
 		return numberOfPeople;
 	}
@@ -22,6 +22,5 @@ public NumberOfRolesInProject(){
 	public void setNumberOfPeople(Integer numberOfPeople) {
 		this.numberOfPeople = numberOfPeople;
 	}
-	
-	
+
 }

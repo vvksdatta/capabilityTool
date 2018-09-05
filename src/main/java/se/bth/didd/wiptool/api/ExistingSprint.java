@@ -228,7 +228,4 @@ public class ExistingSprint {
 	public void setExpectedCoachingPotential(String expectedCoachingPotential) {
 		this.expectedCoachingPotential = expectedCoachingPotential;
 	}
-
-	
-	
 }

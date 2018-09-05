@@ -1,10 +1,8 @@
 package se.bth.didd.wiptool.api;
 
 import javax.validation.constraints.NotNull;
-
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.github.rkmk.annotations.ColumnName;
-import com.github.rkmk.annotations.PrimaryKey;
 
 public class CapabilityIdProficiency {
 	@JsonProperty
@@ -47,6 +45,4 @@ public class CapabilityIdProficiency {
 	public void setProficiency(String proficiency) {
 		this.proficiency = proficiency;
 	}
-
-
 }

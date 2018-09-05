@@ -60,6 +60,4 @@ public class PeopleSummary {
 	public void setPersonName(String personName) {
 		this.personName = personName;
 	}
-
-	
 }

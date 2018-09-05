@@ -44,6 +44,4 @@ public class ProjectNameSprints {
 	public void setSprints(List<SprintNameIssues> sprints) {
 		this.sprints = sprints;
 	}
-	
-
 }

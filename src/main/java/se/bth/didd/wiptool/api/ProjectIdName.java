@@ -1,12 +1,9 @@
 package se.bth.didd.wiptool.api;
 
-import java.util.Date;
 import javax.validation.constraints.NotNull;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.github.rkmk.annotations.ColumnName;
 import com.github.rkmk.annotations.PrimaryKey;
-
-/*Project entity which  extends the projectSummary entity.*/
 
 public class ProjectIdName {
 
@@ -39,24 +36,17 @@ public class ProjectIdName {
 
 	}
 
-
-
 	public Integer getProjectId() {
 		return projectId;
 	}
-
-
 
 	public String getProjectName() {
 		return projectName;
 	}
 
-
 	public void setProjectId(Integer projectId) {
 		this.projectId = projectId;
 	}
-
-
 
 	public void setProjectName(String projectName) {
 		this.projectName = projectName;

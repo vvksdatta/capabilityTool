@@ -1,12 +1,9 @@
 package se.bth.didd.wiptool.api;
 
 import java.util.Date;
-
 import javax.validation.constraints.NotNull;
-
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.github.rkmk.annotations.ColumnName;
-import com.github.rkmk.annotations.PrimaryKey;
 
 public class SprintQuestionnaireTemplate {
 
@@ -15,12 +12,10 @@ public class SprintQuestionnaireTemplate {
 	@ColumnName("projectId")
 	public Integer projectId;
 
-	
 	@JsonProperty
 	@ColumnName("sprintEstimatedEffort")
 	public Integer sprintEstimatedEffort;
 
-	
 	@JsonProperty
 	@ColumnName("sprintActualEffort")
 	public Integer sprintActualEffort;
@@ -45,24 +40,23 @@ public class SprintQuestionnaireTemplate {
 	@JsonProperty
 	@ColumnName("question4")
 	public String question4;
-	
+
 	@JsonProperty
 	@ColumnName("question5")
 	public String question5;
-	
+
 	@JsonProperty
 	@ColumnName("question6")
 	public String question6;
-	
+
 	@JsonProperty
 	@ColumnName("question7")
 	public String question7;
-	
+
 	@JsonProperty
 	@ColumnName("question8")
 	public String question8;
-	
-	
+
 	@JsonProperty
 	@ColumnName("question1Comment")
 	public String question1Comment;
@@ -78,19 +72,19 @@ public class SprintQuestionnaireTemplate {
 	@JsonProperty
 	@ColumnName("question4Comment")
 	public String question4Comment;
-	
+
 	@JsonProperty
 	@ColumnName("question5Comment")
 	public String question5Comment;
-	
+
 	@JsonProperty
 	@ColumnName("question6Comment")
 	public String question6Comment;
-	
+
 	@JsonProperty
 	@ColumnName("question7Comment")
 	public String question7Comment;
-	
+
 	@JsonProperty
 	@ColumnName("question8Comment")
 	public String question8Comment;
@@ -141,9 +135,6 @@ public class SprintQuestionnaireTemplate {
 		this.updatedBy = updatedBy;
 		this.lastUpdate = lastUpdate;
 	}
-
-
-
 
 	public Integer getProjectId() {
 		return projectId;
@@ -217,65 +208,49 @@ public class SprintQuestionnaireTemplate {
 		this.lastUpdate = lastUpdate;
 	}
 
-
-
 	public Integer getSprintEstimatedEffort() {
 		return sprintEstimatedEffort;
 	}
-
-
 
 	public Integer getSprintActualEffort() {
 		return sprintActualEffort;
 	}
 
-
-
 	public void setSprintEstimatedEffort(Integer sprintEstimatedEffort) {
 		this.sprintEstimatedEffort = sprintEstimatedEffort;
 	}
-
-
 
 	public void setSprintActualEffort(Integer sprintActualEffort) {
 		this.sprintActualEffort = sprintActualEffort;
 	}
 
-
 	public String getQuestion5() {
 		return question5;
 	}
-
 
 	public String getQuestion6() {
 		return question6;
 	}
 
-
 	public String getQuestion7() {
 		return question7;
 	}
-
 
 	public String getQuestion8() {
 		return question8;
 	}
 
-
 	public void setQuestion5(String question5) {
 		this.question5 = question5;
 	}
-
 
 	public void setQuestion6(String question6) {
 		this.question6 = question6;
 	}
 
-
 	public void setQuestion7(String question7) {
 		this.question7 = question7;
 	}
-
 
 	public void setQuestion8(String question8) {
 		this.question8 = question8;
@@ -344,5 +319,5 @@ public class SprintQuestionnaireTemplate {
 	public void setQuestion8Comment(String question8Comment) {
 		this.question8Comment = question8Comment;
 	}
-	
+
 }

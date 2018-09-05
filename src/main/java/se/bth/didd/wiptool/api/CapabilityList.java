@@ -1,7 +1,5 @@
 package se.bth.didd.wiptool.api;
 
-
-
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 

@@ -1,12 +1,9 @@
 package se.bth.didd.wiptool.api;
 
 import java.util.List;
-
 import javax.validation.constraints.NotNull;
-
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.github.rkmk.annotations.ColumnName;
-import com.github.rkmk.annotations.PrimaryKey;
 
 public class ProgrammingSkillValueOfPeople {
 	@JsonProperty
@@ -22,7 +19,6 @@ public class ProgrammingSkillValueOfPeople {
 	public ProgrammingSkillValueOfPeople() {
 		
 	}
-
 
 	public ProgrammingSkillValueOfPeople(Integer skillId, List<PersonId> people) {
 		super();

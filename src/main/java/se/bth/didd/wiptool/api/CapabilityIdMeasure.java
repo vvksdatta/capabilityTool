@@ -1,10 +1,8 @@
 package se.bth.didd.wiptool.api;
 
 import javax.validation.constraints.NotNull;
-
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.github.rkmk.annotations.ColumnName;
-import com.github.rkmk.annotations.PrimaryKey;
 
 public class CapabilityIdMeasure {
 	@JsonProperty
@@ -15,12 +13,10 @@ public class CapabilityIdMeasure {
 	@JsonProperty
 	@ColumnName("measure")
 	public String measure;
-
 	
 	public CapabilityIdMeasure() {
 		
 	}
-
 
 	public CapabilityIdMeasure(int capabilityId, String measure) {
 		super();
@@ -47,6 +43,5 @@ public class CapabilityIdMeasure {
 	public void setMeasure(String measure) {
 		this.measure = measure;
 	}
-	
 	
 }
