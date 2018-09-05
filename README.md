@@ -1,6 +1,6 @@
 # CAST
 
-*Capability-centric Agile Support Tool - A Web application to assist project managers in assembling teams.*
+* **C**apability-centric **A**gile **S**upport **T**ool - A Web application to assist project managers in assembling teams.*
 
 Overview
 ---
