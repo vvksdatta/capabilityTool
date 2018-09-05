@@ -12,19 +12,12 @@ Diving into the details
 ---
 **Backend**
 
-The backend It's a little bit of opinionated glue code which bangs together a set of libraries which have
-historically not sucked:
+The backend is developed using [Dropwizard](https://www.dropwizard.io/1.2.0/docs/) framework, that implements all the functionalities needed for running a Web appliation. Dropwizard bundles multiple libraries together such as: 
 
-* [Jetty](http://www.eclipse.org/jetty/) for HTTP servin'.
-* [Jersey](http://jersey.java.net/) for REST modelin'.
-* [Jackson](https://github.com/FasterXML/jackson) for JSON parsin' and generatin'.
-* [Logback](http://logback.qos.ch/) for loggin'.
-* [Hibernate Validator](http://hibernate.org/validator/) for validatin'.
-* [Metrics](http://metrics.dropwizard.io) for figurin' out what your application is doin' in production.
-* [JDBI](http://www.jdbi.org) and [Hibernate](http://www.hibernate.org/orm/) for databasin'.
-* [Liquibase](http://www.liquibase.org/) for migratin'.
-
-Read more at [dropwizard.io](http://www.dropwizard.io).
+* [Jetty](http://www.eclipse.org/jetty/) for HTTP services.
+* [Jersey](http://jersey.java.net/) for RESTful web application.
+* [Jackson](https://github.com/FasterXML/jackson) for parsing and generating JSON.
+* [JDBI](http://www.jdbi.org) for database interactions.
 
 How to start the wiptool application
 ---
