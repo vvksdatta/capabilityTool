@@ -8,7 +8,7 @@ This Web application enables the integartion of capability assessments with regu
 
 This application is specially designed to comply with open-source project management tool [PostgreSQL](https://www.postgresql.org/).  
 
-This Web application is powered by a RESTful API on the backend, developed using Java. On the other hand, the client-side interface of the application(front-end) is developed using AngularJS and HTML. The backend API is further designed to interact with [PostgreSQL](https://www.postgresql.org/) database and API of project management tool- [PostgreSQL](https://www.postgresql.org/). The following figure presents an overview of the architecture of the tool.
+This Web application is powered by a RESTful API on the backend, developed using Java. On the other hand, the client-side interface of the application(front-end) is developed using AngularJS and HTML. The backend API is further designed to interact with [PostgreSQL](https://www.postgresql.org/) database and API of project management tool- [Redmine](http://www.redmine.org/). The following figure presents an overview of the architecture of the tool.
 
 <img src="https://github.com/vvksdatta/capabilityTool/blob/master/src/main/resources/assets/frontend/photos/BlockDiagram.png" data-canonical-src="https://github.com/vvksdatta/capabilityTool/blob/master/src/main/resources/assets/frontend/photos/BlockDiagram.png" width="550" height="500"/>
 
