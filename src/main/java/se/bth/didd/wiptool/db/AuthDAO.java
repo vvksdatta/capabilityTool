@@ -7,9 +7,8 @@ import org.skife.jdbi.v2.sqlobject.BindBean;
 import org.skife.jdbi.v2.sqlobject.SqlQuery;
 import org.skife.jdbi.v2.sqlobject.SqlUpdate;
 import se.bth.didd.wiptool.api.Login;
-import se.bth.didd.wiptool.api.People;
 
-/*A simple DAO interface to handle the database operations required to manipulate projects and projectsSummary entities */
+/*A simple DAO interface to handle the database operations required for authentication */
 
 public interface AuthDAO {
 
@@ -19,21 +18,11 @@ public interface AuthDAO {
 
 	@SqlUpdate("insert into LOGINCREDENTIALS ( userName, userFirstName, userLastName, userMailId, password) values (:userName, :userFirstName, :userLastName, :userMailId, :password)")
 	int insertIntoLoginCredentials(@BindBean Login login);
-	
-	/*@SqlQuery("select * from PROJECTS where projectId = :id")
-	Projects findById(@Bind("id") int id);
-	*/
+
 	@SqlQuery("select exists (select 1 from LOGINCREDENTIALS where userMailId = :userMailId  or userName = :userName )")
-	boolean ifCredentialsExists(@Bind("userMailId") String userMailId,@Bind("userName") String userName);
-	
-	
+	boolean ifCredentialsExists(@Bind("userMailId") String userMailId, @Bind("userName") String userName);
+
 	@SqlQuery("select * from LOGINCREDENTIALS where userMailId = :userMailId or userName = :userMailId")
 	List<Login> getUser(@Bind("userMailId") String userMailId);
-	
-	
-	
-	/*
-	@SqlUpdate("delete from PROJECTS where projectId = :id")
-	void deleteById(@Bind("id") int id);
-*/
+
 }

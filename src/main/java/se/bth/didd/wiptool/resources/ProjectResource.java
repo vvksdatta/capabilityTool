@@ -20,16 +20,12 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
-
-import org.skife.jdbi.v2.sqlobject.SqlQuery;
-
 import com.github.rkmk.container.FoldingList;
 import com.taskadapter.redmineapi.MembershipManager;
 import com.taskadapter.redmineapi.RedmineException;
 import com.taskadapter.redmineapi.RedmineManager;
 import com.taskadapter.redmineapi.RedmineManagerFactory;
 import com.taskadapter.redmineapi.bean.Membership;
-import com.taskadapter.redmineapi.bean.MembershipFactory;
 import com.taskadapter.redmineapi.bean.Project;
 import com.taskadapter.redmineapi.bean.ProjectFactory;
 import com.taskadapter.redmineapi.bean.Role;
@@ -45,14 +41,10 @@ import se.bth.didd.wiptool.auth.jwt.UserRoles;
 import se.bth.didd.wiptool.api.ErrorMessage;
 import se.bth.didd.wiptool.api.NewProject;
 import se.bth.didd.wiptool.api.NumberOfRolesInProject;
-import se.bth.didd.wiptool.api.People;
 import se.bth.didd.wiptool.api.ProjectIdName;
 import se.bth.didd.wiptool.api.ProjectParticipants;
 import se.bth.didd.wiptool.api.ProjectSummary;
-import se.bth.didd.wiptool.db.IssuesDAO;
-import se.bth.didd.wiptool.db.PeopleDAO;
 import se.bth.didd.wiptool.db.ProjectDAO;
-import se.bth.didd.wiptool.db.SprintDAO;
 
 @Path("/projects")
 @Produces(MediaType.APPLICATION_JSON)
@@ -65,6 +57,7 @@ public class ProjectResource {
 
 	private String redmineUrl;
 	private String apiAccessKey;
+	private ProjectDAO projectDAO;
 
 	/*
 	 * This constructor is invoked in the run method of the main application and
@@ -77,13 +70,10 @@ public class ProjectResource {
 		this.redmineUrl = redmineUrl;
 	}
 
-	
-	ProjectDAO projectDAO;
-	
 	@RolesAllowed({ UserRoles.ROLE_ONE })
 	@GET
 	@Path("/summary")
-	
+
 	public List<ProjectSummary> getSummary(@Auth User user) throws RedmineException {
 		/*
 		 * As specified in jdbi-folder, whenever we need results to be folded,
@@ -92,62 +82,65 @@ public class ProjectResource {
 		 */
 		FoldingList<ProjectSummary> foldedResult = projectDAO.getSummary();
 		List<ProjectSummary> projectSummary = foldedResult.getValues();
-		//List<String> projectHeiarchyDetails = new ArrayList<String>();
+		// List<String> projectHeiarchyDetails = new ArrayList<String>();
 		Map<Integer, List<String>> projectHeiarchyDetails = new HashMap<Integer, List<String>>();
-		
+
 		boolean restart = false;
 		int sampleParentProjectId = 0;
-		
+
 		for (int i = 0; i < projectSummary.size(); i++) {
 			if (restart) {
-				i = 0;	
+				i = 0;
 			}
-			
-			//parentprojectid for a project
-			if(projectSummary.get(i).getParentProjectId() != null ){
-				if(restart ==false){
+
+			// parentprojectid for a project
+			if (projectSummary.get(i).getParentProjectId() != null) {
+				if (restart == false) {
 					sampleParentProjectId = projectSummary.get(i).getParentProjectId();
-			}
-				
-				restart = false;
-			for (ProjectSummary eachProject : new ArrayList<>(projectSummary)) {
-				if (eachProject.getProjectId().equals(sampleParentProjectId)) {
-					// project details of parentProject matched
-					List<String> array ;
-					if(projectHeiarchyDetails.get(projectSummary.get(i).getProjectId()) != null && projectHeiarchyDetails.get(projectSummary.get(i).getProjectId()).size() >=0){
-						 array= projectHeiarchyDetails.get(projectSummary.get(i).getProjectId());	
-					}else{
-						 array= new ArrayList<>();
-					}
-					
-					if (array.size()>=0){
-					
-						//push parentprojecft name to arry of a project
-					array.add(eachProject.getProjectName());
-					projectHeiarchyDetails.put(projectSummary.get(i).getProjectId(),array );
-					
-					//restart = true;
-					//break;
 				}
-					if (eachProject.getParentProjectId() != null){
-						sampleParentProjectId = eachProject.getParentProjectId();
-					}
-					/*if(projectHeiarchyDetails.containsKey(projectSummary.get(i).getParentProjectId())){
-						for(Integer key:projectHeiarchyDetails.keySet()){
-							if(key.equals(projectSummary.get(i).getParentProjectId())){
-								List<String> alreadyEntered= projectHeiarchyDetails.get(key);
-								if(alreadyEntered.contains(eachProject.getProjectName()) == false){
-								List<String> array2= projectHeiarchyDetails.get(key);
-								array2.add(eachProject.getProjectName());
-								projectHeiarchyDetails.put(projectSummary.get(i).getProjectId(),array2 );
-								}
-							}
+
+				restart = false;
+				for (ProjectSummary eachProject : new ArrayList<>(projectSummary)) {
+					if (eachProject.getProjectId().equals(sampleParentProjectId)) {
+						// project details of parentProject matched
+						List<String> array;
+						if (projectHeiarchyDetails.get(projectSummary.get(i).getProjectId()) != null
+								&& projectHeiarchyDetails.get(projectSummary.get(i).getProjectId()).size() >= 0) {
+							array = projectHeiarchyDetails.get(projectSummary.get(i).getProjectId());
+						} else {
+							array = new ArrayList<>();
 						}
-					}*/
-					
+
+						if (array.size() >= 0) {
+
+							// push parentprojecft name to arry of a project
+							array.add(eachProject.getProjectName());
+							projectHeiarchyDetails.put(projectSummary.get(i).getProjectId(), array);
+
+							// restart = true;
+							// break;
+						}
+						if (eachProject.getParentProjectId() != null) {
+							sampleParentProjectId = eachProject.getParentProjectId();
+						}
+						/*
+						 * if(projectHeiarchyDetails.containsKey(projectSummary.
+						 * get(i).getParentProjectId())){ for(Integer
+						 * key:projectHeiarchyDetails.keySet()){
+						 * if(key.equals(projectSummary.get(i).
+						 * getParentProjectId())){ List<String> alreadyEntered=
+						 * projectHeiarchyDetails.get(key);
+						 * if(alreadyEntered.contains(eachProject.getProjectName
+						 * ()) == false){ List<String> array2=
+						 * projectHeiarchyDetails.get(key);
+						 * array2.add(eachProject.getProjectName());
+						 * projectHeiarchyDetails.put(projectSummary.get(i).
+						 * getProjectId(),array2 ); } } } }
+						 */
+
 					}
+				}
 			}
-		}
 		}
 		return projectSummary;
 	}
@@ -171,32 +164,28 @@ public class ProjectResource {
 
 		return projectDAO.getAllProjects();
 	}
-	
 
-	public void nestingSubProjectsFunction( List<ProjectsList> currentProjectsList, List<ProjectIdName> childProjects){
-		
-	
-		
-			for(ProjectsList eachSubproject : currentProjectsList ){
-				ProjectIdName projectIdName =new ProjectIdName() ;
-				projectIdName.setProjectId(eachSubproject.getProjectId());
-				projectIdName.setProjectName(eachSubproject.getProjectName());
-				
-				if(projectDAO.subProjectsExist(eachSubproject.getProjectId())){
+	public void nestingSubProjectsFunction(List<ProjectsList> currentProjectsList, List<ProjectIdName> childProjects) {
+
+		for (ProjectsList eachSubproject : currentProjectsList) {
+			ProjectIdName projectIdName = new ProjectIdName();
+			projectIdName.setProjectId(eachSubproject.getProjectId());
+			projectIdName.setProjectName(eachSubproject.getProjectName());
+
+			if (projectDAO.subProjectsExist(eachSubproject.getProjectId())) {
 				eachSubproject.setProjectList(projectDAO.getSubProjectsList(eachSubproject.getProjectId()));
-				}
-				if(childProjects.contains(projectIdName)){
-					continue;
-				}
-				else{
-					if(projectDAO.subProjectsExist(eachSubproject.getProjectId())){
+			}
+			if (childProjects.contains(projectIdName)) {
+				continue;
+			} else {
+				if (projectDAO.subProjectsExist(eachSubproject.getProjectId())) {
 					currentProjectsList = eachSubproject.getProjectList();
 					nestingSubProjectsFunction(currentProjectsList, childProjects);
-					}
 				}
 			}
-		
 		}
+
+	}
 
 	@GET
 	@Path("/getAllProjectsNested")
@@ -205,15 +194,15 @@ public class ProjectResource {
 		 * For creating a nested list of projects, we use the projectsList class
 		 * that has projectId, projectName and a list of projectsList(using same
 		 * class). using the initial list of independent projects (i.e. projects
-		 * that are not sub projects of any other projects), we fetch the list of
-		 * sub projects for each independent project. after setting the
+		 * that are not sub projects of any other projects), we fetch the list
+		 * of sub projects for each independent project. after setting the
 		 * List<ProjectsList> using the fetched list, we then inspect whether
 		 * any of the projects in the former list have sub projects. If so, same
 		 * as in previous step a list<ProjectsList> is fetched and set. Thus,
 		 * this loop runs over all independent projects, until a project matches
 		 * the childProject present in childProjects( childProject is the
 		 * project that doesn't have any other sub projects.)
-		 */ 
+		 */
 		List<ProjectIdName> independentProjects = projectDAO.getAllIndependentProjects();
 		List<ProjectIdName> childProjects = projectDAO.getAllChildProjects();
 		List<ProjectsList> listOfProjects = new ArrayList<ProjectsList>();
@@ -253,31 +242,27 @@ public class ProjectResource {
 		try {
 			List<Roles> exisitingRoles = projectDAO.getNumberofParticipants(projectId);
 			List<Roles> distinctRoles = projectDAO.getDistinctRolesInProject(projectId);
-			
-		
-			for(Roles eachDistinctRole : distinctRoles){
+
+			for (Roles eachDistinctRole : distinctRoles) {
 				int count = 0;
 				NumberOfRolesInProject sampleNumber = new NumberOfRolesInProject();
 				sampleNumber.setRoleId(eachDistinctRole.getRoleId());
 				sampleNumber.setRoleName(eachDistinctRole.getRoleName());
-			for(Roles eachRole : exisitingRoles){
-				if(eachDistinctRole.getRoleId().equals(eachRole.getRoleId())){
-					count =(count+1);
+				for (Roles eachRole : exisitingRoles) {
+					if (eachDistinctRole.getRoleId().equals(eachRole.getRoleId())) {
+						count = (count + 1);
+					}
 				}
+				sampleNumber.setNumberOfPeople(count);
+				numberOfRoles.add(sampleNumber);
 			}
-			sampleNumber.setNumberOfPeople(count);
-			numberOfRoles.add(sampleNumber);
-		}
 		} catch (Exception e1) {
 			System.out.println(e1);
 			return Response.status(Status.BAD_REQUEST).entity(e1).build();
 		}
 		return Response.ok(numberOfRoles).build();
-		}
-	
-		 
-	
-	
+	}
+
 	@PUT
 	@Path("/newproject")
 	public Projects newProject(@Auth User user, NewProject newproject) throws RedmineException {
@@ -357,62 +342,40 @@ public class ProjectResource {
 			@PathParam("id") Integer projectId) throws RedmineException, SQLException {
 		RedmineManager redmineManager = RedmineManagerFactory.createWithApiKey(redmineUrl, apiAccessKey);
 		MembershipManager membershipManager = redmineManager.getMembershipManager();
-		 
-			try {
 
-				
-					List<Membership> members = membershipManager.getMemberships(projectId);
-					for (Membership member : members) {
+		try {
 
-						for (Role roleDetails : member.getRoles()) {
-							
-								// System.out.println("the details are
-								// projectId:"+"person Id:"+member.getUserId()+
-								// "roleId:"+member.getRoles().toString()+"\n");
-								// membershipManager.createMembershipForUser(projectId,
-								// person.getPersonId(), allRoles);
-								membershipManager.delete(member);
+			List<Membership> members = membershipManager.getMemberships(projectId);
+			for (Membership member : members) {
 
-							
+				membershipManager.delete(member);
 
-						}
-					}
-					
-					
-						projectDAO.deleteAllParticipants(projectId);
-					
-					
-					for (RolesOfPeople person : rolesOfPeople){
-						List<Roles> role = projectDAO.getRoleId(person.getRoleName());
-						
-						
-						Collection<Role> allRoles = Arrays
-								.asList(new Role[] { RoleFactory.create(person.getRoleId()), });
-					try {
-						membershipManager.createMembershipForUser(projectId, person.getPersonId(), allRoles);
-						
-						
-						
-						if (projectDAO.ifPersonParticipatesInProject(projectId, person.getPersonId(),
-								person.getRoleId()) == false) {
-							projectDAO.insertIntoProjectParticipation(projectId, person.getPersonId(),
-									person.getRoleId());
-						}
-						
-					} catch (Exception e) {
-						System.out.println(e);
-						e.printStackTrace();
-					}
 			}
-					
 
-				
+			projectDAO.deleteAllParticipants(projectId);
 
-			} catch (Exception e) {
-				System.out.println(e.toString());
-				return Response.status(Status.BAD_REQUEST).entity(e).build();
+			for (RolesOfPeople person : rolesOfPeople) {
+
+				Collection<Role> allRoles = Arrays.asList(new Role[] { RoleFactory.create(person.getRoleId()), });
+				try {
+					membershipManager.createMembershipForUser(projectId, person.getPersonId(), allRoles);
+
+					if (projectDAO.ifPersonParticipatesInProject(projectId, person.getPersonId(),
+							person.getRoleId()) == false) {
+						projectDAO.insertIntoProjectParticipation(projectId, person.getPersonId(), person.getRoleId());
+					}
+
+				} catch (Exception e) {
+					System.out.println(e);
+					e.printStackTrace();
+				}
 			}
-		
+
+		} catch (Exception e) {
+			System.out.println(e.toString());
+			return Response.status(Status.BAD_REQUEST).entity(e).build();
+		}
+
 		SuccessMessage success = new SuccessMessage();
 		success.setSuccess("update successful");
 		return Response.ok(success).build();
@@ -464,8 +427,6 @@ public class ProjectResource {
 		}
 
 	}
-	
-	
 
 	@PUT
 	@Path("/updateProject")
@@ -500,14 +461,5 @@ public class ProjectResource {
 		return Response.ok().build();
 
 	}
-	/*
-	 * @POST
-	 * 
-	 * @Path("{id}") public Login post(@PathParam("id") int id) throws
-	 * SQLException { Database dbn =new Database();
-	 * 
-	 * Login login = new Login(); login = dbn.retrieveSingleEmployeeDetail(id);
-	 * dbn.deleteEmployee(id, "EmployeeDetails"); return login; }
-	 */
 
 }

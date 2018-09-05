@@ -1,26 +1,18 @@
 package se.bth.didd.wiptool.resources;
 
 import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
-
 import static org.jose4j.jws.AlgorithmIdentifiers.HMAC_SHA256;
-
-import java.sql.SQLException;
 import java.util.List;
-
 import javax.ws.rs.GET;
-import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
-
 import org.jose4j.jws.JsonWebSignature;
 import org.jose4j.jwt.JwtClaims;
 import org.jose4j.keys.HmacKey;
 import org.jose4j.lang.JoseException;
-
 import io.dropwizard.auth.Auth;
 import io.dropwizard.auth.PrincipalImpl;
 import io.dropwizard.jersey.caching.CacheControl;
@@ -34,16 +26,13 @@ import se.bth.didd.wiptool.resources.dto.LoginResponse;
 
 /**
  * Exchanges login information for a JWT token.
- *
- * @author Hendrik van Huyssteen
- * @since 09 Aug 2017
  */
 
 @Path("auth")
 @Produces(APPLICATION_JSON)
 public class LoginResource {
 
-	AuthDAO authDAO;
+	private AuthDAO authDAO;
 
 	public LoginResource(AuthDAO authDAO) {
 		this.authDAO = authDAO;
@@ -83,12 +72,7 @@ public class LoginResource {
 		}
 	}
 
-	/**
-	 * Example token builder. This would be handled by some role mapping system
-	 * in production.
-	 *
-	 * @return Example token with the {@link UserRoles#ROLE_ONE} role.
-	 */
+	/* token builder */
 	private JsonWebSignature buildToken(PrincipalImpl user) {
 		// These claims would be tightened up for production
 

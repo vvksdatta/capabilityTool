@@ -5,21 +5,14 @@ import java.nio.charset.Charset;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Date;
 import java.util.List;
 import java.util.Random;
-import java.sql.Array;
-import java.sql.Connection;
-
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import javax.ws.rs.core.Response.Status;
-
-import com.google.common.collect.Table;
 import com.taskadapter.redmineapi.RedmineException;
 import com.taskadapter.redmineapi.RedmineManager;
 import com.taskadapter.redmineapi.RedmineManagerFactory;
@@ -32,7 +25,6 @@ import com.taskadapter.redmineapi.bean.User;
 import com.taskadapter.redmineapi.bean.Version;
 import se.bth.didd.wiptool.api.IssueTemplate;
 import se.bth.didd.wiptool.api.IssueUpdateTemplate;
-import se.bth.didd.wiptool.api.PersonId;
 import se.bth.didd.wiptool.api.ProjectIdName;
 import se.bth.didd.wiptool.api.Projects;
 import se.bth.didd.wiptool.api.Roles;
@@ -54,7 +46,6 @@ import se.bth.didd.wiptool.db.RedmineDAO;
 public class Redmine {
 
 	RedmineDAO redmineDAO;
-	// PeopleDAO personDAO;
 
 	private String redmineUrl;
 	private String apiAccessKey;

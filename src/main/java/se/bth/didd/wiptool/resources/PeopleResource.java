@@ -1,13 +1,10 @@
 package se.bth.didd.wiptool.resources;
 
-import java.io.ByteArrayInputStream;
 import java.io.IOException;
-import java.io.ObjectInputStream;
 import java.nio.charset.Charset;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-
 import javax.annotation.security.RolesAllowed;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
@@ -20,16 +17,11 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 import java.util.Base64;
-import java.util.Base64.Decoder;
-
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.rkmk.container.FoldingList;
 import com.taskadapter.redmineapi.RedmineException;
 import com.taskadapter.redmineapi.RedmineManager;
 import com.taskadapter.redmineapi.RedmineManagerFactory;
-
-
-
 import io.dropwizard.auth.Auth;
 import se.bth.didd.wiptool.api.ErrorMessage;
 import se.bth.didd.wiptool.api.ExistingPerson;
@@ -44,7 +36,6 @@ import se.bth.didd.wiptool.api.UserTemplate;
 import se.bth.didd.wiptool.auth.jwt.User;
 import se.bth.didd.wiptool.auth.jwt.UserRoles;
 import se.bth.didd.wiptool.db.PeopleDAO;
-import se.bth.didd.wiptool.db.RedmineDAO;
 import se.bth.didd.wiptool.api.Roles;
 
 @Path("/people")
@@ -58,6 +49,7 @@ public class PeopleResource {
 
 	private String redmineUrl;
 	private String apiAccessKey;
+	private PeopleDAO peopleDAO;
 
 	/*
 	 * This constructor is invoked in the run method of the main application and
@@ -65,14 +57,11 @@ public class PeopleResource {
 	 * and 'apiAcessKey'.
 	 */
 
-	PeopleDAO peopleDAO;
-	RedmineDAO redmineDAO;
-
-	public PeopleResource(PeopleDAO peopleDAO, RedmineDAO redmineDAO, String redmineUrl, String apiAccessKey) {
+	public PeopleResource(PeopleDAO peopleDAO, String redmineUrl, String apiAccessKey) {
 		this.redmineUrl = redmineUrl;
 		this.apiAccessKey = apiAccessKey;
 		this.peopleDAO = peopleDAO;
-		this.redmineDAO = redmineDAO;
+		
 	}
 
 	@RolesAllowed({ UserRoles.ROLE_ONE })
@@ -85,7 +74,7 @@ public class PeopleResource {
 			personDetails.setPersonName(singlePerson.getPersonName());
 			personDetails.setPersonId(singlePerson.getPersonId());
 		}
-		return Response.ok(personDetails).build();		
+		return Response.ok(personDetails).build();
 	}
 
 	@GET
@@ -94,13 +83,12 @@ public class PeopleResource {
 		List<UserTemplate> user = peopleDAO.getUserDetails(personId);
 		People personDetails = new People();
 		for (UserTemplate singleUser : user) {
-			personDetails.setPersonName(singleUser.getUserFirstName()+" "+singleUser.getUserLastName());
+			personDetails.setPersonName(singleUser.getUserFirstName() + " " + singleUser.getUserLastName());
 			personDetails.setPersonId(singleUser.getUserId());
 		}
-		return Response.ok(personDetails).build();		
+		return Response.ok(personDetails).build();
 	}
-	
-	
+
 	@GET
 	@Path("/getUserDetailsbyId/{id}")
 	public Response getUserDetailsbyId(@Auth User currentUser, @PathParam("id") Integer userId) throws SQLException {
@@ -109,11 +97,9 @@ public class PeopleResource {
 		for (UserTemplate singleUser : user) {
 			userDetails = singleUser;
 		}
-		return Response.ok(userDetails).build();		
+		return Response.ok(userDetails).build();
 	}
-	
-	
-	
+
 	@GET
 	@Path("/getAllPeople")
 	public Response getPerson(@Auth User user) {
@@ -125,11 +111,10 @@ public class PeopleResource {
 			return Response.status(Status.BAD_REQUEST).entity(e).build();
 		}
 	}
-	
 
 	@GET
 	@Path("/getUsersList")
-	
+
 	public Response getUsersList(@Auth User user) {
 		try {
 			List<UserTemplate> users = peopleDAO.getUsersList();
@@ -139,11 +124,10 @@ public class PeopleResource {
 			return Response.status(Status.BAD_REQUEST).entity(e).build();
 		}
 	}
-	
 
 	@DELETE
 	@Path("/deleteUser/{userId}")
-	
+
 	public Response deleteUser(@Auth User user, @PathParam("userId") Integer userId) {
 		try {
 			peopleDAO.deleteUser(userId);
@@ -155,8 +139,6 @@ public class PeopleResource {
 			return Response.status(Status.BAD_REQUEST).entity(e).build();
 		}
 	}
-	
-	
 
 	@GET
 	@Path("/summary")
@@ -235,7 +217,8 @@ public class PeopleResource {
 
 	@PUT
 	@Path("/summaryOfPeopleInProject")
-	public List<PeopleSummary> summaryOfPeopleInProject(@Auth User user, Integer projectId) throws SQLException, RedmineException {
+	public List<PeopleSummary> summaryOfPeopleInProject(@Auth User user, Integer projectId)
+			throws SQLException, RedmineException {
 
 		/*
 		 * As specified in jdbi-folder, whenever we need results to be folded,
@@ -261,13 +244,17 @@ public class PeopleResource {
 			}
 
 		}
-		
-		/*preparing a list by including all project participants (both, people who have been 
-		 * allocated to sprints and people who haven't been allocated to any sprint).For this, 
-		 *  people who have been allocated to projects and sprints are selected (allocatedPeople).
-		 *   Then, these people are removed from the full list of project participants(peopleList). 
-		 *   Finally, the summary list (peopleSummary)is appended with the details of remaining people
-		 *    from 'peopleList'  i.e. people who haven't been allocated to any sprint. */		
+
+		/*
+		 * preparing a list by including all project participants (both, people
+		 * who have been allocated to sprints and people who haven't been
+		 * allocated to any sprint).For this, people who have been allocated to
+		 * projects and sprints are selected (allocatedPeople). Then, these
+		 * people are removed from the full list of project
+		 * participants(peopleList). Finally, the summary list (peopleSummary)is
+		 * appended with the details of remaining people from 'peopleList' i.e.
+		 * people who haven't been allocated to any sprint.
+		 */
 		List<People> allocatedPeople = new ArrayList<>();
 		List<People> peopleList = peopleDAO.peopleNamesInaProject(projectId);
 		for (People person : new ArrayList<>(peopleList)) {
@@ -380,8 +367,8 @@ public class PeopleResource {
 	@PUT
 	@Path("/updateUserDetails")
 	public Response updateUserDetails(@Auth User curentUser, UserTemplate user) throws RedmineException {
-		if(peopleDAO.ifUserExists(user.getUserId()) == true ){
-			
+		if (peopleDAO.ifUserExists(user.getUserId()) == true) {
+
 			try {
 				peopleDAO.UpdateUserDetails(user);
 				SuccessMessage success = new SuccessMessage();
@@ -391,25 +378,24 @@ public class PeopleResource {
 				System.out.println(e);
 				return Response.status(Status.BAD_REQUEST).entity(e).build();
 			}
-			
-			}
-		 return Response.status(Status.BAD_REQUEST).build();
+
+		}
+		return Response.status(Status.BAD_REQUEST).build();
 	}
-	
+
 	@PUT
 	@Path("/updateUserPassword")
-	public Response updateUserPassword(@Auth User currentUser, String encoded) throws RedmineException, ClassNotFoundException, IOException {
-		byte [] obj = Base64.getDecoder().decode(encoded);
+	public Response updateUserPassword(@Auth User currentUser, String encoded)
+			throws RedmineException, ClassNotFoundException, IOException {
+		byte[] obj = Base64.getDecoder().decode(encoded);
 
-	
-	ObjectMapper mapper = new ObjectMapper();
-	    String str = new String(obj, Charset.forName("UTF-8"));
-	    UserPasswordChange user = mapper.readValue(str, UserPasswordChange.class);
-	    
-	
-	
-		if(peopleDAO.ifCurrentPasswordExists(user.getUserId(),user.getUserName(), user.getCurrentPassword()) == true ){
-			
+		ObjectMapper mapper = new ObjectMapper();
+		String str = new String(obj, Charset.forName("UTF-8"));
+		UserPasswordChange user = mapper.readValue(str, UserPasswordChange.class);
+
+		if (peopleDAO.ifCurrentPasswordExists(user.getUserId(), user.getUserName(),
+				user.getCurrentPassword()) == true) {
+
 			try {
 				peopleDAO.updateUserPassword(user);
 				SuccessMessage success = new SuccessMessage();
@@ -419,24 +405,21 @@ public class PeopleResource {
 				System.out.println(e);
 				return Response.status(Status.BAD_REQUEST).entity(e).build();
 			}
-			
-			}
-		else{
+
+		} else {
 			ErrorMessage error = new ErrorMessage();
 			error.setError("Your current password is wrong");
 			return Response.status(Status.BAD_REQUEST).entity(error).build();
 		}
-		
-	
+
 	}
-	
-	
-	
+
 	@PUT
 	@Path("/updatePerson")
 	public Response updatePerson(@Auth User user, NewPerson newPerson) throws RedmineException {
 		RedmineManager redmineManager = RedmineManagerFactory.createWithApiKey(redmineUrl, apiAccessKey);
-		com.taskadapter.redmineapi.bean.User newUser = new com.taskadapter.redmineapi.bean.User(newPerson.getPersonId());
+		com.taskadapter.redmineapi.bean.User newUser = new com.taskadapter.redmineapi.bean.User(
+				newPerson.getPersonId());
 
 		newUser.setFirstName(newPerson.getFirstName());
 		newUser.setLastName(newPerson.getLastName());

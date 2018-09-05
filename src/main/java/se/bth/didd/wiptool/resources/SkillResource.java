@@ -1,7 +1,5 @@
 package se.bth.didd.wiptool.resources;
 
-import java.sql.Date;
-import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -17,18 +15,12 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
-
-import se.bth.didd.wiptool.api.Capability;
-import se.bth.didd.wiptool.api.CapabilityDetailsComparisonGraphs;
-import se.bth.didd.wiptool.api.CapabilityDetailsforGraphs;
-import se.bth.didd.wiptool.api.CapabilityValueOfPeople;
 import se.bth.didd.wiptool.api.People;
 import se.bth.didd.wiptool.api.PersonId;
 import se.bth.didd.wiptool.api.ProgrammingSkillValueOfPeople;
 import se.bth.didd.wiptool.api.ProgrammingSkillsDetailsComparisonGraphs;
 import se.bth.didd.wiptool.api.Skill;
 import se.bth.didd.wiptool.api.SkillDetailsforGraphs;
-import se.bth.didd.wiptool.api.SkillNameValue;
 import se.bth.didd.wiptool.api.SkillNameValueUser;
 import se.bth.didd.wiptool.api.SkillTabsTemplate;
 import se.bth.didd.wiptool.api.SkillTimelineGraphs;
@@ -40,14 +32,9 @@ import se.bth.didd.wiptool.db.SkillDAO;
 @Consumes(MediaType.APPLICATION_JSON)
 public class SkillResource {
 
-	private String redmineUrl;
-	private String apiAccessKey;
+	private SkillDAO skillDAO;
 
-	SkillDAO skillDAO;
-
-	public SkillResource(SkillDAO skillDAO, String redmineUrl, String apiAccessKey) {
-		this.redmineUrl = redmineUrl;
-		this.apiAccessKey = apiAccessKey;
+	public SkillResource(SkillDAO skillDAO) {
 		this.skillDAO = skillDAO;
 	}
 
@@ -65,8 +52,7 @@ public class SkillResource {
 		}
 		return template;
 	}
-	
-	
+
 	@GET
 	@Path("/getProgrammingSkillsList")
 	public Response getProgrammingSkillsList() {
@@ -78,57 +64,57 @@ public class SkillResource {
 			return Response.status(Status.BAD_REQUEST).entity(e).build();
 		}
 	}
-	
-	
+
 	@GET
 	@Path("/getProgrammingSkllsRecorded/{id}")
 	public Response getProgrammingSkllsRecorded(@PathParam("id") Integer personId) {
-		
+
 		try {
-			List<Skill>	distinctSkillsOfPerson= skillDAO.getDistinctSkillsOfPerson(personId);
+			List<Skill> distinctSkillsOfPerson = skillDAO.getDistinctSkillsOfPerson(personId);
 			return Response.ok(distinctSkillsOfPerson).build();
 		} catch (Exception e) {
 			System.out.println(e);
 			return Response.status(Status.BAD_REQUEST).entity(e).build();
 		}
-		
-	
-		}
+
+	}
+
 	@GET
 	@Path("/getProgrammingSkllsTimeline/{personId}/{skillId}")
-public Response getProgrammingSkllsTimeline(@PathParam("personId") Integer personId, @PathParam("skillId") Integer skillId ) {
-		
+	public Response getProgrammingSkllsTimeline(@PathParam("personId") Integer personId,
+			@PathParam("skillId") Integer skillId) {
+
 		try {
-			List<SkillTimelineGraphs> distinctProficienciesOfSkill= skillDAO.getDistinctProficienciesOfSkill(personId, skillId);
+			List<SkillTimelineGraphs> distinctProficienciesOfSkill = skillDAO.getDistinctProficienciesOfSkill(personId,
+					skillId);
 			return Response.ok(distinctProficienciesOfSkill).build();
 		} catch (Exception e) {
 			System.out.println(e);
 			return Response.status(Status.BAD_REQUEST).entity(e).build();
 		}
-		
-	
-		}
-	
+
+	}
+
 	@GET
 	@Path("/getProgrammingSkllsOfPerson/{id}")
 	public Response getSkillsfPerson(@PathParam("id") Integer personId) {
 		List<SkillDetailsforGraphs> setOfSkillDetails = new ArrayList<SkillDetailsforGraphs>();
 		try {
-		List<Skill>	distinctSkillsOfPerson= skillDAO.getDistinctSkillsOfPerson(personId);
-		for(Skill eachSkill : distinctSkillsOfPerson){
-			try {
-				List<SkillDetailsforGraphs>	skillsProficiency= skillDAO.skillsDetailsOfPerson(personId, eachSkill.getSkillId());
-				for(SkillDetailsforGraphs proficiencyInEachSkill : skillsProficiency){
-					setOfSkillDetails.add(proficiencyInEachSkill);
+			List<Skill> distinctSkillsOfPerson = skillDAO.getDistinctSkillsOfPerson(personId);
+			for (Skill eachSkill : distinctSkillsOfPerson) {
+				try {
+					List<SkillDetailsforGraphs> skillsProficiency = skillDAO.skillsDetailsOfPerson(personId,
+							eachSkill.getSkillId());
+					for (SkillDetailsforGraphs proficiencyInEachSkill : skillsProficiency) {
+						setOfSkillDetails.add(proficiencyInEachSkill);
+					}
+				} catch (Exception e) {
+					System.out.println(e);
+					return Response.status(Status.BAD_REQUEST).entity(e).build();
 				}
-			} catch (Exception e) {
-				System.out.println(e);
-				return Response.status(Status.BAD_REQUEST).entity(e).build();
+
 			}
-			
-			
-		}
-		return Response.ok(setOfSkillDetails).build();
+			return Response.ok(setOfSkillDetails).build();
 		} catch (Exception e) {
 			System.out.println(e);
 			return Response.status(Status.BAD_REQUEST).entity(e).build();
@@ -139,46 +125,47 @@ public Response getProgrammingSkllsTimeline(@PathParam("personId") Integer perso
 	@Path("/getProgrammingSkillValueOfPeople")
 	public Response getProgrammingSkillValueOfPeople(ProgrammingSkillValueOfPeople programmingSkillOfPeople) {
 		List<ProgrammingSkillsDetailsComparisonGraphs> programmingSkillValuesOfPeople = new ArrayList<ProgrammingSkillsDetailsComparisonGraphs>();
-		
-		for(PersonId eachPerson : programmingSkillOfPeople.getPeople()){
+
+		for (PersonId eachPerson : programmingSkillOfPeople.getPeople()) {
 			ProgrammingSkillsDetailsComparisonGraphs sampleDetail = new ProgrammingSkillsDetailsComparisonGraphs();
-		try {
-			if(skillDAO.ifSkillAssessed(eachPerson.getPersonId(),programmingSkillOfPeople.getSkillId())){
-		List<ProgrammingSkillsDetailsComparisonGraphs>	capabilitiesOfPerson= skillDAO.specificSkillOfPerson(eachPerson.getPersonId(),programmingSkillOfPeople.getSkillId());
-			
-		for(ProgrammingSkillsDetailsComparisonGraphs capabilityDetails: capabilitiesOfPerson){
-		sampleDetail.setSkillName(capabilityDetails.getSkillName());
-		sampleDetail.setLastUpdate(capabilityDetails.getLastUpdate());
-		sampleDetail.setPersonName(capabilityDetails.getPersonName());
-		sampleDetail.setProficiency(capabilityDetails.getProficiency());
-		sampleDetail.setUpdatedBy(capabilityDetails.getUpdatedBy());
-		}
-		programmingSkillValuesOfPeople.add(sampleDetail);
-		} 
-			else{
-				List<People> personDetails= skillDAO.getPersonDetails(eachPerson.getPersonId());
-				for(People person: personDetails){
-					sampleDetail.setPersonName(person.getPersonName());
+			try {
+				if (skillDAO.ifSkillAssessed(eachPerson.getPersonId(), programmingSkillOfPeople.getSkillId())) {
+					List<ProgrammingSkillsDetailsComparisonGraphs> capabilitiesOfPerson = skillDAO
+							.specificSkillOfPerson(eachPerson.getPersonId(), programmingSkillOfPeople.getSkillId());
+
+					for (ProgrammingSkillsDetailsComparisonGraphs capabilityDetails : capabilitiesOfPerson) {
+						sampleDetail.setSkillName(capabilityDetails.getSkillName());
+						sampleDetail.setLastUpdate(capabilityDetails.getLastUpdate());
+						sampleDetail.setPersonName(capabilityDetails.getPersonName());
+						sampleDetail.setProficiency(capabilityDetails.getProficiency());
+						sampleDetail.setUpdatedBy(capabilityDetails.getUpdatedBy());
+					}
+					programmingSkillValuesOfPeople.add(sampleDetail);
+				} else {
+					List<People> personDetails = skillDAO.getPersonDetails(eachPerson.getPersonId());
+					for (People person : personDetails) {
+						sampleDetail.setPersonName(person.getPersonName());
+					}
+					SimpleDateFormat format = new SimpleDateFormat("yyyyMMdd");
+					java.util.Date parsed = format.parse("20180101");
+					java.sql.Date sql = new java.sql.Date(parsed.getTime());
+
+					sampleDetail.setSkillName("");
+					sampleDetail.setLastUpdate(sql);
+					sampleDetail.setProficiency("");
+					sampleDetail.setUpdatedBy("");
+					programmingSkillValuesOfPeople.add(sampleDetail);
 				}
-				SimpleDateFormat format = new SimpleDateFormat("yyyyMMdd");
-		        java.util.Date parsed = format.parse("20180101");
-		        java.sql.Date sql = new java.sql.Date(parsed.getTime());
-		        
-				sampleDetail.setSkillName("");
-				sampleDetail.setLastUpdate(sql);
-				sampleDetail.setProficiency("");
-				sampleDetail.setUpdatedBy("");
-				programmingSkillValuesOfPeople.add(sampleDetail);
+			} catch (Exception e) {
+				System.out.println(e);
 			}
-		}catch (Exception e) {
-			System.out.println(e);
+
 		}
-		
-		}
-		programmingSkillValuesOfPeople.sort((o1,o2) -> o1.getLastUpdate().compareTo(o2.getLastUpdate()));
+		programmingSkillValuesOfPeople.sort((o1, o2) -> o1.getLastUpdate().compareTo(o2.getLastUpdate()));
 		return Response.ok(programmingSkillValuesOfPeople).build();
-				
-}
+
+	}
+
 	@PUT
 	@Path("/searchSkill")
 	public List<SkillTabsTemplate> searchSkill(String enteredSkill) {
@@ -231,20 +218,18 @@ public Response getProgrammingSkllsTimeline(@PathParam("personId") Integer perso
 		success.setSuccess("success");
 		return Response.ok(success).build();
 	}
-	
+
 	@POST
 	@Path("/insertSkill")
 	public List<SkillTabsTemplate> insertSkill(String newSkill) {
-		if(newSkill != ""){
-		
-			
-			
+		if (newSkill != "") {
+
 			try {
 				skillDAO.insertDefuaultValSkillDB(newSkill);
 			} catch (Exception e1) {
 				return null;
 			}
-			
+
 			List<Skill> skills = skillDAO.getAllSkills();
 			List<SkillTabsTemplate> sampleSkill = new ArrayList<SkillTabsTemplate>();
 			for (Skill skill : skills) {

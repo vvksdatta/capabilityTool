@@ -5,10 +5,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 /**
  * Communicates JWT token to be used after login.
  *
-
  */
 public class LoginResponse {
-
 
 	public LoginResponse(String token, String userFirstName, Integer userId) {
 		super();
@@ -19,10 +17,10 @@ public class LoginResponse {
 
 	@JsonProperty("token")
 	public String token;
-	
+
 	@JsonProperty("userFirstName")
 	public String userFirstName;
-	
+
 	@JsonProperty("userId")
 	public Integer userId;
 

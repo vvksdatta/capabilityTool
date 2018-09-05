@@ -1,6 +1,5 @@
 package se.bth.didd.wiptool.db;
 
-import java.sql.SQLException;
 import java.util.List;
 import org.skife.jdbi.v2.sqlobject.Bind;
 import org.skife.jdbi.v2.sqlobject.BindBean;
@@ -11,7 +10,6 @@ import se.bth.didd.wiptool.api.Projects;
 import se.bth.didd.wiptool.api.ProjectsList;
 import se.bth.didd.wiptool.api.Roles;
 import se.bth.didd.wiptool.api.RolesOfPeople;
-import se.bth.didd.wiptool.api.Participants;
 import se.bth.didd.wiptool.api.ProjectIdName;
 import se.bth.didd.wiptool.api.ProjectParticipants;
 import se.bth.didd.wiptool.api.ProjectSummary;
@@ -30,10 +28,6 @@ public interface ProjectDAO {
 	@SqlUpdate("create table if not exists PROJECTPARTICIPATION (projectId int REFERENCES PROJECTS(projectId),"
 			+ " personId int REFERENCES PEOPLE(personId), roleId int, redmineProjectIdentifier varchar(10), PRIMARY KEY(projectId, personId, roleId))")
 	void createProjectParticipationTable();
-
-	// projectDAO.insertnewProject(projectId, project.getName(),
-	// project.getName(), project.getDescription(), "active", timestamp,
-	// project.getUpdatedOn());
 
 	@SqlUpdate("insert into PROJECTS (projectId, parentProjectId, projectName, projectDescription, projectStartDate, projectEndDate, "
 			+ "projectLeader, projectEstimatedEffort,  projectStatus, projectLastUpdate, redmineLastUpdate, projectUpdatedBy, redmineProjectIdentifier)"
@@ -66,16 +60,16 @@ public interface ProjectDAO {
 
 	@SqlQuery("select projectId, projectName from PROJECTS")
 	List<ProjectIdName> getAllProjects();
-	
+
 	@SqlQuery("select projectId, projectName from PROJECTS where parentProjectId IS NULL or parentProjectId = 0")
 	List<ProjectIdName> getAllIndependentProjects();
-	
+
 	@SqlQuery("select projectId, projectName from PROJECTS where parentProjectId = :parentProjectId")
-	List<ProjectsList>  getSubProjectsList(@Bind("parentProjectId") int parentProjectId);
-	
+	List<ProjectsList> getSubProjectsList(@Bind("parentProjectId") int parentProjectId);
+
 	@SqlQuery("select exists (select 1 from PROJECTS where parentProjectId = :parentProjectId)")
 	boolean subProjectsExist(@Bind("parentProjectId") int parentProjectId);
-	
+
 	@SqlQuery("select projectId, projectName,parentprojectId from projects where parentprojectId is not null and projectId NOT IN (select ParentProjectId from projects where parentProjectId is not null)")
 	List<ProjectIdName> getAllChildProjects();
 
@@ -94,7 +88,7 @@ public interface ProjectDAO {
 
 	@SqlQuery("select exists( select 1 from PROJECTPARTICIPATION where projectId = :projectId and personId = :personId)")
 	boolean ifPersonExistsInProject(@Bind("projectId") int projectId, @Bind("personId") int personId);
-	
+
 	@SqlQuery("select TableA.personId, PEOPLE.personName, TableA.roleId, TableA.roleName from PEOPLE RIGHT JOIN (select  PROJECTPARTICIPATION.personId,"
 			+ " PROJECTPARTICIPATION.roleId, ROLESDB.roleName from PROJECTPARTICIPATION RIGHT JOIN ROLESDB ON "
 			+ "PROJECTPARTICIPATION.roleId = ROLESDB.roleId  where projectId = :id ) AS TableA ON TableA.personId = PEOPLE.personId ")
@@ -103,7 +97,7 @@ public interface ProjectDAO {
 	@SqlUpdate("delete from PROJECTPARTICIPATION where projectId = :projectId and personId = :personId and roleId= :roleId")
 	void deleteProjectParticipant(@Bind("projectId") int projectId, @Bind("personId") int personId,
 			@Bind("roleId") int roleId);
-	
+
 	@SqlUpdate("delete from PROJECTPARTICIPATION where projectId = :projectId ")
 	void deleteAllParticipants(@Bind("projectId") int projectId);
 

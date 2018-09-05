@@ -4,13 +4,8 @@ import java.sql.Date;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Calendar;
-import java.util.Collection;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -22,38 +17,22 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
-
-import org.skife.jdbi.v2.sqlobject.Bind;
-import org.skife.jdbi.v2.sqlobject.SqlUpdate;
-
 import com.github.rkmk.container.FoldingList;
-import com.taskadapter.redmineapi.MembershipManager;
 import com.taskadapter.redmineapi.RedmineException;
 import com.taskadapter.redmineapi.RedmineManager;
 import com.taskadapter.redmineapi.RedmineManagerFactory;
-import com.taskadapter.redmineapi.bean.Membership;
-import com.taskadapter.redmineapi.bean.Role;
-import com.taskadapter.redmineapi.bean.RoleFactory;
 import com.taskadapter.redmineapi.bean.Version;
 import com.taskadapter.redmineapi.bean.VersionFactory;
-
-import io.dropwizard.auth.Auth;
 import se.bth.didd.wiptool.api.SprintIdProjectId;
 import se.bth.didd.wiptool.api.NewSprint;
 import se.bth.didd.wiptool.api.People;
-import se.bth.didd.wiptool.api.PersonId;
-import se.bth.didd.wiptool.api.Roles;
-import se.bth.didd.wiptool.api.RolesOfPeople;
 import se.bth.didd.wiptool.api.RolesOfPeopleSprint;
 import se.bth.didd.wiptool.api.SelectedSprintRequirement;
-import se.bth.didd.wiptool.api.Skill;
-import se.bth.didd.wiptool.api.SkillNameValueUser;
 import se.bth.didd.wiptool.api.SprintRequirementsTabsTemplate;
 import se.bth.didd.wiptool.api.SprintRequirement;
 import se.bth.didd.wiptool.api.SprintRequirementNameLevel;
 import se.bth.didd.wiptool.api.SprintRequirementNameValueDescriptionUser;
 import se.bth.didd.wiptool.api.SprintRequirementUpdate;
-import se.bth.didd.wiptool.api.SprintRequirementsTabsTemplate;
 import se.bth.didd.wiptool.api.Sprint;
 import se.bth.didd.wiptool.api.SprintAllDomainsAssets;
 import se.bth.didd.wiptool.api.SprintAsset;
@@ -65,32 +44,29 @@ import se.bth.didd.wiptool.api.SprintIdProjectIdParticipants;
 import se.bth.didd.wiptool.api.SprintQuestionnaireTemplate;
 import se.bth.didd.wiptool.api.SprintSummary;
 import se.bth.didd.wiptool.api.SuccessMessage;
-import se.bth.didd.wiptool.auth.jwt.User;
 import se.bth.didd.wiptool.db.SprintDAO;
 import se.bth.didd.wiptool.api.CompanyDrivenFactorsNames;
 import se.bth.didd.wiptool.api.ErrorMessage;
 import se.bth.didd.wiptool.api.ExistingSprint;
-import se.bth.didd.wiptool.api.SprintRequirement;
 
 @Path("/sprints")
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
+
 /*
- * This servers as the main API resource for projects and projectsSumary
- * entities
+ * This servers as the main API resource for sprints entity
  */
 public class SprintResource {
 
 	private String redmineUrl;
 	private String apiAccessKey;
+	private SprintDAO sprintDAO;
 
 	/*
 	 * This constructor is invoked in the run method of the main application and
 	 * it maps the redmine configuration values to the variables 'redmineUrl'
 	 * and 'apiAcessKey'.
 	 */
-
-	SprintDAO sprintDAO;
 
 	public SprintResource(SprintDAO sprintDao, String redmineUrl, String apiAccessKey) {
 		super();
@@ -120,14 +96,14 @@ public class SprintResource {
 		try {
 			FoldingList<SprintSummary> foldedResult = sprintDAO.getListOfSprintsInProject(projectId);
 			List<SprintSummary> sprintSummary = foldedResult.getValues();
-			 return Response.ok(sprintSummary).build();
-				
+			return Response.ok(sprintSummary).build();
+
 		} catch (Exception e) {
 			System.out.println(e);
 			return Response.status(Status.BAD_REQUEST).entity(e).build();
 		}
 	}
-	
+
 	@GET
 	@Path("/existingSprintDetails/{sprintId}/{projectId}")
 	public Response existingSprintDetails(@PathParam("sprintId") Integer sprintId,
@@ -468,9 +444,10 @@ public class SprintResource {
 			for (RolesOfPeopleSprint eachExistingParticipant : existingparticipants) {
 
 				if (eachExistingParticipant.getPersonId().equals(person.getPersonId())) {
-					
+
 					sprintParticipantsWhoContinue.add(person.getPersonId());
-					sprintDAO.updateSprintParticipantExists(sprintdetails.getProjectId(), sprintdetails.getSprintId(), person.getPersonId());
+					sprintDAO.updateSprintParticipantExists(sprintdetails.getProjectId(), sprintdetails.getSprintId(),
+							person.getPersonId());
 				}
 
 			}
@@ -478,10 +455,11 @@ public class SprintResource {
 		}
 
 		try {
-		
-			
-			//System.out.println("projectId is" +sprintdetails.getProjectId()+" sprint  Id is "+ sprintdetails.getSprintId()+ " partici are " + foo2);
-			
+
+			// System.out.println("projectId is" +sprintdetails.getProjectId()+"
+			// sprint Id is "+ sprintdetails.getSprintId()+ " partici are " +
+			// foo2);
+
 			sprintDAO.deletePeopleWhoNoLongerParticipate(sprintdetails.getProjectId(), sprintdetails.getSprintId());
 
 			for (People person : sprintdetails.getSprintParticipants()) {
@@ -492,9 +470,10 @@ public class SprintResource {
 							sprintdetails.getSprintId());
 				}
 
-				sprintDAO.updateSprintParticipantDoesnotExist(sprintdetails.getProjectId(), sprintdetails.getSprintId(), person.getPersonId());
+				sprintDAO.updateSprintParticipantDoesnotExist(sprintdetails.getProjectId(), sprintdetails.getSprintId(),
+						person.getPersonId());
 			}
-			
+
 		} catch (Exception e) {
 			System.out.println(e.toString());
 			return Response.status(Status.BAD_REQUEST).entity(e).build();
@@ -730,7 +709,7 @@ public class SprintResource {
 	@POST
 	@Path("/updateQuestionnaire")
 	public Response updateQuestionnaire(SprintQuestionnaireTemplate questionnaireList) {
-		
+
 		Long timeStamp = Calendar.getInstance().getTimeInMillis();
 		Date date = new Date(timeStamp);
 		questionnaireList.setLastUpdate(date);

@@ -17,8 +17,6 @@ import se.bth.didd.wiptool.auth.jwt.User;
 import se.bth.didd.wiptool.resources.CapabilityResource;
 import se.bth.didd.wiptool.resources.IssueResource;
 import se.bth.didd.wiptool.resources.LoginResource;
-import se.bth.didd.wiptool.resources.ProtectedResourceOne;
-import se.bth.didd.wiptool.resources.ProtectedResourceTwo;
 import se.bth.didd.wiptool.resources.RolesResource;
 import se.bth.didd.wiptool.resources.SkillResource;
 import io.dropwizard.Application;
@@ -137,24 +135,22 @@ public class WiptoolApplication extends Application<WiptoolConfiguration> {
 		environment.jersey().register(
 				new SprintResource(sprintDAO, configuration.getRedmineUrl(),configuration.getApiAccessKey()));
 		environment.jersey().register(
-				new PeopleResource(peopleDAO, redmineDAO, configuration.getRedmineUrl(),configuration.getApiAccessKey()));
+				new PeopleResource(peopleDAO, configuration.getRedmineUrl(),configuration.getApiAccessKey()));
 		environment.jersey().register(
-				new RolesResource(rolesDAO,  configuration.getRedmineUrl(),configuration.getApiAccessKey()));
+				new RolesResource(rolesDAO));
 		environment.jersey().register(
-				new CapabilityResource(capabilityDAO, configuration.getRedmineUrl(),configuration.getApiAccessKey()));
+				new CapabilityResource(capabilityDAO));
 		environment.jersey().register(
 				new Redmine(redmineDAO, configuration.getRedmineUrl(),configuration.getApiAccessKey()));
 		environment.jersey().register(
-				new SkillResource(skillDAO, configuration.getRedmineUrl(),configuration.getApiAccessKey()));
+				new SkillResource(skillDAO));
 		environment.jersey().register(
 				new IssueResource(issuesDAO, configuration.getRedmineUrl(),configuration.getApiAccessKey()));
 		environment.jersey().register(new LoginResource(authDAO));
-		environment.jersey().register(new ProtectedResourceOne(authDAO));
-		environment.jersey().register(new ProtectedResourceTwo(authDAO));
 		
 		registerAuthFilters(environment);
 		
-		CapabilityResource capability = new CapabilityResource(capabilityDAO, configuration.getRedmineUrl(),configuration.getApiAccessKey());
+		CapabilityResource capability = new CapabilityResource(capabilityDAO);
 		capability.insertDefaultCapabilities();
 		
 		Login login = new Login();
