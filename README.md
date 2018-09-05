@@ -1,6 +1,6 @@
-# Wiptool
+# CAST
 
-*A capability-centric Web application to assist project managers in assembling teams.*
+*Capability-centric Agile Support Tool - A Web application to assist project managers in assembling teams.*
 
 Overview
 ---
