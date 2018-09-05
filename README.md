@@ -6,7 +6,7 @@ Overview
 ---
 This Web application is powered by a RESTful API on the backend. The API is developed using Java whereas, the client-side interface of the application(front-end) is developed using AngularJS and HTML. The backend API is further designed to interact with PostgreSQL database and the API of project management tool- Redmine. The following figure presents an overview of the architecture of the tool.
 
-![alt text](https://github.com/vvksdatta/capabilityTool/blob/master/src/main/resources/assets/frontend/photos/BlockDiagram.png)
+![alt text](https://github.com/vvksdatta/capabilityTool/blob/master/src/main/resources/assets/frontend/photos/BlockDiagram.png =250x250)
 
 Diving into the details
 ---
