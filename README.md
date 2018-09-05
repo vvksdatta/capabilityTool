@@ -6,9 +6,13 @@ Overview
 ---
 This Web application enables the integartion of capability assessments with regular project management routines. Such integration gives flexibility to managers for creating projects and keeping track of capabilities, sprint requirements and allocation routines, all from one tool while rest of the team members interact with regular project management platform and devote their complete focus towards accomplishing sprint goals.
 
-This application is specially designed to comply with open-source project management tool [PostgreSQL](https://www.postgresql.org/).  
+This application is specially designed to comply with open-source project management tool [Redmine](http://www.redmine.org/).  
 
-This Web application is powered by a RESTful API on the backend, developed using Java. On the other hand, the client-side interface of the application(front-end) is developed using AngularJS and HTML. The backend API is further designed to interact with [PostgreSQL](https://www.postgresql.org/) database and API of project management tool- [Redmine](http://www.redmine.org/). The following figure presents an overview of the architecture of the tool.
+This Web application is powered by a RESTful API on the backend, developed using Java. On the other hand, the client-side interface of the application(front-end) is developed using AngularJS and HTML. The backend API is further designed to interact with 
+*The API of project management tool- [Redmine](http://www.redmine.org/) 
+*[PostgreSQL](https://www.postgresql.org/) database to store capability information and project related details from Redmine.
+
+The following figure presents an overview of the architecture of the tool.
 
 <img src="https://github.com/vvksdatta/capabilityTool/blob/master/src/main/resources/assets/frontend/photos/BlockDiagram.png" data-canonical-src="https://github.com/vvksdatta/capabilityTool/blob/master/src/main/resources/assets/frontend/photos/BlockDiagram.png" width="550" height="500"/>
 
