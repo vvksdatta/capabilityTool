@@ -1,0 +1,9 @@
+<div  ng-controller="programmingskills">
+	<ul class="nav nav-tabs" style="margin-bottom: 10px;">
+		<li ng-class="getTabClass(1)" ng-click="setActiveTab(1)" ui-sref="management.people.editPerson.person({personId: userId})" ui-sref-opts="{reload: true}"><a  data-toggle="tab" >Person details</a></li>
+		<li ng-class="getTabClass(2)" ng-click="setActiveTab(2)" ui-sref="management.people.editPerson.editCapabilities({personId: userId})" ui-sref-opts="{reload: false}"><a   data-toggle="tab" >Capabilities</a></li>
+		<li ng-class="getTabClass(3)" ng-click="setActiveTab(3)" ui-sref="management.people.editPerson.programmingSkills({personId: userId})" ui-sref-opts="{reload: true}"><a   data-toggle="tab" >Programming skills</a></li>
+	</ul>
+	<user-card ng-cloak ng-show="newUserName"  name="{{newUserName | capitalize}}"></user-card>
+</div>
+<div ui-view> </div>
