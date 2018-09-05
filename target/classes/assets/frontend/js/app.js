@@ -106,8 +106,7 @@
   app.factory('GetProgrammingSkillsService', function ($http, $q) {
     return {
       getCountry: function(str) {
-        // the $http API is based on the deferred/promise APIs exposed by the $q service
-        // so it returns a promise for us by default
+        // the $http API is based on the deferred/promise APIs exposed by the $q service. So it returns a promise for us by default
         var url = "/api/skills/searchSkill";
         return $http.put(url,str)
         .then(function(response) {
