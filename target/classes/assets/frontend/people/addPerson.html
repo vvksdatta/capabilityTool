@@ -1,0 +1,20 @@
+<style>
+.disabledTab {
+  background-color: #eee;
+  cursor: no-drop;
+  pointer-events: none;
+}
+.md-headline {
+  font-size: 20px;
+}
+</style>
+<script>
+</script>
+<div ng-controller="programmingskills">
+  <ul class="nav nav-tabs" style="margin-bottom: 10px;">
+    <li ng-class="getTabClass(1)" ng-click="setActiveTab(1)" ui-sref="management.people.addPerson.newPerson" ui-sref-opts="{reload: true}" ><a  data-toggle="tab" >Person details</a></li>
+    <li ng-class="getTabClass(2)" ng-click="setActiveTab(2)" ui-sref="management.people.addPerson.capabilities({personId: userId})" ui-sref-opts="{reload: true}"><a  data-toggle="tab" >Capabilities</a></li>
+    <li ng-class="getTabClass(3)" ng-click="setActiveTab(3)"  ui-sref="management.people.addPerson.programmingSkills({personId: userId})" ui-sref-opts="{reload: true}" ><a data-toggle="tab" >Programming skills</a></li>
+  </ul>
+</div>
+<div ui-view> </div>

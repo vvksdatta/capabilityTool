@@ -1,0 +1,40 @@
+<style>
+p {
+  display: inline;
+}
+</style>
+<div class="row top-buffer">
+  <div id="page-wrapper"  >
+    <div id="page-viewport" ng-cloak >
+      <div id="sidebar" position:relative;">
+        <div id="sidebar-header">
+          <a href="" class="toggle-sidebar"><h3>Management</h3></a>
+          <span class="pull-right">
+            <a href="" class="toggle-sidebar btn btn-default">
+              <i class="fa fa-bars"></i>
+            </a>
+          </span>
+        </div>
+        <ul class="nav nav-pills nav-stacked">
+          <li>
+            <a ui-sref="management.projects.projectsTable">Projects<span class="pull-right"><i class="glyphicon glyphicon-folder-close"><md-tooltip md-direction="right"> Projects </md-tooltip></i></span></a>
+          </li>
+          <li>
+            <a ui-sref="management.sprints.sprintsTable">Sprints<span class="pull-right"><i class="glyphicon glyphicon-tasks"><md-tooltip  md-direction="right">  Sprints </md-tooltip></i></span></a>
+          </li>
+          <li>
+            <a ui-sref="management.people.peopleTable">People<span class="pull-right"><i class="fa fa-users"></i><md-tooltip md-direction="right"> People </md-tooltip></i></span></a>
+          </li>
+        </ul>
+      </div>
+      <div id="sidebar-page-content">
+        <div ncy-breadcrumb="" ng-cloak >
+        </div>
+        <div class="alert"  style="z-index:1" uib-alert ng-repeat="alert in alerts" ng-class="'alert-' + (alert.type || 'warning')" close="closeAlert($index)" ng-cloak> {{alert.msg}}</div>
+        <div ui-view></div>
+      </div>
+    </div>
+  </div>
+</div>
+<script src="js/sidebar.js"></script>
+<script src="js/searchText.js"> </script>

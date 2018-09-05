@@ -1,0 +1,52 @@
+<style>
+.disabledTab {
+  background-color: #eee;
+  cursor: no-drop;
+  pointer-events: none;
+}
+.md-headline {
+  font-size: 20px;
+}
+md-card {
+  margin: 0px;
+  margin-bottom: 10px;
+}
+md-card md-card-title {
+  padding: 8px 8px 8px;
+}
+</style>
+<script>
+</script>
+<div ng-controller="sprintRolesCtrl">
+  <ul class="nav nav-tabs" style="margin-bottom: 10px;">
+    <li ng-class="getTabClass(1)" ng-click="setActiveTab(1)" ui-sref="management.sprints.editSprint.existingSprint({sprintId: sprintId, projectId: projectId })" ui-sref-opts="{reload: false}"><a  data-toggle="tab" >Sprint details</a></li>
+    <li ng-class="getTabClass(2)" ng-click="setActiveTab(2);refreshSlider()" ui-sref="management.sprints.editSprint.companyFactors({sprintId: sprintId, projectId: projectId })" ui-sref-opts="{reload: false}"><a  data-toggle="tab" >Company driven factors</a></li>
+    <li ng-class="getTabClass(3)" ng-click="setActiveTab(3)" ui-sref="management.sprints.editSprint.sprintRequirements({sprintId: sprintId, projectId: projectId})" ui-sref-opts="{reload: false}"  ><a  data-toggle="tab">Sprint requirements</a></li>
+    <li ng-class="getTabClass(5)" ng-click="setActiveTab(5)" ui-sref="management.sprints.editSprint.sprintParticipants({sprintId: sprintId, projectId: projectId})" ui-sref-opts="{reload: false}" ><a  data-toggle="tab" >Sprint participants</a></li>
+    <li ng-class="getTabClass(6)" ng-click="setActiveTab(6)" ui-sref="management.sprints.editSprint.peopleToIssues({sprintId: sprintId, projectId: projectId})" ui-sref-opts="{reload: false}" ><a  data-toggle="tab" >People to issues</a></li>
+    <li ng-class="getTabClass(7)" ng-click="setActiveTab(7)" ui-sref="management.sprints.editSprint.questionnaire({sprintId: sprintId, projectId: projectId})" ui-sref-opts="{reload: false}"><a  data-toggle="tab" >Post completion questionnaire</a></li>
+  </ul>
+  <md-card >
+    <md-content>
+      <md-whiteframe class="md-whiteframe-18dp"  layout layout-align="center center">
+        <md-card-title>
+          <md-card-title-media>
+          </md-card-title-media>
+          <md-card-title-text>
+            <div style="width:100%; display: inline-flex">
+              <div style="width:40%;">
+                <span class="md-headline"  ng-click="manageSprint(sprintDetails)" > <i class="glyphicon glyphicon-tasks" style="font-size: 26px;" aria-label="Sprints" ></i>
+                  <strong>Sprint: </strong>{{sprintDetails.sprintName | capitalize}}</span>
+                </div>
+                <div style="width:40%;">
+                  <span class="md-headline"  ng-click="manageProject(sprintDetails)"> <i class="glyphicon glyphicon-folder-close" style="font-size: 26px;" aria-label="Projects" ></i>
+                    <strong>Project: </strong> {{sprintDetails.projectName | capitalize}}</span>
+                  </div>
+                </div>
+              </md-card-title-text>
+            </md-card-title>
+          </md-whiteframe>
+        </md-content>
+      </md-card>
+    </div>
+    <div ui-view> </div>

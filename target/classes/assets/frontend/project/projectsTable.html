@@ -1,0 +1,78 @@
+<style>
+p {
+  display: inline;
+}
+</style>
+<md-whiteframe class="md-whiteframe-18dp"  layout layout-align="center center">
+  <div class="col-md-12" style="padding-left: 0px; padding-right: 0px;">
+    <div class="panel panel-default-table panel-table" style="margin-bottom: 0px;">
+      <div class="panel-heading">
+        <md-button style="font-size: 15px; background-color: rgb(90, 132, 187);"  type="submit"  class="add-tab md-primary md-raised" ui-sref="management.projects.addProject.newProject"><i class="glyphicon glyphicon-plus"></i>Add project </md-button>
+        <input type="text" style="margin-top: 10px;" class="form-control" id="dev-table-filter" data-action="filter" data-filters="#dev-table" placeholder="Filter project"/>
+        <div class="pull-right">
+          <span class="clickable filter" data-toggle="tooltip" title="Toggle table filter" data-container="body"></span>
+        </div>
+      </div>
+      <div class="panel-body project-table-responsive">
+        <md-whiteframe class="md-whiteframe-24dp"  layout layout-align="center center">
+          <table class="table table-hover" id="dev-table">
+            <thead>
+              <tr>
+                <th>Project </th>
+                <th>Members</th>
+                <th>Team Leader</th>
+                <th>Sprints</th>
+                <th>progress</th>
+              </tr>
+            </thead>
+            <col width="35%" />
+            <col width="20%" />
+            <col width="15%" />
+            <col width="20%" />
+            <col width="10%" />
+            <tbody>
+              <tr ng-repeat="project in projects"  ng-click="manageProject(project)" >
+                <td><div>{{project.projectName | capitalize }}</div>
+                  <div style="display: inline-flex;margin-top:10px; font-size: 14px;color: rgb(90, 132, 187);" ng-repeat="parentProject in parentProjectsList[project.projectId].slice().reverse() track by $index " >
+                    <span ng-show="($index + 1) != parentProjectsList[project.projectId].length && parentProjectsList[project.projectId].length != 1">
+                      <a style="color: rgb(90, 132, 187);line-height: 20px;" ng-click="manageProjectWithId(parentProject.projectId)"> {{parentProject.projectName | capitalize}} <md-tooltip  md-direction="top"> Project: {{parentProject.projectName | capitalize}}</md-tooltip> </a>&nbsp;>>&nbsp;
+                    </span>
+                    <span ng-hide="($index + 1) != parentProjectsList[project.projectId].length || parentProjectsList[project.projectId].length == 1">
+                      <a style="color: rgb(90, 132, 187);line-height: 20px;" ng-click="manageProjectWithId(parentProject.projectId)"> {{parentProject.projectName | capitalize}} <md-tooltip  md-direction="top"> Project: {{parentProject.projectName | capitalize}}</md-tooltip> </a>
+                    </span>
+                  </div>
+                </td>
+                <td>
+                  <span ng-model="letterLimit" ng-repeat="name in project.projectMembers" class="avatar" alt="datta" data-toggle="tooltip" data-placement="top" data-container="body" title="" style="background-color: #29516D; width: 28px; height: 26px; font-size: 12px; padding-top: 5px; margin-right: 3px;cursor: pointer;" data-original-title={{name.personName}}>{{ name.personName | limitTo:2 | uppercase }} <md-tooltip md-direction="top"> {{ name.personName }}</md-tooltip>
+                  </span>
+                </td>
+                <td>{{project.projectLeader | capitalize }}</td>
+                <td>
+                  <span ng-repeat="sprint in project.sprints">
+                    <ul class="align">
+                      {{sprint.sprintName | capitalize}}
+                    </ul>
+                  </span>
+                </td>
+                <td>
+                  <div ng-show="project.projectProgress" class="progress">
+                    <div class="progress-bar progress-bar-striped active" role="progressbar" aria-valuenow={{project.projectProgress}} aria-valuemin="0" aria-valuemax="100" style="width:{{project.projectProgress}}%;color: #000000e6; font-size: 12px;">
+                      {{project.projectProgress}}%
+                    </div>
+                    <md-tooltip md-direction="top"> Project progress : {{ project.projectProgress }}%</md-tooltip>
+                  </div>
+                  <div ng-hide="project.projectProgress" class="progress">
+                    <div class="progress-bar progress-bar-striped active" role="progressbar" aria-valuenow={{project.projectProgress}} aria-valuemin="0" aria-valuemax="100" style="width:0%;color: #000000e6; font-size: 12px;">
+                    </div>
+                    <md-tooltip md-direction="top"> Project progress : 0%</md-tooltip>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </md-whiteframe>
+      </div>
+    </div>
+  </div>
+</md-whiteframe>
+<script src="js/searchText.js"> </script>
