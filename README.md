@@ -21,7 +21,7 @@ Diving into the details of the architecture
 ---
 **RESTful API of Redmine**
 
-The right most block in the above listed diagram represents the RESTful API of Redmine. With the help of an administrator's API access-key, it would be possible to communicate with Redmine using REST calls, for fetching and manipulating information of projects, people, issues and other entitities. Thus, the URL of Redmine server and API access-key of administartor are used by another block (**dropwizard based RESTful API**) to communicate with Redmine. These details are refereed from the [configuration file] (https://github.com/vvksdatta/capabilityTool/blob/master/config.yml).  
+The right most block in the above listed diagram represents the RESTful API of Redmine. With the help of an administrator's API access-key, it would be possible to communicate with Redmine using REST calls, for fetching and manipulating information of projects, people, issues and other entitities. Thus, the URL of Redmine server and API access-key of administartor are used by another block (**dropwizard based RESTful API**) to communicate with Redmine. These details are refereed from the [Configuration file](https://github.com/vvksdatta/capabilityTool/blob/master/config.yml).  
 
 **PostgreSQL database**
 
