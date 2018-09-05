@@ -44,7 +44,15 @@ With the help of Jersey and Jackson services, the dropwizard project herein host
 Further, the main method of dropwizard project spins up an HTTP server using [Jetty](http://www.eclipse.org/jetty/). This server hosts all the Web pages and other static files associated with the client-side interface of the application(front-end).  
 
 **Users**
+The Application's design is oriented towards the practices of managers. Multiple managers can create profiles and access this Web application.
 
+Prerequisites for running the Web application
+---
+* jre 1.8
+* postgreSQL
+* Redmine
+* Maven
+* Chrome or  Fire-Fox Web browser
 
 How to start the wiptool application
 ---
