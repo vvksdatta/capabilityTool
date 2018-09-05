@@ -1,6 +1,6 @@
 # CAST
 
-***C**apability-centric **A**gile **S**upport **T**ool - A Web application to assist project managers for assembling teams.*
+***C**apability-centric **A**gile **S**upport **T**ool - A Web application to assist project managers for configuring teams.*
 
 Overview
 ---
