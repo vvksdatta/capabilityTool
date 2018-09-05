@@ -10,7 +10,7 @@ This Web application is powered by a RESTful API on the backend. The API is deve
 
 Diving into the details
 ---
-
+**Backend**
 The backend It's a little bit of opinionated glue code which bangs together a set of libraries which have
 historically not sucked:
 
