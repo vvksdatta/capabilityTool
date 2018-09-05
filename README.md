@@ -8,11 +8,11 @@ This Web application is powered by a RESTful API on the backend. The API is deve
 
 <img src="https://github.com/vvksdatta/capabilityTool/blob/master/src/main/resources/assets/frontend/photos/BlockDiagram.png" data-canonical-src="https://github.com/vvksdatta/capabilityTool/blob/master/src/main/resources/assets/frontend/photos/BlockDiagram.png" width="550" height="500"/>
 
-Diving into the details
+Diving into the details of backend
 ---
-**Backend**
+**Dropwizard based RESTful API**
 
-The backend is developed using [Dropwizard](https://www.dropwizard.io/1.2.0/docs/) framework, that implements all the functionalities needed for running a Web appliation. Dropwizard bundles multiple libraries together such as: 
+The central block presented in the above listed diagram is a key elememt that acts a bridge between [Redmine](http://www.redmine.org/) and [PostgreSQL](https://www.postgresql.org/) database. It is developed using [Dropwizard](https://www.dropwizard.io/1.2.0/docs/) framework, that implements all the functionalities needed for running a Web appliation. Dropwizard bundles multiple libraries together such as: 
 
 * [Jetty](http://www.eclipse.org/jetty/) for HTTP services.
 * [Jersey](http://jersey.java.net/) for RESTful web application.
