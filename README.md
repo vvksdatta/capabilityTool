@@ -1,5 +1,27 @@
 # wiptool
 
+*A capability-centric Web tool that can assist project managers in assembling teams.*
+
+Overview
+---
+This Web application is powered by a RESTful API on the backend. The API is developed using Java whereas, the client-side interface of the application(front-end) is developed using AngularJS and HTML. The backend API is further designed to interact with PostgreSQL database and the API of project management tool- Redmine.
+
+![alt text](https://github.com/vvksdatta/capabilityTool/blob/master/src/main/resources/assets/frontend/photos/BlockDiagram.png)
+
+The backend It's a little bit of opinionated glue code which bangs together a set of libraries which have
+historically not sucked:
+
+* [Jetty](http://www.eclipse.org/jetty/) for HTTP servin'.
+* [Jersey](http://jersey.java.net/) for REST modelin'.
+* [Jackson](https://github.com/FasterXML/jackson) for JSON parsin' and generatin'.
+* [Logback](http://logback.qos.ch/) for loggin'.
+* [Hibernate Validator](http://hibernate.org/validator/) for validatin'.
+* [Metrics](http://metrics.dropwizard.io) for figurin' out what your application is doin' in production.
+* [JDBI](http://www.jdbi.org) and [Hibernate](http://www.hibernate.org/orm/) for databasin'.
+* [Liquibase](http://www.liquibase.org/) for migratin'.
+
+Read more at [dropwizard.io](http://www.dropwizard.io).
+
 How to start the wiptool application
 ---
 
