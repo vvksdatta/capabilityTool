@@ -23,11 +23,12 @@ Diving into the details of the architecture
 ---
 **RESTful API of Redmine**
 
-The right most block in the above listed diagram represents the RESTful API of Redmine. With the help of an administrator's API access-key, it would be possible to communicate with Redmine using REST calls, for fetching and manipulating information of projects, people, issues and other entitities. Thus, the URL of Redmine server and API access-key of administartor are used by another block (**dropwizard based RESTful API**) to communicate with Redmine. These details are refereed from the [configuration file](https://github.com/vvksdatta/capabilityTool/blob/master/config.yml).  
+The right most block in the above listed diagram represents the RESTful API of Redmine. With the help of an administrator's API access-key, it would be possible to communicate with Redmine using REST calls, for fetching and manipulating information of projects, people, issues and other entitities. Thus, the URL of Redmine server and API access-key of administartor are used by another block (**Dropwizard based RESTful API**) to communicate with Redmine. These details are refereed from the [configuration file](https://github.com/vvksdatta/capabilityTool/blob/master/config.yml).  
 
 **PostgreSQL database**
 
-A PostgreSQl database is integrated to the Web application to maintain a local copy of information related to various entities on Redmine. This information is necessary in order to further establish relationships between entities like people and different apsects like programming skills, capabilities, etc.  
+A PostgreSQl database is integrated to the Web application to maintain a local copy of information related to various entities on Redmine. This information is necessary in order to further establish relationships between entities like people and different apsects like programming skills, capabilities, etc. For maintaining a consistency between data being stored on Redmine and database, a database schema similar to that of Redmine is implemented in the local instance of database. That is, the identifiers of various entities on Redmine, together with their respective values are retieved and stored in the database. This is accomplished by the next block.
+ 
 
 **Dropwizard based RESTful API**
 
