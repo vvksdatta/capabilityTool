@@ -45,7 +45,7 @@ Further, the main method of dropwizard project spins up an HTTP server using [Je
 
 **Users**
 
-The Application's design is oriented towards the practices of managers. Multiple managers can create profiles and access this Web application.
+The application's design is oriented towards the practices of managers. Multiple managers can create profiles and access this Web application.
 
 Prerequisites for running the Web application
 ---
