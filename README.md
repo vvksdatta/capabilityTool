@@ -1,4 +1,4 @@
-# wiptool
+# Wiptool
 
 *A capability-centric Web application to assist project managers in assembling teams.*
 
@@ -29,6 +29,7 @@ The central block in the above listed diagram is a key elememt that acts a bridg
 * [JDBI](http://www.jdbi.org) for database interactions.
 
 The main method of dropwizard project spins up an HTTP server using [Jetty](http://www.eclipse.org/jetty/).
+
 How to start the wiptool application
 ---
 
