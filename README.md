@@ -58,7 +58,7 @@ Prerequisites for running the Web application
    * [Install PostgreSQL database server](https://www.enterprisedb.com/downloads/postgres-postgresql-downloads)
    * When installation panel prompts to enter port number for the server to listen to, you can set it to the default port number 5432. Further, choose a password for superuser 'postgres'. These credentials will further be used to set up a server and communicate with the database.   
    * [Install PgAdmin 4](https://www.pgadmin.org/download/) 
-   * Now open PgAdmin 4 application to setup a server. Click Object > Create > Server.
+   * Now open PgAdmin 4 application to setup a server. Select the 'Servers' group and click Object > Create > Server.
    * In the Create-Server panel, under general tab, assign a name for the server. Then under Connection tab, the Host name/address shoud be set to localhost. Make sure that the port number is set to 5432 and then under password, enter the password for 'postgres' user that was used while installing PostgreSQL. Next, save the configuration.   
    
 3. Redmine
