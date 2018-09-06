@@ -19,7 +19,7 @@ The following figure presents an overview of the architecture of the tool.
 |:--:| 
 | *Block diagram of Web application* |
 
-Diving into the details of the architecture
+Diving into the details of architecture
 ---
 **RESTful API of Redmine**
 
