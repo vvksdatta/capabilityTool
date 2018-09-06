@@ -49,7 +49,8 @@ The application's design is oriented towards the practices of managers. Multiple
 
 Prerequisites for running the Web application
 ---
-* jre 1.8
+* JRE 9
+ * [Install JRE 9 on Windows](https://docs.oracle.com/javase/9/install/installation-jdk-and-jre-microsoft-windows-platforms.htm#GUID-2B9D2A17-176B-4BC8-AE2D-FD884161C958)
 * postgreSQL
 * Redmine
 * Maven
