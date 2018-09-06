@@ -49,12 +49,18 @@ The application's design is oriented towards the practices of managers. Multiple
 
 Prerequisites for running the Web application
 ---
-* JRE 9
- * [Install JRE 9 on Windows](https://docs.oracle.com/javase/9/install/installation-jdk-and-jre-microsoft-windows-platforms.htm#GUID-2B9D2A17-176B-4BC8-AE2D-FD884161C958)
-* postgreSQL
-* Redmine
-* Maven
-* Chrome or  Fire-Fox Web browser
+1. JRE 9
+   * [Install JRE 9 on Windows](https://docs.oracle.com/javase/9/install/installation-jdk-and-jre-microsoft-windows-platforms.htm#GUID-2B9D2A17-176B-4BC8-AE2D-FD884161C958)
+   * [Install JRE 9 on Linux](https://docs.oracle.com/javase/9/install/installation-jdk-and-jre-linux-platforms.htm#GUID-09D016D5-AB67-4552-9312-3B249180BD0F)
+   * [Install JRE 9 on macOS](https://docs.oracle.com/javase/9/install/installation-jdk-and-jre-macos.htm#GUID-0071963E-D247-4D15-BF49-AD19C7260740)
+   
+2. postgreSQL
+
+3. Redmine
+
+4. Maven
+
+5. Chrome or  Fire-Fox Web browser
 
 How to start the wiptool application
 ---
