@@ -6683,6 +6683,9 @@
           $scope.list2= [];
         });
       }
+      $scope.manageProject = function(project) {
+        $state.go("management.projects.editProject",project );
+      }
     });
     app.controller('editProject', function($scope, $state, $stateParams, $filter, $location, $http, alertFactory, $base64, $q, dataService, alertFactory, $localStorage, $mdDialog, $log) {
       var currentProject = $stateParams;
