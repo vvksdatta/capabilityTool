@@ -20,7 +20,7 @@ database:
   password: wip
 
   # the JDBC URL
-  url: jdbc:postgresql://localhost:5432/aug6
+  url: jdbc:postgresql://localhost:5432/sep8
   
 # Tool admin account username (can be changed after login)
 adminUserName: admin

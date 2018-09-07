@@ -147,6 +147,8 @@ public class Redmine {
 				newProject.setRedmineLastUpdate(redmineProject.getUpdatedOn());
 				newProject.setParentProjectId(redmineProject.getParentId());
 				redmineDAO.insertIntoProjects(newProject);
+			
+	
 
 				/*
 				 * for each project, fetch the list of sprints associated with
@@ -232,6 +234,12 @@ public class Redmine {
 					}
 
 				}
+			}
+		}
+				Timestamp timestamp = new Timestamp(System.currentTimeMillis());
+				for (Project redmineProject : projects) {
+					/* check if project already added to database */
+					if (redmineDAO.ifProjectExists(redmineProject.getId()) != true) {
 
 				/*
 				 * for each project, we use the projectidentifier field to fetch
@@ -471,13 +479,20 @@ public class Redmine {
 						}
 					}
 				}
+					}
+				}
 
-			} else {
+				
+				
+				for (Project redmineProject : projects) {
+					/* check if project already added to database */
+					if (redmineDAO.ifProjectExists(redmineProject.getId()) != false) {
+			
 				/*
 				 * The current project is already added as a record on projects
 				 * table of local database
 				 */
-				Timestamp timestamp = new Timestamp(System.currentTimeMillis());
+				
 
 				/*
 				 * Check whether the current project details have been modified
