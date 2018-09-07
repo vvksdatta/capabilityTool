@@ -1,7 +1,6 @@
 package se.bth.didd.wiptool.redmine;
 
 import java.math.BigDecimal;
-import java.nio.charset.Charset;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Collection;
