@@ -71,11 +71,18 @@ public class Redmine {
 		RedmineManager redmineManager = RedmineManagerFactory.createWithApiKey(redmineUrl, apiAccessKey);
 
 		List<User> people = redmineManager.getUserManager().getUsers();
+		
+		/*generating a random string for updating the identifiers on each iteration*/
 
-		byte[] array = new byte[5];
-		new Random().nextBytes(array);
-		String generatedRandomString = new String(array, Charset.forName("UTF-8"));
-
+		String alphabet= "abcdefghijklmnopqrstuvwxyz";
+        String generatedRandomString = "";
+        Random random = new Random();
+        int randomLen = 5;
+        for (int i = 0; i < randomLen; i++) {
+            char c = alphabet.charAt(random.nextInt(26));
+            generatedRandomString+=c;
+        }
+         
 		for (User person : people) {
 
 			if (redmineDAO.ifPersonIdExists(person.getId()) != true) {
@@ -147,8 +154,6 @@ public class Redmine {
 				newProject.setRedmineLastUpdate(redmineProject.getUpdatedOn());
 				newProject.setParentProjectId(redmineProject.getParentId());
 				redmineDAO.insertIntoProjects(newProject);
-			
-	
 
 				/*
 				 * for each project, fetch the list of sprints associated with
@@ -236,11 +241,27 @@ public class Redmine {
 				}
 			}
 		}
-				Timestamp timestamp = new Timestamp(System.currentTimeMillis());
-				for (Project redmineProject : projects) {
-					/* check if project already added to database */
-					if (redmineDAO.ifProjectExists(redmineProject.getId()) != true) {
 
+		/*
+		 * The loop for inserting new projects has been isolated from the loop
+		 * for inserting new issues. The reason for this can be understood from
+		 * a simple example. consider a project (project1) which has a sub
+		 * project (child1). Further, consider the case where this 'child1'
+		 * project has another subproject (grancChild1). When an issue is
+		 * created in this 'grandChild1' project, on Redmine, the same issue
+		 * will be listed automatically under both the parent projects, i.e.
+		 * Redmine lists the issue under both 'child1' and 'project1' projects.
+		 * So, if issues are updated in the same loop where new projects are
+		 * inserted, there is a chance for foreign key conflicts when a
+		 * 'grandChildproject1' details are not yet registered to the database.
+		 */ 
+		Timestamp timestamp = new Timestamp(System.currentTimeMillis());
+		System.out.println("hello the timestamp now is"+timestamp);
+		
+		for (Project redmineProject : projects) {
+			/* check if project already added to database */
+			if (redmineDAO.ifProjectExists(redmineProject.getId()) != true) {
+				System.out.println("hello the timestamp now is"+timestamp);
 				/*
 				 * for each project, we use the projectidentifier field to fetch
 				 * all the issues listed in that project
@@ -479,20 +500,17 @@ public class Redmine {
 						}
 					}
 				}
-					}
-				}
+			}
+		}
 
-				
-				
-				for (Project redmineProject : projects) {
-					/* check if project already added to database */
-					if (redmineDAO.ifProjectExists(redmineProject.getId()) != false) {
-			
+		for (Project redmineProject : projects) {
+			/* check if project already added to database */
+			if (redmineDAO.ifProjectExists(redmineProject.getId()) != false) {
+
 				/*
 				 * The current project is already added as a record on projects
 				 * table of local database
 				 */
-				
 
 				/*
 				 * Check whether the current project details have been modified
