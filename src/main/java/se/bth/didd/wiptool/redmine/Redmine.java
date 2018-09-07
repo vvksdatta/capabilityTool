@@ -64,15 +64,6 @@ public class Redmine {
 	public Response synchronizingWithRedmine() throws RedmineException {
 
 		/*
-		 * Fetch list of project participants from each project in redmine. If
-		 * person is not already added, add as a new person.Else if the details
-		 * are modified, update the details of person
-		 */
-		RedmineManager redmineManager = RedmineManagerFactory.createWithApiKey(redmineUrl, apiAccessKey);
-
-		List<User> people = redmineManager.getUserManager().getUsers();
-
-		/*
 		 * Generating a random string for updating the identifiers on each
 		 * iteration. These identifiers are used to remove the entities from
 		 * database that no longer exist on Redmine
@@ -87,6 +78,16 @@ public class Redmine {
 			generatedRandomString += c;
 		}
 
+		/*
+		 * Fetch list of project participants from each project in redmine. If
+		 * person is not already added, add as a new person.Else if the details
+		 * are modified, update the details of person
+		 */
+		RedmineManager redmineManager = RedmineManagerFactory.createWithApiKey(redmineUrl, apiAccessKey);
+
+		List<User> people = redmineManager.getUserManager().getUsers();
+
+		
 		for (User person : people) {
 
 			if (redmineDAO.ifPersonIdExists(person.getId()) != true) {
