@@ -221,12 +221,13 @@ $(".nav-tabs li").eq(5).removeClass("active");
           <div class="panel-heading">
             <h3 class="panel-title"><strong>Sprint Participants </strong></h3>
           </div>
-          <div class="panel-body">
+          <div class="panel-body" ng-if="displayAddButton != true;">
             <table class="table table-hover" id="dev-table">
               <thead>
                 <tr>
                   <th>Name</th>
                   <th>Role</th>
+
                 </tr>
               </thead>
               <tbody>
@@ -238,25 +239,30 @@ $(".nav-tabs li").eq(5).removeClass("active");
                   <td>{{participant.roleName}}</td>
                 </tr>
                 <tr>
-                  <td colspan="2" style="border-top: 1px solid #fff; text-align: center" >
+                  <td colspan="2" style="border-top: 1px solid #fff; text-align: center">
                     <md-button type="submit" style="font-size: 15px; background-color: rgb(90, 132, 187);"  class="add-tab md-primary md-raised" ng-click="editSprintParticipants()"> <i class="glyphicon glyphicon-edit"> </i> Edit  </md-button>
                   </td>
                 </tr>
               </tbody>
             </table>
           </div>
-          <div ng-init="stopDisplay = false;">
-          <div ng-repeat="participant in sprintParticipants">
-          <div  ng-if="!participant.roleName" ng-init="displayInfo = true;">
 
+        <div  ng-if="displayInfo == true;"  class="panel-body">
+          <div ng-cloak style="margin-top: 15px;" class="alert alert-info" role="alert">
+          Issue(s) have been moved to this project from another project. This is why the role of some member(s) is blank.
           </div>
         </div>
-        <div  ng-if="displayInfo = true;"  class="panel-body">
-          <div    style="margin-top: 15px;" class="alert alert-info" role="alert">
-          Issue(s) has been moved to this project from another project. This is why the role of some member(s) is blank.
-          </div>
-        </div>
+
+
+    <div ng-if="displayAddButton == true;"  class="panel-body">
+      <div ng-cloak style="margin-top: 15px;" class="alert alert-info" role="alert">
+        No participants exist in this sprint.
       </div>
+      <div class="col-sm-3 pull-right" >
+        <md-button type="submit" style="font-size: 15px; background-color: rgb(90, 132, 187);"  class="add-tab md-primary md-raised" ng-click="editSprintParticipants()"> <i class="glyphicon glyphicon-plus"> </i> Add  </md-button>
+      </div>
+    </div>
+
         </div>
       </div>
     </div>
