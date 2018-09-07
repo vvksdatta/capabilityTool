@@ -223,6 +223,24 @@ public class Redmine {
 						 * person already added, no new roles will be assigned
 						 * to the person in the current project.
 						 */
+
+						/*
+						 * Note a possible scenario: Consider two projects
+						 * 'project1' and 'project2'. Say 'project2' consists of
+						 * several issues tagged under special category and say
+						 * an issue('issue1') among these is assigned to
+						 * 'person1'. Now considering that 'person1' is not a
+						 * member of 'project1', if we move the 'issue1' from
+						 * 'project2' to 'project1' and assign 'issue1' to a
+						 * target version in 'project1', then the 'person1' will
+						 * be a member of a sprint without actually being a
+						 * member of 'project1'. In such case, even Redmine
+						 * doesn't represent the person to be part of the
+						 * project. Thus, this person doesn't bear a role within
+						 * this project. So, if a sprint shows people with no
+						 * role, it indicates that an issue that was allocated
+						 * to a person was moved from one project to another.
+						 */
 						if (redmineDAO.ifPersonExistsInProject(redmineProject.getId(),
 								projectParticipant.getUserId()) != true) {
 							if (redmineDAO.ifPersonParticipatesInProject(redmineProject.getId(),
