@@ -71,18 +71,22 @@ public class Redmine {
 		RedmineManager redmineManager = RedmineManagerFactory.createWithApiKey(redmineUrl, apiAccessKey);
 
 		List<User> people = redmineManager.getUserManager().getUsers();
-		
-		/*generating a random string for updating the identifiers on each iteration*/
 
-		String alphabet= "abcdefghijklmnopqrstuvwxyz";
-        String generatedRandomString = "";
-        Random random = new Random();
-        int randomLen = 5;
-        for (int i = 0; i < randomLen; i++) {
-            char c = alphabet.charAt(random.nextInt(26));
-            generatedRandomString+=c;
-        }
-         
+		/*
+		 * Generating a random string for updating the identifiers on each
+		 * iteration. These identifiers are used to remove the entities from
+		 * database that no longer exist on Redmine
+		 */
+
+		String alphabet = "abcdefghijklmnopqrstuvwxyz";
+		String generatedRandomString = "";
+		Random random = new Random();
+		int randomLen = 5;
+		for (int i = 0; i < randomLen; i++) {
+			char c = alphabet.charAt(random.nextInt(26));
+			generatedRandomString += c;
+		}
+
 		for (User person : people) {
 
 			if (redmineDAO.ifPersonIdExists(person.getId()) != true) {
@@ -137,7 +141,7 @@ public class Redmine {
 			redmineDAO.updateRoleStatus(role.getId(), generatedRandomString);
 		}
 
-		/* update projects,sprints, issues etc */
+		/* update projects,sprints etc */
 		List<Project> projects = redmineManager.getProjectManager().getProjects();
 		for (Project redmineProject : projects) {
 			/* check if project already added to database */
@@ -254,14 +258,15 @@ public class Redmine {
 		 * So, if issues are updated in the same loop where new projects are
 		 * inserted, there is a chance for foreign key conflicts when a
 		 * 'grandChildproject1' details are not yet registered to the database.
-		 */ 
+		 */
 		Timestamp timestamp = new Timestamp(System.currentTimeMillis());
-		System.out.println("hello the timestamp now is"+timestamp);
-	
+		System.out.println("hello the timestamp now is" + timestamp);
+
 		for (Project redmineProject : projects) {
 			/* check if project already added to database */
 			if (redmineDAO.ifProjectExists(redmineProject.getId()) != false) {
-				System.out.println("hello the project"+ redmineProject.getName()+ "exists and the timestamp now is"+timestamp);
+				System.out.println(
+						"hello the project" + redmineProject.getName() + "exists and the timestamp now is" + timestamp);
 				/*
 				 * The current project is already added as a record on projects
 				 * table of local database
@@ -504,7 +509,7 @@ public class Redmine {
 
 							}
 						}
-						
+
 						if (issue.getTargetVersion() != null) {
 							redmineDAO.updateIdentifiersInSprintComprisingIssues(issue.getProjectId(), issue.getId(),
 									issue.getTargetVersion().getId(), generatedRandomString, generatedRandomString,
@@ -558,7 +563,8 @@ public class Redmine {
 								}
 							} else {
 								redmineDAO.deleteIssueAlreadyAllocatedToOtherSprint(issue.getId());
-								System.out.println("issue already allocated to other sprint. so deleted as target version is null");
+								System.out.println(
+										"issue already allocated to other sprint. so deleted as target version is null");
 							}
 						}
 						/*
@@ -577,8 +583,8 @@ public class Redmine {
 						 * insert the issue details as new entry to issues table
 						 */
 						redmineDAO.insertIntoIssuesTable(newIssue);
-						System.out.println("Added new  isses to  project "+ redmineProject.getName());
-						
+						System.out.println("Added new  isses to  project " + redmineProject.getName());
+
 						if (issue.getTargetVersion() != null) {
 							Version issueTargetVersion = issue.getTargetVersion();
 
@@ -586,7 +592,8 @@ public class Redmine {
 									issue.getId()) != true) {
 								redmineDAO.InsertIntoSprintComprisingIssuesTable(issue.getProjectId(),
 										issueTargetVersion.getId(), issue.getId());
-								System.out.println("Added the isses to SprintComprisingIssues table for project "+ redmineProject.getName());
+								System.out.println("Added the isses to SprintComprisingIssues table for project "
+										+ redmineProject.getName());
 
 							}
 
@@ -596,12 +603,13 @@ public class Redmine {
 
 									redmineDAO.InsertIntoSprintParticipationTable(issue.getProjectId(),
 											issueTargetVersion.getId(), issue.getAssigneeId());
-									System.out.println("Added to the sprint participation table for project " +  redmineProject.getName());
+									System.out.println("Added to the sprint participation table for project "
+											+ redmineProject.getName());
 
 								}
 							}
 						}
-						
+
 					}
 					redmineDAO.updateIdentifiersInIssues(issue.getProjectId(), issue.getId(), generatedRandomString,
 							generatedRandomString);
@@ -610,7 +618,7 @@ public class Redmine {
 								issue.getTargetVersion().getId(), generatedRandomString, generatedRandomString,
 								generatedRandomString);
 					}
-					
+
 					if (issue.getAssigneeId() != null && issue.getTargetVersion() != null) {
 						redmineDAO.updateIdentifiersInSprintparticipation(issue.getProjectId(),
 								issue.getTargetVersion().getId(), issue.getAssigneeId(), generatedRandomString,
