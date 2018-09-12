@@ -5164,14 +5164,6 @@
           $http.get('/api/sprints/getSprintParticipants/'+$scope.sprintId+'/'+$scope.projectId).then(function(response)
           {
             $scope.sprintParticipants= response.data;
-            angular.forEach($scope.sprintParticipants, function(value, key) {
-              if(value.roleName == null){
-                $scope.displayInfo = true;
-              }
-            });
-            if($scope.sprintParticipants.length==0){
-              $scope.displayAddButton = true;
-            }
           });
         }).then(function(){
           var existingSprint = $scope.sprint;
@@ -6682,9 +6674,6 @@
           },$scope.peopleList);
           $scope.list2= [];
         });
-      }
-      $scope.manageProject = function(project) {
-        $state.go("management.projects.editProject",project );
       }
     });
     app.controller('editProject', function($scope, $state, $stateParams, $filter, $location, $http, alertFactory, $base64, $q, dataService, alertFactory, $localStorage, $mdDialog, $log) {
