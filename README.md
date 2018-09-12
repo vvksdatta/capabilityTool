@@ -74,12 +74,12 @@ Prerequisites for running the Web application
 
 **5.** **Chrome or  Fire-Fox Web browser**
 
-How to start the wiptool application
+How to start the Web application
 ---
   * Update the following fields in configuration file ([config.yml](https://github.com/vvksdatta/capabilityTool/blob/master/config.yml))
-    * Under database, update user, password and url
-    *
-      
-1. Run `mvn clean install` to build your application
-1. Start application with `java -jar target/wiptool-0.0.1-SNAPSHOT.jar server config.yml`
-1. To check that your application is running enter url `http://localhost:8080`
+    * Under database, update 'password' and 'url'
+    * Update 'adminUserName' and 'adminPassword' in order to change the defualt username and password details for Web application
+    * Update 'redmineUrl' and 'apiAccessKey' 
+  * Run 'mvn clean install` to build the Web application
+  * Start the application with `java -jar target/wiptool-0.0.1-SNAPSHOT.jar server config.yml`
+  * Access the Web application from a browser using the url `http://localhost:8080`
