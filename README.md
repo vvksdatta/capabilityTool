@@ -54,16 +54,17 @@ Prerequisites for running the Web application
    * [Install JRE 9 on Linux](https://docs.oracle.com/javase/9/install/installation-jdk-and-jre-linux-platforms.htm#GUID-09D016D5-AB67-4552-9312-3B249180BD0F)
    * [Install JRE 9 on macOS](https://docs.oracle.com/javase/9/install/installation-jdk-and-jre-macos.htm#GUID-0071963E-D247-4D15-BF49-AD19C7260740)
    
-2. PostgreSQL 9.5.14
-   * [Install PostgreSQL database](https://www.enterprisedb.com/downloads/postgres-postgresql-downloads)
+2. PostgreSQL 
+   * [Install PostgreSQL database version 9.5.14](https://www.enterprisedb.com/downloads/postgres-postgresql-downloads)
    * When installation panel prompts to enter port number for the server to listen to, you can set it to the default port number 5432. Further, choose a password for superuser 'postgres'. These credentials will further be used to set up a server and communicate with the database.   
    * [Install PgAdmin 4](https://www.pgadmin.org/download/), an administration and management tool for PostgreSQL database
    * Now open PgAdmin 4 application to setup a server. Select the 'Servers' group and right click > Create > Server.
    * In the Create-Server panel, under general tab, assign a name for the server. Then under Connection tab, the Host name/address shoud be set to localhost. Make sure that the port number is set to 5432 and then under password, enter the password for 'postgres' user that was used while installing PostgreSQL. Next, save the configuration.   
    * Next, we create a new a database. Within the 'Servers' group, select the server created in the previous step and right click > Create > Database. Enter a name for the new database and make sure that the Owner is set to 'postgres' uer. Then, save the details.
    
-3. Redmine
-
+3. Redmine 
+   * [Install Redmine by setting up various components manually](https://www.redmine.org/projects/redmine/wiki/RedmineInstall) or alternately, if you choose to install Redmine stack with a all-in-one installer, you can use [BitNami's Redmine stack](https://bitnami.com/stack/redmine/installer). These [instructions](https://www.redmine.org/projects/redmine/wiki/How_to_install_Redmine_in_Linux_Windows_and_OS_X_using_BitNami_Redmine_Stack) with detailed screenshots could be helpful during the installation process. Currently, the developed web applications works well with Redmine version 3.3.3.stable.
+   
 4. Maven
 
 5. Chrome or  Fire-Fox Web browser
