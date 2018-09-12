@@ -55,9 +55,9 @@ Prerequisites for running the Web application
    * [Install JRE 9 on macOS](https://docs.oracle.com/javase/9/install/installation-jdk-and-jre-macos.htm#GUID-0071963E-D247-4D15-BF49-AD19C7260740)
    
 2. PostgreSQL 9.5.14
-   * [Install PostgreSQL database server](https://www.enterprisedb.com/downloads/postgres-postgresql-downloads)
+   * [Install PostgreSQL database](https://www.enterprisedb.com/downloads/postgres-postgresql-downloads)
    * When installation panel prompts to enter port number for the server to listen to, you can set it to the default port number 5432. Further, choose a password for superuser 'postgres'. These credentials will further be used to set up a server and communicate with the database.   
-   * [Install PgAdmin 4](https://www.pgadmin.org/download/) 
+   * [Install PgAdmin 4](https://www.pgadmin.org/download/), an administration and management tool for PostgreSQL database
    * Now open PgAdmin 4 application to setup a server. Select the 'Servers' group and click Object > Create > Server.
    * In the Create-Server panel, under general tab, assign a name for the server. Then under Connection tab, the Host name/address shoud be set to localhost. Make sure that the port number is set to 5432 and then under password, enter the password for 'postgres' user that was used while installing PostgreSQL. Next, save the configuration.   
    
