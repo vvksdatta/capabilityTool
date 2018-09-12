@@ -70,6 +70,7 @@ Prerequisites for running the Web application
    * The URL of Redmine server and API access-key will further be used in the configuration file ([config.yml](https://github.com/vvksdatta/capabilityTool/blob/master/config.yml)) for the Web application. 
    
 4. **Maven**
+   * [Install build automation tool Maven](https://www.baeldung.com/install-maven-on-windows-linux-mac) for building the Web application. 
 
 5. **Chrome or  Fire-Fox Web browser**
 
@@ -79,8 +80,3 @@ How to start the wiptool application
 1. Run `mvn clean install` to build your application
 1. Start application with `java -jar target/wiptool-0.0.1-SNAPSHOT.jar server config.yml`
 1. To check that your application is running enter url `http://localhost:8080`
-
-Health Check
----
-
-To see your applications health enter url `http://localhost:8081/healthcheck`
