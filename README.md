@@ -80,6 +80,6 @@ How to start the Web application
     * Under database, update 'password' and 'url'
     * Update 'adminUserName' and 'adminPassword' in order to change the defualt username and password details for Web application
     * Update 'redmineUrl' and 'apiAccessKey' 
-  * Run 'mvn clean install` to build the Web application
+  * Run 'mvn clean install` to build the Web application. This generates a .jar file under target folder.
   * Start the application with `java -jar target/wiptool-0.0.1-SNAPSHOT.jar server config.yml`
   * Access the Web application from a browser using the url `http://localhost:8080`
