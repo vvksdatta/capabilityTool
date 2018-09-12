@@ -13,14 +13,14 @@ database:
   # the name of your JDBC driver
   driverClass: org.postgresql.Driver
 
-  # database username
+  # database username (postgres)
   user: postgres
 
   # Database password
   password: wip
 
-  # the JDBC URL
-  url: jdbc:postgresql://localhost:5432/aug6
+  # JDBC URL with newly created database
+  url: jdbc:postgresql://localhost:5432/sep8
   
 # Tool admin account username (can be changed after login)
 adminUserName: admin

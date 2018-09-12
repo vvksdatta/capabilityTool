@@ -221,29 +221,48 @@ $(".nav-tabs li").eq(5).removeClass("active");
           <div class="panel-heading">
             <h3 class="panel-title"><strong>Sprint Participants </strong></h3>
           </div>
-          <div class="panel-body ">
+          <div class="panel-body" ng-if="displayAddButton != true;">
             <table class="table table-hover" id="dev-table">
               <thead>
                 <tr>
                   <th>Name</th>
                   <th>Role</th>
+
                 </tr>
               </thead>
               <tbody>
                 <tr ng-repeat="participant in sprintParticipants"  ng-click="manageSprintParticipants(sprint)" >
                   <td >
-                    <span ng-model="letterLimit" class="avatar" alt="datta" data-toggle="tooltip" data-placement="top" data-container="body" style="background-color: #29516D; width: 28px; height: 26px; font-size: 12px; padding-top: 5px; margin-right: 3px" data-original-title={{participant.personName }}> {{ participant.personName | limitTo:2 | uppercase }}<md-tooltip ng-hide="project.projectStartDate" md-direction="right"> {{ participant.personName }}</md-tooltip></span> {{ participant.personName}}
+                    <span ng-model="letterLimit" class="avatar" alt="datta" data-toggle="tooltip" data-placement="top" data-container="body" style="background-color: #29516D; width: 28px; height: 26px; font-size: 12px; padding-top: 5px; margin-right: 3px" data-original-title={{participant.personName }}> {{ participant.personName | limitTo:2 | uppercase }}<md-tooltip ng-hide="project.projectStartDate" md-direction="right"> {{ participant.personName }}</md-tooltip></span>
+                    {{ participant.personName}}
                   </td>
                   <td>{{participant.roleName}}</td>
                 </tr>
                 <tr>
-                  <td colspan="2" style="border-top: 1px solid #fff; text-align: center" >
+                  <td colspan="2" style="border-top: 1px solid #fff; text-align: center">
                     <md-button type="submit" style="font-size: 15px; background-color: rgb(90, 132, 187);"  class="add-tab md-primary md-raised" ng-click="editSprintParticipants()"> <i class="glyphicon glyphicon-edit"> </i> Edit  </md-button>
                   </td>
                 </tr>
               </tbody>
             </table>
           </div>
+
+        <div  ng-if="displayInfo == true;"  class="panel-body">
+          <div ng-cloak style="margin-top: 15px;" class="alert alert-info" role="alert">
+          Issue(s) has/have been moved to this project from another project. This is why the role of some member(s) is blank.
+          </div>
+        </div>
+
+
+    <div ng-if="displayAddButton == true;"  class="panel-body">
+      <div ng-cloak style="margin-top: 15px;" class="alert alert-info" role="alert">
+        No participants exist in this sprint.
+      </div>
+      <div class="col-sm-3 pull-right" >
+        <md-button type="submit" style="font-size: 15px; background-color: rgb(90, 132, 187);"  class="add-tab md-primary md-raised" ng-click="editSprintParticipants()"> <i class="glyphicon glyphicon-plus"> </i> Add  </md-button>
+      </div>
+    </div>
+
         </div>
       </div>
     </div>

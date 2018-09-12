@@ -1,7 +1,6 @@
 package se.bth.didd.wiptool.redmine;
 
 import java.math.BigDecimal;
-import java.nio.charset.Charset;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -64,6 +63,21 @@ public class Redmine {
 	public Response synchronizingWithRedmine() throws RedmineException {
 
 		/*
+		 * Generating a random string for updating the identifiers on each
+		 * iteration. These identifiers are used to remove the entities from
+		 * database that no longer exist on Redmine
+		 */
+
+		String alphabet = "abcdefghijklmnopqrstuvwxyz";
+		String generatedRandomString = "";
+		Random random = new Random();
+		int randomLen = 5;
+		for (int i = 0; i < randomLen; i++) {
+			char c = alphabet.charAt(random.nextInt(26));
+			generatedRandomString += c;
+		}
+
+		/*
 		 * Fetch list of project participants from each project in redmine. If
 		 * person is not already added, add as a new person.Else if the details
 		 * are modified, update the details of person
@@ -72,10 +86,7 @@ public class Redmine {
 
 		List<User> people = redmineManager.getUserManager().getUsers();
 
-		byte[] array = new byte[5];
-		new Random().nextBytes(array);
-		String generatedRandomString = new String(array, Charset.forName("UTF-8"));
-
+		
 		for (User person : people) {
 
 			if (redmineDAO.ifPersonIdExists(person.getId()) != true) {
@@ -130,7 +141,7 @@ public class Redmine {
 			redmineDAO.updateRoleStatus(role.getId(), generatedRandomString);
 		}
 
-		/* update projects,sprints, issues etc */
+		/* update projects,sprints etc */
 		List<Project> projects = redmineManager.getProjectManager().getProjects();
 		for (Project redmineProject : projects) {
 			/* check if project already added to database */
@@ -212,6 +223,24 @@ public class Redmine {
 						 * person already added, no new roles will be assigned
 						 * to the person in the current project.
 						 */
+
+						/*
+						 * Note a possible scenario: Consider two projects
+						 * 'project1' and 'project2'. Say 'project2' consists of
+						 * several issues tagged under special category and say
+						 * an issue('issue1') among these is assigned to
+						 * 'person1'. Now considering that 'person1' is not a
+						 * member of 'project1', if we move the 'issue1' from
+						 * 'project2' to 'project1' and assign 'issue1' to a
+						 * target version in 'project1', then the 'person1' will
+						 * be a member of a sprint without actually being a
+						 * member of 'project1'. In such case, even Redmine
+						 * doesn't represent the person to be part of the
+						 * project. Thus, this person doesn't bear a role within
+						 * this project. So, if a sprint shows people with no
+						 * role, it indicates that an issue that was allocated
+						 * to a person was moved from one project to another.
+						 */
 						if (redmineDAO.ifPersonExistsInProject(redmineProject.getId(),
 								projectParticipant.getUserId()) != true) {
 							if (redmineDAO.ifPersonParticipatesInProject(redmineProject.getId(),
@@ -232,252 +261,34 @@ public class Redmine {
 					}
 
 				}
+			}
+		}
 
-				/*
-				 * for each project, we use the projectidentifier field to fetch
-				 * all the issues listed in that project
-				 */
+		/*
+		 * The loop for inserting new projects has been isolated from the loop
+		 * for inserting new issues. The reason for this can be understood from
+		 * a simple example. consider a project (project1) which has a sub
+		 * project (child1). Further, consider the case where this 'child1'
+		 * project has another subproject (grancChild1). When an issue is
+		 * created in this 'grandChild1' project, on Redmine, the same issue
+		 * will be listed automatically under both the parent projects, i.e.
+		 * Redmine lists the issue under both 'child1' and 'project1' projects.
+		 * So, if issues are updated in the same loop where new projects are
+		 * inserted, there is a chance for foreign key conflicts when a
+		 * 'grandChildproject1' details are not yet registered to the database.
+		 */
+		Timestamp timestamp = new Timestamp(System.currentTimeMillis());
+		System.out.println("hello the timestamp now is" + timestamp);
 
-				/* Redmine taskadpater java api specific parameter */
-				Integer include = null;
-
-				List<Issue> issues = redmineManager.getIssueManager().getIssues(redmineProject.getIdentifier(),
-						include);
-				for (Issue issue : issues) {
-					/*
-					 * check whether the current issue (check by using issueId
-					 * and projectId) is already associated with current project
-					 * and exists in issues Table
-					 */
-					if (redmineDAO.ifIssueExistsInProject(issue.getProjectId(), issue.getId()) != true) {
-						/*
-						 * the current issue hasn't been previously associated
-						 * with current project
-						 */
-						IssueTemplate newIssue = new IssueTemplate();
-						newIssue.setProjectId(issue.getProjectId());
-						newIssue.setIssueId(issue.getId());
-						newIssue.setIssueName(issue.getSubject());
-						newIssue.setIssueStartDate(issue.getStartDate());
-						newIssue.setIssueDueDate(issue.getDueDate());
-						newIssue.setIssueDescription(issue.getDescription());
-						/*
-						 * Check whether the issue is marked as a special
-						 * category issue and retrieve the category name
-						 */
-						if (issue.getCategory() != null) {
-							IssueCategory retrievedCategory = issue.getCategory();
-							newIssue.setIssueCategory(retrievedCategory.getName());
-						}
-						newIssue.setIssuePriority(issue.getPriorityText());
-						newIssue.setIssueEstimatedTime(issue.getEstimatedHours());
-						newIssue.setIssueDone(issue.getDoneRatio());
-						newIssue.setIssueLastUpdate(timestamp);
-						newIssue.setRedmineLastUpdate(issue.getUpdatedOn());
-						/*
-						 * retrieve a list of issues from SPRINTCOMPRISINGISSUES
-						 * table to check whether the current issue(issueId) is
-						 * already associated with some other sprint
-						 */
-						List<SprintComprisingIssues> sprintDetails = redmineDAO
-								.getSprintAssociatedWithIssue(issue.getId());
-						for (SprintComprisingIssues eachIssue : sprintDetails) {
-							if (issue.getTargetVersion() != null) {
-								/*
-								 * if the issue(issueId) is associated with some
-								 * other sprint(in SPRINTCOMPRISINGISSUES table)
-								 * other than the current sprint linked to
-								 * issue, delete the entry from table
-								 */
-								if (eachIssue.getSprintId().equals(issue.getTargetVersion()) == false) {
-									redmineDAO.deleteIssueAlreadyAllocatedToOtherSprint(issue.getId());
-								}
-							} else {
-								/*
-								 * Here, the current issue is not associated to
-								 * any Sprint. But, there exists an entry(entry
-								 * with sprintId and issueId) in
-								 * SPRINTCOMPRISINGISSUES table, meaning that
-								 * the issue was previously associated with
-								 * another sprint. So, in this case, delete such
-								 * records from database table
-								 */
-								redmineDAO.deleteIssueAlreadyAllocatedToOtherSprint(issue.getId());
-							}
-						}
-						/*
-						 * retrieve a list of issues from ISSUES table to check
-						 * whether the current issue(issueId) is already
-						 * associated with some other project
-						 */
-
-						List<IssueUpdateTemplate> projectDetails = redmineDAO
-								.getProjectAssocitaedWithIssue(issue.getId());
-						for (IssueUpdateTemplate project : projectDetails) {
-							/*
-							 * On Redmine each issue should be associated with a
-							 * project. If the issue(issueId) is associated with
-							 * some other project(projectId in ISSUES table)
-							 * other than the current project linked to issue,
-							 * delete the entry from table
-							 */
-							if (project.getProjectId().equals(issue.getProjectId()) == false) {
-								redmineDAO.deleteIssueAlreadyAllocatedToOProject(issue.getId());
-							}
-						}
-						/*
-						 * Now add the current issue to the ISSUES Table.This
-						 * pushes a new entry to the table together with the
-						 * latest project(projectId) the issue is currently
-						 * associated with
-						 */
-						redmineDAO.insertIntoIssuesTable(newIssue);
-						System.out.println("Added new issues to the project");
-					} else {
-						/*
-						 * The current issue has already been previously
-						 * associated with current project. i.e, a database
-						 * entry already exists in ISSUES table with the current
-						 * issueId and projectId
-						 */
-
-						/*
-						 * check whether the issue has been modified since last
-						 * update on database table (by comparing the latest
-						 * updated time from issue and the existing LastUpdate
-						 * time record on ISSUES table in database)
-						 */
-						if (redmineDAO.ifIssueUnModified(issue.getProjectId(), issue.getId(),
-								issue.getUpdatedOn()) == false) {
-							/*
-							 * Here the issue is modified in comparison to last
-							 * saved state on ISSUES table, so update the
-							 * database record
-							 */
-							IssueTemplate updateIssue = new IssueTemplate();
-							updateIssue.setProjectId(issue.getProjectId());
-							updateIssue.setIssueId(issue.getId());
-							updateIssue.setIssueName(issue.getSubject());
-							updateIssue.setIssueStartDate(issue.getStartDate());
-							updateIssue.setIssueDueDate(issue.getDueDate());
-							updateIssue.setIssueDescription(issue.getDescription());
-							/*
-							 * Check whether the issue is marked as a special
-							 * category issue and retrieve the category name
-							 */
-							if (issue.getCategory() != null) {
-								IssueCategory retrievedCategory = issue.getCategory();
-								updateIssue.setIssueCategory(retrievedCategory.getName());
-							}
-							updateIssue.setIssuePriority(issue.getPriorityText());
-							updateIssue.setPersonId(issue.getAssigneeId());
-							updateIssue.setIssueEstimatedTime(issue.getEstimatedHours());
-							updateIssue.setIssueDone(issue.getDoneRatio());
-							updateIssue.setIssueLastUpdate(timestamp);
-							updateIssue.setRedmineLastUpdate(issue.getUpdatedOn());
-
-							/*
-							 * retrieve a list of issues from
-							 * SPRINTCOMPRISINGISSUES table to check whether the
-							 * current issue(issueId) is already associated with
-							 * some other sprint within the same project
-							 */
-
-							List<SprintComprisingIssues> sprintDetails = redmineDAO
-									.getSprintAssociatedWithIssue(issue.getId());
-							for (SprintComprisingIssues eachIssue : sprintDetails) {
-								if (issue.getTargetVersion() != null) {
-									/*
-									 * if the issue(issueId) is associated with
-									 * some other sprint(in
-									 * SPRINTCOMPRISINGISSUES table) other than
-									 * the current sprint linked to issue,
-									 * delete the entry from table
-									 */
-									if (eachIssue.getSprintId().equals(issue.getTargetVersion()) == false) {
-										redmineDAO.deleteIssueAlreadyAllocatedToOtherSprint(issue.getId());
-									}
-								} else {
-									/*
-									 * Here, the current issue is not associated
-									 * to any Sprint. But, there exists an
-									 * entry(entry with sprintId and issueId) in
-									 * SPRINTCOMPRISINGISSUES table, meaning
-									 * that the issue was previously associated
-									 * with another sprint within the same
-									 * project. So, in this case, delete such
-									 * records from database table
-									 */
-									redmineDAO.deleteIssueAlreadyAllocatedToOtherSprint(issue.getId());
-								}
-							}
-
-							/*
-							 * Update the existing database entry(in ISSUES
-							 * table) with latest modifications
-							 */
-							redmineDAO.updateIssuesModifications(updateIssue);
-						}
-					}
-					/*
-					 * Next, use the TargetVersion of an issue and record to
-					 * which sprint the issue belongs. Add a new entry to
-					 * SprintComprisingIssues Table
-					 */
-					if (issue.getTargetVersion() != null) {
-						Version issueTargetVersion = issue.getTargetVersion();
-						if (redmineDAO.ifIssueExistsInSprint(issue.getProjectId(), issueTargetVersion.getId(),
-								issue.getId()) != true) {
-							redmineDAO.InsertIntoSprintComprisingIssuesTable(issue.getProjectId(),
-									issueTargetVersion.getId(), issue.getId());
-							System.out.println("Adeed the isses to SprintComprisingIssues table");
-						}
-					}
-					/*
-					 * condition to check whether the issue is assigned to a
-					 * person. If an issue has an 'assignee', then update the
-					 * personId in ISSUES table and insert a record in
-					 * sprintParticipation table. This is because an issue can
-					 * be a part of project even without being assigned to a
-					 * person
-					 */
-					if (issue.getAssigneeId() != null) {
-						IssueUpdateTemplate newIssue = new IssueUpdateTemplate();
-						newIssue.setProjectId(issue.getProjectId());
-						newIssue.setIssueId(issue.getId());
-						newIssue.setPersonId(issue.getAssigneeId());
-						newIssue.setIssueDone(issue.getDoneRatio());
-						newIssue.setRedmineLastUpdate(issue.getUpdatedOn());
-						newIssue.setIssueLastUpdate(issue.getUpdatedOn());
-
-						redmineDAO.updateIssuesTable(newIssue);
-						System.out.println("Updated the assignee details in Issues table");
-						/*
-						 * Further, on Redmine, if a person is assigned an
-						 * issue, that would implicitly mean that the person is
-						 * also part of the sprint. So, this block can be
-						 * further used to add a record in the
-						 * SprintParticiaption Table
-						 */
-						if (issue.getTargetVersion() != null) {
-							Version issueTargetVersion = issue.getTargetVersion();
-							if (redmineDAO.ifPersonParticipatesInSprint(issue.getProjectId(),
-									issueTargetVersion.getId(), issue.getAssigneeId()) != true) {
-
-								redmineDAO.InsertIntoSprintParticipationTable(issue.getProjectId(),
-										issueTargetVersion.getId(), issue.getAssigneeId());
-								System.out.println("Updated the sprint participation table");
-							}
-						}
-					}
-				}
-
-			} else {
+		for (Project redmineProject : projects) {
+			/* check if project already added to database */
+			if (redmineDAO.ifProjectExists(redmineProject.getId()) != false) {
+				System.out.println(
+						"hello the project" + redmineProject.getName() + "exists and the timestamp now is" + timestamp);
 				/*
 				 * The current project is already added as a record on projects
 				 * table of local database
 				 */
-				Timestamp timestamp = new Timestamp(System.currentTimeMillis());
 
 				/*
 				 * Check whether the current project details have been modified
@@ -716,6 +527,12 @@ public class Redmine {
 
 							}
 						}
+
+						if (issue.getTargetVersion() != null) {
+							redmineDAO.updateIdentifiersInSprintComprisingIssues(issue.getProjectId(), issue.getId(),
+									issue.getTargetVersion().getId(), generatedRandomString, generatedRandomString,
+									generatedRandomString);
+						}
 						if (issue.getAssigneeId() != null && issue.getTargetVersion() != null) {
 							redmineDAO.updateIdentifiersInSprintparticipation(issue.getProjectId(),
 									issue.getTargetVersion().getId(), issue.getAssigneeId(), generatedRandomString,
@@ -760,9 +577,12 @@ public class Redmine {
 							if (issue.getTargetVersion() != null) {
 								if (eachIssue.getSprintId().equals(issue.getTargetVersion()) == false) {
 									redmineDAO.deleteIssueAlreadyAllocatedToOtherSprint(issue.getId());
+									System.out.println("issue already allocated to other sprint. so deleted");
 								}
 							} else {
 								redmineDAO.deleteIssueAlreadyAllocatedToOtherSprint(issue.getId());
+								System.out.println(
+										"issue already allocated to other sprint. so deleted as target version is null");
 							}
 						}
 						/*
@@ -773,6 +593,7 @@ public class Redmine {
 						for (IssueUpdateTemplate project : projectDetails) {
 							if (!project.getProjectId().equals(issue.getProjectId())) {
 								redmineDAO.deleteIssueAlreadyAllocatedToOProject(issue.getId());
+								System.out.println("issue already allocated to other project. so deleted");
 							}
 						}
 
@@ -780,6 +601,7 @@ public class Redmine {
 						 * insert the issue details as new entry to issues table
 						 */
 						redmineDAO.insertIntoIssuesTable(newIssue);
+						System.out.println("Added new  isses to  project " + redmineProject.getName());
 
 						if (issue.getTargetVersion() != null) {
 							Version issueTargetVersion = issue.getTargetVersion();
@@ -788,6 +610,8 @@ public class Redmine {
 									issue.getId()) != true) {
 								redmineDAO.InsertIntoSprintComprisingIssuesTable(issue.getProjectId(),
 										issueTargetVersion.getId(), issue.getId());
+								System.out.println("Added the isses to SprintComprisingIssues table for project "
+										+ redmineProject.getName());
 
 							}
 
@@ -797,6 +621,8 @@ public class Redmine {
 
 									redmineDAO.InsertIntoSprintParticipationTable(issue.getProjectId(),
 											issueTargetVersion.getId(), issue.getAssigneeId());
+									System.out.println("Added to the sprint participation table for project "
+											+ redmineProject.getName());
 
 								}
 							}
@@ -808,6 +634,12 @@ public class Redmine {
 					if (issue.getTargetVersion() != null) {
 						redmineDAO.updateIdentifiersInSprintComprisingIssues(issue.getProjectId(), issue.getId(),
 								issue.getTargetVersion().getId(), generatedRandomString, generatedRandomString,
+								generatedRandomString);
+					}
+
+					if (issue.getAssigneeId() != null && issue.getTargetVersion() != null) {
+						redmineDAO.updateIdentifiersInSprintparticipation(issue.getProjectId(),
+								issue.getTargetVersion().getId(), issue.getAssigneeId(), generatedRandomString,
 								generatedRandomString);
 					}
 				}
