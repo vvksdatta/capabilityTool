@@ -61,9 +61,11 @@ Prerequisites for running the Web application
    * Now open PgAdmin 4 application to setup a server. Select the 'Servers' group and right click > Create > Server.
    * In the Create-Server panel, under general tab, assign a name for the server. Then under Connection tab, the Host name/address shoud be set to localhost. Make sure that the port number is set to 5432 and then under password, enter the password for 'postgres' user that was used while installing PostgreSQL. Next, save the configuration.   
    * Next, we create a new a database. Within the 'Servers' group, select the server created in the previous step and right click > Create > Database. Enter a name for the new database and make sure that the Owner is set to 'postgres' uer. Then, save the details.
+   * The server configuration details together with the details of newly created database will be further used in the configuration file ([config.yml](https://github.com/vvksdatta/capabilityTool/blob/master/config.yml)) for the Web application. 
    
 3. Redmine 
-   * [Install Redmine by setting up various components manually](https://www.redmine.org/projects/redmine/wiki/RedmineInstall) or alternately, if you choose to install Redmine stack with a all-in-one installer, you can use [BitNami's Redmine stack](https://bitnami.com/stack/redmine/installer). These [instructions](https://www.redmine.org/projects/redmine/wiki/How_to_install_Redmine_in_Linux_Windows_and_OS_X_using_BitNami_Redmine_Stack) with detailed screenshots could be helpful during the installation process. Currently, the developed web applications works well with Redmine version 3.3.3.stable.
+   * [Install Redmine by setting up various components manually](https://www.redmine.org/projects/redmine/wiki/RedmineInstall) or alternately, if you choose to install Redmine stack with a all-in-one installer, you can use [BitNami's Redmine stack](https://bitnami.com/stack/redmine/installer). These [instructions](https://www.redmine.org/projects/redmine/wiki/How_to_install_Redmine_in_Linux_Windows_and_OS_X_using_BitNami_Redmine_Stack) with detailed screenshots could be helpful during the installation process. Currently, the developed Web applications works well with Redmine version 3.3.3.stable.
+   * After setting up Redmine, 
    
 4. Maven
 
