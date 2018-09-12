@@ -23,7 +23,7 @@ Diving into the details of architecture
 ---
 **RESTful API of Redmine**
 
-The right most block in the above listed diagram represents the RESTful API of Redmine. With the help of an administrator's API access-key, it would be possible to communicate with Redmine using REST calls, for fetching and manipulating information of projects, people, issues and other entitities. Thus, the URL of Redmine server and API access-key of administartor are used by another block (**Dropwizard based RESTful API**) to communicate with Redmine. These details are refereed from the [configuration file](https://github.com/vvksdatta/capabilityTool/blob/master/config.yml).  
+The right most block in the above listed diagram represents the RESTful API of Redmine. With the help of an administrator's API access-key on Redmine, it would be possible to communicate with Redmine using REST calls, for fetching and manipulating information of projects, people, issues and other entitities. Thus, the URL of Redmine server and API access-key of administartor are used by another block (**Dropwizard based RESTful API**) to communicate with Redmine. These details are refereed from the [configuration file](https://github.com/vvksdatta/capabilityTool/blob/master/config.yml).  
 
 **PostgreSQL database**
 
@@ -65,6 +65,7 @@ Prerequisites for running the Web application
    
 3. Redmine 
    * [Install Redmine by setting up various components manually](https://www.redmine.org/projects/redmine/wiki/RedmineInstall) or alternately, if you choose to install Redmine stack with a all-in-one installer, you can use [BitNami's Redmine stack](https://bitnami.com/stack/redmine/installer). These [instructions](https://www.redmine.org/projects/redmine/wiki/How_to_install_Redmine_in_Linux_Windows_and_OS_X_using_BitNami_Redmine_Stack) with detailed screenshots could be helpful during the installation process. Currently, the developed Web applications works well with Redmine version 3.3.3.stable.
+   * The URL of Redmine server and API access-key of an administartor on Redmine will be used
    * After setting up Redmine, 
    
 4. Maven
