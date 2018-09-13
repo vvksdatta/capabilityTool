@@ -50,8 +50,9 @@ The application's design is oriented towards the practices of managers. Multiple
 Prerequisites for running the Web application
 ---
 **1.** **JDK 10**
-   * On Windows, [Install JDK 10](https://docs.oracle.com/javase/10/install/installation-jdk-and-jre-microsoft-windows-platforms.htm#JSJIG-GUID-A740535E-9F97-448C-A141-B95BF1688E6F). Then, update the system variables as shown [here](https://www.mkyong.com/java/how-to-set-java_home-on-windows-10/)
-   * On Linux, [Install JDK 10](https://docs.oracle.com/javase/10/install/installation-jdk-and-jre-linux-platforms.htm#JSJIG-GUID-ADC9C14A-5F51-4C32-802C-9639A947317F). Then, update the system variables as shown [here](https://www.cyberciti.biz/faq/linux-unix-set-java_home-path-variable/)
+   * On Windows, [Install JDK 10](https://docs.oracle.com/javase/10/install/installation-jdk-and-jre-microsoft-windows-platforms.htm#JSJIG-GUID-A740535E-9F97-448C-A141-B95BF1688E6F). Then, update the system variables as shown [here](https://www.mkyong.com/java/how-to-set-java_home-on-windows-10/).
+   * On Linux, [Install JDK 10](https://docs.oracle.com/javase/10/install/installation-jdk-and-jre-linux-platforms.htm#JSJIG-GUID-ADC9C14A-5F51-4C32-802C-9639A947317F). Then, update the system variables as shown [here](https://www.cyberciti.biz/faq/linux-unix-set-java_home-path-variable/).
+   * Reboot the system after updating the system variables.
  
 **2.** **PostgreSQL** 
    * [Install PostgreSQL database version 9.5.14](https://www.enterprisedb.com/downloads/postgres-postgresql-downloads)
