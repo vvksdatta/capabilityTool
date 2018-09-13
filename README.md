@@ -49,11 +49,10 @@ The application's design is oriented towards the practices of managers. Multiple
 
 Prerequisites for running the Web application
 ---
-**1.** **JRE 9**
-   * [Install JRE 9 on Windows](https://docs.oracle.com/javase/9/install/installation-jdk-and-jre-microsoft-windows-platforms.htm#GUID-2B9D2A17-176B-4BC8-AE2D-FD884161C958)
-   * [Install JRE 9 on Linux](https://docs.oracle.com/javase/9/install/installation-jdk-and-jre-linux-platforms.htm#GUID-09D016D5-AB67-4552-9312-3B249180BD0F)
-   * [Install JRE 9 on macOS](https://docs.oracle.com/javase/9/install/installation-jdk-and-jre-macos.htm#GUID-0071963E-D247-4D15-BF49-AD19C7260740)
-   
+**1.** **JDK 10**
+   * On Windows, [Install JDK 10](https://docs.oracle.com/javase/10/install/installation-jdk-and-jre-microsoft-windows-platforms.htm#JSJIG-GUID-A740535E-9F97-448C-A141-B95BF1688E6F). Then, update the system variables as shown [here](https://www.mkyong.com/java/how-to-set-java_home-on-windows-10/)
+   * On Linux, [Install JDK 10](https://docs.oracle.com/javase/10/install/installation-jdk-and-jre-linux-platforms.htm#JSJIG-GUID-ADC9C14A-5F51-4C32-802C-9639A947317F). Then, update the system variables as shown [here](https://www.cyberciti.biz/faq/linux-unix-set-java_home-path-variable/)
+ 
 **2.** **PostgreSQL** 
    * [Install PostgreSQL database version 9.5.14](https://www.enterprisedb.com/downloads/postgres-postgresql-downloads)
    * When installation panel prompts to enter port number for the server to listen to, you can set it to the default port number 5432. Further, choose a password for superuser 'postgres'. These credentials will further be used to set up a server and communicate with the database.   
@@ -70,16 +69,17 @@ Prerequisites for running the Web application
    * The URL of Redmine server and API access-key will further be used in the configuration file ([config.yml](https://github.com/vvksdatta/capabilityTool/blob/master/config.yml)) for the Web application. 
    
 **4.** **Maven**
-   * [Install build automation tool Maven](https://www.baeldung.com/install-maven-on-windows-linux-mac) for building the Web application. 
+   * [Install build automation tool Maven](https://www.baeldung.com/install-maven-on-windows-linux-mac) and update the system variables for building the Web application. Here is an [example](https://www.mkyong.com/maven/how-to-install-maven-in-windows/) 
 
 **5.** **Chrome or  Fire-Fox Web browser**
 
 How to start the Web application
 ---
-  * Update the following fields in configuration file ([config.yml](https://github.com/vvksdatta/capabilityTool/blob/master/config.yml))
+  * After cloning the repository, update the following fields in configuration file ([config.yml](https://github.com/vvksdatta/capabilityTool/blob/master/config.yml))
     * Under database, update `password` and `url`.
     * Update `adminUserName` and `adminPassword` in order to change the defualt username and password details for Web application.
     * Update `redmineUrl` and `apiAccessKey`. 
+  * Now using command line, change to `capabilityTool` directory and make sure you have `pom.xml` file for building the Web application. 
   * Run `mvn clean install` to build the Web application. This generates a .jar file under target folder.
   * Start the application with `java -jar target/wiptool-0.0.1-SNAPSHOT.jar server config.yml`.
   * Access the Web application from a browser using the url `http://localhost:8080`.
