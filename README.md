@@ -77,7 +77,7 @@ Prerequisites for running the Web application
 How to start the Web application
 ---
   * After cloning the repository, update the following fields in configuration file ([config.yml](https://github.com/vvksdatta/capabilityTool/blob/master/config.yml))
-    * Under database, update `password` and `url`.
+    * Under database, update `password` and `url` details of PostgreSQL database server.
     * Update `adminUserName` and `adminPassword` in order to change the defualt username and password details for Web application.
     * Update `redmineUrl` and `apiAccessKey`. 
   * Now using command line, change to `capabilityTool` directory and make sure you have `pom.xml` file for building the Web application. 
