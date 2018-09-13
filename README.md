@@ -69,7 +69,7 @@ Prerequisites for running the Web application
    * The URL of Redmine server and API access-key will further be used in the configuration file ([config.yml](https://github.com/vvksdatta/capabilityTool/blob/master/config.yml)) for the Web application. 
    
 **4.** **Maven**
-   * [Install build automation tool Maven](https://www.baeldung.com/install-maven-on-windows-linux-mac) and update the system variables for building the Web application. Here is an [example](https://www.mkyong.com/maven/how-to-install-maven-in-windows/) 
+   * [Install build automation tool Maven](https://www.baeldung.com/install-maven-on-windows-linux-mac) and update the system variables. Here is an [example](https://www.mkyong.com/maven/how-to-install-maven-in-windows/) 
 
 **5.** **Chrome or  Fire-Fox Web browser**
 
