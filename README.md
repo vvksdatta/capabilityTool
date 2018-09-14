@@ -51,7 +51,7 @@ Prerequisites for running the Web application
 ---
 **1.** **JDK 10**
    * On Windows, [Install JDK 10](https://docs.oracle.com/javase/10/install/installation-jdk-and-jre-microsoft-windows-platforms.htm#JSJIG-GUID-A740535E-9F97-448C-A141-B95BF1688E6F). Then, update the system variables as shown [here](https://www.mkyong.com/java/how-to-set-java_home-on-windows-10/).
-   * On Linux, [Install JDK 10](https://docs.oracle.com/javase/10/install/installation-jdk-and-jre-linux-platforms.htm#JSJIG-GUID-ADC9C14A-5F51-4C32-802C-9639A947317F). Then, update the system variables as shown [here](https://www.cyberciti.biz/faq/linux-unix-set-java_home-path-variable/).
+   
    * Reboot the system after updating the system variables.
  
 **2.** **PostgreSQL** 
@@ -70,7 +70,7 @@ Prerequisites for running the Web application
    * The URL of Redmine server and API access-key will further be used in the configuration file ([config.yml](https://github.com/vvksdatta/capabilityTool/blob/master/config.yml)) for the Web application. 
    
 **4.** **Maven**
-   * [Install build automation tool Maven](https://www.baeldung.com/install-maven-on-windows-linux-mac) and update the system variables. Here is an [example for Windows](https://www.mkyong.com/maven/how-to-install-maven-in-windows/) and [an example for Linux](https://www.vultr.com/docs/how-to-install-apache-maven-on-ubuntu-16-04).
+   * [Install build automation tool Maven](https://www.baeldung.com/install-maven-on-windows-linux-mac) and update the system variables. Here is an [example for Windows](https://www.mkyong.com/maven/how-to-install-maven-in-windows/). 
 
 **5.** **Chrome or  Fire-Fox Web browser**
 
