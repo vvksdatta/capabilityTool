@@ -19,7 +19,6 @@ se\bth\didd\wiptool\api\SkillTabsTemplate.class
 se\bth\didd\wiptool\api\SprintComprisingIssues.class
 se\bth\didd\wiptool\api\SelectedSprintRequirement.class
 se\bth\didd\wiptool\configuration\LocalDateMapperFactory.class
-se\bth\didd\wiptool\resources\dto\ProtectedResourceResponse.class
 se\bth\didd\wiptool\api\Roles.class
 se\bth\didd\wiptool\resources\ProjectResource.class
 se\bth\didd\wiptool\api\People.class
@@ -56,7 +55,6 @@ se\bth\didd\wiptool\api\CapabilityList.class
 se\bth\didd\wiptool\api\IssueId.class
 se\bth\didd\wiptool\api\SkillNameValueUser.class
 se\bth\didd\wiptool\resources\IssueResource.class
-se\bth\didd\wiptool\resources\ProtectedResourceOne.class
 se\bth\didd\wiptool\api\RolesOfPeople.class
 se\bth\didd\wiptool\api\SprintRequirementNameValueDescriptionUser.class
 se\bth\didd\wiptool\api\SprintRequirementUpdate.class
@@ -76,7 +74,6 @@ se\bth\didd\wiptool\api\Participants.class
 se\bth\didd\wiptool\configuration\WiptoolConfiguration.class
 se\bth\didd\wiptool\api\RolesOfPeopleSprint.class
 se\bth\didd\wiptool\resources\dto\LoginResponse.class
-se\bth\didd\wiptool\resources\ProtectedResourceTwo.class
 se\bth\didd\wiptool\api\SprintRequirementsTabsTemplate.class
 se\bth\didd\wiptool\api\IssueUpdateTemplate.class
 se\bth\didd\wiptool\auth\jwt\User.class
