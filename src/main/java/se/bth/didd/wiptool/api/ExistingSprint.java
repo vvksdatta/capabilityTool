@@ -8,7 +8,9 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.github.rkmk.annotations.ColumnName;
 import com.github.rkmk.annotations.OneToMany;
 
-/*Sprint entity which  extends the SprintsSummary entity.*/
+/**
+ * Sprint entity which  extends the SprintsSummary entity.
+ * */
 
 public class ExistingSprint {
 

@@ -6,6 +6,9 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.github.rkmk.annotations.ColumnName;
 import com.github.rkmk.annotations.PrimaryKey;
 
+/**
+ *Template for fetching the details of a role associated to a person with in a sprint.
+ */
 public class RolesOfPeopleSprint {
 
 	@JsonProperty
@@ -22,7 +25,6 @@ public class RolesOfPeopleSprint {
 	@ColumnName("roleName")
 	public String roleName;
 	
-
 	public RolesOfPeopleSprint(Integer personId, String personName, String roleName) {
 		super();
 		this.personId = personId;

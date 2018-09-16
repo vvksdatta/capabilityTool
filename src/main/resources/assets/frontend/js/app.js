@@ -5407,7 +5407,7 @@
                 var $string = {};
                 if(response.data.message !=null){
                   $string = response.data.message;
-                  if($string = "Forbidden. Please check the user has proper permissions"){
+                  if($string = "Forbidden. Please check whether the user has proper permissions"){
                     $string = $string+". Perhaps, the project is closed!"
                   }
                 }else {

@@ -10,7 +10,10 @@ import com.github.rkmk.annotations.ColumnName;
 import com.github.rkmk.annotations.OneToMany;
 import com.github.rkmk.annotations.PrimaryKey;
 
-/*Representation of projects with one to many relationship with sprints. This representation can be used for presenting summaries of people*/
+/**
+ * Representation of projects with one to many relationship with sprints. This
+ * representation can be used for presenting summaries of people
+ */
 public class ProjectNameSprints {
 
 	@JsonProperty
@@ -22,7 +25,7 @@ public class ProjectNameSprints {
 	@JsonProperty
 	@ColumnName("projectName")
 	public String projectName;
-	
+
 	@JsonProperty
 	@OneToMany("sprints")
 	public List<SprintNameIssues> sprints = new ArrayList<SprintNameIssues>();
@@ -32,9 +35,9 @@ public class ProjectNameSprints {
 		this.projectName = projectName;
 		this.sprints = sprints;
 	}
-	
-	public ProjectNameSprints(){
-	
+
+	public ProjectNameSprints() {
+
 	}
 
 	public List<SprintNameIssues> getSprints() {

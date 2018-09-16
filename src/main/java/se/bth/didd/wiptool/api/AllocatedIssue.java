@@ -1,19 +1,31 @@
 package se.bth.didd.wiptool.api;
 
-
 import javax.validation.constraints.NotNull;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.github.rkmk.annotations.ColumnName;
 import com.github.rkmk.annotations.PrimaryKey;
 
+/**
+ *Template for updating issues allocated in a sprint. This class is used in association with {@code se.bth.didd.wiptool.api.SprintIdProjectIdIssuesAllocated}
+ */
+
 public class AllocatedIssue {
+	
+	/*
+	 * @ColoumnName("name") is an annotation that belongs to jdbi-folder. This
+	 * is essential for fetching values from the 'name' column of database
+	 * table.
+	 */
+	
 	@JsonProperty
 	@PrimaryKey
 	@NotNull
+	@ColumnName("issueId")
 	public Integer issueId;
 	
 	@JsonProperty
+	@ColumnName("personId")
 	public Integer personId;
 	
 	@JsonProperty
@@ -32,6 +44,11 @@ public class AllocatedIssue {
 		this.securityRiskAnalysis = securityRiskAnalysis;
 	}
 
+	/*
+	 * default constructor is required for FoldingListContainerFactory
+	 * (jdbi-folder)
+	 */
+	
 	public AllocatedIssue(){
 		
 	}

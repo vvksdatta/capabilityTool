@@ -4,6 +4,10 @@ import javax.validation.constraints.NotNull;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.github.rkmk.annotations.ColumnName;
 
+/**
+ *Template for updating the requirements of a sprint.
+ */
+
 public class SprintRequirementUpdate {
 
 	@JsonProperty

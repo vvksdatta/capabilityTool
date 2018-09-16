@@ -4,6 +4,10 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.github.rkmk.annotations.ColumnName;
 import com.github.rkmk.annotations.PrimaryKey;
 
+/**
+ * Template for updating the password details of a user
+ */
+
 public class UserPasswordChange {
 
 	@JsonProperty

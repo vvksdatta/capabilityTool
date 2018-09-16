@@ -7,6 +7,10 @@ import com.github.rkmk.annotations.ColumnName;
 import com.github.rkmk.annotations.OneToMany;
 import com.github.rkmk.annotations.PrimaryKey;
 
+/**
+ *Template for fetching the details of issues associated with a sprint. This class is further used in association with {@code se.bth.didd.wiptool.api.ProjectNameSprints}
+ */
+
 public class SprintNameIssues {
 	@JsonProperty
 	@PrimaryKey

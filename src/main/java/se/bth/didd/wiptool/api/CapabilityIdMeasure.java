@@ -4,6 +4,10 @@ import javax.validation.constraints.NotNull;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.github.rkmk.annotations.ColumnName;
 
+/**
+ *Template for associating various measures of a capability to its ID.
+ */
+
 public class CapabilityIdMeasure {
 	@JsonProperty
 	@NotNull

@@ -3,6 +3,10 @@ package se.bth.didd.wiptool.api;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.github.rkmk.annotations.PrimaryKey;
 
+/**
+ *Template to fetch names of different persons who are enrolled on Redmine.
+ */
+
 public class People {
 	
 	@JsonProperty

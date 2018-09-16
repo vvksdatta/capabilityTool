@@ -3,23 +3,27 @@ package se.bth.didd.wiptool.api;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.github.rkmk.annotations.PrimaryKey;
 
+/**
+ * Template for retrieving list of project participants, together with the roles
+ * they are currently taking up within a project.
+ */
+
 public class ProjectParticipants {
-	
+
 	@JsonProperty
 	@PrimaryKey
 	public Integer personId;
-	
+
 	@JsonProperty
 	public String personName;
-	
+
 	@JsonProperty
 	public Integer roleId;
-		
+
 	@JsonProperty
 	public String roleName;
-	
-	
-	public ProjectParticipants(Integer personId, String personName,Integer roleId, String roleName) {
+
+	public ProjectParticipants(Integer personId, String personName, Integer roleId, String roleName) {
 		super();
 		this.personId = personId;
 		this.personName = personName;
@@ -33,7 +37,7 @@ public class ProjectParticipants {
 	 */
 	public ProjectParticipants() {
 	}
-	
+
 	public Integer getPersonId() {
 		return personId;
 	}
@@ -41,7 +45,7 @@ public class ProjectParticipants {
 	public String getPersonName() {
 		return personName;
 	}
-	
+
 	public String getRoleName() {
 		return roleName;
 	}
@@ -65,5 +69,5 @@ public class ProjectParticipants {
 	public void setRoleId(Integer roleId) {
 		this.roleId = roleId;
 	}
-	
+
 }

@@ -8,7 +8,10 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.github.rkmk.annotations.ColumnName;
 import com.github.rkmk.annotations.OneToMany;
 import com.github.rkmk.annotations.PrimaryKey;
-/*Project summaries entity which has one-to-many mapping with projectmembers and sprints*/
+
+/**
+ * Project summaries entity which has one-to-many mapping with projectmembers and sprints.
+ * */
 public class ProjectSummary {
 
 	@JsonProperty

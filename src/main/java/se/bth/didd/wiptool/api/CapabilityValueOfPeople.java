@@ -5,6 +5,9 @@ import javax.validation.constraints.NotNull;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.github.rkmk.annotations.ColumnName;
 
+/**
+ *Template for retrieving details of a capability for multiple people.
+ */
 public class CapabilityValueOfPeople {
 	@JsonProperty
 	@NotNull

@@ -6,6 +6,10 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.github.rkmk.annotations.ColumnName;
 import com.github.rkmk.annotations.PrimaryKey;
 
+/**
+ *Template to fetching and updating the details of an issue.
+ */
+
 public class IssueTemplate {
 	@JsonProperty
 	@PrimaryKey

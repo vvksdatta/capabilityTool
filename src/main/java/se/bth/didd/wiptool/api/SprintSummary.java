@@ -7,6 +7,11 @@ import com.github.rkmk.annotations.ColumnName;
 import com.github.rkmk.annotations.OneToMany;
 import com.github.rkmk.annotations.PrimaryKey;
 
+/**
+ * Template for presenting a complete summary of sprint, with details such as name,
+ * associated project name, etc.
+ */
+
 public class SprintSummary {
 
 	@JsonProperty

@@ -6,6 +6,10 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.github.rkmk.annotations.ColumnName;
 import com.github.rkmk.annotations.PrimaryKey;
 
+/**
+ *Template for retrieving or updating the details of a project.
+ */
+
 public class Projects {
 
 	@JsonProperty
@@ -16,12 +20,7 @@ public class Projects {
 	@JsonProperty
 	@ColumnName("parentProjectId")
 	public Integer parentProjectId;
-	/*
-	 * @ColoumnName("name") is an annotation that belongs to jdbi-folder. This
-	 * is essential for fetching values from the 'name' column of database
-	 * table.
-	 */
-
+	
 	@JsonProperty
 	@ColumnName("projectName")
 	public String projectName;

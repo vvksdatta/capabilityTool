@@ -7,7 +7,9 @@ import com.github.rkmk.annotations.ColumnName;
 import com.github.rkmk.annotations.OneToMany;
 import com.github.rkmk.annotations.PrimaryKey;
 
-/*ProjectMembers entity that holds personID and personName. This has a relation with projectSummaries and project entity. */
+/**
+ * ProjectMembers entity that holds personID and personName. This has a relation with projectSummaries and project entity. 
+ * */
 
 public class NewPerson {
 	

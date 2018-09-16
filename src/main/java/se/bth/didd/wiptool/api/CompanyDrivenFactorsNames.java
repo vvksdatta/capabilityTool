@@ -16,7 +16,7 @@ public class CompanyDrivenFactorsNames {
 	@ColumnName("expectedTeamKnowledgeDiversity")
 	public String teamKnowledgeDiversity;
 
-		/*
+	/*
 	 * default constructor is required for FoldingListContainerFactory
 	 * (jdbi-folder)
 	 */

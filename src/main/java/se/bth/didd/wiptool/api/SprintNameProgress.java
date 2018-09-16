@@ -3,6 +3,10 @@ package se.bth.didd.wiptool.api;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.github.rkmk.annotations.PrimaryKey;
 
+/**
+ *Template for fetching a sprint name and its progress 
+ */
+
 public class SprintNameProgress {
 	@JsonProperty
 	@PrimaryKey

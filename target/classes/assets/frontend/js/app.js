@@ -4218,7 +4218,7 @@
       var $string = "Error in fetching list of sprint participants";
       alertFactory.addAuto('danger', $string, optionalDelay);
     });
-    $http.get('http://localhost:8080/api/issues/getSpecialIssuesInSprint/'+$scope.sprintId+"/"+$scope.projectId).then(function(response)
+    $http.get('api/issues/getSpecialIssuesInSprint/'+$scope.sprintId+"/"+$scope.projectId).then(function(response)
     {
       $scope.specialIssues = response.data;
     }).then(function(){
@@ -5407,7 +5407,7 @@
                 var $string = {};
                 if(response.data.message !=null){
                   $string = response.data.message;
-                  if($string = "Forbidden. Please check the user has proper permissions"){
+                  if($string = "Forbidden. Please check whether the user has proper permissions"){
                     $string = $string+". Perhaps, the project is closed!"
                   }
                 }else {

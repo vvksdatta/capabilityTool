@@ -6,6 +6,10 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.github.rkmk.annotations.ColumnName;
 import com.github.rkmk.annotations.PrimaryKey;
 
+/**
+ *Template for updating the details of a new project.
+ */
+
 public class NewProject {
 
 	@JsonProperty

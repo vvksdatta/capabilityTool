@@ -3,6 +3,10 @@ package se.bth.didd.wiptool.api;
 import java.util.List;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+/**
+ *Template for fetching the list of domains and types of assets associated with a sprint.
+ */
+
 public class SprintAllDomainsAssets {
 	@JsonProperty
 	public List<SprintAsset> latestassetsList;

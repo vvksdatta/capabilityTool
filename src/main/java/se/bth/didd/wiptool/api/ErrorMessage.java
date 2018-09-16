@@ -2,6 +2,10 @@ package se.bth.didd.wiptool.api;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+/**
+*Template for sending an error message. Mainly used in the 'Response' of various resource classes    
+ */
+
 public class ErrorMessage {
 	@JsonProperty
 

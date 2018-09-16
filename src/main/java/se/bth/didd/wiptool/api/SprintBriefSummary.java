@@ -5,13 +5,18 @@ import javax.validation.constraints.NotNull;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.github.rkmk.annotations.ColumnName;
 
+/**
+ * Template for presenting a brief summary of sprint, with details such as name,
+ * associated project name, etc.
+ */
+
 public class SprintBriefSummary {
 
 	@NotNull
 	@JsonProperty
 	@ColumnName("projectId")
 	public Integer projectId;
-	
+
 	@NotNull
 	@JsonProperty
 	@ColumnName("sprintId")
@@ -24,7 +29,7 @@ public class SprintBriefSummary {
 	@JsonProperty
 	@ColumnName("projectName")
 	public String projectName;
-	
+
 	@JsonProperty
 	@ColumnName("sprintDescription")
 	public String sprintDescription;
@@ -41,8 +46,6 @@ public class SprintBriefSummary {
 	@ColumnName("sprintEstimatedEffort")
 	public Integer sprintEstimatedEffort;
 
-	
-
 	public SprintBriefSummary(Integer projectId, Integer sprintId, String sprintName, String projectName,
 			String sprintDescription, Date sprintStartDate, Date sprintEndDate, Integer sprintEstimatedEffort) {
 		super();
@@ -56,8 +59,8 @@ public class SprintBriefSummary {
 		this.sprintEstimatedEffort = sprintEstimatedEffort;
 	}
 
-	public SprintBriefSummary(){
-		
+	public SprintBriefSummary() {
+
 	}
 
 	public Integer getProjectId() {
@@ -123,5 +126,5 @@ public class SprintBriefSummary {
 	public void setProjectName(String projectName) {
 		this.projectName = projectName;
 	}
-	
+
 }

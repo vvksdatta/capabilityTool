@@ -4,6 +4,9 @@ import javax.validation.constraints.NotNull;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.github.rkmk.annotations.ColumnName;
 
+/**
+ *Template for retrieving the names of capabilities together with their ID.
+ */
 
 public class Capability {
 	@JsonProperty

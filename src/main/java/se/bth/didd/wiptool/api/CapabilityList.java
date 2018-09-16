@@ -2,7 +2,9 @@ package se.bth.didd.wiptool.api;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-
+/**
+ * List of capabilities class. These are the list of capabilities that will be recorded for each person. * 
+ */
 public class CapabilityList {
 	
 	@JsonProperty

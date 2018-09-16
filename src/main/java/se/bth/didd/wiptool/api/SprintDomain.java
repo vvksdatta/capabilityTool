@@ -4,6 +4,10 @@ import javax.validation.constraints.NotNull;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.github.rkmk.annotations.ColumnName;
 
+/**
+ *Template for inserting a new domain associated with a sprint.
+ */
+
 public class SprintDomain {
 	@JsonProperty
 	@NotNull

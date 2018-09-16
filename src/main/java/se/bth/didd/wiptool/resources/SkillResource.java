@@ -39,21 +39,6 @@ public class SkillResource {
 	}
 
 	@GET
-	@Path("/getSkillsList")
-	public List<SkillTabsTemplate> getAll() {
-
-		List<Skill> skills = skillDAO.getAllSkills();
-		List<SkillTabsTemplate> template = new ArrayList<SkillTabsTemplate>();
-		for (Skill skill : skills) {
-			SkillTabsTemplate sampleSkill = new SkillTabsTemplate();
-			sampleSkill.setValue(skill.getSkillName());
-			sampleSkill.setDisplay(skill.getSkillName());
-			template.add(sampleSkill);
-		}
-		return template;
-	}
-
-	@GET
 	@Path("/getProgrammingSkillsList")
 	public Response getProgrammingSkillsList() {
 		try {

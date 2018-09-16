@@ -4,6 +4,10 @@ import javax.validation.constraints.NotNull;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.github.rkmk.annotations.ColumnName;
 
+/**
+ *Template for fetching the details of skills in order to comply with the tabular display of skills on UI.
+ */
+
 public class SkillTabsTemplate {
 	@JsonProperty
 	@NotNull

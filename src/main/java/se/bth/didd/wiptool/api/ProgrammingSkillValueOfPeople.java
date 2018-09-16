@@ -5,6 +5,10 @@ import javax.validation.constraints.NotNull;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.github.rkmk.annotations.ColumnName;
 
+/**
+ *Template for retrieving list of people who are associated with a particular skill. 
+ **/
+
 public class ProgrammingSkillValueOfPeople {
 	@JsonProperty
 	@NotNull

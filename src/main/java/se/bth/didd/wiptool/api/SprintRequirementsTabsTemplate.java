@@ -4,6 +4,10 @@ import javax.validation.constraints.NotNull;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.github.rkmk.annotations.ColumnName;
 
+/**
+ *Template for fetching the details of sprint requirements in order to comply with the tabular display on UI that displays the requirements. 
+ */
+
 public class SprintRequirementsTabsTemplate {
 	@JsonProperty
 	@NotNull

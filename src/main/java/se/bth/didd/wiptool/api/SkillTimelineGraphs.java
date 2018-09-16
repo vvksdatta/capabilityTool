@@ -4,6 +4,10 @@ import java.util.Date;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.github.rkmk.annotations.ColumnName;
 
+/**
+ *Template for fetching skills details for plotting a timeline graph of skills.
+ */
+
 public class SkillTimelineGraphs {
 	
 	@JsonProperty

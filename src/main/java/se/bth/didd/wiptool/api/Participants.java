@@ -3,6 +3,10 @@ package se.bth.didd.wiptool.api;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.github.rkmk.annotations.PrimaryKey;
 
+/**
+ *Template to fetch group of participants in a project and sprint.
+ */
+
 public class Participants {
 	
 	@JsonProperty

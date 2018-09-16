@@ -4,6 +4,10 @@ import java.util.Date;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.github.rkmk.annotations.ColumnName;
 
+/**
+ *Template for fetching distinct proficiencies recorded over time for a capability, with respect to a person.   
+ */
+
 public class CapabilityTimelineGraphs {
 	
 	@JsonProperty

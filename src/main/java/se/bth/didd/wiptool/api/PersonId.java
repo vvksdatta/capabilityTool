@@ -4,6 +4,10 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.github.rkmk.annotations.ColumnName;
 import com.github.rkmk.annotations.PrimaryKey;
 
+/**
+ *Template useful retrieving list of people.
+ */
+
 public class PersonId {
 	
 	@JsonProperty

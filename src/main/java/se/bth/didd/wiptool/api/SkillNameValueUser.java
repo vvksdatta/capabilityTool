@@ -3,6 +3,10 @@ package se.bth.didd.wiptool.api;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.github.rkmk.annotations.ColumnName;
 
+/**
+ *Template for updating the assessment details of a skill.
+ */
+
 public class SkillNameValueUser {
 
 	@JsonProperty

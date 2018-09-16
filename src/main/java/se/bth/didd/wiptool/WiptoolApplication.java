@@ -99,6 +99,7 @@ public class WiptoolApplication extends Application<WiptoolConfiguration> {
 		customMapperFactory.register(new LocalDateMapperFactory());
 		jdbi.registerMapper(customMapperFactory);
 		jdbi.registerContainerFactory(new FoldingListContainerFactory());
+		
 		/* Creating empty tables in the database */
 		peopleDAO.createPeopleTable();
 		projectDAO.createProjectTable();
@@ -125,7 +126,6 @@ public class WiptoolApplication extends Application<WiptoolConfiguration> {
 		skillDAO.createSkillDBTable();
 		skillDAO.createSkillAssessmentTable();
 		
-
 		/*
 		 * Add configuration parameters to the run method. Register all the
 		 * additional configuration parameters from YAML file, with resources

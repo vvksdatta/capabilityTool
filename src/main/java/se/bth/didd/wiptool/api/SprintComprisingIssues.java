@@ -4,13 +4,16 @@ import javax.validation.constraints.NotNull;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.github.rkmk.annotations.ColumnName;
 
+/**
+ *Template for fetching the IDs of issues associated with a sprint.
+ */
+
 public class SprintComprisingIssues {
 
 	@NotNull
 	@JsonProperty
 	@ColumnName("projectId")
 	public Integer projectId;
-	
 
 	@NotNull
 	@JsonProperty

@@ -2,6 +2,10 @@ package se.bth.didd.wiptool.api;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+/**
+ *Template to get number of participants in a project.
+ */
+
 public class NumberOfRolesInProject extends Roles {
 	@JsonProperty
 	public Integer numberOfPeople;

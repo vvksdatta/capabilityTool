@@ -1,23 +1,13 @@
 package se.bth.didd.wiptool.api;
 
-import javax.validation.constraints.NotNull;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.github.rkmk.annotations.ColumnName;
 
-public class SprintRequirementNameLevel {
-	@JsonProperty
-	@NotNull
-	@ColumnName("sprintRequirementId")
-	public int sprintRequirementId;
-
-	@JsonProperty
-	@ColumnName("sprintRequirementName")
-	public String sprintRequirementName;
-
-	@JsonProperty
-	@ColumnName("sprintRequirementDescription")
-	public String sprintRequirementDescription;
-
+/**
+ *Template for updating and fetching the details of requirements associated with a sprint and the level of requirement.
+ */
+public class SprintRequirementNameLevel extends SprintRequirement{
+	
 	@JsonProperty
 	@ColumnName("requirementLevel")
 	public String requirementLevel;

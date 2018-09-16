@@ -5,6 +5,10 @@ import javax.validation.constraints.NotNull;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.github.rkmk.annotations.ColumnName;
 
+/**
+ *Template for fetching and updating the details of post sprint questionnaire
+ */
+
 public class SprintQuestionnaireTemplate {
 
 	@NotNull

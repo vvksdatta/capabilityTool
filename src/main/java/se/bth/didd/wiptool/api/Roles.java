@@ -6,6 +6,9 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.github.rkmk.annotations.ColumnName;
 import com.github.rkmk.annotations.PrimaryKey;
 
+/**
+ *Template for retrieving list of roles.
+ */
 public class Roles {
 	@JsonProperty
 	@PrimaryKey

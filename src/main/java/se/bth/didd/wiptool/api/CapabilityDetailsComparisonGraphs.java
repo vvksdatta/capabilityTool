@@ -5,6 +5,12 @@ import javax.validation.constraints.NotNull;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.github.rkmk.annotations.ColumnName;
 
+/**
+ * Template for retrieving the last updated proficiency for each capability,
+ * together with the first name of user who updated it. This template is used
+ * for plotting comparative graphs.
+ */
+
 public class CapabilityDetailsComparisonGraphs {
 	@JsonProperty
 	@NotNull
@@ -15,15 +21,15 @@ public class CapabilityDetailsComparisonGraphs {
 	@NotNull
 	@ColumnName("capabilityName")
 	public String capabilityName;
-	
+
 	@JsonProperty
 	@ColumnName("proficiency")
 	public String proficiency;
-	
+
 	@JsonProperty
 	@ColumnName("updatedBy")
 	public String updatedBy;
-	
+
 	@JsonProperty
 	@ColumnName("lastUpdate")
 	public Date lastUpdate;
@@ -37,11 +43,10 @@ public class CapabilityDetailsComparisonGraphs {
 		this.updatedBy = updatedBy;
 		this.lastUpdate = lastUpdate;
 	}
-	
-	public CapabilityDetailsComparisonGraphs(){
-		
+
+	public CapabilityDetailsComparisonGraphs() {
+
 	}
-	
 
 	public String getPersonName() {
 		return personName;

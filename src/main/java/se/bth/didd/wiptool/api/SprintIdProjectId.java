@@ -4,6 +4,12 @@ import javax.validation.constraints.NotNull;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.github.rkmk.annotations.ColumnName;
 
+/**
+ * Template for replying back with the IDs of a sprint and its associated
+ * project. This is useful for passing sprint information between different
+ * pages related to a sprint.
+ */
+
 public class SprintIdProjectId {
 
 	@NotNull

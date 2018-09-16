@@ -6,6 +6,10 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.github.rkmk.annotations.ColumnName;
 import com.github.rkmk.annotations.OneToMany;
 
+/**
+ *Template for fetching the details of company driven factors associated with a sprint and the details of different development environments involved.
+ */
+
 public class SprintCompanyDrivenFactors {
 
 	@NotNull

@@ -7,7 +7,10 @@ import com.github.rkmk.annotations.ColumnName;
 import com.github.rkmk.annotations.OneToMany;
 import com.github.rkmk.annotations.PrimaryKey;
 
-/*People summaries entity which has one-to-many mapping with projects and sprints*/
+/**
+ * People summaries entity which has one-to-many mapping with projects and sprints
+ * */
+
 public class PeopleSummary {
 
 	@JsonProperty
