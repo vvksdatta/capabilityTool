@@ -19,7 +19,7 @@ $(".nav-tabs li").eq(2).removeClass("active").removeClass("disabledTab");
 </script>
 <md-content style="overflow: unset;" >
   <md-whiteframe class="md-whiteframe-18dp"  layout layout-align="center center">
-    <div class="container" >
+    <div class="container" ng-if="rolesList.length != 0" >
       <form class="form-horizontal" name="form" ng-submit="form.$valid && createSprintRoles()"  novalidate>
         <fieldset>
           <div class="control-group" >
@@ -54,6 +54,11 @@ $(".nav-tabs li").eq(2).removeClass("active").removeClass("disabledTab");
           </div>
         </fieldset>
       </form>
+    </div>
+    <div class="col-md-12" style="padding-left: 0px;  padding-right: 0px;" ng-if="rolesList.length == 0">
+      <div style="margin-top: 15px;" class="alert alert-info" role="alert">
+        <strong>Info: </strong> No project participants! You can only add project participants to a sprint.
+      </div>
     </div>
   </md-whiteframe>
 </md-content>

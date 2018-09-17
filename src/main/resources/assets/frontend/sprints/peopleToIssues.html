@@ -1,19 +1,5 @@
 <style>
-#sidebar-page-content {
-  position: absolute;
-  width: 100%;
-  left: 5%;
-  right: 5%;
-  padding: 5px;
-  transition: .5s ease all;
-  height: calc(100% - 150px);
-}
-.breadcrumb {
-  width : 82%;
-}
-.alert {
-  width: 82%;
-}
+
 select > option{ font-size:17px; }
 .list-group {
   margin-bottom: 0px;
@@ -27,7 +13,7 @@ select > option{ font-size:17px; }
   border-color: #171515;
 }
 #page-wrapper.show-sidebar #sidebar-page-content {
-  width: calc(95% - 50px);
+  width: calc(81% - 50px);
 }
 .md-cancel-button {
   background: whitesmoke;
@@ -99,7 +85,7 @@ canvas { background:#fff; }
   </div>
   <div class="col-md-1">
   </div>
-  <div class="col-md-7">
+  <div class="col-md-8">
     <div class="list-group" style="min-height: 110px; border: 1px solid #17151566; border-style: solid; padding-bottom: 1px;border-radius: 3px;">
       <div style="color: #333; background-color: #d2d2d2; border-color: #d2d2d2;margin-top: 0; margin-bottom: 10px; border-bottom: 1px solid transparent; border-top-right-radius: 3px; border-top-left-radius: 3px; padding: 10px;" class="list-group-item">
         <strong>Issues</strong>
@@ -207,7 +193,7 @@ canvas { background:#fff; }
 <div class="col-md-3 selectedPeople">
 </div>
 <div class="col-6 col-md-4" >
-  <div style="margin-top:40px;">
+  <div style="margin-bottom: 40px;margin-top: 20px;">
     <md-button type="reset" style="font-size: 15px;"  ng-if="showRemove" class="add-tab md-raised" ng-click="removePeopleToIssues($event)"> Remove  </md-button>
     <md-button type="submit" style=" font-size: 15px; background-color: rgb(90, 132, 187);" ng-if="showRemove"  class="add-tab md-primary md-raised" ng-click="savePeopleToIssues()"> Save </md-button>
   </div>

@@ -45,12 +45,12 @@
 
 #sidebar-page-content {
   position:absolute;
-  width: calc(75% - 50px);
-  left:15%;
-  right: 15%;
+  width: calc(95% - 50px);
+  left:5%;
+  right: 5%;
   padding: 5px;
   transition: .5s ease all;
-      height: -webkit-calc(100% - 150px);
+      height: -webkit-calc(97% - 150px);
 }
 
 #page-content {
@@ -62,5 +62,5 @@
 }
 
 #page-wrapper.show-sidebar #sidebar-page-content {
-  width: calc(75% - 50px);
+  width: calc(80% - 50px);
 }
