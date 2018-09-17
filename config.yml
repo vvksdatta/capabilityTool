@@ -10,10 +10,10 @@ assets:
   # Database settings.
 database:
 
-  # the name of your JDBC driver
+  # The name of your JDBC driver
   driverClass: org.postgresql.Driver
 
-  # database username (postgres)
+  # Database username (postgres)
   user: postgres
 
   # Database password
@@ -28,8 +28,8 @@ adminUserName: admin
 # Tool admin account password (can be changed after login)
 adminPassword: admin
   
-#url of redmine server
+# URL of redmine server
 redmineUrl: http://10.0.1.124/redmine/
   
-#api access key of redmine administrator
+# API access key of redmine administrator
 apiAccessKey: 7ecde4643c4a1196f66717686daa30cbd10d34a7
