@@ -4,7 +4,7 @@ p {
 }
 </style>
 <md-whiteframe class="md-whiteframe-18dp"  layout layout-align="center center">
-  <div class="col-md-12" style="padding-left: 0px;padding-right: 0px;">
+  <div class="col-md-12" style="padding-left: 0px;padding-right: 0px;" ng-if="people.length != 0">
     <div class="panel panel-default-table panel-table" style="margin-bottom: 0px;">
       <div class="panel-heading">
         <md-button type="submit" style="font-size: 15px; background-color: rgb(90, 132, 187);" class="add-tab md-primary md-raised" ui-sref="management.people.addPerson.newPerson" > <i class="glyphicon glyphicon-plus"></i>Add person</md-button>
@@ -57,6 +57,11 @@ p {
           </table>
         </md-whiteframe>
       </div>
+    </div>
+  </div>
+  <div class="col-md-12" style="padding-left: 0px;  padding-right: 0px;" ng-if="people.length == 0">
+    <div style="margin-top: 15px;" class="alert alert-info" role="alert">
+      <strong>Info: </strong> No people found! Did you synchronize with Redmine? Click on <strong>Synchronize</strong> to import people from Redmine.
     </div>
   </div>
 </md-whiteframe>

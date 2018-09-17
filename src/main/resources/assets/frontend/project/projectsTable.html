@@ -4,7 +4,7 @@ p {
 }
 </style>
 <md-whiteframe class="md-whiteframe-18dp"  layout layout-align="center center">
-  <div class="col-md-12" style="padding-left: 0px; padding-right: 0px;">
+  <div class="col-md-12" style="padding-left: 0px; padding-right: 0px;" ng-if="projects.length != 0">
     <div class="panel panel-default-table panel-table" style="margin-bottom: 0px;">
       <div class="panel-heading">
         <md-button style="font-size: 15px; background-color: rgb(90, 132, 187);"  type="submit"  class="add-tab md-primary md-raised" ui-sref="management.projects.addProject.newProject"><i class="glyphicon glyphicon-plus"></i>Add project </md-button>
@@ -72,6 +72,11 @@ p {
           </table>
         </md-whiteframe>
       </div>
+    </div>
+  </div>
+  <div class="col-md-12" style="padding-left: 0px;  padding-right: 0px;" ng-if="projects.length == 0">
+    <div style="margin-top: 15px;" class="alert alert-info" role="alert">
+      <strong>Info: </strong> No projects found! Did you synchronize with Redmine? Click on <strong>Synchronize</strong> to import all projects from Redmine.
     </div>
   </div>
 </md-whiteframe>

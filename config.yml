@@ -29,7 +29,7 @@ adminUserName: admin
 adminPassword: admin
   
 # URL of redmine server
-redmineUrl: http://10.0.1.124/redmine/
+redmineUrl: http://localhost/redmine/
   
 # API access key of redmine administrator
-apiAccessKey: 7ecde4643c4a1196f66717686daa30cbd10d34a7
+apiAccessKey: b9d329ab19430f66e7861fe734e9b334f384dc45
