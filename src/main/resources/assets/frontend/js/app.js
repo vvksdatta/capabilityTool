@@ -818,7 +818,6 @@
               for (var k =  list.length - 1; k >= 0; k--){
                 if(list[k].personId == value3.personId ){
                   $scope.peopleList.push(list[k]);
-                  $log.debug('Hello ' +$scope.peopleList.length+ '!');
                   //clearSelected[key].splice(key3,1);
                   var tmp ={};
                   tmp.personId = value3.personId;
@@ -868,22 +867,6 @@
       var $string = "Error in fetching roles of people";
       alertFactory.addAuto('danger', $string, optionalDelay);
     });
-    $http.get('/api/projects/' + currentProject.projectId).then(function(response)
-    {
-      var CurrentProject = response.data;
-      var finalProject = CurrentProject;
-      var  projectStartDate = $filter('date')(CurrentProject.projectStartDate, 'yyyy/MM/dd');
-      var  projectEndDate = $filter('date')(CurrentProject.projectEndDate, 'yyyy/MM/dd');
-      finalProject.projectStartDate = projectStartDate;
-      finalProject.projectEndDate = projectEndDate;
-      $scope.finalProject= finalProject;
-    })
-    .catch(function(response, status) {
-      //	$scope.loading = false;
-      var optionalDelay = 5000;
-      var $string = "Error in fetching project  details";
-      alertFactory.addAuto('danger', $string, optionalDelay);
-    });
     $http.get('/api/roles/getRoles').then(function(response)
     {
       var roles = response.data;
@@ -901,6 +884,30 @@
       var people = response.data;
       var peopleList = people;
       $scope.peopleList= peopleList;
+    }).then(function(){
+      $http.get('/api/projects/' + currentProject.projectId).then(function(response)
+      {
+        var finalProject =   response.data;
+        var  projectStartDate = $filter('date')(finalProject.projectStartDate, 'yyyy/MM/dd');
+        var  projectEndDate = $filter('date')(finalProject.projectEndDate, 'yyyy/MM/dd');
+        finalProject.projectStartDate = projectStartDate;
+        finalProject.projectEndDate = projectEndDate;
+        finalProject.projectLeaderName = null;
+        if($scope.peopleList.length != 0){
+        angular.forEach($scope.peopleList, function(value, key) {
+          if (value.personId == finalProject.projectLeader) {
+            finalProject.projectLeaderName = value.personName;
+          }
+        });
+        }
+        $scope.finalProject= finalProject;
+      })
+      .catch(function(response, status) {
+        //	$scope.loading = false;
+        var optionalDelay = 5000;
+        var $string = "Error in fetching project  details";
+        alertFactory.addAuto('danger', $string, optionalDelay);
+      });
     })
     .catch(function(response, status) {
       //	$scope.loading = false;
@@ -1344,12 +1351,13 @@
         $scope.formData.selectedRoles = {};
         $scope.person = person;
         var roles = response.data.roles;
-        var ee =[];
+        if(roles != null){
         for (var i =  roles.length - 1; i >= 0; i--) {
           if(roles[i].roleName != null){
             $scope.formData.selectedRoles[roles[i].roleName] = true;
           }
         }
+      }
       }).then(function(){
         $scope.someSelected = function (object) {
           return Object.keys(object).some(function (key) {
@@ -6585,20 +6593,42 @@
         var $string = "Error in fetching project participants details";
         alertFactory.addAuto('danger', $string, optionalDelay);
       });
-      $http.get('/api/projects/' + currentProject.projectId).then(function(response)
+
+      $http.get('/api/people/summary').then(function(response)
       {
-        var CurrentProject = response.data;
-        var finalProject = CurrentProject;
-        var  projectStartDate = $filter('date')(CurrentProject.projectStartDate, 'yyyy/MM/dd');
-        var  projectEndDate = $filter('date')(CurrentProject.projectEndDate, 'yyyy/MM/dd');
-        finalProject.projectStartDate = projectStartDate;
-        finalProject.projectEndDate = projectEndDate;
-        $scope.finalProject= finalProject;
+        var people = response.data;
+        var peopleList = people;
+        $scope.peopleList= peopleList;
+      }).then(function(){
+        $http.get('/api/projects/' + currentProject.projectId).then(function(response)
+        {
+          var CurrentProject = response.data;
+          var finalProject = CurrentProject;
+          var  projectStartDate = $filter('date')(CurrentProject.projectStartDate, 'yyyy/MM/dd');
+          var  projectEndDate = $filter('date')(CurrentProject.projectEndDate, 'yyyy/MM/dd');
+          finalProject.projectStartDate = projectStartDate;
+          finalProject.projectEndDate = projectEndDate;
+          finalProject.projectLeaderName = null;
+          if($scope.peopleList.length != 0){
+            angular.forEach($scope.peopleList, function(value, key) {
+              if (value.personId == finalProject.projectLeader) {
+                finalProject.projectLeaderName = value.personName;
+              }
+            });
+          }
+          $scope.finalProject= finalProject;
+        })
+        .catch(function(response, status) {
+          //	$scope.loading = false;
+          var optionalDelay = 5000;
+          var $string = "Error in fetching project  details";
+          alertFactory.addAuto('danger', $string, optionalDelay);
+        });
       })
       .catch(function(response, status) {
         //	$scope.loading = false;
         var optionalDelay = 5000;
-        var $string = "Error in fetching project  details";
+        var $string = "Error in fetching list of people";
         alertFactory.addAuto('danger', $string, optionalDelay);
       });
       $http.get('/api/roles/getRoles').then(function(response)
@@ -6613,18 +6643,7 @@
         var $string = "Error in fetching roles";
         alertFactory.addAuto('danger', $string, optionalDelay);
       });
-      $http.get('/api/people/summary').then(function(response)
-      {
-        var people = response.data;
-        var peopleList = people;
-        $scope.peopleList= peopleList;
-      })
-      .catch(function(response, status) {
-        //	$scope.loading = false;
-        var optionalDelay = 5000;
-        var $string = "Error in fetching list of people";
-        alertFactory.addAuto('danger', $string, optionalDelay);
-      });
+
       $scope.list2 = [];
       //	$scope.demo = [{ "personId": 1, "personName": "sai datta Admin", "projects": [ { "projectId": 1, "projectName": "Project1", "sprints": [ { "sprintId": 4, "sprintName": "sprintlog", "issues": [ { "issueId": 7 }, { "issueId": 6 } ], "numberofIssues": 2 }, { "sprintId": 8, "sprintName": "demosprint", "issues": [ { "issueId": 0 }, { "issueId": 1 } ], "numberofIssues": 2 } ] } ], "roleId": "3", "jqyoui_pos": 1 } ];
       $scope.filterPeople = function() {
@@ -6634,13 +6653,14 @@
         for (var i =  peoplelength - 1; i >= 0; i--) {
           angular.forEach($scope.list2, function(value2, key2) {
             if ($scope.peopleList[i].personId == value2.personId) {
+              $log.debug("this is for person "+ value2.personName);
               list1.splice(i, 1);
             }
           })
         }
         $scope.show = true;
         return $scope.peopleList = list1;
-      }
+      };
       $scope.updateProjectParticipants =function(participants){
         var ee = [];
         angular.forEach(participants, function(value, key) {
