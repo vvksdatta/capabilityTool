@@ -165,7 +165,7 @@ select > option{ font-size:17px; }
               <tbody>
                 <tr >
                   <td style="padding-left: 0px;">
-                    <div class="thumbnail" style="min-height: 250px;border: 5px dotted #5d5c5c; color: #333;margin-bottom: 10px;border-radius: 3px;" data-drop="true" ng-model='list2' jqyoui-droppable>
+                    <div class="thumbnail" style="min-height: 250px;height: inherit;border: 5px dotted #5d5c5c; color: #333;margin-bottom: 10px;border-radius: 3px;" data-drop="true" ng-model='list2' jqyoui-droppable>
                       <div style="text-align: center;" ng-if="list2 == ''">  Drag and Drop to add project participants </div>
                       <div ng-repeat="item in list2">
                         <md-checkbox  type="checkbox" style="margin-bottom: 10px;width: 100%;display: grid;" class="md-primary"  ng-model="removeSelected[item.personId]" >

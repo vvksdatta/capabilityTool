@@ -1,19 +1,14 @@
 <style>
 #sidebar-page-content {
   position: absolute;
-  width: 100%;
+  width: calc(95% - 50px);
   left: 5%;
   right: 5%;
   padding: 5px;
   transition: .5s ease all;
   height: calc(100% - 150px);
 }
-.breadcrumb {
-  width : 82%;
-}
-.alert {
-  width: 82%;
-}
+
 select > option{ font-size:17px; }
 .list-group {
   margin-bottom: 0px;
@@ -27,7 +22,7 @@ select > option{ font-size:17px; }
   border-color: #171515;
 }
 #page-wrapper.show-sidebar #sidebar-page-content {
-  width: calc(95% - 50px);
+  width: calc(81% - 50px);
 }
 .md-cancel-button {
   background: whitesmoke;
@@ -165,7 +160,7 @@ canvas { background:#fff; }
           <div style="max-height:23vh;overflow-x:hidden;overflow-y:auto;">
             <div   ng-if="item.roleName == selectedRole && show" ng-cloak class="" ng-repeat="item in rolesOfPeople"  class="btn btn-block btn-droppable list-group-item" data-drop="true" data-jqyoui-options="{accept:'.btn-draggable:not([ng-model=peopleList])'}"  jqyoui-droppable="{index: {{$index}}}" >
               <div ng-if="item.roleName == selectedRole" style = "display: inline-flex;padding: 5px 10px;margin-bottom: 2px;" class="btn btn-block list-group-item" ng-repeat="person in peopleList" ng-click="showGraph(person);" ng-show="person.personId == item.personId" ng-model='peopleList'>
-                  
+
                 <div style="margin-left: 0; width: 4%; text-align: left;display: inline-flex;" ng-show="person.personId == item.personId">
                   <md-checkbox type="checkbox" name="selectedDomains" style="margin-bottom: 8px;" class="md-primary" ng-model="formData.selected[person.personId]" ng-change="optionToggled()">
                   </div>
@@ -419,7 +414,7 @@ canvas { background:#fff; }
           </div>
         </div>
       </div>
-      <div class='col-xs-3'>
+      <div class='col-xs-4'>
         <div class="panel panel-default-table panel-table">
           <div class="panel-heading">
             <h3 class="panel-title"><strong>Sprint Participants </strong></h3>
