@@ -86,7 +86,6 @@ public class Redmine {
 
 		List<User> people = redmineManager.getUserManager().getUsers();
 
-		
 		for (User person : people) {
 
 			if (redmineDAO.ifPersonIdExists(person.getId()) != true) {
@@ -106,7 +105,9 @@ public class Redmine {
 				 * people(deleting from local database) who have been removed
 				 * from Redmine.
 				 */
-				redmineDAO.updatePersonStatus(person.getId(), generatedRandomString);
+				redmineDAO.updatePersonIdentifier(person.getId(), generatedRandomString);
+				redmineDAO.updateidentifierInAssessmentOfCapabilities(person.getId(), generatedRandomString);
+				redmineDAO.updateidentifierInAssessmentOfSkills(person.getId(), generatedRandomString);
 			}
 		}
 
@@ -196,11 +197,29 @@ public class Redmine {
 					for (Role role : rolesOfProjectParticipant) {
 
 						/*
+						 * check whether the person is already added to People
+						 * table. If the person is not added but exists in the
+						 * project participation list, it indicates that the
+						 * person account is locked. This person is first added
+						 * to list of people and then added to other tables.
+						 */
+						if (redmineDAO.ifPersonIdExists(projectParticipant.getUserId()) != true) {
+
+							User lockedUser = redmineManager.getUserManager()
+									.getUserById(projectParticipant.getUserId());
+							redmineDAO.insertIntoPeopleTable(lockedUser.getId(), lockedUser.getFullName(),
+									lockedUser.getFirstName(), lockedUser.getLastName(), lockedUser.getMail(),
+									generatedRandomString);
+
+						}
+
+						/*
 						 * check if the role is already added to the table that
 						 * displays the list of roles each person is capable of
 						 * taking up (RolesOfPeople Table)
 						 */
 						if (redmineDAO.ifRoleOfPersonExists(role.getId(), projectParticipant.getUserId()) != true) {
+
 							/*
 							 * If there is no registered record in database,
 							 * insert a new record to the table with the roleId
@@ -208,6 +227,7 @@ public class Redmine {
 							 */
 							redmineDAO.insertIntoRolesOfPeopleTable(projectParticipant.getUserId(), role.getId());
 							System.out.println("Updated RolesofPeople table");
+
 						}
 
 						/*
@@ -258,6 +278,17 @@ public class Redmine {
 						redmineDAO.updateRedmineProjectIdentifierInParticipationTable(redmineProject.getId(),
 								projectParticipant.getUserId(), role.getId(), generatedRandomString);
 
+						redmineDAO.updateRedminePersonIdentifierInParticipationTable(redmineProject.getId(),
+								projectParticipant.getUserId(), role.getId(), generatedRandomString);
+
+						redmineDAO.updateidentifierInRolesOfPeople(projectParticipant.getUserId(), role.getId(),
+								generatedRandomString);
+						redmineDAO.updatePersonIdentifier(projectParticipant.getUserId(), generatedRandomString);
+						redmineDAO.updateidentifierInAssessmentOfCapabilities(projectParticipant.getUserId(),
+								generatedRandomString);
+						redmineDAO.updateidentifierInAssessmentOfSkills(projectParticipant.getUserId(),
+								generatedRandomString);
+
 					}
 
 				}
@@ -278,13 +309,11 @@ public class Redmine {
 		 * 'grandChildproject1' details are not yet registered to the database.
 		 */
 		Timestamp timestamp = new Timestamp(System.currentTimeMillis());
-		System.out.println("hello the timestamp now is" + timestamp);
 
 		for (Project redmineProject : projects) {
 			/* check if project already added to database */
 			if (redmineDAO.ifProjectExists(redmineProject.getId()) != false) {
-				System.out.println(
-						"hello the project" + redmineProject.getName() + "exists and the timestamp now is" + timestamp);
+
 				/*
 				 * The current project is already added as a record on projects
 				 * table of local database
@@ -379,11 +408,33 @@ public class Redmine {
 					for (Role role : rolesOfProjectParticipant) {
 
 						/*
+						 * check whether the person is already added to People
+						 * table. If the person is not added but exists in the
+						 * project participation list, it indicates that the
+						 * person account is locked. This person is first added
+						 * to list of people and then added to other tables.
+						 */
+
+						if (redmineDAO.ifPersonIdExists(projectParticipant.getUserId()) != true) {
+
+							User lockedUser = redmineManager.getUserManager()
+									.getUserById(projectParticipant.getUserId());
+							redmineDAO.insertIntoPeopleTable(lockedUser.getId(), lockedUser.getFullName(),
+									lockedUser.getFirstName(), lockedUser.getLastName(), lockedUser.getMail(),
+									generatedRandomString);
+							redmineDAO.updatePersonIdentifier(lockedUser.getId(), generatedRandomString);
+							redmineDAO.updateidentifierInAssessmentOfCapabilities(lockedUser.getId(),
+									generatedRandomString);
+							redmineDAO.updateidentifierInAssessmentOfSkills(lockedUser.getId(), generatedRandomString);
+						}
+
+						/*
 						 * check if the role is already added to the table that
 						 * displays the list of roles each person is capable of
 						 * taking up (RolesOfPeople Table)
 						 */
 						if (redmineDAO.ifRoleOfPersonExists(role.getId(), projectParticipant.getUserId()) != true) {
+
 							/*
 							 * If there is no registered record in database,
 							 * insert a new record to the table with the roleId
@@ -414,6 +465,18 @@ public class Redmine {
 						}
 						redmineDAO.updateRedmineProjectIdentifierInParticipationTable(redmineProject.getId(),
 								projectParticipant.getUserId(), role.getId(), generatedRandomString);
+
+						redmineDAO.updateRedminePersonIdentifierInParticipationTable(redmineProject.getId(),
+								projectParticipant.getUserId(), role.getId(), generatedRandomString);
+
+						redmineDAO.updateidentifierInRolesOfPeople(projectParticipant.getUserId(), role.getId(),
+								generatedRandomString);
+
+						redmineDAO.updatePersonIdentifier(projectParticipant.getUserId(), generatedRandomString);
+						redmineDAO.updateidentifierInAssessmentOfCapabilities(projectParticipant.getUserId(),
+								generatedRandomString);
+						redmineDAO.updateidentifierInAssessmentOfSkills(projectParticipant.getUserId(),
+								generatedRandomString);
 
 					}
 
@@ -449,6 +512,23 @@ public class Redmine {
 						updateIssue.setIssuePriority(issue.getPriorityText());
 
 						if (issue.getAssigneeId() != null) {
+
+							/*
+							 * check whether the assignee is already added to
+							 * the People Table. If the person does not exist in
+							 * the People table, it means that the person's
+							 * account is locked. Thus, this person will be
+							 * first added to People table and then the assignee
+							 * ID for the issue will be updated.
+							 */
+							if (redmineDAO.ifPersonIdExists(issue.getAssigneeId()) != true) {
+
+								User lockedUser = redmineManager.getUserManager().getUserById(issue.getAssigneeId());
+								redmineDAO.insertIntoPeopleTable(lockedUser.getId(), lockedUser.getFullName(),
+										lockedUser.getFirstName(), lockedUser.getLastName(), lockedUser.getMail(),
+										generatedRandomString);
+							}
+
 							updateIssue.setPersonId(issue.getAssigneeId());
 						}
 
@@ -536,7 +616,7 @@ public class Redmine {
 						if (issue.getAssigneeId() != null && issue.getTargetVersion() != null) {
 							redmineDAO.updateIdentifiersInSprintparticipation(issue.getProjectId(),
 									issue.getTargetVersion().getId(), issue.getAssigneeId(), generatedRandomString,
-									generatedRandomString);
+									generatedRandomString, generatedRandomString);
 						}
 					} else {
 						/*
@@ -561,6 +641,23 @@ public class Redmine {
 						}
 						newIssue.setIssuePriority(issue.getPriorityText());
 						if (issue.getAssigneeId() != null) {
+							/*
+							 * check whether the assignee is already added to
+							 * the People Table. If the person does not exist in
+							 * the People table, it means that the person's
+							 * account is locked. Thus, this person will be
+							 * first added to People table and then the assignee
+							 * ID for the issue will be updated.
+							 */
+							if (redmineDAO.ifPersonIdExists(issue.getAssigneeId()) != true) {
+
+								User lockedUser = redmineManager.getUserManager().getUserById(issue.getAssigneeId());
+								redmineDAO.insertIntoPeopleTable(lockedUser.getId(), lockedUser.getFullName(),
+										lockedUser.getFirstName(), lockedUser.getLastName(), lockedUser.getMail(),
+										generatedRandomString);
+
+							}
+
 							newIssue.setPersonId(issue.getAssigneeId());
 						}
 						newIssue.setIssueEstimatedTime(issue.getEstimatedHours());
@@ -640,7 +737,7 @@ public class Redmine {
 					if (issue.getAssigneeId() != null && issue.getTargetVersion() != null) {
 						redmineDAO.updateIdentifiersInSprintparticipation(issue.getProjectId(),
 								issue.getTargetVersion().getId(), issue.getAssigneeId(), generatedRandomString,
-								generatedRandomString);
+								generatedRandomString, generatedRandomString);
 					}
 				}
 			}
@@ -648,13 +745,6 @@ public class Redmine {
 			redmineDAO.updateRedmineProjectIdentifier(redmineProject.getId(), generatedRandomString);
 
 		}
-
-		/*
-		 * Deleting the people who haven't been assigned the current(random
-		 * string for this iteration) status identifier i.e. the people who have
-		 * been removed from Redmine
-		 */
-		redmineDAO.deletePeopleWhoNoLongerExist(generatedRandomString);
 
 		// Deleting roles that no longer exist on Redmine
 		redmineDAO.deleteNonExistingRoles(generatedRandomString);
@@ -686,9 +776,23 @@ public class Redmine {
 		redmineDAO.deleteNonExistingSprintsFromSprintDevEnvTable(generatedRandomString);
 		redmineDAO.deleteNonExistingSprintsFromSprintComprisingIssuesTable(generatedRandomString);
 		redmineDAO.deleteNonExistingIssuesFromSprintComprisingIssuesTable(generatedRandomString);
-
 		redmineDAO.deleteNonExistingIssuesFromissuesTable(generatedRandomString);
 		redmineDAO.deleteNonExistingSprintsFromSprintsTable(generatedRandomString);
+
+		// Deleting all the people removed from Redmine.
+
+		// redmineDAO.deletePeopleWhoNoLongerExistFromAssessmentOfCapabilities(generatedRandomString);
+		/*
+		 * Deleting the people who haven't been assigned the current(random
+		 * string for this iteration) status identifier i.e. the people who have
+		 * been removed from Redmine
+		 */
+		redmineDAO.deleteNonExistingPeopleFromAssessmentOfCapabilitiesTable(generatedRandomString);
+		redmineDAO.deleteNonExistingPeopleFromAssessmentOfSkillsTable(generatedRandomString);
+		redmineDAO.deleteNonExistingPeopleFromRolesOfPeopleTable(generatedRandomString);
+		redmineDAO.deleteNonExistingPeopleFromProjectParticipationTable(generatedRandomString);
+		redmineDAO.deleteNonExistingPeopleFromSprintParticipationTable(generatedRandomString);
+		redmineDAO.deletePeopleWhoNoLongerExist(generatedRandomString);
 
 		/*
 		 * Updating the percentage of done for each sprint. This is updated

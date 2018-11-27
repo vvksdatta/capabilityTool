@@ -34,7 +34,7 @@ public interface SprintDAO {
 			+ " PRIMARY KEY (projectId,sprintId))")
 	void createSprintQuestionnaireTable();
 
-	@SqlUpdate("create table if not exists SPRINTPARTICIPATION (projectId int , sprintId int, personId int REFERENCES PEOPLE(personId), personExists int, redmineSprintIdentifier varchar(10), redmineProjectIdentifier varchar(10), "
+	@SqlUpdate("create table if not exists SPRINTPARTICIPATION (projectId int , sprintId int, personId int REFERENCES PEOPLE(personId), personExists int, redmineSprintIdentifier varchar(10), redmineProjectIdentifier varchar(10), redminePersonIdentifier varchar(10),"
 			+ "FOREIGN KEY (projectId, sprintId) REFERENCES SPRINTS(projectId, sprintId), PRIMARY KEY(projectId,sprintId,personId))")
 	void createSprintParticipationTable();
 
@@ -266,7 +266,7 @@ public interface SprintDAO {
 	@SqlQuery("select exists( select 1 from SprintQuestionnaire where projectId = :projectId and sprintId = :sprintId)")
 	boolean IfSprintQuestionnaireAnswered(@Bind("projectId") int projectId, @Bind("sprintId") int sprintId);
 
-	@SqlUpdate("insert into SPRINTPARTICIPATION (projectId, personId, sprintId, redmineProjectIdentifier, redmineSprintIdentifier) values (:projectId, :personId, :sprintId, 'new', 'new')")
+	@SqlUpdate("insert into SPRINTPARTICIPATION (projectId, personId, sprintId, redmineProjectIdentifier, redmineSprintIdentifier, redminePersonIdentifier) values (:projectId, :personId, :sprintId, 'new', 'new', 'new')")
 	void insertIntoSprintParticipation(@Bind("projectId") int projectId, @Bind("personId") int personId,
 			@Bind("sprintId") int sprintId);
 

@@ -22,7 +22,7 @@ public interface RedmineDAO {
 			+ ":projectEstimatedEffort, :projectActualEffort, :projectStatus, :projectLastUpdate, :redmineLastUpdate, :projectUpdatedBy, 'new')")
 	void insertIntoProjects(@BindBean Projects project);
 
-	@SqlUpdate("insert into PROJECTPARTICIPATION (projectId, personId, roleId,redmineProjectIdentifier ) values (:projectId, :personId, :roleId, 'new')")
+	@SqlUpdate("insert into PROJECTPARTICIPATION (projectId, personId, roleId,redmineProjectIdentifier, redminePersonIdentifier ) values (:projectId, :personId, :roleId, 'new', 'new')")
 	void insertIntoProjectParticipation(@Bind("projectId") int projectId, @Bind("personId") int personId,
 			@Bind("roleId") int roleId);
 
@@ -44,7 +44,7 @@ public interface RedmineDAO {
 			+ ":issueLastUpdate, 'new', 'new')")
 	void insertIntoIssuesTable(@BindBean IssueTemplate issue);
 
-	@SqlUpdate("insert into SPRINTPARTICIPATION (projectId, sprintId, personId,redmineProjectIdentifier,redmineSprintIdentifier ) values (:projectId, :sprintId, :personId, 'new', 'new')")
+	@SqlUpdate("insert into SPRINTPARTICIPATION (projectId, sprintId, personId,redmineProjectIdentifier,redmineSprintIdentifier, redminePersonIdentifier ) values (:projectId, :sprintId, :personId, 'new', 'new', 'new')")
 	void InsertIntoSprintParticipationTable(@Bind("projectId") int projectId, @Bind("sprintId") int sprintId,
 			@Bind("personId") int personId);
 
@@ -71,6 +71,11 @@ public interface RedmineDAO {
 	void updateRedmineProjectIdentifierInParticipationTable(@Bind("projectId") int projectId,
 			@Bind("personId") int personId, @Bind("roleId") int roleId,
 			@Bind("redmineProjectIdentifier") String redmineProjectIdentifier);
+	
+	@SqlUpdate("update PROJECTPARTICIPATION set redminePersonIdentifier = :redminePersonIdentifier where projectId = :projectId and personId = :personId and roleId = :roleId")
+	void updateRedminePersonIdentifierInParticipationTable(@Bind("projectId") int projectId,
+			@Bind("personId") int personId, @Bind("roleId") int roleId,
+			@Bind("redminePersonIdentifier") String redminePersonIdentifier);
 
 	@SqlUpdate("update ISSUES set redmineProjectIdentifier = :redmineProjectIdentifier, redmineIssueIdentifier = :redmineIssueIdentifier where projectId = :projectId and issueId = :issueId")
 	void updateIdentifiersInIssues(@Bind("projectId") int projectId, @Bind("issueId") int issueId,
@@ -108,10 +113,10 @@ public interface RedmineDAO {
 			@Bind("redmineProjectIdentifier") String redmineProjectIdentifier,
 			@Bind("redmineSprintIdentifier") String redmineSprintIdentifier);
 
-	@SqlUpdate("update SPRINTPARTICIPATION set redmineProjectIdentifier = :redmineProjectIdentifier, redmineSprintIdentifier = :redmineSprintIdentifier where projectId = :projectId and sprintId = :sprintId and personId = :personId")
+	@SqlUpdate("update SPRINTPARTICIPATION set redmineProjectIdentifier = :redmineProjectIdentifier, redmineSprintIdentifier = :redmineSprintIdentifier, redminePersonIdentifier = :redminePersonIdentifier where projectId = :projectId and sprintId = :sprintId and personId = :personId")
 	void updateIdentifiersInSprintparticipation(@Bind("projectId") int projectId, @Bind("sprintId") int sprintId,
 			@Bind("personId") int personId, @Bind("redmineProjectIdentifier") String redmineProjectIdentifier,
-			@Bind("redmineSprintIdentifier") String redmineSprintIdentifier);
+			@Bind("redmineSprintIdentifier") String redmineSprintIdentifier, @Bind("redminePersonIdentifier") String redminePersonIdentifier);
 
 	@SqlUpdate("update DEVELOPMENT_ENV_IN_A_SPRINT set redmineProjectIdentifier = :redmineProjectIdentifier, redmineSprintIdentifier = :redmineSprintIdentifier where projectId = :projectId and sprintId = :sprintId")
 	void updateIdentifiersInSprintDevEnvironments(@Bind("projectId") int projectId, @Bind("sprintId") int sprintId,
@@ -121,6 +126,12 @@ public interface RedmineDAO {
 	@SqlUpdate("update RolesOfPeople set status =:status where personId = :personId and roleId = :roleId ")
 	void updateidentifierInRolesOfPeople(@Bind("personId") int personId, @Bind("roleId") int roleId,
 			@Bind("status") String status);
+	
+	@SqlUpdate("update ASSESSMENTOFCAPABILITIES set status =:status where personId = :personId ")
+	void updateidentifierInAssessmentOfCapabilities(@Bind("personId") int personId, @Bind("status") String status);
+
+	@SqlUpdate("update ASSESSMENTOFSKILLS set status =:status where personId = :personId ")
+	void updateidentifierInAssessmentOfSkills(@Bind("personId") int personId, @Bind("status") String status);
 
 	@SqlUpdate("insert into ROLESDB (roleId, roleName) values (:roleId, :roleName)")
 	void insertIntoRolesDB(@BindBean Roles roles);
@@ -134,10 +145,10 @@ public interface RedmineDAO {
 	@SqlUpdate("insert into RolesOfPeople (personId ,roleId, status) values (:personId, :roleId, 'new' )")
 	void insertIntoRolesOfPeopleTable(@Bind("personId") int personId, @Bind("roleId") int roleId);
 
-	@SqlUpdate("insert into PEOPLE (personId, personName, firstName, lastName, emailId, status) values (:personId, :personName, :firstName, :lastName, :emailId, :status)")
+	@SqlUpdate("insert into PEOPLE (personId, personName, firstName, lastName, emailId, redminePersonIdentifier) values (:personId, :personName, :firstName, :lastName, :emailId, :redminePersonIdentifier)")
 	void insertIntoPeopleTable(@Bind("personId") int personId, @Bind("personName") String personName,
 			@Bind("firstName") String firstName, @Bind("lastName") String lastName, @Bind("emailId") String emailId,
-			@Bind("status") String status);
+			@Bind("redminePersonIdentifier") String redminePersonIdentifier);
 
 	@SqlUpdate("update PEOPLE set personName =:personName, firstName =:firstName, lastName =:lastName, emailId =:emailId where personId=:personId")
 	void updatePeopleTable(@Bind("personId") int personId, @Bind("personName") String personName,
@@ -145,8 +156,8 @@ public interface RedmineDAO {
 
 	// separate query as this identifier is updated each time the Redmine
 	// synchronization button is clicked
-	@SqlUpdate("update PEOPLE set status = :status where personId=:personId")
-	void updatePersonStatus(@Bind("personId") int personId, @Bind("status") String status);
+	@SqlUpdate("update PEOPLE set redminePersonIdentifier = :redminePersonIdentifier where personId=:personId")
+	void updatePersonIdentifier(@Bind("personId") int personId, @Bind("redminePersonIdentifier") String redminePersonIdentifier);
 
 	@SqlUpdate("update PROJECTS set parentProjectId = :parentProjectId, projectName = :projectName, projectDescription = :projectDescription, redmineLastUpdate = :redmineLastUpdate,"
 			+ " projectLastUpdate = :projectLastUpdate  where projectId = :projectId")
@@ -254,7 +265,7 @@ public interface RedmineDAO {
 	@SqlUpdate("Delete from ISSUES where issueId = :issueId")
 	void deleteIssueAlreadyAllocatedToOProject(@Bind("issueId") int issueId);
 
-	@SqlUpdate("DELETE FROM PEOPLE WHERE status NOT IN (:currentStatusIdentifier)")
+	@SqlUpdate("DELETE FROM PEOPLE WHERE redminePersonIdentifier NOT IN (:currentStatusIdentifier)")
 	void deletePeopleWhoNoLongerExist(@Bind("currentStatusIdentifier") String currentStatusIdentifier);
 
 	@SqlUpdate("DELETE FROM ROLESDB WHERE roleStatus NOT IN (:currentStatusIdentifier)")
@@ -319,6 +330,10 @@ public interface RedmineDAO {
 	void deleteNonExistingProjectsFromSprintParticipationTable(
 			@Bind("redmineProjectIdentifier") String redmineProjectIdentifier);
 
+	@SqlUpdate("DELETE FROM SPRINTPARTICIPATION  WHERE redminePersonIdentifier NOT IN (:redminePersonIdentifier)")
+	void deleteNonExistingPeopleFromSprintParticipationTable(
+			@Bind("redminePersonIdentifier") String redminePersonIdentifier);
+
 	@SqlUpdate("DELETE FROM DEVELOPMENT_ENV_IN_A_SPRINT  WHERE redmineProjectIdentifier NOT IN (:redmineProjectIdentifier)")
 	void deleteNonExistingProjectsFromSprintDevEnvTable(
 			@Bind("redmineProjectIdentifier") String redmineProjectIdentifier);
@@ -337,5 +352,19 @@ public interface RedmineDAO {
 	@SqlUpdate("DELETE FROM SPRINTCOMPRISINGISSUES WHERE redmineIssueIdentifier NOT IN (:redmineIssueIdentifier)")
 	void deleteNonExistingIssuesFromSprintComprisingIssuesTable(
 			@Bind("redmineIssueIdentifier") String redmineIssueIdentifier);
+	
+	@SqlUpdate("DELETE FROM PROJECTPARTICIPATION  WHERE redminePersonIdentifier NOT IN (:redminePersonIdentifier)")
+	void deleteNonExistingPeopleFromProjectParticipationTable(
+			@Bind("redminePersonIdentifier") String redminePersonIdentifier);
+
+	@SqlUpdate("DELETE FROM RolesOfPeople WHERE status NOT IN (:status)")
+	void deleteNonExistingPeopleFromRolesOfPeopleTable(@Bind("status") String status);
+	
+	
+	@SqlUpdate("DELETE FROM ASSESSMENTOFCAPABILITIES WHERE status NOT IN (:status)")
+	void deleteNonExistingPeopleFromAssessmentOfCapabilitiesTable(@Bind("status") String status);
+	
+	@SqlUpdate("DELETE FROM ASSESSMENTOFSKILLS WHERE status NOT IN (:status)")
+	void deleteNonExistingPeopleFromAssessmentOfSkillsTable(@Bind("status") String status);
 
 }

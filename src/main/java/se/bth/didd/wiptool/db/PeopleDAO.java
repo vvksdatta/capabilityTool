@@ -15,18 +15,18 @@ import se.bth.didd.wiptool.api.UserPasswordChange;
 import se.bth.didd.wiptool.api.UserTemplate;
 
 public interface PeopleDAO {
-	@SqlUpdate("create table if not exists PEOPLE (personId int primary key, personName varchar(40), firstName varchar(40), lastName varchar(40), emailId varchar(40), status varchar(10))")
+	@SqlUpdate("create table if not exists PEOPLE (personId int primary key, personName varchar(40), firstName varchar(40), lastName varchar(40), emailId varchar(40), redminePersonIdentifier varchar(10))")
 	void createPeopleTable();
 
-	@SqlUpdate("insert into PEOPLE (personId, personName, firstName, lastname, emailId, status) values (:personId, :personName, :firstName, :lastName, :emailId, 'new')")
+	@SqlUpdate("insert into PEOPLE (personId, personName, firstName, lastname, emailId, redminePersonIdentifier) values (:personId, :personName, :firstName, :lastName, :emailId, 'new')")
 	void insertIntoPeopleTable(@Bind("personId") int personId, @Bind("personName") String personName,
 			@Bind("firstName") String firstName, @Bind("lastName") String lastName, @Bind("emailId") String emailId);
 
 	@SqlUpdate("update PEOPLE set personName = :personName, firstName = :firstName, lastName = :lastName, emailId = :emailId where personId= :personId")
 	void updatePerson(@Bind("personId") int personId, @Bind("personName") String personName,
-			@Bind("firstName") String firstName, @Bind("lastName") String lastName, @Bind("emailId") String emailId);
+			@Bind("firstName") String firstName, @Bind("lastName") String lastName, @Bind("emailId") String emailId );
 
-	@SqlUpdate("insert into RolesOfPeople (personId ,roleId) values (:personId, :roleId )")
+	@SqlUpdate("insert into RolesOfPeople (personId ,roleId, status) values (:personId, :roleId, 'new' )")
 	void insertIntoRolesOfPeopleTable(@Bind("personId") int personId, @Bind("roleId") int roleId);
 
 	@SqlQuery("select exists (select 1 from RolesOfPeople where personId = :personId and roleId = :roleId)")

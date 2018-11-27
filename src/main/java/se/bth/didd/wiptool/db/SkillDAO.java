@@ -17,13 +17,13 @@ public interface SkillDAO {
 	void createSkillDBTable();
 
 	@SqlUpdate("create table if not exists ASSESSMENTOFSKILLS (personId int REFERENCES PEOPLE(personId), skillId int REFERENCES "
-			+ "SkillDB(skillId), proficiency varchar(30), updatedBy varchar(30), lastUpdate timestamp)")
+			+ "SkillDB(skillId), proficiency varchar(30), updatedBy varchar(30), lastUpdate timestamp, status varchar(10))")
 	void createSkillAssessmentTable();
 
 	@SqlUpdate("insert into SkillDB (skillName) values(:skillName)")
 	void insertDefuaultValSkillDB(@Bind("skillName") String skillName);
 
-	@SqlUpdate("insert into ASSESSMENTOFSKILLS (personId,skillId, proficiency,updatedBy,lastUpdate ) values(:personId, :skillId, :proficiency, :updatedBy, :lastUpdate)")
+	@SqlUpdate("insert into ASSESSMENTOFSKILLS (personId,skillId, proficiency,updatedBy,lastUpdate, status ) values(:personId, :skillId, :proficiency, :updatedBy, :lastUpdate, 'new')")
 	void insertSkillAssessment(@Bind("personId") int personId, @Bind("skillId") int skillId,
 			@Bind("proficiency") String proficiency, @Bind("updatedBy") String updatedBy,
 			@Bind("lastUpdate") Timestamp timeStamp);

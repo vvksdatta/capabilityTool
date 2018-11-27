@@ -22,7 +22,7 @@ public interface CapabilityDAO {
 	void createCapabilityMeasuresTable();
 
 	@SqlUpdate("create table if not exists ASSESSMENTOFCAPABILITIES (personId int REFERENCES PEOPLE(personId), capabilityId int REFERENCES "
-			+ "CAPABILITYDB(capabilityId), proficiency varchar(30), updatedBy varchar(30), lastUpdate timestamp)")
+			+ "CAPABILITYDB(capabilityId), proficiency varchar(30), updatedBy varchar(30), lastUpdate timestamp, status varchar(10))")
 	void createCapabilityAssessmentTable();
 
 	@SqlUpdate("insert into CAPABILITYDB (capabilityName) values(:capabilityName)")
@@ -31,7 +31,7 @@ public interface CapabilityDAO {
 	@SqlUpdate("insert into CAPABILITYMEASURES (capabilityId, measure) values(:capabilityId,:measure)")
 	void insertDefuaultMeasuresCapabilities(@Bind("capabilityId") int capabilityId, @Bind("measure") String measure);
 
-	@SqlUpdate("insert into ASSESSMENTOFCAPABILITIES (personId,capabilityId, proficiency,updatedBy,lastUpdate ) values(:personId, :capabilityId, :proficiency, :updatedBy, :lastUpdate)")
+	@SqlUpdate("insert into ASSESSMENTOFCAPABILITIES (personId,capabilityId, proficiency,updatedBy,lastUpdate, status) values(:personId, :capabilityId, :proficiency, :updatedBy, :lastUpdate, 'new')")
 	void insertCapabilityAssessment(@Bind("personId") int personId, @Bind("capabilityId") int capabilityId,
 			@Bind("proficiency") String proficiency, @Bind("updatedBy") String updatedBy,
 			@Bind("lastUpdate") Timestamp timeStamp);

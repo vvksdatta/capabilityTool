@@ -26,7 +26,7 @@ public interface RolesDAO {
 	@SqlUpdate("insert into ROLESDB (roleId, roleName, roleStatus) values (:roleId, :roleName, 'new')")
 	void insert(@BindBean Roles roles);
 
-	@SqlUpdate("insert into RolesOfPeople (personId ,roleId) values (:personId, :roleId )")
+	@SqlUpdate("insert into RolesOfPeople (personId ,roleId, status) values (:personId, :roleId, 'new' )")
 	void insertIntoRolesOfPeopleTable(@Bind("personId") int personId, @Bind("roleId") int roleId);
 
 	@SqlQuery("select * from ROLESDB")
