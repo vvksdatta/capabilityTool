@@ -16,6 +16,7 @@ se\bth\didd\wiptool\auth\basic\BasicAuthenticator.class
 se\bth\didd\wiptool\api\SprintDevelopmentEnvironment.class
 se\bth\didd\wiptool\api\ProgrammingSkillsDetailsComparisonGraphs.class
 se\bth\didd\wiptool\api\SkillTabsTemplate.class
+se\bth\didd\wiptool\api\ProjectLeaderId.class
 se\bth\didd\wiptool\api\SprintComprisingIssues.class
 se\bth\didd\wiptool\api\SelectedSprintRequirement.class
 se\bth\didd\wiptool\configuration\LocalDateMapperFactory.class
@@ -32,7 +33,6 @@ se\bth\didd\wiptool\api\AllocatedIssue.class
 se\bth\didd\wiptool\api\SprintCompanyDrivenFactors.class
 se\bth\didd\wiptool\api\SprintAllDomainsAssets.class
 se\bth\didd\wiptool\auth\jwt\JwtAuthoriser.class
-se\bth\didd\wiptool\api\CapabilityNameMeasures.class
 se\bth\didd\wiptool\db\ProjectDAO.class
 se\bth\didd\wiptool\api\ProjectSummary.class
 se\bth\didd\wiptool\api\SprintAsset.class
@@ -60,7 +60,6 @@ se\bth\didd\wiptool\api\SprintRequirementNameValueDescriptionUser.class
 se\bth\didd\wiptool\api\SprintRequirementUpdate.class
 se\bth\didd\wiptool\api\ProjectIdName.class
 se\bth\didd\wiptool\api\SprintBriefSummary.class
-se\bth\didd\wiptool\api\CapabilityMeasuresDisplay.class
 se\bth\didd\wiptool\db\PeopleDAO.class
 se\bth\didd\wiptool\db\CapabilityDAO.class
 se\bth\didd\wiptool\api\CapabilityValueOfPeople.class
@@ -85,7 +84,6 @@ se\bth\didd\wiptool\api\SprintRequirementNameLevel.class
 se\bth\didd\wiptool\auth\jwt\UserRoles.class
 se\bth\didd\wiptool\auth\Secrets.class
 se\bth\didd\wiptool\api\ProjectParticipants.class
-se\bth\didd\wiptool\api\SkillNameValue.class
 se\bth\didd\wiptool\resources\PeopleResource.class
 se\bth\didd\wiptool\auth\jwt\JwtAuthenticator.class
 se\bth\didd\wiptool\db\SprintDAO.class

@@ -894,11 +894,11 @@
         finalProject.projectEndDate = projectEndDate;
         finalProject.projectLeaderName = null;
         if($scope.peopleList.length != 0){
-        angular.forEach($scope.peopleList, function(value, key) {
-          if (value.personId == finalProject.projectLeader) {
-            finalProject.projectLeaderName = value.personName;
-          }
-        });
+          angular.forEach($scope.peopleList, function(value, key) {
+            if (value.personId == finalProject.projectLeader) {
+              finalProject.projectLeaderName = value.personName;
+            }
+          });
         }
         $scope.finalProject= finalProject;
       })
@@ -1352,12 +1352,12 @@
         $scope.person = person;
         var roles = response.data.roles;
         if(roles != null){
-        for (var i =  roles.length - 1; i >= 0; i--) {
-          if(roles[i].roleName != null){
-            $scope.formData.selectedRoles[roles[i].roleName] = true;
+          for (var i =  roles.length - 1; i >= 0; i--) {
+            if(roles[i].roleName != null){
+              $scope.formData.selectedRoles[roles[i].roleName] = true;
+            }
           }
         }
-      }
       }).then(function(){
         $scope.someSelected = function (object) {
           return Object.keys(object).some(function (key) {
@@ -5168,6 +5168,17 @@
           alertFactory.addAuto('danger', $string, optionalDelay);
         });
       }).then(function(){
+        $http.get('/api/sprints/getAllSprintAssets').then(function(response)
+        {
+          $scope.assetsList= response.data;
+        })
+        .catch(function(response, status) {
+          //	$scope.loading = false;
+          var optionalDelay = 5000;
+          var $string = "Error in fetching updated list of assets";
+          alertFactory.addAuto('danger', $string, optionalDelay);
+        });
+      }).then(function(){
         $http.get('/api/sprints/existingSprintDetails/'+$scope.sprintId+'/'+$scope.projectId).then(function(response)
         {
           $scope.sprint= response.data;
@@ -6539,8 +6550,6 @@
                     tmp.roleName = value3.roleName;
                     splicelist.push(tmp);
                     remove[list[k].personId] =false;
-                    //$log.debug('Hello ' +list3[key3].personId + list[k].personName + '!');
-                    //$log.debug('Hello ' +list3[key3].personId+ " asdasd "+key3+ "ff"+ '!');
                   }
                 };
               }
@@ -6593,7 +6602,6 @@
         var $string = "Error in fetching project participants details";
         alertFactory.addAuto('danger', $string, optionalDelay);
       });
-
       $http.get('/api/people/summary').then(function(response)
       {
         var people = response.data;
@@ -6643,7 +6651,6 @@
         var $string = "Error in fetching roles";
         alertFactory.addAuto('danger', $string, optionalDelay);
       });
-
       $scope.list2 = [];
       //	$scope.demo = [{ "personId": 1, "personName": "sai datta Admin", "projects": [ { "projectId": 1, "projectName": "Project1", "sprints": [ { "sprintId": 4, "sprintName": "sprintlog", "issues": [ { "issueId": 7 }, { "issueId": 6 } ], "numberofIssues": 2 }, { "sprintId": 8, "sprintName": "demosprint", "issues": [ { "issueId": 0 }, { "issueId": 1 } ], "numberofIssues": 2 } ] } ], "roleId": "3", "jqyoui_pos": 1 } ];
       $scope.filterPeople = function() {
@@ -6860,7 +6867,10 @@
         };
         $scope.editProjectParticipants = function(){
           $state.go('management.projects.editProjectParticipants', currentProject);
-        }
+        };
+        $scope.createNewSprint = function(){
+          $state.go('management.sprints.addSprint.newSprint');
+        };
       });
     })
   })();

@@ -8,7 +8,9 @@ import org.skife.jdbi.v2.sqlobject.SqlQuery;
 import org.skife.jdbi.v2.sqlobject.SqlUpdate;
 import se.bth.didd.wiptool.api.IssueTemplate;
 import se.bth.didd.wiptool.api.IssueUpdateTemplate;
+import se.bth.didd.wiptool.api.PersonId;
 import se.bth.didd.wiptool.api.ProjectIdName;
+import se.bth.didd.wiptool.api.ProjectLeaderId;
 import se.bth.didd.wiptool.api.Projects;
 import se.bth.didd.wiptool.api.Roles;
 import se.bth.didd.wiptool.api.Sprint;
@@ -17,9 +19,9 @@ import se.bth.didd.wiptool.api.SprintNameProgress;
 
 public interface RedmineDAO {
 	@SqlUpdate("insert into PROJECTS (projectId, parentProjectId, projectName, projectDescription, projectStartDate, projectEndDate, "
-			+ "projectLeader, projectEstimatedEffort, projectActualEffort, projectStatus, projectLastUpdate, redmineLastUpdate, projectUpdatedBy, redmineProjectIdentifier)"
+			+ "projectLeader, projectEstimatedEffort, projectActualEffort, projectStatus, projectLastUpdate, redmineLastUpdate, projectUpdatedBy, redmineProjectIdentifier, projectLeaderIdentifier)"
 			+ " values (:projectId, :parentProjectId, :projectName, :projectDescription, :projectStartDate, :projectEndDate, :projectLeader, "
-			+ ":projectEstimatedEffort, :projectActualEffort, :projectStatus, :projectLastUpdate, :redmineLastUpdate, :projectUpdatedBy, 'new')")
+			+ ":projectEstimatedEffort, :projectActualEffort, :projectStatus, :projectLastUpdate, :redmineLastUpdate, :projectUpdatedBy, 'new', 'new')")
 	void insertIntoProjects(@BindBean Projects project);
 
 	@SqlUpdate("insert into PROJECTPARTICIPATION (projectId, personId, roleId,redmineProjectIdentifier, redminePersonIdentifier ) values (:projectId, :personId, :roleId, 'new', 'new')")
@@ -66,6 +68,11 @@ public interface RedmineDAO {
 	@SqlUpdate("update PROJECTS set redmineProjectIdentifier = :redmineProjectIdentifier where projectId = :projectId")
 	void updateRedmineProjectIdentifier(@Bind("projectId") int projectId,
 			@Bind("redmineProjectIdentifier") String redmineProjectIdentifier);
+	
+	@SqlUpdate("update PROJECTS set projectLeaderIdentifier = :projectLeaderIdentifier where projectId = :projectId")
+	void updateProjectLeaderIdentifier(@Bind("projectId") int projectId,
+			@Bind("projectLeaderIdentifier") String projectLeaderIdentifier);
+	
 
 	@SqlUpdate("update PROJECTPARTICIPATION set redmineProjectIdentifier = :redmineProjectIdentifier where projectId = :projectId and personId = :personId and roleId = :roleId")
 	void updateRedmineProjectIdentifierInParticipationTable(@Bind("projectId") int projectId,
@@ -127,6 +134,10 @@ public interface RedmineDAO {
 	void updateidentifierInRolesOfPeople(@Bind("personId") int personId, @Bind("roleId") int roleId,
 			@Bind("status") String status);
 	
+	@SqlUpdate("update RolesOfPeople set status =:status where personId = :personId ")
+	void updateidentifierForAllRolesInRolesOfPeople(@Bind("personId") int personId, @Bind("status") String status);
+	
+	
 	@SqlUpdate("update ASSESSMENTOFCAPABILITIES set status =:status where personId = :personId ")
 	void updateidentifierInAssessmentOfCapabilities(@Bind("personId") int personId, @Bind("status") String status);
 
@@ -176,6 +187,12 @@ public interface RedmineDAO {
 			+ " issueDone = :issueDone, redmineLastUpdate = :redmineLastUpdate, issueLastUpdate = :issueLastUpdate"
 			+ " where projectId = :projectId and issueId = :issueId")
 	void updateIssuesModifications(@BindBean IssueTemplate issue);
+	
+	@SqlUpdate("update PROJECTS set projectLeader = null where projectLeaderIdentifier='delete'")
+	void deleteNonExistingPeopleFromProjectsTable();
+	
+	@SqlUpdate("update PROJECTS set projectLeaderIdentifier = null where projectLeaderIdentifier='delete'")
+	void resetProjectLeaderIdentifier();
 
 	@SqlQuery("Select * from SPRINTCOMPRISINGISSUES where issueId = :issueId")
 	List<SprintComprisingIssues> getSprintAssociatedWithIssue(@Bind("issueId") int issueId);
@@ -194,6 +211,10 @@ public interface RedmineDAO {
 
 	@SqlQuery("select exists (select 1 from PROJECTS where projectId= :projectId)")
 	boolean ifProjectExists(@Bind("projectId") int projectId);
+	
+	@SqlQuery("select exists (select projectLeader from PROJECTS where projectId= :projectId and projectLeader is not null)")
+	boolean ifProjectLeaderExists(@Bind("projectId") int projectId);
+	
 
 	@SqlQuery("select exists( select 1 from PROJECTPARTICIPATION where projectId = :projectId and personId = :personId and roleId= :roleId)")
 	boolean ifPersonParticipatesInProject(@Bind("projectId") int projectId, @Bind("personId") int personId,
@@ -247,6 +268,9 @@ public interface RedmineDAO {
 	@SqlQuery("select projectId, projectName from PROJECTS")
 	List<ProjectIdName> getListOfProjects();
 
+	@SqlQuery("select projectLeader from PROJECTS where projectId = :projectId")
+	List<ProjectLeaderId> getProjectLeader(@Bind("projectId") int projectId);
+	
 	@SqlQuery("select sprintId, sprintProgress from SPRINTS where projectId = :projectId")
 	List<SprintNameProgress> selectSprintByprojectId(@Bind("projectId") int projectId);
 
@@ -360,11 +384,10 @@ public interface RedmineDAO {
 	@SqlUpdate("DELETE FROM RolesOfPeople WHERE status NOT IN (:status)")
 	void deleteNonExistingPeopleFromRolesOfPeopleTable(@Bind("status") String status);
 	
-	
 	@SqlUpdate("DELETE FROM ASSESSMENTOFCAPABILITIES WHERE status NOT IN (:status)")
 	void deleteNonExistingPeopleFromAssessmentOfCapabilitiesTable(@Bind("status") String status);
 	
 	@SqlUpdate("DELETE FROM ASSESSMENTOFSKILLS WHERE status NOT IN (:status)")
 	void deleteNonExistingPeopleFromAssessmentOfSkillsTable(@Bind("status") String status);
-
+	
 }

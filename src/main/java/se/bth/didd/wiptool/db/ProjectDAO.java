@@ -22,7 +22,7 @@ public interface ProjectDAO {
 			+ "projectDescription text, projectStartDate date, projectEndDate date, "
 			+ "projectLeader int REFERENCES PEOPLE(personId), projectEstimatedEffort int, projectProgress int,"
 			+ "projectActualEffort int, projectStatus varchar(20), projectLastUpdate timestamp, redmineLastUpdate "
-			+ "timestamp with time zone, projectUpdatedBy varchar(20), redmineProjectIdentifier varchar(10))")
+			+ "timestamp with time zone, projectUpdatedBy varchar(20), redmineProjectIdentifier varchar(10), projectLeaderIdentifier varchar(10))")
 	void createProjectTable();
 
 	@SqlUpdate("create table if not exists PROJECTPARTICIPATION (projectId int REFERENCES PROJECTS(projectId),"
@@ -30,9 +30,9 @@ public interface ProjectDAO {
 	void createProjectParticipationTable();
 
 	@SqlUpdate("insert into PROJECTS (projectId, parentProjectId, projectName, projectDescription, projectStartDate, projectEndDate, "
-			+ "projectLeader, projectEstimatedEffort,  projectStatus, projectLastUpdate, redmineLastUpdate, projectUpdatedBy, redmineProjectIdentifier)"
+			+ "projectLeader, projectEstimatedEffort,  projectStatus, projectLastUpdate, redmineLastUpdate, projectUpdatedBy, redmineProjectIdentifier, projectLeaderIdentifier)"
 			+ " values (:projectId, :parentProjectId, :projectName, :projectDescription, :projectStartDate, :projectEndDate, :projectLeader, "
-			+ ":projectEstimatedEffort,  :projectStatus, :projectLastUpdate, :redmineLastUpdate, :projectUpdatedBy, 'new')")
+			+ ":projectEstimatedEffort,  :projectStatus, :projectLastUpdate, :redmineLastUpdate, :projectUpdatedBy, 'new', 'new')")
 	void createProject(@BindBean Projects project);
 
 	@SqlUpdate("insert into PROJECTPARTICIPATION (projectId, personId, roleId, redmineProjectIdentifier, redminePersonIdentifier) values (:projectId, :personId, :roleId, 'new', 'new')")
