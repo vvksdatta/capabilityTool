@@ -5077,8 +5077,9 @@
               //$state.go("management.sprints.addSprint.newSprint");
             };
             $scope.searchTextChange = function (str) {
+              if(str != ""){
               return  GetSprintEnvironmentsService.getEnvironments(str);
-            }
+            }}
             $scope.newState = function(envi) {
               $http.post('/api/sprints/insertEnvironment',envi).then(function(response) {
                 var $string = "Added "+envi+" to the catalogue of enironments!";
