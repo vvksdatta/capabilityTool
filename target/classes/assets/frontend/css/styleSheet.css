@@ -761,7 +761,8 @@
     cursor: pointer;
   }
   .thumbnail {
-    height: 200px;
+  min-height: 200px;
+  height: inherit;
   }
   .tabs-below > .nav-tabs,
   .tabs-right > .nav-tabs,

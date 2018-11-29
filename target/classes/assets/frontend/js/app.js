@@ -6799,7 +6799,7 @@
           $scope.finalProject = finalProject;
           $scope.projectStartDate = new Date();
           $scope.minDate = new Date(
-            $scope.projectStartDate.getFullYear(),
+            $scope.projectStartDate.getFullYear() -1,
             $scope.projectStartDate.getMonth(),
             $scope.projectStartDate.getDate()
           );
