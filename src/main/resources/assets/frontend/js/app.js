@@ -1542,7 +1542,6 @@
         questionnaire.updatedBy = $localStorage.currentUser.userFirstName;
         questionnaire.projectId = $scope.projectId ;
         questionnaire.sprintId = $scope.sprintId;
-        $log.debug("sfgasdfgsdfg");
         $http.post('/api/sprints/updateQuestionnaire',questionnaire).then(function(response)
         {
           var optionalDelay = 3000;
@@ -1662,7 +1661,7 @@
               $scope.list2[val.roleName] = [];
               for(var i = 0; i < $scope.peopleList.length; i++ ){
                 if( $scope.peopleList[i].personId == val.personId ){
-                  $log.debug("person is"+ $scope.peopleList[i].personName);
+                  //$log.debug("person is"+ $scope.peopleList[i].personName);
                   $scope.peopleList.splice(i,1);
                   i =0;
                 }
@@ -1695,7 +1694,7 @@
                 $scope.drop[val.roleName] = true;
                 for(var i = 0; i < $scope.peopleList.length; i++ ){
                   if( $scope.peopleList[i].personId == val.personId ){
-                    $log.debug("person is"+ $scope.peopleList[i].personName);
+                    //$log.debug("person is"+ $scope.peopleList[i].personName);
                     $scope.peopleList.splice(i,1);
                     i =0;
                   }
@@ -2673,7 +2672,6 @@
           if($scope.formData.selected !={}){
             var count = 0;
             angular.forEach($scope.formData.selected, function(value,key){
-              $log.debug('Hello ' +value+key+ '!');
               if(value == true){
                 count = count+1;
               }
@@ -2691,7 +2689,6 @@
           if($scope.formData.selected !={}){
             var count = 0;
             angular.forEach($scope.formData.selected, function(value,key){
-              $log.debug('Hello ' +value+key+ '!');
               if(value == true){
                 count = count+1;
               }
@@ -2884,7 +2881,6 @@
           $scope.showRemove = false;
         }
         //return $scope.removeSelected = {};
-        $log.debug('Hello ' +$scope.countSelected+ '!');
       }).then(function(){
         $scope.peopleList = currentPeopleList;
         $scope.list2 = clearSelected;
@@ -3016,7 +3012,7 @@
               });
               for(var i = 0; i < $scope.peopleList.length; i++ ){
                 if( $scope.peopleList[i].personId == val.personId ){
-                  $log.debug("person is"+ $scope.peopleList[i].personName);
+                  //$log.debug("person is"+ $scope.peopleList[i].personName);
                   $scope.peopleList.splice(i,1);
                   i =0;
                 }
@@ -3049,7 +3045,7 @@
                 $scope.drop[val.roleName] = true;
                 for(var i = 0; i < $scope.peopleList.length; i++ ){
                   if( $scope.peopleList[i].personId == val.personId ){
-                    $log.debug("person is"+ $scope.peopleList[i].personName);
+                    //$log.debug("person is"+ $scope.peopleList[i].personName);
                     $scope.peopleList.splice(i,1);
                     i =0;
                   }
@@ -4030,7 +4026,6 @@
           if($scope.formData.selected !={}){
             var count = 0;
             angular.forEach($scope.formData.selected, function(value,key){
-              $log.debug('Hello ' +value+key+ '!');
               if(value == true){
                 count = count+1;
               }
@@ -4048,7 +4043,6 @@
           if($scope.formData.selected !={}){
             var count = 0;
             angular.forEach($scope.formData.selected, function(value,key){
-              $log.debug('Hello ' +value+key+ '!');
               if(value == true){
                 count = count+1;
               }
@@ -6541,7 +6535,6 @@
                 for (var k =  list.length - 1; k >= 0; k--){
                   if(list[k].personId == value3.personId){
                     $scope.peopleList.push(list[k]);
-                    $log.debug('Hello ' +$scope.peopleList.length+ '!');
                     //clearSelected[key].splice(key3,1);
                     var tmp ={};
                     tmp.personId = value3.personId;
@@ -6660,7 +6653,7 @@
         for (var i =  peoplelength - 1; i >= 0; i--) {
           angular.forEach($scope.list2, function(value2, key2) {
             if ($scope.peopleList[i].personId == value2.personId) {
-              $log.debug("this is for person "+ value2.personName);
+            // $log.debug("this is for person "+ value2.personName);
               list1.splice(i, 1);
             }
           })

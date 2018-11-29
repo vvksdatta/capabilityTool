@@ -126,7 +126,7 @@ public class Redmine {
 				newRoles.setRoleId(role.getId());
 				newRoles.setRoleName(role.getName());
 				redmineDAO.insertIntoRolesDB(newRoles);
-				System.out.println("Inserted new roles ");
+				//System.out.println("Inserted new roles ");
 
 			} else {
 				/* Handling modifications to role names on Redmine */
@@ -135,7 +135,7 @@ public class Redmine {
 					newRoles.setRoleId(role.getId());
 					newRoles.setRoleName(role.getName());
 					redmineDAO.updateRolesDB(newRoles);
-					System.out.println("Updated roles database");
+					//System.out.println("Updated roles database");
 				}
 			}
 			/*
@@ -174,8 +174,6 @@ public class Redmine {
 					 * sprints. If false, add as a new sprint
 					 */
 
-					System.out.println("this is sprint " + sprint.getName() + " in project " + redmineProject.getName()
-							+ " sprintID and project ID are " + sprint.getId() + " " + redmineProject.getId());
 					if (redmineDAO.ifSprintExists(sprint.getProjectId(), sprint.getId()) != true) {
 
 						/*
@@ -206,7 +204,7 @@ public class Redmine {
 						newSprint.setSprintLastUpdate(timestamp);
 						newSprint.setSprintRedmineUpdate(sprint.getUpdatedOn());
 						redmineDAO.insertIntoSprints(newSprint);
-						System.out.println("Updated new sprint details to database");
+						//System.out.println("Updated new sprint details to database");
 					}
 				}
 
@@ -251,7 +249,7 @@ public class Redmine {
 							 * along with personId
 							 */
 							redmineDAO.insertIntoRolesOfPeopleTable(projectParticipant.getUserId(), role.getId());
-							System.out.println("Updated RolesofPeople table");
+							//System.out.println("Updated RolesofPeople table");
 
 						}
 
@@ -297,7 +295,7 @@ public class Redmine {
 								 */
 								redmineDAO.insertIntoProjectParticipation(redmineProject.getId(),
 										projectParticipant.getUserId(), role.getId());
-								System.out.println("Updated ProjectParticipation table");
+								//System.out.println("Updated ProjectParticipation table");
 							}
 						}
 						redmineDAO.updateRedmineProjectIdentifierInParticipationTable(redmineProject.getId(),
@@ -416,7 +414,7 @@ public class Redmine {
 						newSprint.setSprintLastUpdate(timestamp);
 						newSprint.setSprintRedmineUpdate(sprint.getUpdatedOn());
 						redmineDAO.insertIntoSprints(newSprint);
-						System.out.println("Updated new sprint details to database");
+						//System.out.println("Updated new sprint details to database");
 					}
 					/*
 					 * Check whether the current sprint details on Redmine have
@@ -436,7 +434,7 @@ public class Redmine {
 						newSprint.setSprintLastUpdate(timestamp);
 						newSprint.setSprintRedmineUpdate(sprint.getUpdatedOn());
 						redmineDAO.updateSprintModifications(newSprint);
-						System.out.println("Modified sprint details");
+						//System.out.println("Modified sprint details");
 
 					}
 
@@ -633,7 +631,7 @@ public class Redmine {
 
 									redmineDAO.InsertIntoSprintComprisingIssuesTable(issue.getProjectId(),
 											issueTargetVersion.getId(), issue.getId());
-									System.out.println("Added the isses to SprintComprisingIssues table");
+									//System.out.println("Added the isses to SprintComprisingIssues table");
 								}
 
 								if (issue.getAssigneeId() != null) {
@@ -642,7 +640,7 @@ public class Redmine {
 
 										redmineDAO.InsertIntoSprintParticipationTable(issue.getProjectId(),
 												issueTargetVersion.getId(), issue.getAssigneeId());
-										System.out.println("Updated the sprint participation table");
+										//System.out.println("Updated the sprint participation table");
 									}
 								}
 							}
@@ -666,7 +664,7 @@ public class Redmine {
 
 										redmineDAO.InsertIntoSprintComprisingIssuesTable(issue.getProjectId(),
 												issueTargetVersion.getId(), issue.getId());
-										System.out.println("Added the isses to SprintComprisingIssues table");
+										//System.out.println("Added the isses to SprintComprisingIssues table");
 									}
 								}
 							}
@@ -738,12 +736,11 @@ public class Redmine {
 							if (issue.getTargetVersion() != null) {
 								if (eachIssue.getSprintId().equals(issue.getTargetVersion()) == false) {
 									redmineDAO.deleteIssueAlreadyAllocatedToOtherSprint(issue.getId());
-									System.out.println("issue already allocated to other sprint. so deleted");
+									//System.out.println("issue already allocated to other sprint. so deleted");
 								}
 							} else {
 								redmineDAO.deleteIssueAlreadyAllocatedToOtherSprint(issue.getId());
-								System.out.println(
-										"issue already allocated to other sprint. so deleted as target version is null");
+								//System.out.println("issue already allocated to other sprint. so deleted as target version is null");
 							}
 						}
 						/*
@@ -754,7 +751,7 @@ public class Redmine {
 						for (IssueUpdateTemplate project : projectDetails) {
 							if (!project.getProjectId().equals(issue.getProjectId())) {
 								redmineDAO.deleteIssueAlreadyAllocatedToOProject(issue.getId());
-								System.out.println("issue already allocated to other project. so deleted");
+								//System.out.println("issue already allocated to other project. so deleted");
 							}
 						}
 
@@ -762,7 +759,7 @@ public class Redmine {
 						 * insert the issue details as new entry to issues table
 						 */
 						redmineDAO.insertIntoIssuesTable(newIssue);
-						System.out.println("Added new  isses to  project " + redmineProject.getName());
+						//System.out.println("Added new  isses to  project " + redmineProject.getName());
 
 						if (issue.getTargetVersion() != null) {
 							Version issueTargetVersion = issue.getTargetVersion();
@@ -772,8 +769,7 @@ public class Redmine {
 
 									redmineDAO.InsertIntoSprintComprisingIssuesTable(issue.getProjectId(),
 											issueTargetVersion.getId(), issue.getId());
-									System.out.println("Added the isses to SprintComprisingIssues table for project "
-											+ redmineProject.getName());
+									//System.out.println("Added the isses to SprintComprisingIssues table for project "+ redmineProject.getName());
 
 								}
 
@@ -783,8 +779,7 @@ public class Redmine {
 
 										redmineDAO.InsertIntoSprintParticipationTable(issue.getProjectId(),
 												issueTargetVersion.getId(), issue.getAssigneeId());
-										System.out.println("Added to the sprint participation table for project "
-												+ redmineProject.getName());
+										//System.out.println("Added to the sprint participation table for project "+ redmineProject.getName());
 
 									}
 								}
