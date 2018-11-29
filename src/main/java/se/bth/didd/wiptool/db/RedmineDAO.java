@@ -8,11 +8,12 @@ import org.skife.jdbi.v2.sqlobject.SqlQuery;
 import org.skife.jdbi.v2.sqlobject.SqlUpdate;
 import se.bth.didd.wiptool.api.IssueTemplate;
 import se.bth.didd.wiptool.api.IssueUpdateTemplate;
-import se.bth.didd.wiptool.api.PersonId;
 import se.bth.didd.wiptool.api.ProjectIdName;
 import se.bth.didd.wiptool.api.ProjectLeaderId;
 import se.bth.didd.wiptool.api.Projects;
+import se.bth.didd.wiptool.api.RedminePersonIdentifier;
 import se.bth.didd.wiptool.api.Roles;
+import se.bth.didd.wiptool.api.RolesOfPeopleSprint;
 import se.bth.didd.wiptool.api.Sprint;
 import se.bth.didd.wiptool.api.SprintComprisingIssues;
 import se.bth.didd.wiptool.api.SprintNameProgress;
@@ -258,6 +259,9 @@ public interface RedmineDAO {
 	@SqlQuery("select exists( select 1 from SPRINTPARTICIPATION where projectId = :projectId and sprintId = :sprintId and personId = :personId)")
 	boolean ifPersonParticipatesInSprint(@Bind("projectId") int projectId, @Bind("sprintId") int sprintId,
 			@Bind("personId") int personId);
+	
+	@SqlQuery("select redminePersonIdentifier from PEOPLE where personId = :personId")
+	List<RedminePersonIdentifier> IdentifierOfPerson(@Bind("personId") int personId);
 
 	@SqlQuery("select * from SPRINTCOMPRISINGISSUES where projectId = :projectId and sprintId = :sprintId")
 	List<IssueTemplate> selectIssuesInSprint(@Bind("projectId") int projectId, @Bind("sprintId") int sprintId);
@@ -276,6 +280,13 @@ public interface RedmineDAO {
 
 	@SqlQuery("select sprintId, projectId from SPRINTS")
 	List<Sprint> selectSprintIds();
+	
+	
+	@SqlQuery("select TableC.personId, PEOPLE.personName, TableC.roleName from PEOPLE RIGHT JOIN (select  TableB.projectId, TableB.sprintId, TableB.personId,ROLESDB.roleName from "
+			+ "ROLESDB RIGHT JOIN(select PROJECTPARTICIPATION.roleId, TableA.projectId, TableA.sprintId, TableA.personId from PROJECTPARTICIPATION RIGHT JOIN (select * from SPRINTPARTICIPATION"
+			+ " where sprintId= :sprintId and projectId = :projectId)AS TableA ON TableA.projectId = PROJECTPARTICIPATION.projectId and TableA.personId = PROJECTPARTICIPATION.personId) AS TableB ON "
+			+ "TableB.roleId = ROLESDB.roleId) AS TableC ON TableC.personId = PEOPLE.personId ")
+	List<RolesOfPeopleSprint> getSprintParticipants(@Bind("projectId") int projectId, @Bind("sprintId") int sprintId);
 
 	@SqlQuery("Select * from ISSUES where issueId = :issueId")
 	List<IssueUpdateTemplate> getProjectAssocitaedWithIssue(@Bind("issueId") int issueId);

@@ -467,7 +467,11 @@ public class SprintResource {
 				if (sprintDAO.ifPersonParticipatesInSprint(sprintdetails.getProjectId(), person.getPersonId(),
 						sprintdetails.getSprintId()) == false) {
 					sprintDAO.insertIntoSprintParticipation(sprintdetails.getProjectId(), person.getPersonId(),
-							sprintdetails.getSprintId());
+							sprintdetails.getSprintId(), sprintDAO.getLatestRedmineProjectIdentifier().get(0).getRedmineProjectIdentifier());
+					
+					/*sprintDAO.updateIdentifiersInSprintParticipationTable(sprintdetails.getProjectId(), person.getPersonId(),
+							sprintdetails.getSprintId(), sprintDAO.getLatestRedmineProjectIdentifier().get(0).getRedmineProjectIdentifier());
+					*/
 				}
 
 				sprintDAO.updateSprintParticipantDoesnotExist(sprintdetails.getProjectId(), sprintdetails.getSprintId(),

@@ -45,14 +45,14 @@ public class Secrets {
 			if (fileIn.nextLine().contains("JDBC driver")) {
 				String trim = fileIn.nextLine();
 				databaseDriver = trim.substring(15);
-				System.out.println(databaseDriver);
+				//System.out.println(databaseDriver);
 				System.out.println(fileIn.nextLine());
 			}
 			if (fileIn.nextLine().contains("user")) {
 				String trim = fileIn.nextLine();
 				if (trim.substring(0, 7).contentEquals("  user:")) {
 					databaseUsername = trim.substring(8);
-					System.out.println(databaseUsername);
+					//System.out.println(databaseUsername);
 					System.out.println(fileIn.nextLine());
 				}
 
@@ -61,7 +61,7 @@ public class Secrets {
 				String trim = fileIn.nextLine();
 				if (trim.substring(0, 11).contentEquals("  password:")) {
 					databasePassword = trim.substring(12);
-					System.out.println(databasePassword);
+					//System.out.println(databasePassword);
 					System.out.println(fileIn.nextLine());
 				}
 
@@ -69,7 +69,7 @@ public class Secrets {
 			if (fileIn.nextLine().contains("JDBC URL")) {
 				String trim = fileIn.nextLine();
 				DB_URL = trim.substring(7);
-				System.out.println(DB_URL);
+				//System.out.println(DB_URL);
 				break;
 				
 			}

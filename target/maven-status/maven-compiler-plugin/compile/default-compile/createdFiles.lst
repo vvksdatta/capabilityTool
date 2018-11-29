@@ -33,6 +33,7 @@ se\bth\didd\wiptool\api\AllocatedIssue.class
 se\bth\didd\wiptool\api\SprintCompanyDrivenFactors.class
 se\bth\didd\wiptool\api\SprintAllDomainsAssets.class
 se\bth\didd\wiptool\auth\jwt\JwtAuthoriser.class
+se\bth\didd\wiptool\api\RedmineProjectIdentifier.class
 se\bth\didd\wiptool\db\ProjectDAO.class
 se\bth\didd\wiptool\api\ProjectSummary.class
 se\bth\didd\wiptool\api\SprintAsset.class
@@ -53,6 +54,7 @@ se\bth\didd\wiptool\api\NewProject.class
 se\bth\didd\wiptool\api\ProjectsList.class
 se\bth\didd\wiptool\api\CapabilityList.class
 se\bth\didd\wiptool\api\IssueId.class
+se\bth\didd\wiptool\api\RedminePersonIdentifier.class
 se\bth\didd\wiptool\api\SkillNameValueUser.class
 se\bth\didd\wiptool\resources\IssueResource.class
 se\bth\didd\wiptool\api\RolesOfPeople.class

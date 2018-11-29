@@ -7,6 +7,7 @@ import org.skife.jdbi.v2.sqlobject.SqlQuery;
 import org.skife.jdbi.v2.sqlobject.SqlUpdate;
 import com.github.rkmk.container.FoldingList;
 import se.bth.didd.wiptool.api.CompanyDrivenFactorsNames;
+import se.bth.didd.wiptool.api.RedmineProjectIdentifier;
 import se.bth.didd.wiptool.api.RolesOfPeopleSprint;
 import se.bth.didd.wiptool.api.SelectedSprintRequirement;
 import se.bth.didd.wiptool.api.Sprint;
@@ -266,9 +267,9 @@ public interface SprintDAO {
 	@SqlQuery("select exists( select 1 from SprintQuestionnaire where projectId = :projectId and sprintId = :sprintId)")
 	boolean IfSprintQuestionnaireAnswered(@Bind("projectId") int projectId, @Bind("sprintId") int sprintId);
 
-	@SqlUpdate("insert into SPRINTPARTICIPATION (projectId, personId, sprintId, redmineProjectIdentifier, redmineSprintIdentifier, redminePersonIdentifier) values (:projectId, :personId, :sprintId, 'new', 'new', 'new')")
+	@SqlUpdate("insert into SPRINTPARTICIPATION (projectId, personId, sprintId, redmineProjectIdentifier, redmineSprintIdentifier, redminePersonIdentifier) values (:projectId, :personId, :sprintId, :identifier, :identifier, :identifier)")
 	void insertIntoSprintParticipation(@Bind("projectId") int projectId, @Bind("personId") int personId,
-			@Bind("sprintId") int sprintId);
+			@Bind("sprintId") int sprintId,  @Bind("identifier") String identifier);
 
 	@SqlQuery("select exists( select 1 from DOMAINSINASPRINT where projectId= :projectId and sprintId = :sprintId and domainId = :domainId)")
 	boolean ifDomainExistsInASprint(@Bind("projectId") int projectId, @Bind("sprintId") int sprintId,
@@ -278,6 +279,9 @@ public interface SprintDAO {
 	boolean ifAssetExistsInASprint(@Bind("projectId") int projectId, @Bind("sprintId") int sprintId,
 			@Bind("assetId") int assetId);
 
+	@SqlQuery("select redmineprojectidentifier from sprintparticipation where redmineprojectidentifier not in ('new') order by redmineprojectidentifier DESC LIMIT 1")
+	List<RedmineProjectIdentifier> getLatestRedmineProjectIdentifier();
+	
 	@SqlQuery("select exists( select 1 from REQUIREMENTSSELECTEDFORSPRINT where projectId= :projectId and sprintId = :sprintId and sprintRequirementId = :sprintRequirementId)")
 	boolean ifRequirementSelected(@Bind("projectId") int projectId, @Bind("sprintId") int sprintId,
 			@Bind("sprintRequirementId") int sprintRequirementId);
@@ -296,6 +300,10 @@ public interface SprintDAO {
 	void updateSprintParticipantDoesnotExist(@Bind("projectId") int projectId, @Bind("sprintId") int sprintId,
 			@Bind("personId") int personId);
 
+	@SqlUpdate("update SPRINTPARTICIPATION set redmineprojectidentifier = :identifier, redmineSprintIdentifier = :identifier, redminePersonIdentifier = :identifier where projectId = :projectId and sprintId = :sprintId and personId = :personId")
+	void updateIdentifiersInSprintParticipationTable(@Bind("projectId") int projectId, @Bind("sprintId") int sprintId,
+			@Bind("personId") int personId, @Bind("identifier") String identifier );
+	
 	@SqlUpdate("DELETE FROM sprintparticipation WHERE sprintId=  :sprintId and projectId =:projectId and personId NOT IN (select personId from sprintparticipation where personExists =1)")
 	void deletePeopleWhoNoLongerParticipate(@Bind("projectId") int projectId, @Bind("sprintId") int sprintId);
 

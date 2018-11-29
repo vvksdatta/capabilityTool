@@ -28,6 +28,7 @@ import se.bth.didd.wiptool.api.ProjectIdName;
 import se.bth.didd.wiptool.api.ProjectLeaderId;
 import se.bth.didd.wiptool.api.Projects;
 import se.bth.didd.wiptool.api.Roles;
+import se.bth.didd.wiptool.api.RolesOfPeopleSprint;
 import se.bth.didd.wiptool.api.Sprint;
 import se.bth.didd.wiptool.api.SprintComprisingIssues;
 import se.bth.didd.wiptool.api.SprintNameProgress;
@@ -172,17 +173,18 @@ public class Redmine {
 					 * check if a sprint is already added to the list of
 					 * sprints. If false, add as a new sprint
 					 */
-					
-					System.out.println("this is sprint "+ sprint.getName() + " in project "+ redmineProject.getName()+" sprintID and project ID are " + sprint.getId() + " " + redmineProject.getId());
+
+					System.out.println("this is sprint " + sprint.getName() + " in project " + redmineProject.getName()
+							+ " sprintID and project ID are " + sprint.getId() + " " + redmineProject.getId());
 					if (redmineDAO.ifSprintExists(sprint.getProjectId(), sprint.getId()) != true) {
-						
+
 						/*
 						 * A sprint can sometimes be hierarchical i.e the
 						 * sprints of sub projects can be shared with parent
 						 * project. To handle this, add project details if they
 						 * don't exist in projects table
-						 */	
-						if(redmineDAO.ifProjectExists(sprint.getProjectId()) != true){
+						 */
+						if (redmineDAO.ifProjectExists(sprint.getProjectId()) != true) {
 							Project project = redmineManager.getProjectManager().getProjectById(sprint.getProjectId());
 							newProject.setProjectId(project.getId());
 							newProject.setProjectName(project.getName());
@@ -193,7 +195,7 @@ public class Redmine {
 							newProject.setParentProjectId(project.getParentId());
 							redmineDAO.insertIntoProjects(newProject);
 						}
-						
+
 						Sprint newSprint = new Sprint();
 						newSprint.setProjectId(sprint.getProjectId());
 						newSprint.setSprintId(sprint.getId());
@@ -207,8 +209,6 @@ public class Redmine {
 						System.out.println("Updated new sprint details to database");
 					}
 				}
-				
-				
 
 				/* Retrieve the list of project participants */
 				List<Membership> projectParticipants = redmineManager.getMembershipManager()
@@ -628,29 +628,24 @@ public class Redmine {
 						if (issue.getTargetVersion() != null) {
 							Version issueTargetVersion = issue.getTargetVersion();
 							if (redmineDAO.ifSprintExists(issue.getProjectId(), issueTargetVersion.getId()) == true) {
-							if (redmineDAO.ifIssueExistsInSprint(issue.getProjectId(), issueTargetVersion.getId(),
-									issue.getId()) != true) {
-								
-							
-									
-									
-								
-								
-								redmineDAO.InsertIntoSprintComprisingIssuesTable(issue.getProjectId(),
-										issueTargetVersion.getId(), issue.getId());
-								System.out.println("Added the isses to SprintComprisingIssues table");
-							}
+								if (redmineDAO.ifIssueExistsInSprint(issue.getProjectId(), issueTargetVersion.getId(),
+										issue.getId()) != true) {
 
-							if (issue.getAssigneeId() != null) {
-								if (redmineDAO.ifPersonParticipatesInSprint(issue.getProjectId(),
-										issueTargetVersion.getId(), issue.getAssigneeId()) != true) {
+									redmineDAO.InsertIntoSprintComprisingIssuesTable(issue.getProjectId(),
+											issueTargetVersion.getId(), issue.getId());
+									System.out.println("Added the isses to SprintComprisingIssues table");
+								}
 
-									redmineDAO.InsertIntoSprintParticipationTable(issue.getProjectId(),
-											issueTargetVersion.getId(), issue.getAssigneeId());
-									System.out.println("Updated the sprint participation table");
+								if (issue.getAssigneeId() != null) {
+									if (redmineDAO.ifPersonParticipatesInSprint(issue.getProjectId(),
+											issueTargetVersion.getId(), issue.getAssigneeId()) != true) {
+
+										redmineDAO.InsertIntoSprintParticipationTable(issue.getProjectId(),
+												issueTargetVersion.getId(), issue.getAssigneeId());
+										System.out.println("Updated the sprint participation table");
+									}
 								}
 							}
-						}
 						}
 
 						else {
@@ -664,17 +659,16 @@ public class Redmine {
 							if (issue != null && issue.getTargetVersion() != null) {
 
 								Version issueTargetVersion = issue.getTargetVersion();
-								if (redmineDAO.ifSprintExists(issue.getProjectId(), issueTargetVersion.getId()) == true) {
-								if (redmineDAO.ifIssueExistsInSprint(issue.getProjectId(), issueTargetVersion.getId(),
-										issue.getId()) != true) {
-									
-								
-								
-									redmineDAO.InsertIntoSprintComprisingIssuesTable(issue.getProjectId(),
-											issueTargetVersion.getId(), issue.getId());
-									System.out.println("Added the isses to SprintComprisingIssues table");
+								if (redmineDAO.ifSprintExists(issue.getProjectId(),
+										issueTargetVersion.getId()) == true) {
+									if (redmineDAO.ifIssueExistsInSprint(issue.getProjectId(),
+											issueTargetVersion.getId(), issue.getId()) != true) {
+
+										redmineDAO.InsertIntoSprintComprisingIssuesTable(issue.getProjectId(),
+												issueTargetVersion.getId(), issue.getId());
+										System.out.println("Added the isses to SprintComprisingIssues table");
+									}
 								}
-							}
 							}
 						}
 
@@ -773,31 +767,29 @@ public class Redmine {
 						if (issue.getTargetVersion() != null) {
 							Version issueTargetVersion = issue.getTargetVersion();
 							if (redmineDAO.ifSprintExists(issue.getProjectId(), issueTargetVersion.getId()) == true) {
-							if (redmineDAO.ifIssueExistsInSprint(issue.getProjectId(), issueTargetVersion.getId(),
-									issue.getId()) != true) {
+								if (redmineDAO.ifIssueExistsInSprint(issue.getProjectId(), issueTargetVersion.getId(),
+										issue.getId()) != true) {
 
-							
-								
-								redmineDAO.InsertIntoSprintComprisingIssuesTable(issue.getProjectId(),
-										issueTargetVersion.getId(), issue.getId());
-								System.out.println("Added the isses to SprintComprisingIssues table for project "
-										+ redmineProject.getName());
-
-							}
-
-							if (issue.getAssigneeId() != null) {
-								if (redmineDAO.ifPersonParticipatesInSprint(issue.getProjectId(),
-										issueTargetVersion.getId(), issue.getAssigneeId()) != true) {
-
-									redmineDAO.InsertIntoSprintParticipationTable(issue.getProjectId(),
-											issueTargetVersion.getId(), issue.getAssigneeId());
-									System.out.println("Added to the sprint participation table for project "
+									redmineDAO.InsertIntoSprintComprisingIssuesTable(issue.getProjectId(),
+											issueTargetVersion.getId(), issue.getId());
+									System.out.println("Added the isses to SprintComprisingIssues table for project "
 											+ redmineProject.getName());
 
 								}
+
+								if (issue.getAssigneeId() != null) {
+									if (redmineDAO.ifPersonParticipatesInSprint(issue.getProjectId(),
+											issueTargetVersion.getId(), issue.getAssigneeId()) != true) {
+
+										redmineDAO.InsertIntoSprintParticipationTable(issue.getProjectId(),
+												issueTargetVersion.getId(), issue.getAssigneeId());
+										System.out.println("Added to the sprint participation table for project "
+												+ redmineProject.getName());
+
+									}
+								}
 							}
 						}
-					}
 
 					}
 					redmineDAO.updateIdentifiersInIssues(issue.getProjectId(), issue.getId(), generatedRandomString,
@@ -818,6 +810,43 @@ public class Redmine {
 			/* Setting an identifier to tag all exisiting projects on redmine */
 			redmineDAO.updateRedmineProjectIdentifier(redmineProject.getId(), generatedRandomString);
 
+		}
+
+		/*
+		 * After updating the projects and issuses, check whether all the
+		 * participants in sprintparticipation table still remain as valid users
+		 * on Redmine, If a user is removed from Redmine, the identifier for
+		 * that person will not be updated and hence that person will be deleted
+		 * from sprint participation table.
+		 */
+
+		for (Project redmineProject : projects) {
+
+			List<Version> sprints = redmineManager.getProjectManager().getVersions(redmineProject.getId());
+			for (Version sprint : sprints) {
+				List<RolesOfPeopleSprint> sprintParticipants = redmineDAO.getSprintParticipants(redmineProject.getId(),
+						sprint.getId());
+
+				/*
+				 * for each existing sprint participant (from
+				 * sprintparticipation table), check whether the
+				 * redminePersonIdentifier matches the current generated string.
+				 * An active person's redminePersonIdentifier is updated in the
+				 * above loops while updating projects and sprints. So, if a
+				 * person is active, then the person should have same
+				 * redminePersonIdentifier as the current generatedRandomString.
+				 */
+
+				for (RolesOfPeopleSprint eachSprintParticipant : sprintParticipants) {
+					if (redmineDAO.IdentifierOfPerson(eachSprintParticipant.getPersonId()).get(0)
+							.getRedminePersonIdentifier().equals(generatedRandomString)) {
+						redmineDAO.updateIdentifiersInSprintparticipation(redmineProject.getId(), sprint.getId(),
+								eachSprintParticipant.getPersonId(), generatedRandomString, generatedRandomString,
+								generatedRandomString);
+					}
+
+				}
+			}
 		}
 
 		// Deleting roles that no longer exist on Redmine
