@@ -20,7 +20,7 @@
         md-selected-item-change="selectedItemChange(item)"
         md-items="item in searchTextChange(searchText)"
         md-item-text="item.display"
-        md-min-length="0"
+        md-min-length="1"
         placeholder="Search and add an asset">
         <md-item-template>
           <span style="width: inherit;"> {{item.display | capitalize}} </span>

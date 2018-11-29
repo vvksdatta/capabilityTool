@@ -4598,6 +4598,7 @@
         return  GetSprintRequirementsService.getRequirements(str);
       }
       $scope.newState = function(ev,req) {
+        if(req != ""){
         var confirm = $mdDialog.confirm()
         .title("Would you like to add the requirement '"+req+"'?")
         .textContent('This will also add the requirement to the catalogue of requirements')
@@ -4624,6 +4625,7 @@
           });
         });
       }
+    }
       $scope.saveRequirements = function(tabs){
         var RequirementsEntered = [];
         angular.forEach(tabs, function(value, key) {
@@ -4731,6 +4733,7 @@
       return  GetSprintRequirementsService.getRequirements(str);
     }
     $scope.newState = function(ev,req) {
+        if(req != ""){
       var confirm = $mdDialog.confirm()
       .title("Would you like to add the requirement '"+req+"'?")
       .textContent('This will also add the requirement to the catalogue of requirements')
@@ -4757,6 +4760,7 @@
         });
       });
     }
+  }
     $scope.saveRequirements = function(tabs){
       var RequirementsEntered = [];
       angular.forEach(tabs, function(value, key) {
@@ -4950,7 +4954,7 @@
                 var $string = "Error in adding"+envi+" to the list of environments";
                 alertFactory.addAuto('danger', $string, optionalDelay);
               });
-            }
+          }
           },
           templateUrl: 'sprints/dialog3.tmpl.html',
           //parent: angular.element(document.getElementById('extraEnvironments')),
@@ -5077,9 +5081,8 @@
               //$state.go("management.sprints.addSprint.newSprint");
             };
             $scope.searchTextChange = function (str) {
-              if(str != ""){
               return  GetSprintEnvironmentsService.getEnvironments(str);
-            }}
+            }
             $scope.newState = function(envi) {
               $http.post('/api/sprints/insertEnvironment',envi).then(function(response) {
                 var $string = "Added "+envi+" to the catalogue of enironments!";
@@ -6292,6 +6295,7 @@
           return  GetProgrammingSkillsService.getCountry(str);
         }
         $scope.newState = function(ev,skill) {
+            if(skill != ""){
           var confirm = $mdDialog.confirm()
           .title("Would you like to add the skill '"+skill+"'?")
           .textContent('This will also also add the skill to the skills database')
@@ -6318,6 +6322,7 @@
             });
           });
         }
+      };
         $scope.saveSkills = function(tabs){
           $scope.userId = $stateParams.personId;
           var programmingSkillsEntered = [];
@@ -6427,6 +6432,7 @@
         return  GetProgrammingSkillsService.getCountry(str);
       }
       $scope.newState = function(ev,skill) {
+          if(skill != ""){
         var confirm = $mdDialog.confirm()
         .title("Would you like to add the skill '"+skill+"'?")
         .textContent('This will also also add the skill to the skills database')
@@ -6453,6 +6459,7 @@
           });
         });
       }
+    };
       $scope.saveSkills = function(tabs){
         $scope.userId = $stateParams.personId;
         var programmingSkillsEntered = [];
