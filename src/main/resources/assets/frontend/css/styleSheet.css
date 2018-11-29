@@ -879,3 +879,10 @@
                             width: 264px; }
                             .tabsdemoDynamicTabs .md-button.add-tab {
                               transform: translateY(5px); }
+                              md-toolbar.md-default-theme:not(.md-menu-toolbar), md-toolbar:not(.md-menu-toolbar) {
+                                background-color: #101010;
+                                color: rgba(255,255,255,0.87);
+                              }
+                              md-autocomplete input:not(.md-input) {
+                                font-size: 16px;
+                              }
