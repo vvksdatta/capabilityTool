@@ -18,7 +18,7 @@ import se.bth.didd.wiptool.api.ProjectSummary;
 
 public interface ProjectDAO {
 
-	@SqlUpdate("create table if not exists PROJECTS (projectId int primary key, parentProjectId int, projectName varchar(30), "
+	@SqlUpdate("create table if not exists PROJECTS (projectId int primary key, parentProjectId int, projectName varchar(120), "
 			+ "projectDescription text, projectStartDate date, projectEndDate date, "
 			+ "projectLeader int REFERENCES PEOPLE(personId), projectEstimatedEffort int, projectProgress int,"
 			+ "projectActualEffort int, projectStatus varchar(20), projectLastUpdate timestamp, redmineLastUpdate "

@@ -70,7 +70,7 @@ $(".nav-tabs li").eq(5).removeClass("active");
 <md-content style="overflow: unset;margin-bottom: 50px;" >
   <md-whiteframe class="md-whiteframe-18dp"  layout layout-align="center center">
     <div class="col-md-12">
-      <div class="col-md-7" id="extras">
+      <div class="col-md-7" id="extras" style="align-self: normal;">
         <form class="form-horizontal" name="form" ng-submit="form.$valid && updateSprint(sprint)" ng-init="readOnly = true"  novalidate>
           <fieldset>
             <div class="control-group" >
@@ -201,7 +201,7 @@ $(".nav-tabs li").eq(5).removeClass("active");
           </fieldset>
         </form>
       </div>
-      <div class="col-md-5">
+      <div class="col-md-5" style="align-self: normal;" >
         <div  >
           <div class="col-sm-8" style="width:80%;margin-top: 10px;margin-bottom: 20px;">
             <label> Sprint Status </label>

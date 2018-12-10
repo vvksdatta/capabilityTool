@@ -23,7 +23,7 @@ textarea[readonly=true], textarea[readonly] {
 </style>
 <md-content style="overflow: unset;margin-bottom: 50px;" >
   <md-whiteframe class="md-whiteframe-18dp"  layout layout-align="center center">
-    <div class="col-sm-8" >
+    <div class="col-sm-8" style="align-self: normal;" >
       <div class="row top-buffer-addProject">
         <form class="form-horizontal" name="editform" ng-init="readOnly = true" ng-submit="editform.$valid && updateProject(finalProject)"  novalidate>
           <fieldset>
@@ -138,7 +138,7 @@ textarea[readonly=true], textarea[readonly] {
         </form>
       </div>
     </div>
-    <div class="col-sm-4">
+    <div class="col-sm-4" style="align-self: normal;" >
       <div  style="height:20px; margin-bottom: 60px;">
         <label> Project Status: </label>
         <md-radio-group style="display:inline-flex;"  ng-model="finalProject.projectStatus">

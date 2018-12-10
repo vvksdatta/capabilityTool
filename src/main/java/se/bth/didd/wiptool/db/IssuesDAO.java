@@ -11,7 +11,7 @@ import se.bth.didd.wiptool.api.Sprint;
 
 public interface IssuesDAO {
 	@SqlUpdate("create table if not exists ISSUES (issueId int, projectId int REFERENCES PROJECTS(projectId),personId int REFERENCES PEOPLE(personId), "
-			+ " issueName varchar(60), issueStartDate date, issueDueDate date, issueCategory varchar(40), issuePriority varchar(20), securityRiskAnalysis varchar(20), issueDescription text,"
+			+ " issueName text, issueStartDate date, issueDueDate date, issueCategory varchar(40), issuePriority varchar(20), securityRiskAnalysis varchar(20), issueDescription text,"
 			+ "securityLevel varchar(20), issueEstimatedTime NUMERIC(10,3) , issueDone int, redmineLastUpdate timestamp with time zone, issueLastUpdate timestamp, redmineProjectIdentifier varchar(10), redmineIssueIdentifier varchar(10), PRIMARY KEY (issueId, projectId))")
 	void createIssuesTable();
 
