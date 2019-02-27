@@ -252,6 +252,14 @@
         label: 'Manage user accounts'
       }
     })
+    .state('manageUser.manageOptions', {
+      url:'/manageOptions',
+      templateUrl: 'user/options.html',
+      controller: 'optionsCtrl',
+      ncyBreadcrumb: {
+        label: 'Update user options'
+      }
+    })
     .state('summaries', {
       url:'/summaries',
       templateUrl: 'summaries/summaries.html',
@@ -663,6 +671,75 @@
     };
     initTabs();
   });
+  app.controller('optionsCtrl', function($state, $http, $q ,$scope, dataService, alertFactory, $location, $log) {
+    $http.get('/api/options/statusOfOptions').then(function(response) {
+
+      var optionValues = response.data;
+      $scope.options = {};
+      if(optionValues.addNewProject == '1'){
+        $scope.options.addNewProject = 'true';
+      }else{
+        $scope.options.addNewProject = 'false';
+      }
+
+      if(optionValues.addNewPerson == '1'){
+        $scope.options.addNewPerson = 'true';
+      }else{
+        $scope.options.addNewPerson = 'false';
+      }
+
+      if(optionValues.addNewSprint == '1'){
+        $scope.options.addNewSprint = 'true';
+      }else{
+        $scope.options.addNewSprint = 'false';
+      }
+    })
+    .catch(function(response, status) {
+      var optionalDelay = 5000;
+      var $string = "Error in fetching list of options";
+      alertFactory.addAuto('danger', $string, optionalDelay);
+    });
+
+
+
+  $scope.saveOptions = function(optionValues){
+    var options = {};
+    if(optionValues.addNewProject == 'true'){
+    options.addNewProject = '1';
+    }else{
+    options.addNewProject = '0';
+    }
+
+    if(optionValues.addNewPerson == 'true'){
+    options.addNewPerson = '1';
+    }else{
+    options.addNewPerson = '0';
+    }
+
+    if(optionValues.addNewSprint == 'true'){
+    options.addNewSprint = '1';
+    }else{
+    options.addNewSprint = '0';
+    }
+
+    $http.post('/api/options/updateOptions',options).then(function(response){
+      var optionalDelay = 3000;
+      var $string = "Updated the options";
+      $state.go("manageUser.manageOptions",response.data);
+      alertFactory.addAuto('success', $string, optionalDelay);
+    })
+    .catch(function(response, status) {
+      //	$scope.loading = false;
+      var optionalDelay = 5000;
+      var $string = "Error in updating the options";
+      alertFactory.addAuto('danger', $string, optionalDelay);
+    });
+
+
+  }
+
+  });
+
   app.controller('manageUsersCtrl', function($state, $http, $q ,$scope, dataService, alertFactory, $location, $mdDialog, $localStorage) {
     $scope.currentUserId = $localStorage.currentUser.userId;
     $http.get('/api/people/getUsersList').then(function(response) {
@@ -1080,15 +1157,46 @@
   }
   RootCtrl.$inject = ['$scope', '$location', 'alertService'];
   app.controller('sprintsTableCtrl', function($scope, $state, $location, $http, alertFactory, $base64, $q, dataService, alertFactory,  $localStorage) {
-    refreshSprintsSummary();
+
     $scope.manageSprint = function(sprint) {
       $state.go("management.sprints.editSprint.existingSprint",sprint );
     };
-    function refreshSprintsSummary() {
+
+    var sprints = {};
       $http.get('/api/sprints/summary').then(function(response) {
-        $scope.sprints= response.data;
+      sprints= response.data;
+      }).then(function(){
+        $http.get('/api/options/statusOfOptions').then(function(response) {
+
+          var optionValues = response.data;
+
+          if(optionValues.addNewProject == '0'){
+            sprints.addNewProject = 'true';
+          }else{
+            sprints.addNewProject = 'false';
+          }
+
+          if(optionValues.addNewPerson == '0'){
+          sprints.addNewPerson = 'true';
+          }else{
+          sprints.addNewPerson = 'false';
+          }
+
+          if(optionValues.addNewSprint == '0'){
+          sprints.addNewSprint = 'true';
+          }else{
+            sprints.addNewSprint = 'false';
+          }
+            $scope.sprints = sprints;
+        })
+        .catch(function(response, status) {
+          var optionalDelay = 5000;
+          var $string = "Error in fetching list of options";
+          alertFactory.addAuto('danger', $string, optionalDelay);
+        });
       });
-    }
+
+
   });
   app.controller('sprintSummaryCtrl', function($scope, $state, $location, $http, alertFactory, $base64, $q, dataService, alertFactory,  $localStorage) {
     $http.get('/api/sprints/summary').then(function(response) {

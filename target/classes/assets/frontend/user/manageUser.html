@@ -5,6 +5,7 @@
 	<li ng-class="getTabClass(1)" ng-click="setActiveTab(1)" ui-sref="manageUser.myDetails({userId: currentUserId})" ui-sref-opts="{reload: false}"><a  data-toggle="tab" >My details</a></li>
 	<li ng-class="getTabClass(2)" ng-click="setActiveTab(2)" ui-sref="manageUser.createNewUser" ui-sref-opts="{reload: false}"><a   data-toggle="tab" >Create new user</a></li>
 	<li ng-class="getTabClass(3)" ng-click="setActiveTab(3)" ui-sref="manageUser.manageUserAccounts({userId: currentUserId})" ui-sref-opts="{reload: false}"><a   data-toggle="tab" >Manage user accounts</a></li>
+	<li ng-class="getTabClass(4)" ng-click="setActiveTab(4)" ui-sref="manageUser.manageOptions" ui-sref-opts="{reload: false}"><a   data-toggle="tab" >Options</a></li>
 </ul>
 <user-card ng-cloak ng-show="newUserName"  name="{{newUserName | capitalize}}">
 </user-card>

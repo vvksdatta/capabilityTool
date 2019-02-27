@@ -2,6 +2,7 @@
 $(".nav-tabs li").eq(0).removeClass("active");
 $(".nav-tabs li").eq(1).addClass("active");
 $(".nav-tabs li").eq(2).removeClass("active");
+$(".nav-tabs li").eq(3).removeClass("active");
 </script>
 <md-content style="overflow: unset;" >
   <md-whiteframe class="md-whiteframe-18dp"  layout layout-align="center center">
@@ -21,7 +22,7 @@ $(".nav-tabs li").eq(2).removeClass("active");
             <div class="form-group" ng-class="{ 'has-error': form2.$submitted && form2.userFirstName.$invalid }">
               <label class="col-sm-3 control-label" for="userFirstName">First Name</label>
               <div class="col-sm-8">
-                <input type="text" id="userFirstName" name="userFirstName" placeholder="First Name" class="form-control" ng-model="register.userFirstName" required></p>
+                <input type="text" id="userFirstName" name="userFirstName" placeholder="First Name" class="form-control" ng-model="register.userFirstName" required>
                 <div ng-messages="form2.$submitted && form2.userFirstName.$error" class="help-block">
                   <div ng-message="required">First name is required</div>
                 </div>

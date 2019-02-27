@@ -441,6 +441,7 @@ public class SprintResource {
 
 			List<RolesOfPeopleSprint> existingparticipants = sprintDAO
 					.getSprintParticipants(sprintdetails.getProjectId(), sprintdetails.getSprintId());
+			System.out.println(existingparticipants);
 			for (RolesOfPeopleSprint eachExistingParticipant : existingparticipants) {
 
 				if (eachExistingParticipant.getPersonId().equals(person.getPersonId())) {

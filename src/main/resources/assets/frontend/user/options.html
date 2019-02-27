@@ -1,0 +1,56 @@
+<script>
+  $(".nav-tabs li").eq(0).removeClass("active");
+  $(".nav-tabs li").eq(1).removeClass("active");
+  $(".nav-tabs li").eq(2).removeClass("active");
+  $(".nav-tabs li").eq(3).addClass("active");
+</script>
+<md-content style="overflow: unset;" >
+  <md-whiteframe class="md-whiteframe-18dp"  layout layout-align="center center">
+    <div class="col-md-8" style="align-self: normal; margin-top: 20px;" >
+      <span>
+        <label class="col-sm-3 control-label" style="height: 60px;margin-bottom: 0px;" >Add new projects
+          <i style="margin-left: 10px;" class="glyphicon glyphicon-info-sign control-label">
+            <md-tooltip  md-direction="top"> This option allows a user to create new projects on Redmine</md-tooltip>
+          </i>
+        </label>
+      </span>
+      <span>
+        <label class="col-sm-3 control-label"  style="height: 60px;margin-bottom: 0px;">Add new sprints
+          <i style="margin-left: 10px;" class="glyphicon glyphicon-info-sign control-label">
+            <md-tooltip  md-direction="top"> This option allows a user to create new sprints on Redmine</md-tooltip>
+          </i>
+        </label>
+      </span>
+      <span>
+        <label class="col-sm-3 control-label"  style="height: 60px;margin-bottom: 0px;" >Add new people
+          <i style="margin-left: 10px;" class="glyphicon glyphicon-info-sign control-label">
+            <md-tooltip  md-direction="top"> This option allows a user to add new people to Redmine</md-tooltip>
+          </i>
+        </label>
+      </span>
+      <div class="col-md-6 pull-right" style="margin-top: 5px;">
+        <md-button type="submit" style="font-size: 15px;  background-color: rgb(90, 132, 187);margin-left: 25%;"  class="add-tab md-primary md-raised" ng-click="saveOptions(options)" >Save </md-button>
+      </div>
+    </div>
+    <div class="col-md-4" style="align-self: normal; margin-top: 20px;" >
+      <div  style="height:60px;">
+        <md-radio-group style="display:inline-flex;"  ng-model="options.addNewProject">
+          <md-radio-button value='true' class="md-primary">Enable</md-radio-button>
+          <md-radio-button style="margin-left: 10px;" class="md-primary" value='false'> Disable </md-radio-button>
+        </md-radio-group>
+      </div>
+      <div  style="height:60px;">
+        <md-radio-group style="display:inline-flex;"  ng-model="options.addNewSprint">
+          <md-radio-button value='true' class="md-primary">Enable</md-radio-button>
+          <md-radio-button style="margin-left: 10px;" class="md-primary" value='false'> Disable </md-radio-button>
+        </md-radio-group>
+      </div>
+      <div  style="height:60px;">
+        <md-radio-group style="display:inline-flex;"  ng-model="options.addNewPerson">
+          <md-radio-button value='true' class="md-primary">Enable</md-radio-button>
+          <md-radio-button style="margin-left: 10px;" class="md-primary" value='false'> Disable </md-radio-button>
+        </md-radio-group>
+      </div>
+    </div>
+  </md-whiteframe>
+</md-content>

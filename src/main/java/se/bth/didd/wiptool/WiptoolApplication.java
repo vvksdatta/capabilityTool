@@ -17,6 +17,7 @@ import se.bth.didd.wiptool.auth.jwt.User;
 import se.bth.didd.wiptool.resources.CapabilityResource;
 import se.bth.didd.wiptool.resources.IssueResource;
 import se.bth.didd.wiptool.resources.LoginResource;
+import se.bth.didd.wiptool.resources.OptionsResource;
 import se.bth.didd.wiptool.resources.RolesResource;
 import se.bth.didd.wiptool.resources.SkillResource;
 import io.dropwizard.Application;
@@ -33,6 +34,7 @@ import se.bth.didd.wiptool.configuration.WiptoolConfiguration;
 import se.bth.didd.wiptool.db.AuthDAO;
 import se.bth.didd.wiptool.db.CapabilityDAO;
 import se.bth.didd.wiptool.db.IssuesDAO;
+import se.bth.didd.wiptool.db.OptionsDAO;
 import se.bth.didd.wiptool.db.PeopleDAO;
 import se.bth.didd.wiptool.db.ProjectDAO;
 import se.bth.didd.wiptool.db.RedmineDAO;
@@ -87,6 +89,7 @@ public class WiptoolApplication extends Application<WiptoolConfiguration> {
 		final RedmineDAO redmineDAO = jdbi.onDemand(RedmineDAO.class);
 		final CapabilityDAO capabilityDAO = jdbi.onDemand(CapabilityDAO.class);
 		final SkillDAO skillDAO = jdbi.onDemand(SkillDAO.class);
+		final OptionsDAO optionsDAO = jdbi.onDemand(OptionsDAO.class);
 		/*
 		 * Registering the CustomMapperFactory & FoldingListContainerFactory to
 		 * dbi. This is essential for folding the objects.
@@ -125,6 +128,7 @@ public class WiptoolApplication extends Application<WiptoolConfiguration> {
 		capabilityDAO.createCapabilityAssessmentTable();
 		skillDAO.createSkillDBTable();
 		skillDAO.createSkillAssessmentTable();
+		optionsDAO.createOptionsTable();
 		
 		/*
 		 * Add configuration parameters to the run method. Register all the
@@ -147,11 +151,15 @@ public class WiptoolApplication extends Application<WiptoolConfiguration> {
 		environment.jersey().register(
 				new IssueResource(issuesDAO, configuration.getRedmineUrl(),configuration.getApiAccessKey()));
 		environment.jersey().register(new LoginResource(authDAO));
+		environment.jersey().register(
+				new OptionsResource(optionsDAO));
 		
 		registerAuthFilters(environment);
 		
 		CapabilityResource capability = new CapabilityResource(capabilityDAO);
 		capability.insertDefaultCapabilities();
+		OptionsResource options = new OptionsResource(optionsDAO);
+		options.insertDefaultOptions();
 		
 		Login login = new Login();
 		login.setUserFirstName("Default admin");
