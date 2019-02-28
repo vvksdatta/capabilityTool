@@ -1150,12 +1150,6 @@
     $http.get('/api/options/statusOfOptions').then(function(response) {
       var optionValues = response.data;
       $scope.enable = false;
-      if(optionValues.addNewProject == '0'){
-        $scope.enable = true;
-      }
-      if(optionValues.addNewPerson == '0'){
-        $scope.enable = true;
-      }
       if(optionValues.addNewSprint == '0'){
         $scope.enable = true;
       }
@@ -1310,6 +1304,18 @@
       var $string = "Error in fetching summary of projects";
       alertFactory.addAuto('danger', $string, optionalDelay);
     });
+    $http.get('/api/options/statusOfOptions').then(function(response) {
+      var optionValues = response.data;
+      $scope.enable = false;
+      if(optionValues.addNewProject == '0'){
+        $scope.enable = true;
+      }
+    })
+    .catch(function(response, status) {
+      var optionalDelay = 5000;
+      var $string = "Error in fetching list of options";
+      alertFactory.addAuto('danger', $string, optionalDelay);
+    });
     $scope.manageProject = function(project) {
       $state.go("management.projects.editProject",project );
     }
@@ -1320,6 +1326,20 @@
     }
   });
   app.controller('addProjectCtrl', function($scope, $state, $location, $http, alertFactory, $base64, $q, dataService, alertFactory,  $localStorage) {
+    $http.get('/api/options/statusOfOptions').then(function(response) {
+      var optionValues = response.data;
+      if(optionValues.addNewProject == '0'){
+        var optionalDelay = 6000;
+        var $string = "This page cannot be accessed as adding new projects option has been disabled. Check options on user >> my page";
+        alertFactory.addAuto('danger', $string, optionalDelay);
+        $state.go("management.projects.projectsTable" );
+      }
+    })
+    .catch(function(response, status) {
+      var optionalDelay = 5000;
+      var $string = "Error in fetching list of options";
+      alertFactory.addAuto('danger', $string, optionalDelay);
+    });
     $scope.formatProjects = function(projectsList, currentProject, indent){
       for(var i=0; i<currentProject.projectList.length; i++){
         var project = {};
@@ -5539,6 +5559,20 @@
       })
     });
     app.controller('newSprintCtrl', function($scope, $state, $timeout,$location, $http, alertFactory, $base64, $q, dataService, newDomains, alertFactory,  $localStorage, $stateParams, $log, $window, $mdDialog, GetSprintDomainsService, GetSprintAssetsService, newAssets) {
+      $http.get('/api/options/statusOfOptions').then(function(response) {
+        var optionValues = response.data;
+        if(optionValues.addNewSprint == '0'){
+          var optionalDelay = 6000;
+          var $string = "This page cannot be accessed as adding new sprints option has been disabled. Check options on user >> my page";
+          alertFactory.addAuto('danger', $string, optionalDelay);
+          $state.go("management.sprints.sprintsTable" );
+        }
+      })
+      .catch(function(response, status) {
+        var optionalDelay = 5000;
+        var $string = "Error in fetching list of options";
+        alertFactory.addAuto('danger', $string, optionalDelay);
+      });
       $scope.sprintStartDate = new Date();
       $scope.minDate = new Date(
         $scope.sprintStartDate.getFullYear(),
@@ -5797,11 +5831,37 @@
       $http.get('/api/people/summary').then(function(response) {
         $scope.people= response.data;
       });
+      $http.get('/api/options/statusOfOptions').then(function(response) {
+        var optionValues = response.data;
+        $scope.enable = false;
+        if(optionValues.addNewPerson == '0'){
+          $scope.enable = true;
+        }
+      })
+      .catch(function(response, status) {
+        var optionalDelay = 5000;
+        var $string = "Error in fetching list of options";
+        alertFactory.addAuto('danger', $string, optionalDelay);
+      });
       $scope.managePerson = function(person) {
         $state.go("management.people.editPerson.person",person );
       }
     });
     app.controller('peopleCtrl', function($scope, $state, $location, $http, alertFactory, $base64, $q, dataService, alertFactory,  $localStorage, $stateParams, $log, $window) {
+      $http.get('/api/options/statusOfOptions').then(function(response) {
+        var optionValues = response.data;
+        if(optionValues.addNewPerson == '0'){
+          var optionalDelay = 6000;
+          var $string = "This page cannot be accessed as adding new people option has been disabled. Check options on user >> my page";
+          alertFactory.addAuto('danger', $string, optionalDelay);
+          $state.go("management.people.peopleTable" );
+        }
+      })
+      .catch(function(response, status) {
+        var optionalDelay = 5000;
+        var $string = "Error in fetching list of options";
+        alertFactory.addAuto('danger', $string, optionalDelay);
+      });
       $scope.formData = {};
       $scope.formData.selectedRoles = {};
       $scope.someSelected = function (object) {
