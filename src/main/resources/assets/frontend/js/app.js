@@ -6656,6 +6656,9 @@
       };
     });
     app.controller('editProjectParticipants', function TodoCtrl($scope, $element,$log, $state, $stateParams, $filter, $location, $http, alertFactory, $base64, $q, dataService, alertFactory, $mdDialog ) {
+      var optionalDelay = 8000;
+      var $string = "Note : Modifying the participants on this page will update the details on Redmine";
+      alertFactory.addAuto('info', $string, optionalDelay);
       var currentProject = $stateParams;
       $scope.showRemove = true;
       $scope.removeSelected = {};
