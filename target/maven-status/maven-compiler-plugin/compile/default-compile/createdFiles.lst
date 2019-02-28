@@ -20,6 +20,7 @@ se\bth\didd\wiptool\api\ProjectLeaderId.class
 se\bth\didd\wiptool\api\SprintComprisingIssues.class
 se\bth\didd\wiptool\api\SelectedSprintRequirement.class
 se\bth\didd\wiptool\configuration\LocalDateMapperFactory.class
+se\bth\didd\wiptool\db\OptionsDAO.class
 se\bth\didd\wiptool\api\Roles.class
 se\bth\didd\wiptool\resources\ProjectResource.class
 se\bth\didd\wiptool\api\People.class
@@ -31,6 +32,7 @@ se\bth\didd\wiptool\api\CapabilityDetailsforGraphs.class
 se\bth\didd\wiptool\api\UserTemplate.class
 se\bth\didd\wiptool\api\AllocatedIssue.class
 se\bth\didd\wiptool\api\SprintCompanyDrivenFactors.class
+se\bth\didd\wiptool\api\OptionsTemplate.class
 se\bth\didd\wiptool\api\SprintAllDomainsAssets.class
 se\bth\didd\wiptool\auth\jwt\JwtAuthoriser.class
 se\bth\didd\wiptool\api\RedmineProjectIdentifier.class
@@ -86,6 +88,7 @@ se\bth\didd\wiptool\api\SprintRequirementNameLevel.class
 se\bth\didd\wiptool\auth\jwt\UserRoles.class
 se\bth\didd\wiptool\auth\Secrets.class
 se\bth\didd\wiptool\api\ProjectParticipants.class
+se\bth\didd\wiptool\resources\OptionsResource.class
 se\bth\didd\wiptool\resources\PeopleResource.class
 se\bth\didd\wiptool\auth\jwt\JwtAuthenticator.class
 se\bth\didd\wiptool\db\SprintDAO.class

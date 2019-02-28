@@ -342,14 +342,14 @@ public class ProjectResource {
 			@PathParam("id") Integer projectId) throws RedmineException, SQLException {
 		RedmineManager redmineManager = RedmineManagerFactory.createWithApiKey(redmineUrl, apiAccessKey);
 		MembershipManager membershipManager = redmineManager.getMembershipManager();
-
 		try {
-
 			List<Membership> members = membershipManager.getMemberships(projectId);
 			for (Membership member : members) {
-
-				membershipManager.delete(member);
-
+				try {
+					membershipManager.delete(member);
+				} catch (Exception e) {
+					continue;
+				}
 			}
 
 			projectDAO.deleteAllParticipants(projectId);

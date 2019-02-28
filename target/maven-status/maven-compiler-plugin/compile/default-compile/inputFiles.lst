@@ -17,9 +17,11 @@ C:\Users\dvi\Documents\GitHub\capabilityTool\src\main\java\se\bth\didd\wiptool\d
 C:\Users\dvi\Documents\GitHub\capabilityTool\src\main\java\se\bth\didd\wiptool\api\CapabilityList.java
 C:\Users\dvi\Documents\GitHub\capabilityTool\src\main\java\se\bth\didd\wiptool\api\SprintRequirementUpdate.java
 C:\Users\dvi\Documents\GitHub\capabilityTool\src\main\java\se\bth\didd\wiptool\redmine\Redmine.java
+C:\Users\dvi\Documents\GitHub\capabilityTool\src\main\java\se\bth\didd\wiptool\api\OptionsTemplate.java
 C:\Users\dvi\Documents\GitHub\capabilityTool\src\main\java\se\bth\didd\wiptool\api\NewSprint.java
 C:\Users\dvi\Documents\GitHub\capabilityTool\src\main\java\se\bth\didd\wiptool\resources\ProjectResource.java
 C:\Users\dvi\Documents\GitHub\capabilityTool\src\main\java\se\bth\didd\wiptool\api\SprintRequirementNameValueDescriptionUser.java
+C:\Users\dvi\Documents\GitHub\capabilityTool\src\main\java\se\bth\didd\wiptool\resources\OptionsResource.java
 C:\Users\dvi\Documents\GitHub\capabilityTool\src\main\java\se\bth\didd\wiptool\resources\IssueResource.java
 C:\Users\dvi\Documents\GitHub\capabilityTool\src\main\java\se\bth\didd\wiptool\api\SkillTimelineGraphs.java
 C:\Users\dvi\Documents\GitHub\capabilityTool\src\main\java\se\bth\didd\wiptool\api\UserTemplate.java
@@ -32,6 +34,7 @@ C:\Users\dvi\Documents\GitHub\capabilityTool\src\main\java\se\bth\didd\wiptool\a
 C:\Users\dvi\Documents\GitHub\capabilityTool\src\main\java\se\bth\didd\wiptool\auth\jwt\UserRoles.java
 C:\Users\dvi\Documents\GitHub\capabilityTool\src\main\java\se\bth\didd\wiptool\api\IssueTemplate.java
 C:\Users\dvi\Documents\GitHub\capabilityTool\src\main\java\se\bth\didd\wiptool\api\ExistingPerson.java
+C:\Users\dvi\Documents\GitHub\capabilityTool\src\main\java\se\bth\didd\wiptool\db\OptionsDAO.java
 C:\Users\dvi\Documents\GitHub\capabilityTool\src\main\java\se\bth\didd\wiptool\api\CapabilityIdProficiency.java
 C:\Users\dvi\Documents\GitHub\capabilityTool\src\main\java\se\bth\didd\wiptool\resources\LoginResource.java
 C:\Users\dvi\Documents\GitHub\capabilityTool\src\main\java\se\bth\didd\wiptool\db\SprintDAO.java

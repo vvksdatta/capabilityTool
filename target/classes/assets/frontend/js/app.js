@@ -673,7 +673,6 @@
   });
   app.controller('optionsCtrl', function($state, $http, $q ,$scope, dataService, alertFactory, $location, $log) {
     $http.get('/api/options/statusOfOptions').then(function(response) {
-
       var optionValues = response.data;
       $scope.options = {};
       if(optionValues.addNewProject == '1'){
@@ -681,13 +680,11 @@
       }else{
         $scope.options.addNewProject = 'false';
       }
-
       if(optionValues.addNewPerson == '1'){
         $scope.options.addNewPerson = 'true';
       }else{
         $scope.options.addNewPerson = 'false';
       }
-
       if(optionValues.addNewSprint == '1'){
         $scope.options.addNewSprint = 'true';
       }else{
@@ -699,47 +696,37 @@
       var $string = "Error in fetching list of options";
       alertFactory.addAuto('danger', $string, optionalDelay);
     });
-
-
-
-  $scope.saveOptions = function(optionValues){
-    var options = {};
-    if(optionValues.addNewProject == 'true'){
-    options.addNewProject = '1';
-    }else{
-    options.addNewProject = '0';
+    $scope.saveOptions = function(optionValues){
+      var options = {};
+      if(optionValues.addNewProject == 'true'){
+        options.addNewProject = '1';
+      }else{
+        options.addNewProject = '0';
+      }
+      if(optionValues.addNewPerson == 'true'){
+        options.addNewPerson = '1';
+      }else{
+        options.addNewPerson = '0';
+      }
+      if(optionValues.addNewSprint == 'true'){
+        options.addNewSprint = '1';
+      }else{
+        options.addNewSprint = '0';
+      }
+      $http.post('/api/options/updateOptions',options).then(function(response){
+        var optionalDelay = 3000;
+        var $string = "Updated the options";
+        $state.go("manageUser.manageOptions",response.data);
+        alertFactory.addAuto('success', $string, optionalDelay);
+      })
+      .catch(function(response, status) {
+        //	$scope.loading = false;
+        var optionalDelay = 5000;
+        var $string = "Error in updating the options";
+        alertFactory.addAuto('danger', $string, optionalDelay);
+      });
     }
-
-    if(optionValues.addNewPerson == 'true'){
-    options.addNewPerson = '1';
-    }else{
-    options.addNewPerson = '0';
-    }
-
-    if(optionValues.addNewSprint == 'true'){
-    options.addNewSprint = '1';
-    }else{
-    options.addNewSprint = '0';
-    }
-
-    $http.post('/api/options/updateOptions',options).then(function(response){
-      var optionalDelay = 3000;
-      var $string = "Updated the options";
-      $state.go("manageUser.manageOptions",response.data);
-      alertFactory.addAuto('success', $string, optionalDelay);
-    })
-    .catch(function(response, status) {
-      //	$scope.loading = false;
-      var optionalDelay = 5000;
-      var $string = "Error in updating the options";
-      alertFactory.addAuto('danger', $string, optionalDelay);
-    });
-
-
-  }
-
   });
-
   app.controller('manageUsersCtrl', function($state, $http, $q ,$scope, dataService, alertFactory, $location, $mdDialog, $localStorage) {
     $scope.currentUserId = $localStorage.currentUser.userId;
     $http.get('/api/people/getUsersList').then(function(response) {
@@ -1157,46 +1144,24 @@
   }
   RootCtrl.$inject = ['$scope', '$location', 'alertService'];
   app.controller('sprintsTableCtrl', function($scope, $state, $location, $http, alertFactory, $base64, $q, dataService, alertFactory,  $localStorage) {
-
     $scope.manageSprint = function(sprint) {
       $state.go("management.sprints.editSprint.existingSprint",sprint );
     };
-
-    var sprints = {};
-      $http.get('/api/sprints/summary').then(function(response) {
-      sprints= response.data;
-      }).then(function(){
-        $http.get('/api/options/statusOfOptions').then(function(response) {
-
-          var optionValues = response.data;
-
-          if(optionValues.addNewProject == '0'){
-            sprints.addNewProject = 'true';
-          }else{
-            sprints.addNewProject = 'false';
-          }
-
-          if(optionValues.addNewPerson == '0'){
-          sprints.addNewPerson = 'true';
-          }else{
-          sprints.addNewPerson = 'false';
-          }
-
-          if(optionValues.addNewSprint == '0'){
-          sprints.addNewSprint = 'true';
-          }else{
-            sprints.addNewSprint = 'false';
-          }
-            $scope.sprints = sprints;
-        })
-        .catch(function(response, status) {
-          var optionalDelay = 5000;
-          var $string = "Error in fetching list of options";
-          alertFactory.addAuto('danger', $string, optionalDelay);
-        });
-      });
-
-
+    $http.get('/api/options/statusOfOptions').then(function(response) {
+      var optionValues = response.data;
+      $scope.enable = false;
+      if(optionValues.addNewSprint == '0'){
+        $scope.enable = true;
+      }
+    })
+    .catch(function(response, status) {
+      var optionalDelay = 5000;
+      var $string = "Error in fetching list of options";
+      alertFactory.addAuto('danger', $string, optionalDelay);
+    });
+    $http.get('/api/sprints/summary').then(function(response) {
+      $scope.sprints= response.data;
+    });
   });
   app.controller('sprintSummaryCtrl', function($scope, $state, $location, $http, alertFactory, $base64, $q, dataService, alertFactory,  $localStorage) {
     $http.get('/api/sprints/summary').then(function(response) {
@@ -1339,6 +1304,18 @@
       var $string = "Error in fetching summary of projects";
       alertFactory.addAuto('danger', $string, optionalDelay);
     });
+    $http.get('/api/options/statusOfOptions').then(function(response) {
+      var optionValues = response.data;
+      $scope.enable = false;
+      if(optionValues.addNewProject == '0'){
+        $scope.enable = true;
+      }
+    })
+    .catch(function(response, status) {
+      var optionalDelay = 5000;
+      var $string = "Error in fetching list of options";
+      alertFactory.addAuto('danger', $string, optionalDelay);
+    });
     $scope.manageProject = function(project) {
       $state.go("management.projects.editProject",project );
     }
@@ -1349,6 +1326,20 @@
     }
   });
   app.controller('addProjectCtrl', function($scope, $state, $location, $http, alertFactory, $base64, $q, dataService, alertFactory,  $localStorage) {
+    $http.get('/api/options/statusOfOptions').then(function(response) {
+      var optionValues = response.data;
+      if(optionValues.addNewProject == '0'){
+        var optionalDelay = 6000;
+        var $string = "This page cannot be accessed as adding new projects option has been disabled. Check options on user >> my page";
+        alertFactory.addAuto('danger', $string, optionalDelay);
+        $state.go("management.projects.projectsTable" );
+      }
+    })
+    .catch(function(response, status) {
+      var optionalDelay = 5000;
+      var $string = "Error in fetching list of options";
+      alertFactory.addAuto('danger', $string, optionalDelay);
+    });
     $scope.formatProjects = function(projectsList, currentProject, indent){
       for(var i=0; i<currentProject.projectList.length; i++){
         var project = {};
@@ -4707,33 +4698,33 @@
       }
       $scope.newState = function(ev,req) {
         if(req != ""){
-        var confirm = $mdDialog.confirm()
-        .title("Would you like to add the requirement '"+req+"'?")
-        .textContent('This will also add the requirement to the catalogue of requirements')
-        .ariaLabel('')
-        .targetEvent(ev)
-        .ok('Proceed!')
-        .cancel('Cancel');
-        $mdDialog.show(confirm).then(function() {
-          $http.post('/api/sprints/insertRequirement',req).then(function(response) {
-            var $string = "Added requirement to the catalogue of requirements!";
-            $scope.searchTextChange();
-            $scope.searchTextChange(req);
-            $scope.searchText = req;
-            var txt = "{\"value\":\""+req+"\",\"display\":\""+req+"\"}";
-            $scope.selectedItem = angular.fromJson(txt);
-            // $scope.selectedItem= programmingSkillEntered.value;
-            var optionalDelay = 3000;
-            alertFactory.addAuto('success', $string, optionalDelay);
-          })
-          .catch(function(response, status) {
-            var optionalDelay = 5000;
-            var $string = "Error in adding the requirement to the catalogue of requirements";
-            alertFactory.addAuto('danger', $string, optionalDelay);
+          var confirm = $mdDialog.confirm()
+          .title("Would you like to add the requirement '"+req+"'?")
+          .textContent('This will also add the requirement to the catalogue of requirements')
+          .ariaLabel('')
+          .targetEvent(ev)
+          .ok('Proceed!')
+          .cancel('Cancel');
+          $mdDialog.show(confirm).then(function() {
+            $http.post('/api/sprints/insertRequirement',req).then(function(response) {
+              var $string = "Added requirement to the catalogue of requirements!";
+              $scope.searchTextChange();
+              $scope.searchTextChange(req);
+              $scope.searchText = req;
+              var txt = "{\"value\":\""+req+"\",\"display\":\""+req+"\"}";
+              $scope.selectedItem = angular.fromJson(txt);
+              // $scope.selectedItem= programmingSkillEntered.value;
+              var optionalDelay = 3000;
+              alertFactory.addAuto('success', $string, optionalDelay);
+            })
+            .catch(function(response, status) {
+              var optionalDelay = 5000;
+              var $string = "Error in adding the requirement to the catalogue of requirements";
+              alertFactory.addAuto('danger', $string, optionalDelay);
+            });
           });
-        });
+        }
       }
-    }
       $scope.saveRequirements = function(tabs){
         var RequirementsEntered = [];
         angular.forEach(tabs, function(value, key) {
@@ -4841,34 +4832,34 @@
       return  GetSprintRequirementsService.getRequirements(str);
     }
     $scope.newState = function(ev,req) {
-        if(req != ""){
-      var confirm = $mdDialog.confirm()
-      .title("Would you like to add the requirement '"+req+"'?")
-      .textContent('This will also add the requirement to the catalogue of requirements')
-      .ariaLabel('')
-      .targetEvent(ev)
-      .ok('Proceed!')
-      .cancel('Cancel');
-      $mdDialog.show(confirm).then(function() {
-        $http.post('/api/sprints/insertRequirement',req).then(function(response) {
-          var $string = "Added requirement to the catalogue of requirements!";
-          $scope.searchTextChange();
-          $scope.searchTextChange(req);
-          $scope.searchText = req;
-          var txt = "{\"value\":\""+req+"\",\"display\":\""+req+"\"}";
-          $scope.selectedItem = angular.fromJson(txt);
-          // $scope.selectedItem= programmingSkillEntered.value;
-          var optionalDelay = 3000;
-          alertFactory.addAuto('success', $string, optionalDelay);
-        })
-        .catch(function(response, status) {
-          var optionalDelay = 5000;
-          var $string = "Error in adding the requirement to the catalogue of requirements";
-          alertFactory.addAuto('danger', $string, optionalDelay);
+      if(req != ""){
+        var confirm = $mdDialog.confirm()
+        .title("Would you like to add the requirement '"+req+"'?")
+        .textContent('This will also add the requirement to the catalogue of requirements')
+        .ariaLabel('')
+        .targetEvent(ev)
+        .ok('Proceed!')
+        .cancel('Cancel');
+        $mdDialog.show(confirm).then(function() {
+          $http.post('/api/sprints/insertRequirement',req).then(function(response) {
+            var $string = "Added requirement to the catalogue of requirements!";
+            $scope.searchTextChange();
+            $scope.searchTextChange(req);
+            $scope.searchText = req;
+            var txt = "{\"value\":\""+req+"\",\"display\":\""+req+"\"}";
+            $scope.selectedItem = angular.fromJson(txt);
+            // $scope.selectedItem= programmingSkillEntered.value;
+            var optionalDelay = 3000;
+            alertFactory.addAuto('success', $string, optionalDelay);
+          })
+          .catch(function(response, status) {
+            var optionalDelay = 5000;
+            var $string = "Error in adding the requirement to the catalogue of requirements";
+            alertFactory.addAuto('danger', $string, optionalDelay);
+          });
         });
-      });
+      }
     }
-  }
     $scope.saveRequirements = function(tabs){
       var RequirementsEntered = [];
       angular.forEach(tabs, function(value, key) {
@@ -5062,7 +5053,7 @@
                 var $string = "Error in adding"+envi+" to the list of environments";
                 alertFactory.addAuto('danger', $string, optionalDelay);
               });
-          }
+            }
           },
           templateUrl: 'sprints/dialog3.tmpl.html',
           //parent: angular.element(document.getElementById('extraEnvironments')),
@@ -5568,6 +5559,20 @@
       })
     });
     app.controller('newSprintCtrl', function($scope, $state, $timeout,$location, $http, alertFactory, $base64, $q, dataService, newDomains, alertFactory,  $localStorage, $stateParams, $log, $window, $mdDialog, GetSprintDomainsService, GetSprintAssetsService, newAssets) {
+      $http.get('/api/options/statusOfOptions').then(function(response) {
+        var optionValues = response.data;
+        if(optionValues.addNewSprint == '0'){
+          var optionalDelay = 6000;
+          var $string = "This page cannot be accessed as adding new sprints option has been disabled. Check options on user >> my page";
+          alertFactory.addAuto('danger', $string, optionalDelay);
+          $state.go("management.sprints.sprintsTable" );
+        }
+      })
+      .catch(function(response, status) {
+        var optionalDelay = 5000;
+        var $string = "Error in fetching list of options";
+        alertFactory.addAuto('danger', $string, optionalDelay);
+      });
       $scope.sprintStartDate = new Date();
       $scope.minDate = new Date(
         $scope.sprintStartDate.getFullYear(),
@@ -5826,11 +5831,37 @@
       $http.get('/api/people/summary').then(function(response) {
         $scope.people= response.data;
       });
+      $http.get('/api/options/statusOfOptions').then(function(response) {
+        var optionValues = response.data;
+        $scope.enable = false;
+        if(optionValues.addNewPerson == '0'){
+          $scope.enable = true;
+        }
+      })
+      .catch(function(response, status) {
+        var optionalDelay = 5000;
+        var $string = "Error in fetching list of options";
+        alertFactory.addAuto('danger', $string, optionalDelay);
+      });
       $scope.managePerson = function(person) {
         $state.go("management.people.editPerson.person",person );
       }
     });
     app.controller('peopleCtrl', function($scope, $state, $location, $http, alertFactory, $base64, $q, dataService, alertFactory,  $localStorage, $stateParams, $log, $window) {
+      $http.get('/api/options/statusOfOptions').then(function(response) {
+        var optionValues = response.data;
+        if(optionValues.addNewPerson == '0'){
+          var optionalDelay = 6000;
+          var $string = "This page cannot be accessed as adding new people option has been disabled. Check options on user >> my page";
+          alertFactory.addAuto('danger', $string, optionalDelay);
+          $state.go("management.people.peopleTable" );
+        }
+      })
+      .catch(function(response, status) {
+        var optionalDelay = 5000;
+        var $string = "Error in fetching list of options";
+        alertFactory.addAuto('danger', $string, optionalDelay);
+      });
       $scope.formData = {};
       $scope.formData.selectedRoles = {};
       $scope.someSelected = function (object) {
@@ -6403,34 +6434,34 @@
           return  GetProgrammingSkillsService.getCountry(str);
         }
         $scope.newState = function(ev,skill) {
-            if(skill != ""){
-          var confirm = $mdDialog.confirm()
-          .title("Would you like to add the skill '"+skill+"'?")
-          .textContent('This will also also add the skill to the skills database')
-          .ariaLabel('')
-          .targetEvent(ev)
-          .ok('Proceed!')
-          .cancel('Cancel');
-          $mdDialog.show(confirm).then(function() {
-            $http.post('/api/skills/insertSkill',skill).then(function(response) {
-              var $string = "Added skill to skills database!";
-              $scope.searchTextChange();
-              $scope.searchTextChange(skill);
-              $scope.searchText = skill;
-              var txt = "{\"value\":\""+skill+"\",\"display\":\""+skill+"\"}";
-              $scope.selectedItem = angular.fromJson(txt);
-              // $scope.selectedItem= programmingSkillEntered.value;
-              var optionalDelay = 3000;
-              alertFactory.addAuto('success', $string, optionalDelay);
-            })
-            .catch(function(response, status) {
-              var optionalDelay = 5000;
-              var $string = "Error in adding skill to skills database";
-              alertFactory.addAuto('danger', $string, optionalDelay);
+          if(skill != ""){
+            var confirm = $mdDialog.confirm()
+            .title("Would you like to add the skill '"+skill+"'?")
+            .textContent('This will also also add the skill to the skills database')
+            .ariaLabel('')
+            .targetEvent(ev)
+            .ok('Proceed!')
+            .cancel('Cancel');
+            $mdDialog.show(confirm).then(function() {
+              $http.post('/api/skills/insertSkill',skill).then(function(response) {
+                var $string = "Added skill to skills database!";
+                $scope.searchTextChange();
+                $scope.searchTextChange(skill);
+                $scope.searchText = skill;
+                var txt = "{\"value\":\""+skill+"\",\"display\":\""+skill+"\"}";
+                $scope.selectedItem = angular.fromJson(txt);
+                // $scope.selectedItem= programmingSkillEntered.value;
+                var optionalDelay = 3000;
+                alertFactory.addAuto('success', $string, optionalDelay);
+              })
+              .catch(function(response, status) {
+                var optionalDelay = 5000;
+                var $string = "Error in adding skill to skills database";
+                alertFactory.addAuto('danger', $string, optionalDelay);
+              });
             });
-          });
-        }
-      };
+          }
+        };
         $scope.saveSkills = function(tabs){
           $scope.userId = $stateParams.personId;
           var programmingSkillsEntered = [];
@@ -6540,34 +6571,34 @@
         return  GetProgrammingSkillsService.getCountry(str);
       }
       $scope.newState = function(ev,skill) {
-          if(skill != ""){
-        var confirm = $mdDialog.confirm()
-        .title("Would you like to add the skill '"+skill+"'?")
-        .textContent('This will also also add the skill to the skills database')
-        .ariaLabel('')
-        .targetEvent(ev)
-        .ok('Proceed!')
-        .cancel('Cancel');
-        $mdDialog.show(confirm).then(function() {
-          $http.post('/api/skills/insertSkill',skill).then(function(response) {
-            var $string = "Added skill to skills database!";
-            $scope.searchTextChange();
-            $scope.searchTextChange(skill);
-            $scope.searchText = skill;
-            var txt = "{\"value\":\""+skill+"\",\"display\":\""+skill+"\"}";
-            $scope.selectedItem = angular.fromJson(txt);
-            // $scope.selectedItem= programmingSkillEntered.value;
-            var optionalDelay = 3000;
-            alertFactory.addAuto('success', $string, optionalDelay);
-          })
-          .catch(function(response, status) {
-            var optionalDelay = 5000;
-            var $string = "Error in adding skill to skills database";
-            alertFactory.addAuto('danger', $string, optionalDelay);
+        if(skill != ""){
+          var confirm = $mdDialog.confirm()
+          .title("Would you like to add the skill '"+skill+"'?")
+          .textContent('This will also also add the skill to the skills database')
+          .ariaLabel('')
+          .targetEvent(ev)
+          .ok('Proceed!')
+          .cancel('Cancel');
+          $mdDialog.show(confirm).then(function() {
+            $http.post('/api/skills/insertSkill',skill).then(function(response) {
+              var $string = "Added skill to skills database!";
+              $scope.searchTextChange();
+              $scope.searchTextChange(skill);
+              $scope.searchText = skill;
+              var txt = "{\"value\":\""+skill+"\",\"display\":\""+skill+"\"}";
+              $scope.selectedItem = angular.fromJson(txt);
+              // $scope.selectedItem= programmingSkillEntered.value;
+              var optionalDelay = 3000;
+              alertFactory.addAuto('success', $string, optionalDelay);
+            })
+            .catch(function(response, status) {
+              var optionalDelay = 5000;
+              var $string = "Error in adding skill to skills database";
+              alertFactory.addAuto('danger', $string, optionalDelay);
+            });
           });
-        });
-      }
-    };
+        }
+      };
       $scope.saveSkills = function(tabs){
         $scope.userId = $stateParams.personId;
         var programmingSkillsEntered = [];
@@ -6769,7 +6800,7 @@
         for (var i =  peoplelength - 1; i >= 0; i--) {
           angular.forEach($scope.list2, function(value2, key2) {
             if ($scope.peopleList[i].personId == value2.personId) {
-            // $log.debug("this is for person "+ value2.personName);
+              // $log.debug("this is for person "+ value2.personName);
               list1.splice(i, 1);
             }
           })
