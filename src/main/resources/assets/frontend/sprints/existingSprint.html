@@ -192,7 +192,7 @@ $(".nav-tabs li").eq(5).removeClass("active");
               </div>
               <div >
                 <div class="pull-right" style="margin-top: 5px;">
-                  <md-button style="font-size: 15px; background-color: rgb(90, 132, 187);" ng-click="readOnly=false" ng-show="readOnly" class="add-tab md-primary md-raised"><i class="glyphicon glyphicon-edit"> </i> Edit </md-button>
+                  <md-button style="font-size: 15px; background-color: rgb(90, 132, 187);" ng-click="updateReadOnly(readOnly)" ng-show="readOnly" class="add-tab md-primary md-raised"><i class="glyphicon glyphicon-edit"> </i> Edit </md-button>
                   <md-button type="submit" style="font-size: 15px;  background-color: rgb(90, 132, 187);" ng-hide="readOnly"  class="add-tab md-primary md-raised">Next </md-button>
                   <md-button class="md-raised" style="font-size: 15px; " ng-hide="readOnly"  ng-click="clearSprint($event, sprint)">Clear </md-button>
                 </div>

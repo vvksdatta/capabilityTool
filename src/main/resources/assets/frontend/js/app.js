@@ -1326,6 +1326,9 @@
     }
   });
   app.controller('addProjectCtrl', function($scope, $state, $location, $http, alertFactory, $base64, $q, dataService, alertFactory,  $localStorage) {
+    var optionalDelay = 8000;
+    var $string = "Note : The informaton entered on this page will be used to create a new project on Redmine.";
+    alertFactory.addAuto('info', $string, optionalDelay);
     $http.get('/api/options/statusOfOptions').then(function(response) {
       var optionValues = response.data;
       if(optionValues.addNewProject == '0'){
@@ -4313,6 +4316,9 @@
     $scope.issueDetails = [];
     $scope.selectedSecurityRisk = [];
     $scope.removeSelected = {};
+    var optionalDelay = 8000;
+    var $string = "Note : Assigning an issue to a person will update the details on Redmine";
+    alertFactory.addAuto('info', $string, optionalDelay);
     $http.get('/api/sprints/getSprintParticipants/'+$scope.sprintId+"/"+$scope.projectId).then(function(response)
     {
       $scope.peopleList = response.data;
@@ -5214,6 +5220,13 @@
       }
     });
     app.controller('existingSprintCtrl', function($scope, $filter, $state, $timeout,$location, $http, alertFactory, $base64, $q, dataService, newDomains, alertFactory,  $localStorage, $stateParams, $log, $window, $mdDialog, GetSprintDomainsService, GetSprintAssetsService, newAssets) {
+      $scope.updateReadOnly  = function (readOnly){
+        readOnly=false;
+        $scope.readOnly = readOnly;
+        var optionalDelay = 8000;
+        var $string = "Note : Modifying the sprint name, description, end date and associated project fields will update the details on Redmine";
+        alertFactory.addAuto('info', $string, optionalDelay);
+      };
       $scope.projectId = $stateParams.projectId;
       $scope.sprintId = $stateParams.sprintId;
       $scope.checkFinished = function(sprint){
@@ -5559,6 +5572,9 @@
       })
     });
     app.controller('newSprintCtrl', function($scope, $state, $timeout,$location, $http, alertFactory, $base64, $q, dataService, newDomains, alertFactory,  $localStorage, $stateParams, $log, $window, $mdDialog, GetSprintDomainsService, GetSprintAssetsService, newAssets) {
+      var optionalDelay = 8000;
+      var $string = "Note : The informaton entered on this page will be used to create a new sprint on Redmine.";
+      alertFactory.addAuto('info', $string, optionalDelay);
       $http.get('/api/options/statusOfOptions').then(function(response) {
         var optionValues = response.data;
         if(optionValues.addNewSprint == '0'){
@@ -6861,6 +6877,13 @@
       };
     });
     app.controller('editProject', function($scope, $state, $stateParams, $filter, $location, $http, alertFactory, $base64, $q, dataService, alertFactory, $localStorage, $mdDialog, $log) {
+      $scope.updateReadOnly  = function (readOnly){
+        readOnly=false;
+        $scope.readOnly = readOnly;
+        var optionalDelay = 8000;
+        var $string = "Note : Modifying the project name, description and associated project fields will update the details on Redmine";
+        alertFactory.addAuto('info', $string, optionalDelay);
+      };
       var currentProject = $stateParams;
       var editProject = null;
       var finalProject = null;
