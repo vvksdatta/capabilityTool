@@ -642,7 +642,16 @@
       }
     });
   }
-  app.controller('manageUserCtrl', function($scope, $state, $location, $http, alertFactory, $q, dataService,  $localStorage, $stateParams, $log, $timeout) {
+  app.controller('manageUserCtrl', function($scope, $state, $location, $http, alertFactory, $q, dataService,  $localStorage, $stateParams, $log, $timeout, $rootScope) {
+    if($rootScope.alerts.length !=0){
+      angular.forEach($rootScope.alerts, function(value, key) {
+        var alert = {};
+        alert = $rootScope.alerts[key];
+        if(alert.type == 'info'){
+          $rootScope.alerts.splice(key,1);
+        }
+      });
+    };
     $scope.currentUserId = $localStorage.currentUser.userId;
     if($scope.currentUserId != null){
       $http.get('/api/people/getUserName/'+$scope.currentUserId).then(function(response)
@@ -671,7 +680,16 @@
     };
     initTabs();
   });
-  app.controller('optionsCtrl', function($state, $http, $q ,$scope, dataService, alertFactory, $location, $log) {
+  app.controller('optionsCtrl', function($state, $http, $q ,$scope, dataService, alertFactory, $location, $log, $rootScope) {
+    if($rootScope.alerts.length !=0){
+      angular.forEach($rootScope.alerts, function(value, key) {
+        var alert = {};
+        alert = $rootScope.alerts[key];
+        if(alert.type == 'info'){
+          $rootScope.alerts.splice(key,1);
+        }
+      });
+    };
     $http.get('/api/options/statusOfOptions').then(function(response) {
       var optionValues = response.data;
       $scope.options = {};
@@ -727,7 +745,16 @@
       });
     }
   });
-  app.controller('manageUsersCtrl', function($state, $http, $q ,$scope, dataService, alertFactory, $location, $mdDialog, $localStorage) {
+  app.controller('manageUsersCtrl', function($state, $http, $q ,$scope, dataService, alertFactory, $location, $mdDialog, $localStorage, $rootScope) {
+    if($rootScope.alerts.length !=0){
+      angular.forEach($rootScope.alerts, function(value, key) {
+        var alert = {};
+        alert = $rootScope.alerts[key];
+        if(alert.type == 'info'){
+          $rootScope.alerts.splice(key,1);
+        }
+      });
+    };
     $scope.currentUserId = $localStorage.currentUser.userId;
     $http.get('/api/people/getUsersList').then(function(response) {
       $scope.usersList = response.data;
@@ -765,7 +792,16 @@
       });
     };
   });
-  app.controller('createNewUserCtrl', function($base64, $state, $http, $q ,$scope, dataService, alertFactory, $location) {
+  app.controller('createNewUserCtrl', function($base64, $state, $http, $q ,$scope, dataService, alertFactory, $location, $rootScope) {
+    if($rootScope.alerts.length !=0){
+      angular.forEach($rootScope.alerts, function(value, key) {
+        var alert = {};
+        alert = $rootScope.alerts[key];
+        if(alert.type == 'info'){
+          $rootScope.alerts.splice(key,1);
+        }
+      });
+    };
     $scope.addUser = function(register) {
       $http.put('/api/auth/register', register).then(function(response) {
         var $string = response.data;
@@ -780,7 +816,16 @@
       });
     }
   });
-  app.controller('userPageCtrl', function($scope,  $base64, $state, $location, $http, alertFactory, $q, dataService,  $localStorage, $stateParams, $log, $timeout) {
+  app.controller('userPageCtrl', function($scope,  $base64, $state, $location, $http, alertFactory, $q, dataService,  $localStorage, $stateParams, $log, $timeout, $rootScope) {
+    if($rootScope.alerts.length !=0){
+      angular.forEach($rootScope.alerts, function(value, key) {
+        var alert = {};
+        alert = $rootScope.alerts[key];
+        if(alert.type == 'info'){
+          $rootScope.alerts.splice(key,1);
+        }
+      });
+    };
     if($stateParams.userId){
       var currentUserId = $stateParams.userId;
     }else{
@@ -856,7 +901,16 @@
       }
     };
   });
-  app.controller('projectParticipants', function TodoCtrl($scope, $element,$log, $state, $stateParams, $filter, $location, $http, alertFactory, $base64, $q, dataService, alertFactory, $mdDialog ) {
+  app.controller('projectParticipants', function TodoCtrl($scope, $element,$log, $state, $stateParams, $filter, $location, $http, alertFactory, $base64, $q, dataService, alertFactory, $mdDialog, $rootScope ) {
+    if($rootScope.alerts.length !=0){
+      angular.forEach($rootScope.alerts, function(value, key) {
+        var alert = {};
+        alert = $rootScope.alerts[key];
+        if(alert.type == 'info'){
+          $rootScope.alerts.splice(key,1);
+        }
+      });
+    };
     var currentProject = $stateParams;
     $scope.showRemove = true;
     $scope.removeSelected = {};
@@ -1077,7 +1131,16 @@
       }
     }
   })();
-  app.controller('NavController', function($state, $http, alertFactory, $q ,$scope, $localStorage, $location, $window) {
+  app.controller('NavController', function($state, $http, alertFactory, $q ,$scope, $localStorage, $location, $window, $rootScope) {
+    if($rootScope.alerts.length !=0){
+      angular.forEach($rootScope.alerts, function(value, key) {
+        var alert = {};
+        alert = $rootScope.alerts[key];
+        if(alert.type == 'info'){
+          $rootScope.alerts.splice(key,1);
+        }
+      });
+    };
     if($localStorage.currentUser){
       $scope.userFirstName = $localStorage.currentUser.userFirstName;
       $scope.currentUserId = $localStorage.currentUser.userId;
@@ -1099,7 +1162,16 @@
       });
     }
   });
-  app.controller('LoginIndexController', function($base64, $state, $http, $q ,$scope, dataService, alertFactory, $location, AuthenticationService) {
+  app.controller('LoginIndexController', function($base64, $state, $http, $q ,$scope, dataService, alertFactory, $location, AuthenticationService, $rootScope) {
+    if($rootScope.alerts.length !=0){
+      angular.forEach($rootScope.alerts, function(value, key) {
+        var alert = {};
+        alert = $rootScope.alerts[key];
+        if(alert.type == 'info'){
+          $rootScope.alerts.splice(key,1);
+        }
+      });
+    };
     var vm = this;
     vm.login = login;
     initController();
@@ -1143,7 +1215,16 @@
     $rootScope.closeAlert = alertService.closeAlert;
   }
   RootCtrl.$inject = ['$scope', '$location', 'alertService'];
-  app.controller('sprintsTableCtrl', function($scope, $state, $location, $http, alertFactory, $base64, $q, dataService, alertFactory,  $localStorage) {
+  app.controller('sprintsTableCtrl', function($scope, $state, $location, $http,$log, alertFactory, $base64, $q, dataService, alertFactory,  $localStorage, $rootScope) {
+    if($rootScope.alerts.length !=0){
+      angular.forEach($rootScope.alerts, function(value, key) {
+        var alert = {};
+        alert = $rootScope.alerts[key];
+        if(alert.type == 'info'){
+          $rootScope.alerts.splice(key,1);
+        }
+      });
+    };
     $scope.manageSprint = function(sprint) {
       $state.go("management.sprints.editSprint.existingSprint",sprint );
     };
@@ -1163,7 +1244,16 @@
       $scope.sprints= response.data;
     });
   });
-  app.controller('sprintSummaryCtrl', function($scope, $state, $location, $http, alertFactory, $base64, $q, dataService, alertFactory,  $localStorage) {
+  app.controller('sprintSummaryCtrl', function($scope, $state, $location, $http, alertFactory, $base64, $q, dataService, alertFactory,  $localStorage, $rootScope) {
+    if($rootScope.alerts.length !=0){
+      angular.forEach($rootScope.alerts, function(value, key) {
+        var alert = {};
+        alert = $rootScope.alerts[key];
+        if(alert.type == 'info'){
+          $rootScope.alerts.splice(key,1);
+        }
+      });
+    };
     $http.get('/api/sprints/summary').then(function(response) {
       $scope.sprints= response.data;
     }).catch(function(response, status) {
@@ -1172,7 +1262,16 @@
       alertFactory.addAuto('danger', $string, optionalDelay);
     });
   });
-  app.controller('projectSummaryCtrl', function($scope, $state, $location, $http, alertFactory, $base64, $q, dataService, alertFactory,  $localStorage) {
+  app.controller('projectSummaryCtrl', function($scope, $state, $location, $http, alertFactory, $base64, $q, dataService, alertFactory,  $localStorage, $rootScope) {
+    if($rootScope.alerts.length !=0){
+      angular.forEach($rootScope.alerts, function(value, key) {
+        var alert = {};
+        alert = $rootScope.alerts[key];
+        if(alert.type == 'info'){
+          $rootScope.alerts.splice(key,1);
+        }
+      });
+    };
     var parentProjectsList = [];
     $http.get('/api/projects/summary').then(function(response) {
       $scope.projects = response.data;
@@ -1234,7 +1333,16 @@
       alertFactory.addAuto('danger', $string, optionalDelay);
     });
   });
-  app.controller('peopleSummaryCtrl', function($scope, $state, $location, $http, alertFactory, $base64, $q, dataService, alertFactory,  $localStorage) {
+  app.controller('peopleSummaryCtrl', function($scope, $state, $location, $http, alertFactory, $base64, $q, dataService, alertFactory,  $localStorage, $rootScope) {
+    if($rootScope.alerts.length !=0){
+      angular.forEach($rootScope.alerts, function(value, key) {
+        var alert = {};
+        alert = $rootScope.alerts[key];
+        if(alert.type == 'info'){
+          $rootScope.alerts.splice(key,1);
+        }
+      });
+    };
     $http.get('/api/people/summary').then(function(response) {
       $scope.people= response.data;
     }).catch(function(response, status) {
@@ -1243,7 +1351,16 @@
       alertFactory.addAuto('danger', $string, optionalDelay);
     });
   });
-  app.controller('projectManagementCtrl', function($scope, $state, $location, $http, alertFactory, $base64, $q, dataService, alertFactory,  $localStorage, $log) {
+  app.controller('projectManagementCtrl', function($scope, $state, $location, $http, alertFactory, $base64, $q, dataService, alertFactory,  $localStorage, $log, $rootScope) {
+    if($rootScope.alerts.length !=0){
+      angular.forEach($rootScope.alerts, function(value, key) {
+        var alert = {};
+        alert = $rootScope.alerts[key];
+        if(alert.type == 'info'){
+          $rootScope.alerts.splice(key,1);
+        }
+      });
+    };
     var parentProjectsList = [];
     $http.get('/api/projects/summary').then(function(response) {
       $scope.projects = response.data;
@@ -1325,8 +1442,18 @@
       $state.go("management.projects.editProject",project );
     }
   });
-  app.controller('addProjectCtrl', function($scope, $state, $location, $http, alertFactory, $base64, $q, dataService, alertFactory,  $localStorage) {
-    var optionalDelay = 8000;
+  app.controller('addProjectCtrl', function($scope, $state, $location, $http, alertFactory, $base64, $q, dataService, alertFactory,  $localStorage, $rootScope) {
+    if($rootScope.alerts.length !=0){
+      angular.forEach($rootScope.alerts, function(value, key) {
+        var alert = {};
+        alert = $rootScope.alerts[key];
+        if(alert.type == 'info'){
+          $rootScope.alerts.splice(key,1);
+        }
+      });
+    };
+    var optionalDelay = "800000";
+    //$rootScope.alerts = [];
     var $string = "Note : The informaton entered on this page will be used to create a new project on Redmine.";
     alertFactory.addAuto('info', $string, optionalDelay);
     $http.get('/api/options/statusOfOptions').then(function(response) {
@@ -1418,7 +1545,16 @@
       });
     };
   });
-  app.controller('peopleEditCtrl', function($scope, $state, $location, $http, alertFactory, $base64, $q, dataService, alertFactory,  $localStorage, $stateParams, $log, $window) {
+  app.controller('peopleEditCtrl', function($scope, $state, $location, $http, alertFactory, $base64, $q, dataService, alertFactory,  $localStorage, $stateParams, $log, $window, $rootScope) {
+    if($rootScope.alerts.length !=0){
+      angular.forEach($rootScope.alerts, function(value, key) {
+        var alert = {};
+        alert = $rootScope.alerts[key];
+        if(alert.type == 'info'){
+          $rootScope.alerts.splice(key,1);
+        }
+      });
+    };
     var currentPerson = $stateParams;
     $scope.userId = currentPerson.personId;
     var tabClasses;
@@ -1503,7 +1639,16 @@
       }
     }
   });
-  app.controller('editSprintQuestionnaireCtrl', function TodoCtrl($scope, $state, $filter, $http, $q, dataService, alertFactory, $localStorage, $stateParams, $log, $window ) {
+  app.controller('editSprintQuestionnaireCtrl', function TodoCtrl($scope, $state, $filter, $http, $q, dataService, alertFactory, $localStorage, $stateParams, $log, $window, $rootScope ) {
+    if($rootScope.alerts.length !=0){
+      angular.forEach($rootScope.alerts, function(value, key) {
+        var alert = {};
+        alert = $rootScope.alerts[key];
+        if(alert.type == 'info'){
+          $rootScope.alerts.splice(key,1);
+        }
+      });
+    };
     $scope.projectId = $stateParams.projectId;
     $scope.sprintId = $stateParams.sprintId;
     $http.get('/api/sprints/getQuestionnaire/'+$scope.sprintId+'/'+$scope.projectId).then(function(response)
@@ -1663,7 +1808,16 @@
       $scope.$broadcast('rzSliderForceRender');
     });
   });
-  app.controller('peopleToSprintCtrl', function($scope, $state, $timeout, $filter, $http, $q, dataService, alertFactory, $localStorage, $stateParams, $log, $window, $mdDialog) {
+  app.controller('peopleToSprintCtrl', function($scope, $state, $timeout, $filter, $http, $q, dataService, alertFactory, $localStorage, $stateParams, $log, $window, $mdDialog, $rootScope) {
+    if($rootScope.alerts.length !=0){
+      angular.forEach($rootScope.alerts, function(value, key) {
+        var alert = {};
+        alert = $rootScope.alerts[key];
+        if(alert.type == 'info'){
+          $rootScope.alerts.splice(key,1);
+        }
+      });
+    };
     $scope.projectId = $stateParams.projectId;
     $scope.sprintId = $stateParams.sprintId;
     if($stateParams.selectedRoles){
@@ -2990,7 +3144,16 @@
       });
     };
   });
-  app.controller('editPeopleToSprintCtrl', function($scope, $state, $timeout, $filter, $http, $q, dataService, alertFactory, $localStorage, $stateParams, $log, $window, $mdDialog) {
+  app.controller('editPeopleToSprintCtrl', function($scope, $state, $timeout, $filter, $http, $q, dataService, alertFactory, $localStorage, $stateParams, $log, $window, $mdDialog, $rootScope) {
+    if($rootScope.alerts.length !=0){
+      angular.forEach($rootScope.alerts, function(value, key) {
+        var alert = {};
+        alert = $rootScope.alerts[key];
+        if(alert.type == 'info'){
+          $rootScope.alerts.splice(key,1);
+        }
+      });
+    };
     $scope.projectId = $stateParams.projectId;
     $scope.sprintId = $stateParams.sprintId;
     $scope.selectedRoles = {};
@@ -4307,7 +4470,16 @@
       });
     };
   });
-  app.controller('peopleToIssuesCtrl', function($scope, $state, $timeout, $http,$filter, $q, dataService, alertFactory,  $localStorage, $stateParams, $log, $window, $mdDialog) {
+  app.controller('peopleToIssuesCtrl', function($scope, $state, $timeout, $http,$filter, $q, dataService, alertFactory,  $localStorage, $stateParams, $log, $window, $mdDialog, $rootScope) {
+    if($rootScope.alerts.length !=0){
+      angular.forEach($rootScope.alerts, function(value, key) {
+        var alert = {};
+        alert = $rootScope.alerts[key];
+        if(alert.type == 'info'){
+          $rootScope.alerts.splice(key,1);
+        }
+      });
+    };
     $scope.projectId = $stateParams.projectId;
     $scope.sprintId = $stateParams.sprintId;
     $scope.drop = [];
@@ -4316,7 +4488,7 @@
     $scope.issueDetails = [];
     $scope.selectedSecurityRisk = [];
     $scope.removeSelected = {};
-    var optionalDelay = 8000;
+    var optionalDelay = "800000";
     var $string = "Note : Assigning an issue to a person will update the details on Redmine";
     alertFactory.addAuto('info', $string, optionalDelay);
     $http.get('/api/sprints/getSprintParticipants/'+$scope.sprintId+"/"+$scope.projectId).then(function(response)
@@ -4505,7 +4677,16 @@
       };
     })
   });
-  app.controller('sprintRolesCtrl', function($scope, $state, $timeout, $http, $q, dataService, alertFactory,  $localStorage, $stateParams, $log, $window, $mdDialog) {
+  app.controller('sprintRolesCtrl', function($scope, $state, $timeout, $http, $q, dataService, alertFactory,  $localStorage, $stateParams, $log, $window, $mdDialog, $rootScope) {
+    if($rootScope.alerts.length !=0){
+      angular.forEach($rootScope.alerts, function(value, key) {
+        var alert = {};
+        alert = $rootScope.alerts[key];
+        if(alert.type == 'info'){
+          $rootScope.alerts.splice(key,1);
+        }
+      });
+    };
     $scope.projectId = $stateParams.projectId;
     $scope.sprintId = $stateParams.sprintId;
     var sprint = {};
@@ -4592,7 +4773,16 @@
       $state.go("management.sprints.editSprint.existingSprint",sprint );
     }
   });
-  app.controller('editSprintRequirementsCtrl', function($scope, $state, $timeout, sprintNav,$http, alertFactory, $q, dataService, alertFactory,  $localStorage, $stateParams, $log, $window, $mdDialog,GetSprintRequirementsService) {
+  app.controller('editSprintRequirementsCtrl', function($scope, $state, $timeout, sprintNav,$http, $q, dataService, alertFactory,  $localStorage, $stateParams, $log, $window, $mdDialog,GetSprintRequirementsService, $rootScope) {
+    if($rootScope.alerts.length !=0){
+      angular.forEach($rootScope.alerts, function(value, key) {
+        var alert = {};
+        alert = $rootScope.alerts[key];
+        if(alert.type == 'info'){
+          $rootScope.alerts.splice(key,1);
+        }
+      });
+    };
     $scope.projectId = $stateParams.projectId;
     $scope.sprintId = $stateParams.sprintId;
     sprintNav.setSprintNav($stateParams.projectId, $stateParams.sprintId);
@@ -4767,7 +4957,16 @@
       //$scope.sprintId = sprint.sprintId;
     })
   });
-  app.controller('sprintRequirementsCtrl', function($scope, $state, $timeout, sprintNav,$http, alertFactory, $q, dataService, alertFactory,  $localStorage, $stateParams, $log, $window, $mdDialog,GetSprintRequirementsService) {
+  app.controller('sprintRequirementsCtrl', function($scope, $state, $timeout, sprintNav,$http, $q, dataService, alertFactory,  $localStorage, $stateParams, $log, $window, $mdDialog,GetSprintRequirementsService, $rootScope) {
+    if($rootScope.alerts.length !=0){
+      angular.forEach($rootScope.alerts, function(value, key) {
+        var alert = {};
+        alert = $rootScope.alerts[key];
+        if(alert.type == 'info'){
+          $rootScope.alerts.splice(key,1);
+        }
+      });
+    };
     //$scope.projectId = $stateParams.projectId;
     //$scope.sprintId = $stateParams.sprintId;
     sprintNav.setSprintNav($stateParams.projectId, $stateParams.sprintId);
@@ -4916,7 +5115,16 @@
     $scope.projectId = sprint.projectId;
     $scope.sprintId = sprint.sprintId;
   });
-  app.controller('editCompanyFactorsCtrl', function($scope, $state, $timeout, $http, alertFactory, $q, dataService, $localStorage, $stateParams, $log, $window, $mdDialog, newEnvironments,sprintNav, GetSprintEnvironmentsService) {
+  app.controller('editCompanyFactorsCtrl', function($scope, $state, $timeout, $http, alertFactory, $q, dataService, $localStorage, $stateParams, $log, $window, $mdDialog, newEnvironments,sprintNav, GetSprintEnvironmentsService, $rootScope) {
+    if($rootScope.alerts.length !=0){
+      angular.forEach($rootScope.alerts, function(value, key) {
+        var alert = {};
+        alert = $rootScope.alerts[key];
+        if(alert.type == 'info'){
+          $rootScope.alerts.splice(key,1);
+        }
+      });
+    };
     sprintNav.setSprintNav($stateParams.projectId, $stateParams.sprintId);
     var sprint = sprintNav.getSprintNav();
     $scope.projectId = sprint.projectId;
@@ -5075,7 +5283,16 @@
         $scope.$broadcast('rzSliderForceRender');
       });
     });
-    app.controller('companyFactorsCtrl', function($scope, $state, $timeout, $http, alertFactory, $q, dataService, $localStorage, $stateParams, $log, $window, $mdDialog, newEnvironments,sprintNav, GetSprintEnvironmentsService) {
+    app.controller('companyFactorsCtrl', function($scope, $state, $timeout, $http, alertFactory, $q, dataService, $localStorage, $stateParams, $log, $window,$rootScope, $mdDialog, newEnvironments,sprintNav, GetSprintEnvironmentsService) {
+      if($rootScope.alerts.length !=0){
+        angular.forEach($rootScope.alerts, function(value, key) {
+          var alert = {};
+          alert = $rootScope.alerts[key];
+          if(alert.type == 'info'){
+            $rootScope.alerts.splice(key,1);
+          }
+        });
+      };
       sprintNav.setSprintNav($stateParams.projectId, $stateParams.sprintId);
       var sprint = sprintNav.getSprintNav();
       $scope.projectId = sprint.projectId;
@@ -5219,11 +5436,20 @@
         $scope.extraEnvironmentsList = newEnvironments.getAddedEnvironments();
       }
     });
-    app.controller('existingSprintCtrl', function($scope, $filter, $state, $timeout,$location, $http, alertFactory, $base64, $q, dataService, newDomains, alertFactory,  $localStorage, $stateParams, $log, $window, $mdDialog, GetSprintDomainsService, GetSprintAssetsService, newAssets) {
+    app.controller('existingSprintCtrl', function($scope, $filter, $state, $timeout,$location, $http, $base64, $q, dataService, newDomains, alertFactory,  $localStorage, $stateParams, $log, $window, $mdDialog, GetSprintDomainsService, GetSprintAssetsService, newAssets, $rootScope) {
+      if($rootScope.alerts.length !=0){
+        angular.forEach($rootScope.alerts, function(value, key) {
+          var alert = {};
+          alert = $rootScope.alerts[key];
+          if(alert.type == 'info'){
+            $rootScope.alerts.splice(key,1);
+          }
+        });
+      };
       $scope.updateReadOnly  = function (readOnly){
         readOnly=false;
         $scope.readOnly = readOnly;
-        var optionalDelay = 8000;
+        var optionalDelay = "800000";
         var $string = "Note : Modifying the sprint name, description, end date and associated project fields will update the details on Redmine";
         alertFactory.addAuto('info', $string, optionalDelay);
       };
@@ -5571,8 +5797,17 @@
         alertFactory.addAuto('danger', $string, optionalDelay);
       })
     });
-    app.controller('newSprintCtrl', function($scope, $state, $timeout,$location, $http, alertFactory, $base64, $q, dataService, newDomains, alertFactory,  $localStorage, $stateParams, $log, $window, $mdDialog, GetSprintDomainsService, GetSprintAssetsService, newAssets) {
-      var optionalDelay = 8000;
+    app.controller('newSprintCtrl', function($scope, $state, $timeout,$location, $http, $base64, $q, dataService, newDomains, alertFactory,  $localStorage, $stateParams, $log, $window, $mdDialog, GetSprintDomainsService, GetSprintAssetsService, newAssets, $rootScope) {
+      if($rootScope.alerts.length !=0){
+        angular.forEach($rootScope.alerts, function(value, key) {
+          var alert = {};
+          alert = $rootScope.alerts[key];
+          if(alert.type == 'info'){
+            $rootScope.alerts.splice(key,1);
+          }
+        });
+      };
+      var optionalDelay = "800000";
       var $string = "Note : The informaton entered on this page will be used to create a new sprint on Redmine.";
       alertFactory.addAuto('info', $string, optionalDelay);
       $http.get('/api/options/statusOfOptions').then(function(response) {
@@ -5843,7 +6078,16 @@
         $scope.extraAssetsList = newAssets.getAddedAssets();
       }
     });
-    app.controller('peopleManagementCtrl', function($scope, $state, $location, $http, alertFactory, $base64, $q, dataService, alertFactory,  $localStorage, $stateParams, $log, $window) {
+    app.controller('peopleManagementCtrl', function($scope, $state, $location, $http, alertFactory, $base64, $q, dataService,  $localStorage, $stateParams, $log, $window, $rootScope) {
+      if($rootScope.alerts.length !=0){
+        angular.forEach($rootScope.alerts, function(value, key) {
+          var alert = {};
+          alert = $rootScope.alerts[key];
+          if(alert.type == 'info'){
+            $rootScope.alerts.splice(key,1);
+          }
+        });
+      };
       $http.get('/api/people/summary').then(function(response) {
         $scope.people= response.data;
       });
@@ -5863,7 +6107,16 @@
         $state.go("management.people.editPerson.person",person );
       }
     });
-    app.controller('peopleCtrl', function($scope, $state, $location, $http, alertFactory, $base64, $q, dataService, alertFactory,  $localStorage, $stateParams, $log, $window) {
+    app.controller('peopleCtrl', function($scope, $state, $location, $http, alertFactory, $base64, $q, dataService,  $localStorage, $stateParams, $log, $window, $rootScope) {
+      if($rootScope.alerts.length !=0){
+        angular.forEach($rootScope.alerts, function(value, key) {
+          var alert = {};
+          alert = $rootScope.alerts[key];
+          if(alert.type == 'info'){
+            $rootScope.alerts.splice(key,1);
+          }
+        });
+      };
       $http.get('/api/options/statusOfOptions').then(function(response) {
         var optionValues = response.data;
         if(optionValues.addNewPerson == '0'){
@@ -5948,7 +6201,16 @@
         alertFactory.addAuto('danger', $string, optionalDelay);
       });
     });
-    app.controller('capabilityCtrl', function($scope, $state, $location, $http, alertFactory, $base64, $q, dataService, alertFactory,  $localStorage, $stateParams, $log, $window) {
+    app.controller('capabilityCtrl', function($scope, $state, $location, $http, alertFactory, $base64, $q, dataService,  $localStorage, $stateParams, $log, $window, $rootScope) {
+      if($rootScope.alerts.length !=0){
+        angular.forEach($rootScope.alerts, function(value, key) {
+          var alert = {};
+          alert = $rootScope.alerts[key];
+          if(alert.type == 'info'){
+            $rootScope.alerts.splice(key,1);
+          }
+        });
+      };
       $scope.userId2 = $stateParams.personId;
       if($scope.userId2 != ''){
         $http.get('/api/people/getPersonName/'+$scope.userId2).then(function(response)
@@ -6167,7 +6429,16 @@
         $scope.slider8.value = "Undefined";
       };
     });
-    app.controller('editCapabilityCtrl', function($scope, $state, $location, $http, alertFactory, $base64, $q, dataService, alertFactory,  $localStorage, $stateParams, $log, $window) {
+    app.controller('editCapabilityCtrl', function($scope, $state, $location, $http, alertFactory, $base64, $q, dataService,  $localStorage, $stateParams, $log, $window, $rootScope) {
+      if($rootScope.alerts.length !=0){
+        angular.forEach($rootScope.alerts, function(value, key) {
+          var alert = {};
+          alert = $rootScope.alerts[key];
+          if(alert.type == 'info'){
+            $rootScope.alerts.splice(key,1);
+          }
+        });
+      };
       $scope.userId2 = $stateParams.personId;
       var tabClasses;
       function initTabs() {
@@ -6377,7 +6648,16 @@
         });
       }
     });
-    app.controller('editProgrammingskills', function($scope, $state, $location, $http, alertFactory, $q, dataService, alertFactory,  $localStorage, $stateParams, $log, $timeout, GetProgrammingSkillsService, $mdDialog) {
+    app.controller('editProgrammingskills', function($scope, $state, $location, $http, alertFactory, $q, dataService,  $localStorage, $stateParams, $log, $timeout, GetProgrammingSkillsService, $mdDialog, $rootScope) {
+      if($rootScope.alerts.length !=0){
+        angular.forEach($rootScope.alerts, function(value, key) {
+          var alert = {};
+          alert = $rootScope.alerts[key];
+          if(alert.type == 'info'){
+            $rootScope.alerts.splice(key,1);
+          }
+        });
+      };
       //$state.go($state.current, currentPerson, {reload: true});
       $scope.userId = $stateParams.personId;
       if($scope.userId != null){
@@ -6535,7 +6815,16 @@
         };
       });
     });
-    app.controller('programmingskills', function($scope, $state, $location, $http, alertFactory, $q, dataService, alertFactory,  $localStorage, $stateParams, $log, $timeout, GetProgrammingSkillsService, $mdDialog) {
+    app.controller('programmingskills', function($scope, $state, $location, $http, alertFactory, $q, dataService,  $localStorage, $stateParams, $log, $timeout, GetProgrammingSkillsService, $mdDialog, $rootScope) {
+      if($rootScope.alerts.length !=0){
+        angular.forEach($rootScope.alerts, function(value, key) {
+          var alert = {};
+          alert = $rootScope.alerts[key];
+          if(alert.type == 'info'){
+            $rootScope.alerts.splice(key,1);
+          }
+        });
+      };
       //$state.go($state.current, currentPerson, {reload: true});
       $scope.userId = $stateParams.personId;
       if($scope.userId != null){
@@ -6671,8 +6960,17 @@
         }
       };
     });
-    app.controller('editProjectParticipants', function TodoCtrl($scope, $element,$log, $state, $stateParams, $filter, $location, $http, alertFactory, $base64, $q, dataService, alertFactory, $mdDialog ) {
-      var optionalDelay = 8000;
+    app.controller('editProjectParticipants', function TodoCtrl($scope, $element,$log, $state, $stateParams, $filter, $location, $http, $base64, $q, dataService, alertFactory, $mdDialog, $rootScope ) {
+      if($rootScope.alerts.length !=0){
+        angular.forEach($rootScope.alerts, function(value, key) {
+          var alert = {};
+          alert = $rootScope.alerts[key];
+          if(alert.type == 'info'){
+            $rootScope.alerts.splice(key,1);
+          }
+        });
+      };
+      var optionalDelay = "800000";
       var $string = "Note : Modifying the participants on this page will update the details on Redmine";
       alertFactory.addAuto('info', $string, optionalDelay);
       var currentProject = $stateParams;
@@ -6876,11 +7174,20 @@
         $state.go("management.projects.editProject",project );
       };
     });
-    app.controller('editProject', function($scope, $state, $stateParams, $filter, $location, $http, alertFactory, $base64, $q, dataService, alertFactory, $localStorage, $mdDialog, $log) {
+    app.controller('editProject', function($scope, $state, $stateParams, $filter, $location, $http, alertFactory, $base64, $q, dataService, alertFactory, $localStorage, $mdDialog, $log, $rootScope) {
+      if($rootScope.alerts.length !=0){
+        angular.forEach($rootScope.alerts, function(value, key) {
+          var alert = {};
+          alert = $rootScope.alerts[key];
+          if(alert.type == 'info'){
+            $rootScope.alerts.splice(key,1);
+          }
+        });
+      };
       $scope.updateReadOnly  = function (readOnly){
         readOnly=false;
         $scope.readOnly = readOnly;
-        var optionalDelay = 8000;
+        var optionalDelay = "800000";
         var $string = "Note : Modifying the project name, description and associated project fields will update the details on Redmine";
         alertFactory.addAuto('info', $string, optionalDelay);
       };
