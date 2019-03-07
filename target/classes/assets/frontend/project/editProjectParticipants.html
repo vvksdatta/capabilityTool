@@ -96,9 +96,14 @@ select > option{ font-size:17px; }
           Select Role:
           <select    ng-model="selectedRole" ng-change="filterPeople()"> <option ng-repeat="role in rolesList"   value= {{role.roleId}}> {{role.roleName}} </option></select>
         </div>
+        <div class="inner-addon left-addon" ng-show="selectedRole">
+            <i class="glyphicon glyphicon-filter"></i>
+        <input type="text" style="margin-top: 10px;" class="form-control"  data-action="filter"  placeholder="Filter people" ng-model="searchPeople"/>
+        </div>
         <div style="max-height:50vh;overflow-x:hidden;overflow-y:auto;">
+
           <div  ng-if="item.roleId == selectedRole"  class="" ng-repeat="item in rolesOfPeople" >
-            <div ng-if="item.roleId == selectedRole"  ng-cloak class="btn btn-block btn-droppable list-group-item" ng-repeat="person in peopleList" ng-show="person.personId == item.personId" data-drop="true" ng-model='peopleList' data-jqyoui-options="{accept:'.btn-draggable:not([ng-model=peopleList])'}"  jqyoui-droppable="{index: {{$index}}}">
+            <div ng-if="item.roleId == selectedRole"  ng-cloak class="btn btn-block btn-droppable list-group-item" ng-repeat="person in peopleList | filter:searchPeople" ng-show="person.personId == item.personId" data-drop="true" ng-model='peopleList' data-jqyoui-options="{accept:'.btn-draggable:not([ng-model=peopleList])'}"  jqyoui-droppable="{index: {{$index}}}">
               <div style="display: inline-flex;" ng-if="person.personId == item.personId"  ng-show="person.personId == item.personId" ng-cloak  ng-init="person.roleId= selectedRole" class="btn btn-default btn-block btn-draggable" data-drag="{{true}}" data-jqyoui-options="{revert: 'invalid',helper:'clone',appendTo:'.selectedPeople',containment:'document',scroll:'false'}" ng-model="peopleList" jqyoui-draggable="{index: {{$index}},placeholder:true,animate:true}" ng-hide="!person.personName">
                 <table style="width: 100%">
                   <thead>

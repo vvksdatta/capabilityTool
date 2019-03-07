@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
@@ -229,4 +230,35 @@ public class SkillResource {
 		return null;
 	}
 
+	@POST
+	@Path("/editSkillDetails")
+	public Response updateSkill(Skill skill) {
+		try {
+			skillDAO.updateSkill(skill);
+		} catch (Exception e) {
+			return Response.status(Status.BAD_REQUEST).entity(e).build();
+		}
+		SuccessMessage success = new SuccessMessage();
+		success.setSuccess("success");
+		return Response.ok(success).build();
+	}
+
+	@DELETE
+	@Path("/deleteSkill/{id}")
+	public Response deleteSkill(@PathParam("id") Integer skillId) {
+		try {
+			skillDAO.deleteSkillfromAssessmentofSkills(skillId);
+			skillDAO.deleteSkill(skillId);
+		} catch (Exception e) {
+			return Response.status(Status.BAD_REQUEST).entity(e).build();
+		}
+		try {
+			List<Skill> skillsList = skillDAO.getAllSkills();
+			return Response.ok(skillsList).build();
+
+		} catch (Exception e) {
+			return Response.status(Status.BAD_REQUEST).entity(e).build();
+		}
+
+	}
 }

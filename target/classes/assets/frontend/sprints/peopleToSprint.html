@@ -94,7 +94,7 @@ canvas { background:#fff; }
         </div>
         <div ng-if="selectedForComparison>1" class="panel panel-default-table panel-table">
           <div class="panel-heading">
-            <h3 class="panel-title"><strong>Filters for comaprison</strong></h3>
+            <h3 class="panel-title"><strong>Filters for comparison</strong></h3>
           </div>
           <div class="panel-group" id="accordion" style="margin-bottom: 1px;border-color: transparent;">
             <div class="panel panel-default" style="border-color: transparent;">
@@ -428,7 +428,23 @@ canvas { background:#fff; }
                 </tr>
               </thead>
               <tbody>
-                <tr ng-repeat="(key,value) in selectedRoles" ng-if="value!=0" >
+                <tr ng-hide="RoleDisplay" ng-if="selectedRoles[selectedRole]!=0 && selectedRoles[selectedRole]!=null" >
+                  <td style="padding-left: 0px;">
+                    <div class="thumbnail" style="border: 5px dotted #5d5c5c; color: #333;margin-bottom: 10px;border-radius: 3px;" data-drop="drop[selectedRole]" ng-model='list2[selectedRole]' jqyoui-droppable>
+                      <div style="text-align: center;" ng-if="selectedRoles[selectedRole]>1">  Add {{selectedRoles[selectedRole]}} {{selectedRole}}s </div>
+                      <div style="text-align: center;" ng-if="selectedRoles[selectedRole]<=1">  Add {{selectedRoles[selectedRole]}} {{selectedRole}} </div>
+                      <div ng-repeat="item in list2[selectedRole]">
+                        <md-checkbox  type="checkbox" style="margin-bottom: 10px;width: 100%;display: block;" class="md-primary"  ng-model="removeSelected[item.personId]" >
+                          <md-tooltip md-direction="left">Remove {{item.personName}}</md-tooltip>
+                          <div class="list-group  btn-info btn-draggable" style="color: #333;cursor: pointer;"  data-drag="{{true}}"  data-jqyoui-options="{revert: 'invalid',helper:'clone',appendTo:'parent',containment:'document',scroll:'false',onDrop: limitEntry(list2[selectedRole].length,selectedRoles[selectedRole],selectedRole)}" jqyoui-draggable="{index: {{$index}},placeholder:true,animate:false}"> <div style="display: flex; border: 1px solid; border-radius: 8px;" ><span style=" text-align: left;">
+                            <span ng-model="letterLimit"  class="avatar" style="background-color: #29516D;width: 28px; height: 26px; font-size: 12px; padding-top: 5px; margin-right: 3px">{{ item.personName | limitTo:2 | uppercase }}</span>{{item.personName | capitalize }}
+                          </span> </div></div>
+                        </md-checkbox></div>
+                      </div>
+                    </td>
+                    <td>{{selectedRole}}</td>
+                  </tr>
+                <tr ng-repeat="(key,value) in selectedRoles" ng-if="value!=0" ng-hide="selectedRole == key" >
                   <td style="padding-left: 0px;">
                     <div class="thumbnail" style="border: 5px dotted #5d5c5c; color: #333;margin-bottom: 10px;border-radius: 3px;" data-drop="drop[key]" ng-model='list2[key]' jqyoui-droppable>
                       <div style="text-align: center;" ng-if="value>1">  Add {{value}} {{key}}s </div>

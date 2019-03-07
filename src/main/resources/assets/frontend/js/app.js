@@ -313,6 +313,53 @@
         skip : true
       }
     })
+    .state('management.repositories', {
+      url:'/repositories',
+      templateUrl: 'repositories/repositories.html',
+      ncyBreadcrumb: {
+        skip : true
+      }
+    })
+    .state('management.repositories.editSkillRepository', {
+      url:'/editSkillRepository',
+      templateUrl: 'repositories/editSkillRepo.html',
+      controller: 'editSkillRepository',
+      ncyBreadcrumb: {
+        label: 'Edit skills repository'
+      }
+    })
+    .state('management.repositories.editDevelopmentEnvRepository', {
+      url:'/editDevelopmentEnvironmentRepository',
+      templateUrl: 'repositories/editDevelopmentEnvRepo.html',
+      controller: 'editDevelopmentEnvRepo',
+      ncyBreadcrumb: {
+        label: 'Edit sprint development environment repository'
+      }
+    })
+    .state('management.repositories.editSprintRequirementsRepository', {
+      url:'/editSprintRequirementsRepository',
+      templateUrl: 'repositories/editSprintRequirementsRepo.html',
+      controller: 'editSprintRequirementsRepo',
+      ncyBreadcrumb: {
+        label: 'Edit sprint requirements repository'
+      }
+    })
+    .state('management.repositories.editSprintAssetsRepository', {
+      url:'/editSprintAssetsRepository',
+      templateUrl: 'repositories/editSprintAssetsRepo.html',
+      controller: 'editSprintAssetsRepo',
+      ncyBreadcrumb: {
+        label: 'Edit sprint assets repository'
+      }
+    })
+    .state('management.repositories.editSprintDomainsRepository', {
+      url:'/editSprintDomainsRepository',
+      templateUrl: 'repositories/editSprintDomainsRepo.html',
+      controller: 'editSprintDomainsRepo',
+      ncyBreadcrumb: {
+        label: 'Edit sprint domains repository'
+      }
+    })
     .state('management.projects.projectsTable', {
       url:'/summary',
       templateUrl: 'project/projectsTable.html',
@@ -1351,7 +1398,137 @@
       alertFactory.addAuto('danger', $string, optionalDelay);
     });
   });
-  app.controller('projectManagementCtrl', function($scope, $state, $location, $http, alertFactory, $base64, $q, dataService, alertFactory,  $localStorage, $log, $rootScope) {
+  app.controller('editSkillRepository', function($scope, $state, $location, $http, alertFactory, $q, dataService,  $localStorage, $log, $rootScope, $window, $mdDialog, $timeout) {
+    if($rootScope.alerts.length !=0){
+      angular.forEach($rootScope.alerts, function(value, key) {
+        var alert = {};
+        alert = $rootScope.alerts[key];
+        if(alert.type == 'info'){
+          $rootScope.alerts.splice(key,1);
+        }
+      });
+    };
+    var tabClasses;
+    function initTabs() {
+      tabClasses = ["","","","",""];
+    }
+    $scope.getTabClass = function (tabNum) {
+      return tabClasses[tabNum];
+    };
+    $scope.getTabPaneClass = function (tabNum) {
+      return "tab-pane " + tabClasses[tabNum];
+    }
+    $scope.setActiveTab = function (tabNum) {
+      initTabs();
+      tabClasses[tabNum] = "active";
+    };
+    initTabs();
+    $http.get('/api/skills/getProgrammingSkillsList').then(function(response)
+    {
+      $scope.programmingSkillsList = response.data;
+    }).catch(function(response, status) {
+      //	$scope.loading = false;
+      var optionalDelay = 5000;
+      var $string = "Error in fetching list of programming skills";
+      alertFactory.addAuto('danger', $string, optionalDelay);
+    });
+    $scope.editSkillDetails =function($event, skill){
+      $scope.tmp = skill;
+      $mdDialog.show({
+        controller: function DialogCtrl ($timeout, $q, $scope, $mdDialog, $http, alertFactory, $state) {
+          $scope.cancel = function($event) {
+            $mdDialog.cancel();
+          }
+          $scope.finish = function($event, skill) {
+            $http.post('/api/skills/editSkillDetails',skill).then(function(response) {
+              var $string = "updated "+skill.skillName+" skill!";
+              var optionalDelay = 2000;
+              $mdDialog.hide();
+              alertFactory.addAuto('success', $string, optionalDelay);
+            })
+            .catch(function(response, status) {
+              var optionalDelay = 5000;
+              var $string = "Error in updating "+skill.skillName+" skill";
+              alertFactory.addAuto('danger', $string, optionalDelay);
+            });
+          }
+        },
+        templateUrl: 'repositories/dialog.tmpl.html',
+        parent: angular.element(document.body),
+        targetEvent: $event,
+        scope: $scope,
+        preserveScope: true,
+        clickOutsideToClose:true
+      })
+    };
+    $scope.deleteSkill =function(ev,skill){
+      var confirm = $mdDialog.confirm()
+      .title('Would you like to delete the skill '+skill.skillName+ ' ?')
+      .textContent('This will delete the entry from the repository')
+      .ariaLabel('')
+      .targetEvent(ev)
+      .ok('Delete!')
+      .cancel('Cancel');
+      $mdDialog.show(confirm).then(function() {
+        $http.delete('/api/skills/deleteSkill/'+skill.skillId).then(function(response) {
+          var $string = "Deleted the skill "+skill.skillName;
+          var optionalDelay = 3000;
+          alertFactory.addAuto('success', $string, optionalDelay);
+          $scope.programmingSkillsList = response.data;
+        })
+        .catch(function(response, status) {
+          var optionalDelay = 5000;
+          var $string = "Error in deleting the skill "+skill.skillName;
+          alertFactory.addAuto('danger', $string, optionalDelay);
+        });
+      });
+    };
+  });
+  app.controller('editDevelopmentEnvRepo', function($scope, $state, $location, $http, alertFactory, $q, dataService,  $localStorage, $log, $rootScope) {
+    if($rootScope.alerts.length !=0){
+      angular.forEach($rootScope.alerts, function(value, key) {
+        var alert = {};
+        alert = $rootScope.alerts[key];
+        if(alert.type == 'info'){
+          $rootScope.alerts.splice(key,1);
+        }
+      });
+    };
+  });
+  app.controller('editSprintAssetsRepo', function($scope, $state, $location, $http, alertFactory, $q, dataService,  $localStorage, $log, $rootScope) {
+    if($rootScope.alerts.length !=0){
+      angular.forEach($rootScope.alerts, function(value, key) {
+        var alert = {};
+        alert = $rootScope.alerts[key];
+        if(alert.type == 'info'){
+          $rootScope.alerts.splice(key,1);
+        }
+      });
+    };
+  });
+  app.controller('editSprintDomainsRepo', function($scope, $state, $location, $http, alertFactory, $q, dataService,  $localStorage, $log, $rootScope) {
+    if($rootScope.alerts.length !=0){
+      angular.forEach($rootScope.alerts, function(value, key) {
+        var alert = {};
+        alert = $rootScope.alerts[key];
+        if(alert.type == 'info'){
+          $rootScope.alerts.splice(key,1);
+        }
+      });
+    };
+  });
+  app.controller('editSprintRequirementsRepo', function($scope, $state, $location, $http, alertFactory, $q, dataService,  $localStorage, $log, $rootScope) {
+    if($rootScope.alerts.length !=0){
+      angular.forEach($rootScope.alerts, function(value, key) {
+        var alert = {};
+        alert = $rootScope.alerts[key];
+        if(alert.type == 'info'){
+          $rootScope.alerts.splice(key,1);
+        }
+      });
+    };
+  });
+  app.controller('projectManagementCtrl', function($scope, $state, $location, $http, alertFactory, $base64, $q, dataService,  $localStorage, $log, $rootScope) {
     if($rootScope.alerts.length !=0){
       angular.forEach($rootScope.alerts, function(value, key) {
         var alert = {};
@@ -2865,7 +3042,7 @@
             })
           });
         }
-          $scope.RoleDisplay = true;
+        $scope.RoleDisplay = true;
         $scope.filterPeople = function(selectedRole) {
           $scope.RoleDisplay = false;
           $scope.isAllSelected = false;
@@ -4234,7 +4411,7 @@
         $scope.filterPeople = function(selectedRole) {
           $scope.isAllSelected = false;
           $scope.selectedRole = selectedRole;
-              $scope.RoleDisplay = false;
+          $scope.RoleDisplay = false;
           //$scope.drop[selectedRole] = true;
           angular.forEach($scope.selectedRoles, function(value,key){
             if(key == selectedRole){
@@ -6965,6 +7142,7 @@
       };
     });
     app.controller('editProjectParticipants', function TodoCtrl($scope, $element,$log, $state, $stateParams, $filter, $location, $http, $base64, $q, dataService, alertFactory, $mdDialog, $rootScope ) {
+      $scope.searchPeople = '';
       if($rootScope.alerts.length !=0){
         angular.forEach($rootScope.alerts, function(value, key) {
           var alert = {};
@@ -7150,7 +7328,7 @@
           var $string = {};
           if(response.data.message !=null){
             $string = response.data.message;
-            if($string = "Forbidden. Please check the user has proper permissions"){
+            if($string = "Forbidden. Please check whether the user has proper permissions"){
               $string = $string+". Perhaps, the project is closed!"
             }
           }else {

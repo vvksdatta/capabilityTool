@@ -3,6 +3,7 @@ package se.bth.didd.wiptool.db;
 import java.sql.Timestamp;
 import java.util.List;
 import org.skife.jdbi.v2.sqlobject.Bind;
+import org.skife.jdbi.v2.sqlobject.BindBean;
 import org.skife.jdbi.v2.sqlobject.SqlQuery;
 import org.skife.jdbi.v2.sqlobject.SqlUpdate;
 import se.bth.didd.wiptool.api.People;
@@ -44,6 +45,9 @@ public interface SkillDAO {
 			+ " personId = :personId and skillId = :skillId ORDER BY lastUpdate DESC limit 1)AS TableA ON TableA.skillId = SKILLDB.skillId")
 	List<SkillDetailsforGraphs> skillsDetailsOfPerson(@Bind("personId") int personId, @Bind("skillId") int skillId);
 
+	@SqlUpdate("update SkillDB set skillName= :skillName where skillId = :skillId")
+	void updateSkill(@BindBean Skill skill);
+
 	@SqlQuery("select TableB.skillName, PEOPLE.personName, TableB.proficiency, TableB.lastUpdate, TableB.updatedBy from PEOPLE RIGHT JOIN (select SKILLDB.skillName,TableA.personId, TableA.proficiency, TableA.lastUpdate, TableA.updatedBy from SKILLDB RIGHT JOIN (select  *  from ASSESSMENTOFSKILLS  where personId = :personId and skillId = :skillId ORDER BY lastUpdate DESC limit 1)AS TableA ON TableA.skillId = SKILLDB.skillId) AS TableB ON TableB.personId = PEOPLE.personId")
 	List<ProgrammingSkillsDetailsComparisonGraphs> specificSkillOfPerson(@Bind("personId") int personId,
 			@Bind("skillId") int skillId);
@@ -57,5 +61,13 @@ public interface SkillDAO {
 
 	@SqlQuery("select * from PEOPLE where personId = :personId")
 	List<People> getPersonDetails(@Bind("personId") int personId);
+
+	@SqlUpdate("Delete from SkillDB where skillId = :skillId")
+	void deleteSkill(@Bind("skillId") Integer skillId);
+	
+	@SqlUpdate("Delete from ASSESSMENTOFSKILLS where skillId = :skillId")
+	void deleteSkillfromAssessmentofSkills(@Bind("skillId") Integer skillId);
+	
+	
 
 }
