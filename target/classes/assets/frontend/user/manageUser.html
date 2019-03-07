@@ -1,6 +1,10 @@
 <div ncy-breadcrumb="" ng-cloak >
 </div>
-<div class="alert"  style="z-index:1" uib-alert ng-repeat="alert in alerts" ng-class="'alert-' + (alert.type || 'warning')" close="closeAlert($index)" ng-cloak> {{alert.msg}}</div>
+<div class="alert"  style="z-index:1" uib-alert ng-repeat="alert in alerts" ng-class="'alert-' + (alert.type || 'warning')" close="closeAlert($index)" ng-cloak> {{alert.msg}}
+	<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+		<span aria-hidden="true">&times;</span>
+	</button>
+</div>
 <ul class="nav nav-tabs" style="margin-bottom: 10px;">
 	<li ng-class="getTabClass(1)" ng-click="setActiveTab(1)" ui-sref="manageUser.myDetails({userId: currentUserId})" ui-sref-opts="{reload: false}"><a  data-toggle="tab" >My details</a></li>
 	<li ng-class="getTabClass(2)" ng-click="setActiveTab(2)" ui-sref="manageUser.createNewUser" ui-sref-opts="{reload: false}"><a   data-toggle="tab" >Create new user</a></li>

@@ -465,23 +465,38 @@ $(".nav-tabs li").eq(5).removeClass("active");
             </tr>
           </thead>
           <tbody>
-            <tr ng-repeat="(key,value) in selectedRoles" ng-if="value!=0" >
-              <td style="padding-left: 0px;">
-                <div class="thumbnail" style="border: 5px dotted #5d5c5c; color: #333;margin-bottom: 10px;border-radius: 3px;" data-drop="drop[key]" ng-model='list2[key]' jqyoui-droppable>
-                  <div style="text-align: center;" ng-if="value>1">  Add {{value}} {{key}}s </div>
-                  <div style="text-align: center;" ng-if="value<=1">  Add {{value}} {{key}} </div>
-                  <div ng-repeat="item in list2[key]">
-                    <md-checkbox  type="checkbox" style="margin-bottom: 10px;width: 100%;display: block;" class="md-primary"  ng-model="removeSelected[item.personId]" >
-                      <md-tooltip md-direction="left">Remove {{item.personName}}</md-tooltip>
-                      <div class="list-group  btn-info btn-draggable" style="color: #333;cursor: pointer;"  data-drag="{{true}}"  data-jqyoui-options="{revert: 'invalid',helper:'clone',appendTo:'parent',containment:'document',scroll:'false',onDrop: limitEntry(list2[key].length,value,key)}" jqyoui-draggable="{index: {{$index}},placeholder:true,animate:false}"> <div style="display: flex; border: 1px solid; border-radius: 8px;" ><span style=" text-align: left;">
-                        <span ng-model="letterLimit"  class="avatar" style="background-color: #29516D;width: 28px; height: 26px; font-size: 12px; padding-top: 5px; margin-right: 3px">{{ item.personName | limitTo:2 | uppercase }}</span>{{item.personName | capitalize }}
-                      </span> </div></div>
-                    </md-checkbox></div>
-                  </div>
-                </td>
-                <td>{{key}}</td>
-              </tr>
-              <tr>
+              <tr ng-hide="RoleDisplay" ng-if="selectedRoles[selectedRole]!=0 && selectedRoles[selectedRole]!=null" >
+                <td style="padding-left: 0px;">
+                  <div class="thumbnail" style="border: 5px dotted #5d5c5c; color: #333;margin-bottom: 10px;border-radius: 3px;" data-drop="drop[selectedRole]" ng-model='list2[selectedRole]' jqyoui-droppable>
+                    <div style="text-align: center;" ng-if="selectedRoles[selectedRole]>1">  Add {{selectedRoles[selectedRole]}} {{selectedRole}}s </div>
+                    <div style="text-align: center;" ng-if="selectedRoles[selectedRole]<=1">  Add {{selectedRoles[selectedRole]}} {{selectedRole}} </div>
+                    <div ng-repeat="item in list2[selectedRole]">
+                      <md-checkbox  type="checkbox" style="margin-bottom: 10px;width: 100%;display: block;" class="md-primary"  ng-model="removeSelected[item.personId]" >
+                        <md-tooltip md-direction="left">Remove {{item.personName}}</md-tooltip>
+                        <div class="list-group  btn-info btn-draggable" style="color: #333;cursor: pointer;"  data-drag="{{true}}"  data-jqyoui-options="{revert: 'invalid',helper:'clone',appendTo:'parent',containment:'document',scroll:'false',onDrop: limitEntry(list2[selectedRole].length,selectedRoles[selectedRole],selectedRole)}" jqyoui-draggable="{index: {{$index}},placeholder:true,animate:false}"> <div style="display: flex; border: 1px solid; border-radius: 8px;" ><span style=" text-align: left;">
+                          <span ng-model="letterLimit"  class="avatar" style="background-color: #29516D;width: 28px; height: 26px; font-size: 12px; padding-top: 5px; margin-right: 3px">{{ item.personName | limitTo:2 | uppercase }}</span>{{item.personName | capitalize }}
+                        </span> </div></div>
+                      </md-checkbox></div>
+                    </div>
+                  </td>
+                  <td>{{selectedRole}}</td>
+                </tr>
+              <tr><tr ng-repeat="(key,value) in selectedRoles" ng-if="value!=0" ng-hide="selectedRole == key" >
+                <td style="padding-left: 0px;">
+                  <div class="thumbnail" style="border: 5px dotted #5d5c5c; color: #333;margin-bottom: 10px;border-radius: 3px;" data-drop="drop[key]" ng-model='list2[key]' jqyoui-droppable>
+                    <div style="text-align: center;"  ng-if="value>1">  Add polo {{value}} {{key}}s </div>
+                    <div style="text-align: center;"  ng-if="value<=1">  Add polo {{value}} {{key}} </div>
+                    <div ng-repeat="item in list2[key]">
+                      <md-checkbox  type="checkbox" style="margin-bottom: 10px;width: 100%;display: block;" class="md-primary"  ng-model="removeSelected[item.personId]" >
+                        <md-tooltip md-direction="left">Remove {{item.personName}}</md-tooltip>
+                        <div class="list-group  btn-info btn-draggable" style="color: #333;cursor: pointer;"  data-drag="{{true}}"  data-jqyoui-options="{revert: 'invalid',helper:'clone',appendTo:'parent',containment:'document',scroll:'false',onDrop: limitEntry(list2[key].length,value,key)}" jqyoui-draggable="{index: {{$index}},placeholder:true,animate:false}"> <div style="display: flex; border: 1px solid; border-radius: 8px;" ><span style=" text-align: left;">
+                          <span ng-model="letterLimit"  class="avatar" style="background-color: #29516D;width: 28px; height: 26px; font-size: 12px; padding-top: 5px; margin-right: 3px">{{ item.personName | limitTo:2 | uppercase }}</span>{{item.personName | capitalize }}
+                        </span> </div></div>
+                      </md-checkbox></div>
+                    </div>
+                  </td>
+                  <td>{{key}}</td>
+                </tr>
                 <td colspan="2" style="border-top: 1px solid #fff; text-align: center" >
                   <md-button type="reset" style="font-size: 15px;"  ng-if="showRemove" class="add-tab md-raised" ng-click="removeSprintParticipants()"> <i class="glyphicon glyphicon-edit"> </i> Remove  </md-button>
                   <md-button type="submit" style=" font-size: 15px; background-color: rgb(90, 132, 187);" ng-if="showRemove"  class="add-tab md-primary md-raised" ng-click="updateSprintParticipants()"> Save </md-button>

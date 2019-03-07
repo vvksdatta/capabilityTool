@@ -2865,7 +2865,9 @@
             })
           });
         }
+          $scope.RoleDisplay = true;
         $scope.filterPeople = function(selectedRole) {
+          $scope.RoleDisplay = false;
           $scope.isAllSelected = false;
           $scope.selectedRole = selectedRole;
           //$scope.drop[selectedRole] = true;
@@ -4228,9 +4230,11 @@
             })
           });
         }
+        $scope.RoleDisplay = true;
         $scope.filterPeople = function(selectedRole) {
           $scope.isAllSelected = false;
           $scope.selectedRole = selectedRole;
+              $scope.RoleDisplay = false;
           //$scope.drop[selectedRole] = true;
           angular.forEach($scope.selectedRoles, function(value,key){
             if(key == selectedRole){
