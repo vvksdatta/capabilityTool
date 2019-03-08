@@ -1,0 +1,32 @@
+<md-dialog aria-label="Add new domain" id="addDomain">
+  <md-toolbar>
+    <div class="md-toolbar-tools">
+      <h2 style="color: white;">Edit sprint requirement details</h2>
+      <span flex></span>
+      <md-button class="md-icon-button" ng-click="cancel()">
+        <md-icon md-svg-src="photos/if_cross-24_103181.svg" aria-label="Close dialog"></md-icon>
+      </md-button>
+    </div>
+  </md-toolbar>
+  <md-dialog-content ng-cloak>
+    <div class="md-dialog-content">
+      <form class="form-horizontal" role="form">
+        <div class="form-group">
+          <label class="col-sm-3 control-label"> Requirement name <sup class="sup-color">*</sup></label>
+          <div class="col-sm-8">
+            <input type="text" ng-model="tmp.sprintRequirementName" placeholder="Requirement name" class="form-control">
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="col-sm-3 control-label"> Requirement description <sup class="sup-color">*</sup></label>
+          <div class="col-sm-8">
+            <textarea rows="3" cols="50" class="form-control-textarea"  id="sprintDescription" name="sprintDescription" placeholder=" Requirement description"  ng-model="tmp.sprintRequirementDescription" > </textarea>
+          </div>
+        </div>
+      </form>
+    </div>
+  </md-dialog-content>
+  <md-dialog-actions>
+    <md-button aria-label="Finished" ng-click="finish($event,tmp)">Update</md-button>
+  </md-dialog-actions>
+</md-dialog>

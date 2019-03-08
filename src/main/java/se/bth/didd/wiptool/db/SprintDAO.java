@@ -304,7 +304,33 @@ public interface SprintDAO {
 	void updateIdentifiersInSprintParticipationTable(@Bind("projectId") int projectId, @Bind("sprintId") int sprintId,
 			@Bind("personId") int personId, @Bind("identifier") String identifier );
 	
+	@SqlUpdate("update SPRINTDEVELOPMENTENVDB set envName= :envName where envId = :envId")
+	void updateEnv(@BindBean SprintDevelopmentEnvironment env);
+	
+	@SqlUpdate("update SPRINTASSETSDB set assetName= :assetName where assetId = :assetId")
+	void updateAsset(@BindBean SprintAsset env);
+	
+	@SqlUpdate("update SPRINTREQUIREMENTSDB set sprintRequirementName= :sprintRequirementName, sprintRequirementDescription = :sprintRequirementDescription  where sprintRequirementId = :sprintRequirementId")
+	void updateRequirement(@BindBean SprintRequirement requirement);
+
 	@SqlUpdate("DELETE FROM sprintparticipation WHERE sprintId=  :sprintId and projectId =:projectId and personId NOT IN (select personId from sprintparticipation where personExists =1)")
 	void deletePeopleWhoNoLongerParticipate(@Bind("projectId") int projectId, @Bind("sprintId") int sprintId);
 
+	@SqlUpdate("Delete from SPRINTDEVELOPMENTENVDB where envId = :envId")
+	void deleteEnvironment(@Bind("envId") Integer envId);
+	
+	@SqlUpdate("Delete from DEVELOPMENT_ENV_IN_A_SPRINT where envId = :envId")
+	void deleteEnvFromSprintDevDB(@Bind("envId") Integer envId);
+	
+	@SqlUpdate("Delete from SPRINTASSETSDB where assetId = :assetId")
+	void deleteAsset(@Bind("assetId") Integer assetId);
+	
+	@SqlUpdate("Delete from ASSETSINASPRINT where assetId = :assetId")
+	void deleteAssetFromAssetsInSprint(@Bind("assetId") Integer assetId);
+	
+	@SqlUpdate("Delete from SPRINTREQUIREMENTSDB where sprintRequirementId = :sprintRequirementId")
+	void deleteRequirement(@Bind("sprintRequirementId") Integer sprintRequirementId);
+	
+	@SqlUpdate("Delete from REQUIREMENTSSELECTEDFORSPRINT where sprintRequirementId = :sprintRequirementId")
+	void deleteRequirementFromRequirementInSprint(@Bind("sprintRequirementId") Integer sprintRequirementId);
 }

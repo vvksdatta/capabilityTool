@@ -1483,9 +1483,181 @@
         });
       });
     };
-
   });
-  app.controller('editDevelopmentEnvRepo', function($scope, $state, $location, $http, alertFactory, $q, dataService,  $localStorage, $log, $rootScope) {
+  app.controller('editDevelopmentEnvRepo', function($scope, $state, $location, $http, alertFactory, $q, dataService,  $localStorage, $log, $rootScope, $window, $mdDialog, $timeout) {
+    if($rootScope.alerts.length !=0){
+      angular.forEach($rootScope.alerts, function(value, key) {
+        var alert = {};
+        alert = $rootScope.alerts[key];
+        if(alert.type == 'info'){
+          $rootScope.alerts.splice(key,1);
+        }
+      });
+    };
+    $http.get('/api/sprints/getAllSprintDevelopmentEnvironments').then(function(response)
+    {
+      $scope.developmentEnvironmentsList = response.data;
+    })
+    .catch(function(response, status) {
+      var optionalDelay = 5000;
+      var $string = "Error in fetching list of development environments";
+      alertFactory.addAuto('danger', $string, optionalDelay);
+    })
+    var tabClasses;
+    function initTabs() {
+      tabClasses = ["","","","",""];
+    }
+    $scope.getTabClass = function (tabNum) {
+      return tabClasses[tabNum];
+    };
+    $scope.getTabPaneClass = function (tabNum) {
+      return "tab-pane " + tabClasses[tabNum];
+    }
+    $scope.setActiveTab = function (tabNum) {
+      initTabs();
+      tabClasses[tabNum] = "active";
+    };
+    initTabs();
+    $scope.editEnvDetails =function($event, env){
+      $scope.tmp = env;
+      $mdDialog.show({
+        controller: function DialogCtrl ($timeout, $q, $scope, $mdDialog, $http, alertFactory, $state) {
+          $scope.cancel = function($event) {
+            $mdDialog.cancel();
+          }
+          $scope.finish = function($event, env) {
+            $http.post('/api/sprints/editEnvDetails',env).then(function(response) {
+              var $string = "updated the development environment "+env.envName+"!";
+              var optionalDelay = 2000;
+              $mdDialog.hide();
+              alertFactory.addAuto('success', $string, optionalDelay);
+            })
+            .catch(function(response, status) {
+              var optionalDelay = 5000;
+              var $string = "Error in updating "+env.envName;
+              alertFactory.addAuto('danger', $string, optionalDelay);
+            });
+          }
+        },
+        templateUrl: 'repositories/dialog1.tmpl.html',
+        parent: angular.element(document.body),
+        targetEvent: $event,
+        scope: $scope,
+        preserveScope: true,
+        clickOutsideToClose:true
+      })
+    };
+    $scope.deleteEnv =function(ev,env){
+      var confirm = $mdDialog.confirm()
+      .title('Would you like to delete the development environment '+env.envName+ ' ?')
+      .textContent('This will delete the entry from the repository')
+      .ariaLabel('')
+      .targetEvent(ev)
+      .ok('Delete!')
+      .cancel('Cancel');
+      $mdDialog.show(confirm).then(function() {
+        $http.delete('/api/sprints/deleteEnv/'+env.envId).then(function(response) {
+          var $string = "Deleted the development environment "+env.envName;
+          var optionalDelay = 3000;
+          alertFactory.addAuto('success', $string, optionalDelay);
+          $scope.developmentEnvironmentsList = response.data;
+        })
+        .catch(function(response, status) {
+          var optionalDelay = 5000;
+          var $string = "Error in deleting the environment "+env.envName;
+          alertFactory.addAuto('danger', $string, optionalDelay);
+        });
+      });
+    };
+  });
+  app.controller('editSprintAssetsRepo', function($scope, $state, $location, $http, alertFactory, $q, dataService,  $localStorage, $log, $rootScope, $window, $mdDialog, $timeout) {
+    if($rootScope.alerts.length !=0){
+      angular.forEach($rootScope.alerts, function(value, key) {
+        var alert = {};
+        alert = $rootScope.alerts[key];
+        if(alert.type == 'info'){
+          $rootScope.alerts.splice(key,1);
+        }
+      });
+    };
+    $http.get('/api/sprints/getAllSprintAssets').then(function(response)
+    {
+      $scope.assetsList= response.data;
+    })
+    .catch(function(response, status) {
+      //	$scope.loading = false;
+      var optionalDelay = 5000;
+      var $string = "Error in fetching updated list of assets";
+      alertFactory.addAuto('danger', $string, optionalDelay);
+    });
+    var tabClasses;
+    function initTabs() {
+      tabClasses = ["","","","",""];
+    }
+    $scope.getTabClass = function (tabNum) {
+      return tabClasses[tabNum];
+    };
+    $scope.getTabPaneClass = function (tabNum) {
+      return "tab-pane " + tabClasses[tabNum];
+    }
+    $scope.setActiveTab = function (tabNum) {
+      initTabs();
+      tabClasses[tabNum] = "active";
+    };
+    initTabs();
+    $scope.editEnvDetails =function($event, env){
+      $scope.tmp = env;
+      $mdDialog.show({
+        controller: function DialogCtrl ($timeout, $q, $scope, $mdDialog, $http, alertFactory, $state) {
+          $scope.cancel = function($event) {
+            $mdDialog.cancel();
+          }
+          $scope.finish = function($event, env) {
+            $http.post('/api/sprints/editAssetDetails',env).then(function(response) {
+              var $string = "updated the asset "+env.assetName+"!";
+              var optionalDelay = 2000;
+              $mdDialog.hide();
+              alertFactory.addAuto('success', $string, optionalDelay);
+            })
+            .catch(function(response, status) {
+              var optionalDelay = 5000;
+              var $string = "Error in updating "+env.assetName;
+              alertFactory.addAuto('danger', $string, optionalDelay);
+            });
+          }
+        },
+        templateUrl: 'repositories/dialog2.tmpl.html',
+        parent: angular.element(document.body),
+        targetEvent: $event,
+        scope: $scope,
+        preserveScope: true,
+        clickOutsideToClose:true
+      })
+    };
+    $scope.deleteEnv =function(ev,env){
+      var confirm = $mdDialog.confirm()
+      .title('Would you like to delete the asset '+env.assetName+ ' ?')
+      .textContent('This will delete the entry from the repository')
+      .ariaLabel('')
+      .targetEvent(ev)
+      .ok('Delete!')
+      .cancel('Cancel');
+      $mdDialog.show(confirm).then(function() {
+        $http.delete('/api/sprints/deleteAsset/'+env.assetId).then(function(response) {
+          var $string = "Deleted the asset "+env.assetName;
+          var optionalDelay = 3000;
+          alertFactory.addAuto('success', $string, optionalDelay);
+          $scope.assetsList = response.data;
+        })
+        .catch(function(response, status) {
+          var optionalDelay = 5000;
+          var $string = "Error in deleting the asset "+env.assetName;
+          alertFactory.addAuto('danger', $string, optionalDelay);
+        });
+      });
+    };
+  });
+  app.controller('editSprintDomainsRepo', function($scope, $state, $location, $http, alertFactory, $q, dataService,  $localStorage, $log, $rootScope, $window, $mdDialog, $timeout) {
     if($rootScope.alerts.length !=0){
       angular.forEach($rootScope.alerts, function(value, key) {
         var alert = {};
@@ -1496,7 +1668,7 @@
       });
     };
   });
-  app.controller('editSprintAssetsRepo', function($scope, $state, $location, $http, alertFactory, $q, dataService,  $localStorage, $log, $rootScope) {
+  app.controller('editSprintRequirementsRepo', function($scope, $state, $location, $http, alertFactory, $q, dataService,  $localStorage, $log, $rootScope, $window, $mdDialog, $timeout) {
     if($rootScope.alerts.length !=0){
       angular.forEach($rootScope.alerts, function(value, key) {
         var alert = {};
@@ -1506,26 +1678,80 @@
         }
       });
     };
-  });
-  app.controller('editSprintDomainsRepo', function($scope, $state, $location, $http, alertFactory, $q, dataService,  $localStorage, $log, $rootScope) {
-    if($rootScope.alerts.length !=0){
-      angular.forEach($rootScope.alerts, function(value, key) {
-        var alert = {};
-        alert = $rootScope.alerts[key];
-        if(alert.type == 'info'){
-          $rootScope.alerts.splice(key,1);
-        }
-      });
+    $http.get('/api/sprints/getAllSprintRequirements').then(function(response)
+    {
+      $scope.assetsList= response.data;
+    })
+    .catch(function(response, status) {
+      //	$scope.loading = false;
+      var optionalDelay = 5000;
+      var $string = "Error in fetching updated list of sprint requirements";
+      alertFactory.addAuto('danger', $string, optionalDelay);
+    });
+    var tabClasses;
+    function initTabs() {
+      tabClasses = ["","","","",""];
+    }
+    $scope.getTabClass = function (tabNum) {
+      return tabClasses[tabNum];
     };
-  });
-  app.controller('editSprintRequirementsRepo', function($scope, $state, $location, $http, alertFactory, $q, dataService,  $localStorage, $log, $rootScope) {
-    if($rootScope.alerts.length !=0){
-      angular.forEach($rootScope.alerts, function(value, key) {
-        var alert = {};
-        alert = $rootScope.alerts[key];
-        if(alert.type == 'info'){
-          $rootScope.alerts.splice(key,1);
-        }
+    $scope.getTabPaneClass = function (tabNum) {
+      return "tab-pane " + tabClasses[tabNum];
+    }
+    $scope.setActiveTab = function (tabNum) {
+      initTabs();
+      tabClasses[tabNum] = "active";
+    };
+    initTabs();
+    $scope.editEnvDetails =function($event, env){
+      $scope.tmp = env;
+      $mdDialog.show({
+        controller: function DialogCtrl ($timeout, $q, $scope, $mdDialog, $http, alertFactory, $state) {
+          $scope.cancel = function($event) {
+            $mdDialog.cancel();
+          }
+          $scope.finish = function($event, env) {
+            $http.post('/api/sprints/editRequirementDetails',env).then(function(response) {
+              var $string = "updated the requirement "+env.sprintRequirementName+"!";
+              var optionalDelay = 2000;
+              $mdDialog.hide();
+              alertFactory.addAuto('success', $string, optionalDelay);
+            })
+            .catch(function(response, status) {
+              var optionalDelay = 5000;
+              var $string = "Error in updating "+env.sprintRequirementName;
+              alertFactory.addAuto('danger', $string, optionalDelay);
+            });
+          }
+        },
+        templateUrl: 'repositories/dialog3.tmpl.html',
+        parent: angular.element(document.body),
+        targetEvent: $event,
+        scope: $scope,
+        preserveScope: true,
+        clickOutsideToClose:true
+      })
+    };
+    $scope.deleteEnv =function(ev,env){
+      var confirm = $mdDialog.confirm()
+      .title('Would you like to delete the requirement '+env.sprintRequirementName+ ' ?')
+      .textContent('This will delete the entry from the repository')
+      .ariaLabel('')
+      .targetEvent(ev)
+      .ok('Delete!')
+      .cancel('Cancel');
+      $mdDialog.show(confirm).then(function() {
+        $http.delete('/api/sprints/deleteRequirement/'+env.sprintRequirementId).then(function(response) {
+          var $string = "Deleted the requirement "+env.sprintRequirementName;
+          var optionalDelay = 3000;
+          alertFactory.addAuto('success', $string, optionalDelay);
+          $scope.assetsList = response.data;
+        })
+        .catch(function(response, status) {
+          var optionalDelay = 5000;
+          var $string = "Error in deleting the requirement "+env.sprintRequirementName;
+          alertFactory.addAuto('danger', $string, optionalDelay);
+        });
       });
     };
   });

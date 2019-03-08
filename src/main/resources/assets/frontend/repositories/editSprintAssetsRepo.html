@@ -1,0 +1,67 @@
+<style>
+  p {
+    display: inline;
+  }
+  .glyphicon.glyphicon-edit {
+    font-size: 25px;
+  }
+  .glyphicon.glyphicon-trash {
+    font-size: 25px;
+  }
+</style>
+<script>
+  $(".nav-tabs li").eq(0).removeClass("active");
+  $(".nav-tabs li").eq(1).removeClass("active");
+  $(".nav-tabs li").eq(2).removeClass("active");
+  $(".nav-tabs li").eq(3).addClass("active");
+  $(".nav-tabs li").eq(4).removeClass("active");
+</script>
+<md-whiteframe class="md-whiteframe-18dp"  layout layout-align="center center" style="margin-bottom: 50px;">
+  <div class="col-md-12" style="padding-left: 0px; padding-right: 0px;">
+    <div class="panel panel-default-table panel-table" style="margin-bottom: 0px;">
+      <div class="panel-heading">
+        <input ng-if="assetsList.length != 0" type="text" style="margin-top: 10px;" class="form-control" id="dev-table-filter" data-action="filter" data-filters="#dev-table" placeholder="Filter skill"/>
+        <div class="pull-right">
+          <span class="clickable filter" data-toggle="tooltip" title="Toggle table filter" data-container="body"></span>
+        </div>
+      </div>
+      <div class="panel-body project-table-responsive">
+        <md-whiteframe class="md-whiteframe-24dp"  layout layout-align="center center">
+          <table class="table table-hover" id="dev-table">
+            <thead>
+              <tr ng-if="assetsList.length != 0">
+                <th>Asset Name </th>
+                <th>Edit</th>
+                <th>Delete</th>
+              </tr>
+            </thead>
+            <col width="50%" />
+            <col width="25%" />
+            <col width="25%" />
+            <tbody>
+              <tr ng-repeat="env in assetsList" >
+                <td>
+                  <div>{{env.assetName | capitalize }}</div>
+                </td>
+                <td>
+                  <span class="pull-center"><i ng-click="editEnvDetails($event,env)" class="glyphicon glyphicon-edit"></i><md-tooltip md-direction="right"> Edit the details of {{env.assetName}} </md-tooltip></i></span>
+                </td>
+                <td>
+                  <span class="pull-center"><i ng-click="deleteEnv($event,env)" class="glyphicon glyphicon glyphicon-trash"></i><md-tooltip md-direction="right"> Delete {{env.assetName}} </md-tooltip></i></span>
+                </td>
+              </tr>
+              <tr ng-if="assetsList.length == 0">
+                <td colspan="5">
+                  <div style="margin-top: 15px;" class="alert alert-info" role="alert">
+                    <strong>Info: </strong> No sprint assets added yet! You can add new sprint assets while creating a new sprint or editing an exisiting sprint's details.
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </md-whiteframe>
+      </div>
+    </div>
+  </div>
+</md-whiteframe>
+<script src="js/searchText.js"></script>

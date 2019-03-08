@@ -409,6 +409,20 @@ public class SprintResource {
 	public List<SprintAsset> getAllAsets() {
 		return sprintDAO.getAllAssets();
 	}
+	
+	@GET
+	@Path("/getAllSprintRequirements")
+	public Response getAllRequirements() {
+		try {
+		List<SprintRequirement>	requiremnetsList = sprintDAO.getAllRequirements();
+			return Response.ok(requiremnetsList).build();
+		
+		} catch (Exception e) {
+			System.out.println(e);
+			return Response.status(Status.BAD_REQUEST).entity(e).build();
+		}
+	}
+
 
 	@GET
 	@Path("/getAllSprintDomainsAssets")
@@ -896,4 +910,101 @@ public class SprintResource {
 	public Sprint get(@PathParam("id") Integer id) {
 		return sprintDAO.findBySprintId(id);
 	}
+	
+	@POST
+	@Path("/editEnvDetails")
+	public Response updateEnv(SprintDevelopmentEnvironment env) {
+		try {
+			sprintDAO.updateEnv(env);
+		} catch (Exception e) {
+			return Response.status(Status.BAD_REQUEST).entity(e).build();
+		}
+		SuccessMessage success = new SuccessMessage();
+		success.setSuccess("success");
+		return Response.ok(success).build();
+	}
+	
+	@POST
+	@Path("/editAssetDetails")
+	public Response updateAsset(SprintAsset env) {
+		try {
+			sprintDAO.updateAsset(env);
+		} catch (Exception e) {
+			return Response.status(Status.BAD_REQUEST).entity(e).build();
+		}
+		SuccessMessage success = new SuccessMessage();
+		success.setSuccess("success");
+		return Response.ok(success).build();
+	}
+	
+	@POST
+	@Path("/editRequirementDetails")
+	public Response updateRequirement(SprintRequirement requirement) {
+		try {
+			sprintDAO.updateRequirement(requirement);
+		} catch (Exception e) {
+			return Response.status(Status.BAD_REQUEST).entity(e).build();
+		}
+		SuccessMessage success = new SuccessMessage();
+		success.setSuccess("success");
+		return Response.ok(success).build();
+	}
+
+	@DELETE
+	@Path("/deleteEnv/{id}")
+	public Response deleteEnv(@PathParam("id") Integer envId) {
+		try {
+			sprintDAO.deleteEnvFromSprintDevDB(envId);
+			sprintDAO.deleteEnvironment(envId);
+		} catch (Exception e) {
+			return Response.status(Status.BAD_REQUEST).entity(e).build();
+		}
+		try {
+			List<SprintDevelopmentEnvironment> skillsList = sprintDAO.getAllDevelopmentEnv();
+			return Response.ok(skillsList).build();
+
+		} catch (Exception e) {
+			return Response.status(Status.BAD_REQUEST).entity(e).build();
+		}
+
+	}
+	
+	@DELETE
+	@Path("/deleteAsset/{id}")
+	public Response deleteAsset(@PathParam("id") Integer assetId) {
+		try {
+			sprintDAO.deleteAssetFromAssetsInSprint(assetId);
+			sprintDAO.deleteAsset(assetId);
+		} catch (Exception e) {
+			return Response.status(Status.BAD_REQUEST).entity(e).build();
+		}
+		try {
+			List<SprintAsset> assetsList = sprintDAO.getAllAssets();
+			return Response.ok(assetsList).build();
+
+		} catch (Exception e) {
+			return Response.status(Status.BAD_REQUEST).entity(e).build();
+		}
+
+	}
+	
+	@DELETE
+	@Path("/deleteRequirement/{id}")
+	public Response deleteRequirement(@PathParam("id") Integer sprintRequirementId) {
+		try {
+			sprintDAO.deleteRequirementFromRequirementInSprint(sprintRequirementId);
+			sprintDAO.deleteRequirement(sprintRequirementId);
+		} catch (Exception e) {
+			return Response.status(Status.BAD_REQUEST).entity(e).build();
+		}
+		try {
+			List<SprintRequirement> requirementsList = sprintDAO.getAllRequirements();
+			return Response.ok(requirementsList).build();
+
+		} catch (Exception e) {
+			return Response.status(Status.BAD_REQUEST).entity(e).build();
+		}
+
+	}
+	
 }

@@ -191,10 +191,6 @@ $(".nav-tabs li").eq(5).removeClass("active");
       <div class="list-group-item">Select Role:
         <select ng-model="selectedRole" ng-cloak ng-change="filterPeople(selectedRole)"> <option ng-repeat="role in rolesList"   value= {{role.roleName}}> {{role.roleName}} </option></select>
       </div>
-      <div class="inner-addon left-addon" ng-show="selectedRole">
-          <i class="glyphicon glyphicon-filter"></i>
-      <input type="text" style="margin-top: 10px;" class="form-control"  data-action="filter"  placeholder="Filter people" ng-model="searchPeople"/>
-      </div>
       <div style="max-height:23vh;overflow-x:hidden;overflow-y:auto;">
         <div   ng-if="item.roleName == selectedRole && show" ng-cloak class="" ng-repeat="item in rolesOfPeople"  class="btn btn-block btn-droppable list-group-item" data-drop="true" data-jqyoui-options="{accept:'.btn-draggable:not([ng-model=peopleList])'}"  jqyoui-droppable="{index: {{$index}}}" >
           <div ng-if="item.roleName == selectedRole" style = "display: inline-flex;padding: 5px 10px;margin-bottom: 2px;" class="btn btn-block list-group-item" ng-repeat="person in peopleList" ng-click="showGraph(person);" ng-show="person.personId == item.personId" ng-model='peopleList'>
