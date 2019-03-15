@@ -1398,7 +1398,7 @@
       alertFactory.addAuto('danger', $string, optionalDelay);
     });
   });
-  app.controller('editSkillRepository', function($scope, $state, $location, $http, alertFactory, $q, dataService,  $localStorage, $log, $rootScope, $window, $mdDialog, $timeout) {
+  app.controller('editSkillRepository', function($scope, $state, $location, $http, alertFactory, $q, dataService,  $localStorage, $log, $rootScope, $window, $mdDialog, $timeout, GetProgrammingSkillsService) {
     if($rootScope.alerts.length !=0){
       angular.forEach($rootScope.alerts, function(value, key) {
         var alert = {};
@@ -1461,6 +1461,59 @@
         clickOutsideToClose:true
       })
     };
+    $scope.openDialog =function($event){
+      $mdDialog.show({
+        controller: function DialogCtrl3 ($timeout, $q, $scope, $mdDialog, GetProgrammingSkillsService, $http, alertFactory, $state, newEnvironments) {
+          // list of `state` value/display objects
+          $scope.searchText = "";
+          $scope.selectedItem = [];
+          $scope.isDisabled = false;
+          $scope.noCache = true;
+          $scope.extraEnvironmentsList = null;
+          $scope.cancel = function($event) {
+            $mdDialog.cancel();
+          };
+          $scope.finish = function($event) {
+            $mdDialog.hide();
+            //$state.go("management.sprints.addSprint.newSprint");
+          };
+          $scope.searchTextChange = function (str) {
+            return  GetProgrammingSkillsService.getCountry(str);
+          }
+          $scope.addEnv = function($event,skill){
+            if(  $scope.searchText != ""){
+              $http.post('/api/skills/insertSkill',skill).then(function(response) {
+                var skillNew = {};
+                skillNew.skillId = 0;
+                skillNew.skillName = skill;
+                $scope.programmingSkillsList.push(skillNew);
+                var $string = "Added "+ skillNew.skillName+ " to skills database!";
+                var optionalDelay = 3000;
+                $mdDialog.hide();
+                alertFactory.addAuto('success', $string, optionalDelay);
+              })
+              .catch(function(response, status) {
+                var optionalDelay = 5000;
+                var $string = "Error in adding skill to skills database";
+                alertFactory.addAuto('danger', $string, optionalDelay);
+              });
+            }
+            else{
+              var optionalDelay = 3000;
+              var $string = "Skill name cannot be empty";
+              alertFactory.addAuto('danger', $string, optionalDelay);
+            }
+          }
+        },
+        templateUrl: 'repositories/newSkill.html',
+        scope: $scope,
+        preserveScope: true,
+        //parent: angular.element(document.getElementById('extraEnvironments')),
+        parent: angular.element(document.body),
+        targetEvent: $event,
+        clickOutsideToClose:true
+      })
+    }
     $scope.deleteSkill =function(ev,skill){
       var confirm = $mdDialog.confirm()
       .title('Would you like to delete the skill '+skill.skillName+ ' ?')
