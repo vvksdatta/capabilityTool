@@ -310,6 +310,9 @@ public interface SprintDAO {
 	@SqlUpdate("update SPRINTASSETSDB set assetName= :assetName where assetId = :assetId")
 	void updateAsset(@BindBean SprintAsset env);
 	
+	@SqlUpdate("update SPRINTDOMAINSDB set domainName= :domainName where domainId = :domainId")
+	void updateDomain(@BindBean SprintDomain env);
+	
 	@SqlUpdate("update SPRINTREQUIREMENTSDB set sprintRequirementName= :sprintRequirementName, sprintRequirementDescription = :sprintRequirementDescription  where sprintRequirementId = :sprintRequirementId")
 	void updateRequirement(@BindBean SprintRequirement requirement);
 
@@ -333,4 +336,10 @@ public interface SprintDAO {
 	
 	@SqlUpdate("Delete from REQUIREMENTSSELECTEDFORSPRINT where sprintRequirementId = :sprintRequirementId")
 	void deleteRequirementFromRequirementInSprint(@Bind("sprintRequirementId") Integer sprintRequirementId);
+	
+	@SqlUpdate("Delete from SPRINTDOMAINSDB where domainId = :domainId")
+	void deleteDoamin(@Bind("domainId") Integer domainId);
+	
+	@SqlUpdate("Delete from DOMAINSINASPRINT where domainId = :domainId")
+	void deleteDomainFromDomainsInSprint(@Bind("domainId") Integer domainId);
 }

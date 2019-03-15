@@ -1680,12 +1680,12 @@
     };
     $http.get('/api/sprints/getAllSprintRequirements').then(function(response)
     {
-      $scope.assetsList= response.data;
+      $scope.requirementsList= response.data;
     })
     .catch(function(response, status) {
       //	$scope.loading = false;
       var optionalDelay = 5000;
-      var $string = "Error in fetching updated list of sprint requirements";
+      var $string = "Error in fetching list of sprint requirements";
       alertFactory.addAuto('danger', $string, optionalDelay);
     });
     var tabClasses;
@@ -1745,7 +1745,7 @@
           var $string = "Deleted the requirement "+env.sprintRequirementName;
           var optionalDelay = 3000;
           alertFactory.addAuto('success', $string, optionalDelay);
-          $scope.assetsList = response.data;
+          $scope.requirementsList = response.data;
         })
         .catch(function(response, status) {
           var optionalDelay = 5000;

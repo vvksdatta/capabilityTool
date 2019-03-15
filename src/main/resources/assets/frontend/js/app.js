@@ -1484,7 +1484,7 @@
       });
     };
   });
-  app.controller('editDevelopmentEnvRepo', function($scope, $state, $location, $http, alertFactory, $q, dataService,  $localStorage, $log, $rootScope, $window, $mdDialog, $timeout) {
+  app.controller('editDevelopmentEnvRepo', function($scope, $state, $location, $http, alertFactory, $q, dataService,  $localStorage, $log, $rootScope, $window, $mdDialog, $timeout, GetSprintEnvironmentsService,) {
     if($rootScope.alerts.length !=0){
       angular.forEach($rootScope.alerts, function(value, key) {
         var alert = {};
@@ -1547,6 +1547,62 @@
         clickOutsideToClose:true
       })
     };
+    $scope.openDialog =function($event){
+      $mdDialog.show({
+        controller: function DialogCtrl3 ($timeout, $q, $scope, $mdDialog, GetSprintEnvironmentsService, $http, alertFactory, $state, newEnvironments) {
+          // list of `state` value/display objects
+          $scope.searchText = "";
+          $scope.selectedItem = [];
+          $scope.isDisabled = false;
+          $scope.noCache = true;
+          $scope.extraEnvironmentsList = null;
+          $scope.cancel = function($event) {
+            $mdDialog.cancel();
+          };
+          $scope.finish = function($event) {
+            $mdDialog.hide();
+            //$state.go("management.sprints.addSprint.newSprint");
+          };
+          $scope.searchTextChange = function (str) {
+            return  GetSprintEnvironmentsService.getEnvironments(str);
+          }
+          $scope.addEnv = function($event,envi){
+            if(  $scope.searchText != ""){
+              $http.post('/api/sprints/insertEnvironment',envi).then(function(response) {
+                //$scope.searchTextChange();
+                var addedEnvironment = {};
+                addedEnvironment.envId = 0;
+                addedEnvironment.envName = envi;
+                var $string = "Added "+ addedEnvironment.envName +" to the catalogue of enironments!";
+                //$scope.extraDomainsList = addedDomain;
+                $scope.developmentEnvironmentsList.push(addedEnvironment);
+                newEnvironments.setAddedEnvironments(addedEnvironment);
+                var optionalDelay = 2000;
+                $mdDialog.hide();
+                alertFactory.addAuto('success', $string, optionalDelay);
+              })
+              .catch(function(response, status) {
+                var optionalDelay = 5000;
+                var $string = "Error in adding"+envi+" to the list of environments";
+                alertFactory.addAuto('danger', $string, optionalDelay);
+              });
+            }
+            else{
+              var optionalDelay = 3000;
+              var $string = "Environment name cannot be empty";
+              alertFactory.addAuto('danger', $string, optionalDelay);
+            }
+          }
+        },
+        templateUrl: 'repositories/newDevelopmentEnvironment.html',
+        scope: $scope,
+        preserveScope: true,
+        //parent: angular.element(document.getElementById('extraEnvironments')),
+        parent: angular.element(document.body),
+        targetEvent: $event,
+        clickOutsideToClose:true
+      })
+    }
     $scope.deleteEnv =function(ev,env){
       var confirm = $mdDialog.confirm()
       .title('Would you like to delete the development environment '+env.envName+ ' ?')
@@ -1665,6 +1721,82 @@
         if(alert.type == 'info'){
           $rootScope.alerts.splice(key,1);
         }
+      });
+    };
+    $http.get('/api/sprints/getAllSprintDomains').then(function(response)
+    {
+      $scope.domainsList= response.data;
+    })
+    .catch(function(response, status) {
+      //	$scope.loading = false;
+      var optionalDelay = 5000;
+      var $string = "Error in fetching updated list of domains";
+      alertFactory.addAuto('danger', $string, optionalDelay);
+    });
+    var tabClasses;
+    function initTabs() {
+      tabClasses = ["","","","",""];
+    }
+    $scope.getTabClass = function (tabNum) {
+      return tabClasses[tabNum];
+    };
+    $scope.getTabPaneClass = function (tabNum) {
+      return "tab-pane " + tabClasses[tabNum];
+    }
+    $scope.setActiveTab = function (tabNum) {
+      initTabs();
+      tabClasses[tabNum] = "active";
+    };
+    initTabs();
+    $scope.editEnvDetails =function($event, env){
+      $scope.tmp = env;
+      $mdDialog.show({
+        controller: function DialogCtrl ($timeout, $q, $scope, $mdDialog, $http, alertFactory, $state) {
+          $scope.cancel = function($event) {
+            $mdDialog.cancel();
+          }
+          $scope.finish = function($event, env) {
+            $http.post('/api/sprints/editDomainDetails',env).then(function(response) {
+              var $string = "updated the domain "+env.domainName+"!";
+              var optionalDelay = 2000;
+              $mdDialog.hide();
+              alertFactory.addAuto('success', $string, optionalDelay);
+            })
+            .catch(function(response, status) {
+              var optionalDelay = 5000;
+              var $string = "Error in updating "+env.domainName;
+              alertFactory.addAuto('danger', $string, optionalDelay);
+            });
+          }
+        },
+        templateUrl: 'repositories/dialog4.tmpl.html',
+        parent: angular.element(document.body),
+        targetEvent: $event,
+        scope: $scope,
+        preserveScope: true,
+        clickOutsideToClose:true
+      })
+    };
+    $scope.deleteEnv =function(ev,env){
+      var confirm = $mdDialog.confirm()
+      .title('Would you like to delete the domain '+env.domainName+ ' ?')
+      .textContent('This will delete the entry from the repository')
+      .ariaLabel('')
+      .targetEvent(ev)
+      .ok('Delete!')
+      .cancel('Cancel');
+      $mdDialog.show(confirm).then(function() {
+        $http.delete('/api/sprints/deleteDomain/'+env.domainId).then(function(response) {
+          var $string = "Deleted the domain "+env.domainName;
+          var optionalDelay = 3000;
+          alertFactory.addAuto('success', $string, optionalDelay);
+          $scope.domainsList = response.data;
+        })
+        .catch(function(response, status) {
+          var optionalDelay = 5000;
+          var $string = "Error in deleting the domain "+env.domainName;
+          alertFactory.addAuto('danger', $string, optionalDelay);
+        });
       });
     };
   });

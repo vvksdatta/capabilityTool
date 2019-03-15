@@ -20,7 +20,8 @@
   <div class="col-md-12" style="padding-left: 0px; padding-right: 0px;">
     <div class="panel panel-default-table panel-table" style="margin-bottom: 0px;">
       <div class="panel-heading">
-        <input ng-if="developmentEnvironmentsList.length != 0" type="text" style="margin-top: 10px;" class="form-control" id="dev-table-filter" data-action="filter" data-filters="#dev-table" placeholder="Filter skill"/>
+        <md-button style="font-size: 15px; background-color: rgb(90, 132, 187);"  type="submit"  class="add-tab md-primary md-raised" ng-click="openDialog($event)"><i class="glyphicon glyphicon-plus"></i>Add development environment</md-button>
+        <input  type="text" style="margin-top: 10px;" class="form-control" id="dev-table-filter" data-action="filter" data-filters="#dev-table" placeholder="Filter development environment"/>
         <div class="pull-right">
           <span class="clickable filter" data-toggle="tooltip" title="Toggle table filter" data-container="body"></span>
         </div>
@@ -53,7 +54,7 @@
               <tr ng-if="developmentEnvironmentsList.length == 0">
                 <td colspan="5">
                   <div style="margin-top: 15px;" class="alert alert-info" role="alert">
-                    <strong>Info: </strong> No development environments added yet! You can add new development environment while creating a new sprint or editing an exisiting sprint's details.
+                    <strong>Info: </strong> No development environments added yet!
                   </div>
                 </td>
               </tr>

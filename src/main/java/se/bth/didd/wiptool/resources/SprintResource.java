@@ -938,6 +938,18 @@ public class SprintResource {
 	}
 	
 	@POST
+	@Path("/editDomainDetails")
+	public Response updateDomain(SprintDomain env) {
+		try {
+			sprintDAO.updateDomain(env);
+		} catch (Exception e) {
+			return Response.status(Status.BAD_REQUEST).entity(e).build();
+		}
+		SuccessMessage success = new SuccessMessage();
+		success.setSuccess("success");
+		return Response.ok(success).build();
+	}
+	@POST
 	@Path("/editRequirementDetails")
 	public Response updateRequirement(SprintRequirement requirement) {
 		try {
@@ -981,6 +993,25 @@ public class SprintResource {
 		try {
 			List<SprintAsset> assetsList = sprintDAO.getAllAssets();
 			return Response.ok(assetsList).build();
+
+		} catch (Exception e) {
+			return Response.status(Status.BAD_REQUEST).entity(e).build();
+		}
+
+	}
+	
+	@DELETE
+	@Path("/deleteDomain/{id}")
+	public Response deleteDomain(@PathParam("id") Integer domainId) {
+		try {
+			sprintDAO.deleteDomainFromDomainsInSprint(domainId);
+			sprintDAO.deleteDoamin(domainId);
+		} catch (Exception e) {
+			return Response.status(Status.BAD_REQUEST).entity(e).build();
+		}
+		try {
+			List<SprintDomain> domainsList = sprintDAO.getAllDomains();
+			return Response.ok(domainsList).build();
 
 		} catch (Exception e) {
 			return Response.status(Status.BAD_REQUEST).entity(e).build();
