@@ -40,7 +40,7 @@
             <col width="25%" />
             <col width="25%" />
             <tbody>
-              <tr ng-repeat="skill in programmingSkillsList" >
+              <tr ng-repeat="skill in programmingSkillsList | orderBy:'skillName'" >
                 <td>
                   <div>{{skill.skillName | capitalize }}</div>
                 </td>

@@ -88,6 +88,9 @@ public interface SprintDAO {
 
 	@SqlUpdate("insert into SPRINTREQUIREMENTSDB (sprintRequirementName) values(:sprintRequirementName)")
 	void insertNewSprintRequirement(@Bind("sprintRequirementName") String sprintRequirementName);
+	
+	@SqlUpdate("insert into SPRINTREQUIREMENTSDB (sprintRequirementName, sprintRequirementDescription) values(:sprintRequirementName, :sprintRequirementDescription)")
+	void insertNewSprintRequirementAndDescription(@BindBean SprintRequirement sprintRequirement);
 
 	@SqlUpdate("insert into SprintQuestionnaire (projectId, sprintId, question1, question2, question3, question4, question5, question6, question7, question8,"
 			+ " question1Comment, question2Comment, question3Comment, question4Comment, question5Comment, question6Comment, question7Comment, question8Comment, other,"

@@ -20,6 +20,7 @@
   <div class="col-md-12" style="padding-left: 0px; padding-right: 0px;">
     <div class="panel panel-default-table panel-table" style="margin-bottom: 0px;">
       <div class="panel-heading">
+        <md-button style="font-size: 15px; background-color: rgb(90, 132, 187);"  type="submit"  class="add-tab md-primary md-raised" ng-click="openDialog($event)"><i class="glyphicon glyphicon-plus"></i>Add asset</md-button>
         <input type="text" style="margin-top: 10px;" class="form-control" id="dev-table-filter" data-action="filter" data-filters="#dev-table" placeholder="Filter asset"/>
         <div class="pull-right">
           <span class="clickable filter" data-toggle="tooltip" title="Toggle table filter" data-container="body"></span>
@@ -39,7 +40,7 @@
             <col width="25%" />
             <col width="25%" />
             <tbody>
-              <tr ng-repeat="env in assetsList" >
+              <tr ng-repeat="env in assetsList | orderBy:'assetName'" >
                 <td>
                   <div>{{env.assetName | capitalize }}</div>
                 </td>

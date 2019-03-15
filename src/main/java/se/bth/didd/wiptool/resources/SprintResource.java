@@ -409,20 +409,19 @@ public class SprintResource {
 	public List<SprintAsset> getAllAsets() {
 		return sprintDAO.getAllAssets();
 	}
-	
+
 	@GET
 	@Path("/getAllSprintRequirements")
 	public Response getAllRequirements() {
 		try {
-		List<SprintRequirement>	requiremnetsList = sprintDAO.getAllRequirements();
+			List<SprintRequirement> requiremnetsList = sprintDAO.getAllRequirements();
 			return Response.ok(requiremnetsList).build();
-		
+
 		} catch (Exception e) {
 			System.out.println(e);
 			return Response.status(Status.BAD_REQUEST).entity(e).build();
 		}
 	}
-
 
 	@GET
 	@Path("/getAllSprintDomainsAssets")
@@ -482,11 +481,16 @@ public class SprintResource {
 				if (sprintDAO.ifPersonParticipatesInSprint(sprintdetails.getProjectId(), person.getPersonId(),
 						sprintdetails.getSprintId()) == false) {
 					sprintDAO.insertIntoSprintParticipation(sprintdetails.getProjectId(), person.getPersonId(),
-							sprintdetails.getSprintId(), sprintDAO.getLatestRedmineProjectIdentifier().get(0).getRedmineProjectIdentifier());
-					
-					/*sprintDAO.updateIdentifiersInSprintParticipationTable(sprintdetails.getProjectId(), person.getPersonId(),
-							sprintdetails.getSprintId(), sprintDAO.getLatestRedmineProjectIdentifier().get(0).getRedmineProjectIdentifier());
-					*/
+							sprintdetails.getSprintId(),
+							sprintDAO.getLatestRedmineProjectIdentifier().get(0).getRedmineProjectIdentifier());
+
+					/*
+					 * sprintDAO.updateIdentifiersInSprintParticipationTable(
+					 * sprintdetails.getProjectId(), person.getPersonId(),
+					 * sprintdetails.getSprintId(),
+					 * sprintDAO.getLatestRedmineProjectIdentifier().get(0).
+					 * getRedmineProjectIdentifier());
+					 */
 				}
 
 				sprintDAO.updateSprintParticipantDoesnotExist(sprintdetails.getProjectId(), sprintdetails.getSprintId(),
@@ -661,6 +665,21 @@ public class SprintResource {
 		}
 
 		return Response.status(Status.BAD_REQUEST).entity("error").build();
+	}
+
+	@POST
+	@Path("/insertRequirementAndDescription")
+	public Response insertRequirement(SprintRequirement newRequirement) {
+		try {
+			sprintDAO.insertNewSprintRequirementAndDescription(newRequirement);
+
+		} catch (Exception e1) {
+			System.out.println(e1);
+			return Response.status(Status.BAD_REQUEST).entity(e1).build();
+		}
+		SuccessMessage success = new SuccessMessage();
+		success.setSuccess("success");
+		return Response.ok(success).build();
 	}
 
 	@PUT
@@ -910,7 +929,7 @@ public class SprintResource {
 	public Sprint get(@PathParam("id") Integer id) {
 		return sprintDAO.findBySprintId(id);
 	}
-	
+
 	@POST
 	@Path("/editEnvDetails")
 	public Response updateEnv(SprintDevelopmentEnvironment env) {
@@ -923,7 +942,7 @@ public class SprintResource {
 		success.setSuccess("success");
 		return Response.ok(success).build();
 	}
-	
+
 	@POST
 	@Path("/editAssetDetails")
 	public Response updateAsset(SprintAsset env) {
@@ -936,7 +955,7 @@ public class SprintResource {
 		success.setSuccess("success");
 		return Response.ok(success).build();
 	}
-	
+
 	@POST
 	@Path("/editDomainDetails")
 	public Response updateDomain(SprintDomain env) {
@@ -949,6 +968,7 @@ public class SprintResource {
 		success.setSuccess("success");
 		return Response.ok(success).build();
 	}
+
 	@POST
 	@Path("/editRequirementDetails")
 	public Response updateRequirement(SprintRequirement requirement) {
@@ -980,7 +1000,7 @@ public class SprintResource {
 		}
 
 	}
-	
+
 	@DELETE
 	@Path("/deleteAsset/{id}")
 	public Response deleteAsset(@PathParam("id") Integer assetId) {
@@ -999,7 +1019,7 @@ public class SprintResource {
 		}
 
 	}
-	
+
 	@DELETE
 	@Path("/deleteDomain/{id}")
 	public Response deleteDomain(@PathParam("id") Integer domainId) {
@@ -1018,7 +1038,7 @@ public class SprintResource {
 		}
 
 	}
-	
+
 	@DELETE
 	@Path("/deleteRequirement/{id}")
 	public Response deleteRequirement(@PathParam("id") Integer sprintRequirementId) {
@@ -1037,5 +1057,5 @@ public class SprintResource {
 		}
 
 	}
-	
+
 }

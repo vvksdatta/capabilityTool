@@ -1483,11 +1483,7 @@
           $scope.addEnv = function($event,skill){
             if(  $scope.searchText != ""){
               $http.post('/api/skills/insertSkill',skill).then(function(response) {
-                var skillNew = {};
-                skillNew.skillId = 0;
-                skillNew.skillName = skill;
-                $scope.programmingSkillsList.push(skillNew);
-                var $string = "Added "+ skillNew.skillName+ " to skills database!";
+                var $string = "Added "+skill+ " to skills database!";
                 var optionalDelay = 3000;
                 $mdDialog.hide();
                 alertFactory.addAuto('success', $string, optionalDelay);
@@ -1632,14 +1628,7 @@
           $scope.addEnv = function($event,envi){
             if(  $scope.searchText != ""){
               $http.post('/api/sprints/insertEnvironment',envi).then(function(response) {
-                //$scope.searchTextChange();
-                var addedEnvironment = {};
-                addedEnvironment.envId = 0;
-                addedEnvironment.envName = envi;
-                var $string = "Added "+ addedEnvironment.envName +" to the catalogue of enironments!";
-                //$scope.extraDomainsList = addedDomain;
-                $scope.developmentEnvironmentsList.push(addedEnvironment);
-                newEnvironments.setAddedEnvironments(addedEnvironment);
+                var $string = "Added "+ envi +" to the catalogue of enironments!";
                 var optionalDelay = 2000;
                 $mdDialog.hide();
                 alertFactory.addAuto('success', $string, optionalDelay);
@@ -1699,7 +1688,7 @@
       });
     };
   });
-  app.controller('editSprintAssetsRepo', function($scope, $state, $location, $http, alertFactory, $q, dataService,  $localStorage, $log, $rootScope, $window, $mdDialog, $timeout) {
+  app.controller('editSprintAssetsRepo', function($scope, $state, $location, $http, alertFactory, $q, dataService,  $localStorage, $log, $rootScope, $window, $mdDialog, $timeout,GetSprintAssetsService) {
     if($rootScope.alerts.length !=0){
       angular.forEach($rootScope.alerts, function(value, key) {
         var alert = {};
@@ -1763,6 +1752,64 @@
         clickOutsideToClose:true
       })
     };
+    $scope.openDialog =function($event){
+      $mdDialog.show({
+        controller: function DialogCtrl ($timeout, $q, $scope, $mdDialog, GetSprintAssetsService, $http, alertFactory, $state) {
+          $scope.searchText = "";
+          $scope.selectedItem = [];
+          $scope.isDisabled = false;
+          $scope.noCache = true;
+          $scope.cancel = function($event) {
+            $mdDialog.cancel();
+          };
+          $scope.finish = function($event) {
+            $mdDialog.hide();
+            //$state.go("management.sprints.addSprint.newSprint");
+          };
+          $scope.searchTextChange = function (str) {
+            return  GetSprintAssetsService.getAssets(str);
+          }
+          $scope.addEnv = function($event,asset){
+            if(  $scope.searchText != ""){
+              $http.post('/api/sprints/insertAsset',asset).then(function(response) {
+                var $string = "Added "+asset+" to the catalogue of assets!";
+                var optionalDelay = 2000;
+                $mdDialog.hide();
+                alertFactory.addAuto('success', $string, optionalDelay);
+              }).then(function(){
+                $http.get('/api/sprints/getAllSprintAssets').then(function(response)
+                {
+                  $scope.assetsList= response.data;
+                })
+                .catch(function(response, status) {
+                  //	$scope.loading = false;
+                  var optionalDelay = 5000;
+                  var $string = "Error in fetching updated list of assets";
+                  alertFactory.addAuto('danger', $string, optionalDelay);
+                });
+              })
+              .catch(function(response, status) {
+                var optionalDelay = 5000;
+                var $string = "Error in adding "+envi+" to the list of assets";
+                alertFactory.addAuto('danger', $string, optionalDelay);
+              });
+            }
+            else{
+              var optionalDelay = 3000;
+              var $string = "Asset name cannot be empty";
+              alertFactory.addAuto('danger', $string, optionalDelay);
+            }
+          }
+        },
+        templateUrl: 'repositories/newAsset.html',
+        scope: $scope,
+        preserveScope: true,
+        //parent: angular.element(document.getElementById('extraEnvironments')),
+        parent: angular.element(document.body),
+        targetEvent: $event,
+        clickOutsideToClose:true
+      })
+    }
     $scope.deleteEnv =function(ev,env){
       var confirm = $mdDialog.confirm()
       .title('Would you like to delete the asset '+env.assetName+ ' ?')
@@ -1786,7 +1833,7 @@
       });
     };
   });
-  app.controller('editSprintDomainsRepo', function($scope, $state, $location, $http, alertFactory, $q, dataService,  $localStorage, $log, $rootScope, $window, $mdDialog, $timeout) {
+  app.controller('editSprintDomainsRepo', function($scope, $state, $location, $http, alertFactory, $q, dataService,  $localStorage, $log, $rootScope, $window, $mdDialog, $timeout, GetSprintDomainsService) {
     if($rootScope.alerts.length !=0){
       angular.forEach($rootScope.alerts, function(value, key) {
         var alert = {};
@@ -1850,6 +1897,63 @@
         clickOutsideToClose:true
       })
     };
+    $scope.openDialog =function($event){
+      $mdDialog.show({
+        controller: function DialogCtrl ($timeout, $q, $scope, $mdDialog, GetSprintDomainsService, $http, alertFactory, $state) {
+          $scope.searchText = "";
+          $scope.selectedItem = [];
+          $scope.isDisabled = false;
+          $scope.noCache = true;
+          $scope.cancel = function($event) {
+            $mdDialog.cancel();
+          };
+          $scope.finish = function($event) {
+            $mdDialog.hide();
+          };
+          $scope.searchTextChange = function (str) {
+            return  GetSprintDomainsService.getDomains(str);
+          }
+          $scope.addEnv = function($event,domain){
+            if(  $scope.searchText != ""){
+              $http.post('/api/sprints/insertDomain',domain).then(function(response) {
+                var $string = "Added "+ domain +" to the catalogue of domains!";
+                var optionalDelay = 2000;
+                $mdDialog.hide();
+                alertFactory.addAuto('success', $string, optionalDelay);
+              }).then(function(){
+                $http.get('/api/sprints/getAllSprintDomains').then(function(response)
+                {
+                  $scope.domainsList= response.data;
+                })
+                .catch(function(response, status) {
+                  //	$scope.loading = false;
+                  var optionalDelay = 5000;
+                  var $string = "Error in fetching updated list of domains";
+                  alertFactory.addAuto('danger', $string, optionalDelay);
+                });
+              })
+              .catch(function(response, status) {
+                var optionalDelay = 5000;
+                var $string = "Error in adding "+domain+" to the list of domains";
+                alertFactory.addAuto('danger', $string, optionalDelay);
+              });
+            }
+            else{
+              var optionalDelay = 3000;
+              var $string = "Domain name cannot be empty";
+              alertFactory.addAuto('danger', $string, optionalDelay);
+            }
+          }
+        },
+        templateUrl: 'repositories/newDomain.html',
+        scope: $scope,
+        preserveScope: true,
+        //parent: angular.element(document.getElementById('extraEnvironments')),
+        parent: angular.element(document.body),
+        targetEvent: $event,
+        clickOutsideToClose:true
+      })
+    }
     $scope.deleteEnv =function(ev,env){
       var confirm = $mdDialog.confirm()
       .title('Would you like to delete the domain '+env.domainName+ ' ?')
@@ -1873,7 +1977,7 @@
       });
     };
   });
-  app.controller('editSprintRequirementsRepo', function($scope, $state, $location, $http, alertFactory, $q, dataService,  $localStorage, $log, $rootScope, $window, $mdDialog, $timeout) {
+  app.controller('editSprintRequirementsRepo', function($scope, $state, $location, $http, alertFactory, $q, dataService,  $localStorage, $log, $rootScope, $window, $mdDialog, $timeout, GetSprintRequirementsService) {
     if($rootScope.alerts.length !=0){
       angular.forEach($rootScope.alerts, function(value, key) {
         var alert = {};
@@ -1937,6 +2041,67 @@
         clickOutsideToClose:true
       })
     };
+    $scope.openDialog =function($event){
+      $mdDialog.show({
+        controller: function DialogCtrl ($timeout, $q, $scope, $mdDialog, GetSprintRequirementsService, $http, alertFactory, $state) {
+          $scope.searchText = "";
+          $scope.selectedItem = [];
+          $scope.isDisabled = false;
+          $scope.noCache = true;
+          $scope.cancel = function($event) {
+            $mdDialog.cancel();
+          };
+          $scope.finish = function($event) {
+            $mdDialog.hide();
+          };
+          $scope.searchTextChange = function (str) {
+            return  GetSprintRequirementsService.getRequirements(str);
+          }
+          $scope.addEnv = function($event,req,description){
+            if(  $scope.searchText != ""){
+              var requirement = {};
+              requirement.sprintRequirementName = req;
+              requirement.sprintRequirementDescription = description;
+              $http.post('/api/sprints/insertRequirementAndDescription',requirement).then(function(response) {
+                var $string = "Added "+req+" to the catalogue of requirements!";
+                var optionalDelay = 2000;
+                $mdDialog.hide();
+                alertFactory.addAuto('success', $string, optionalDelay);
+              }).then(function(){
+                $http.get('/api/sprints/getAllSprintRequirements').then(function(response)
+                {
+                  $scope.requirementsList= response.data;
+                })
+                .catch(function(response, status) {
+                  //	$scope.loading = false;
+                  var optionalDelay = 5000;
+                  var $string = "Error in fetching list of sprint requirements";
+                  alertFactory.addAuto('danger', $string, optionalDelay);
+                });
+              })
+              .catch(function(response, status) {
+                var optionalDelay = 5000;
+                var $string = "Error in adding "+req+" to the list of requirements";
+                alertFactory.addAuto('danger', $string, optionalDelay);
+              });
+            }
+            else{
+              var optionalDelay = 3000;
+              var $string = "Sprint requirement name cannot be empty";
+              alertFactory.addAuto('danger', $string, optionalDelay);
+            }
+            $scope.sprintRequirementDescription="";
+          }
+        },
+        templateUrl: 'repositories/newRequirement.html',
+        scope: $scope,
+        preserveScope: true,
+        //parent: angular.element(document.getElementById('extraEnvironments')),
+        parent: angular.element(document.body),
+        targetEvent: $event,
+        clickOutsideToClose:true
+      })
+    }
     $scope.deleteEnv =function(ev,env){
       var confirm = $mdDialog.confirm()
       .title('Would you like to delete the requirement '+env.sprintRequirementName+ ' ?')
@@ -6238,10 +6403,6 @@
                 $scope.newState = function(domain) {
                   $http.post('/api/sprints/insertDomain',domain).then(function(response) {
                     var $string = "Added "+ domain +" to the catalogue of domains!";
-                    //$scope.searchTextChange();
-                    //$scope.searchTextChange(domain);
-                    //$scope.searchText = domain;
-                    // $scope.selectedItem= programmingSkillEntered.value;
                     var addedDomain = {};
                     addedDomain.domainId = 0;
                     addedDomain.domainName = domain;

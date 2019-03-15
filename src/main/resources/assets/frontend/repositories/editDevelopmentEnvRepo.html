@@ -40,7 +40,7 @@
             <col width="25%" />
             <col width="25%" />
             <tbody>
-              <tr ng-repeat="env in developmentEnvironmentsList" >
+              <tr ng-repeat="env in developmentEnvironmentsList  | orderBy:'envName'" >
                 <td>
                   <div>{{env.envName | capitalize }}</div>
                 </td>
