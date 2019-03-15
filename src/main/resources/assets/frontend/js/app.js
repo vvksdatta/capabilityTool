@@ -1491,6 +1491,16 @@
                 var optionalDelay = 3000;
                 $mdDialog.hide();
                 alertFactory.addAuto('success', $string, optionalDelay);
+              }).then(function(){
+                $http.get('/api/skills/getProgrammingSkillsList').then(function(response)
+                {
+                  $scope.programmingSkillsList = response.data;
+                }).catch(function(response, status) {
+                  //	$scope.loading = false;
+                  var optionalDelay = 5000;
+                  var $string = "Error in fetching list of programming skills";
+                  alertFactory.addAuto('danger', $string, optionalDelay);
+                });
               })
               .catch(function(response, status) {
                 var optionalDelay = 5000;
@@ -1633,6 +1643,16 @@
                 var optionalDelay = 2000;
                 $mdDialog.hide();
                 alertFactory.addAuto('success', $string, optionalDelay);
+              }).then(function(){
+                $http.get('/api/sprints/getAllSprintDevelopmentEnvironments').then(function(response)
+                {
+                  $scope.developmentEnvironmentsList = response.data;
+                })
+                .catch(function(response, status) {
+                  var optionalDelay = 5000;
+                  var $string = "Error in fetching list of development environments";
+                  alertFactory.addAuto('danger', $string, optionalDelay);
+                })
               })
               .catch(function(response, status) {
                 var optionalDelay = 5000;
