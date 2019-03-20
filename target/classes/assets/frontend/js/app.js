@@ -2063,7 +2063,7 @@
               requirement.sprintRequirementName = req;
               requirement.sprintRequirementDescription = description;
               $http.post('/api/sprints/insertRequirementAndDescription',requirement).then(function(response) {
-                var $string = "Added " req" to the catalogue of requirements!";
+                var $string = "Added "+req+" to the catalogue of requirements!";
                 var optionalDelay = 2000;
                 $mdDialog.hide();
                 alertFactory.addAuto('success', $string, optionalDelay);
@@ -2090,6 +2090,7 @@
               var $string = "Sprint requirement name cannot be empty";
               alertFactory.addAuto('danger', $string, optionalDelay);
             }
+            $scope.sprintRequirementDescription="";
           }
         },
         templateUrl: 'repositories/newRequirement.html',
