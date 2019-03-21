@@ -25,7 +25,7 @@ p {
               </tr>
             </thead>
             <tbody>
-              <tr ng-repeat="person in people"  ng-click="managePerson(person)">
+              <tr ng-repeat="person in people | orderBy:'personName'"  ng-click="managePerson(person)">
                 <td>
                   <span ng-model="letterLimit" class="avatar" alt="datta" data-toggle="tooltip" data-placement="top" data-container="body" style="background-color: #29516D; width: 28px;height: 26px;font-size: 12px;padding-top: 5px;margin-right: 3px" data-original-title={{participant.personName }}> {{ person.personName | limitTo:2 | uppercase }}<md-tooltip md-direction="top"> {{ person.personName }}</md-tooltip>
                   </span>   {{person.personName | capitalize }}

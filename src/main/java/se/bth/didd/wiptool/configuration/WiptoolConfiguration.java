@@ -73,14 +73,6 @@ public class WiptoolConfiguration extends Configuration implements AssetsBundleC
 	}
 
 	@NotEmpty
-	private String apiAccessKey;
-	
-	@JsonProperty
-	public String getApiAccessKey() {
-		return apiAccessKey;
-	}
-
-	@NotEmpty
 	private String adminUserName;
 	
 	@NotEmpty

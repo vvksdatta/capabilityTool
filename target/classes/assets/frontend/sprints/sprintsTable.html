@@ -26,7 +26,7 @@
               </tr>
             </thead>
             <tbody>
-              <tr ng-repeat="sprint in sprints" ng-click="manageSprint(sprint)">
+              <tr ng-repeat="sprint in sprints | orderBy:'sprintName'" ng-click="manageSprint(sprint)">
                 <td>{{sprint.sprintName | capitalize }}</td>
                 <td>{{sprint.projectName | capitalize }}</td>
                 <td>
