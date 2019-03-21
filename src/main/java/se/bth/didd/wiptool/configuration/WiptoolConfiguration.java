@@ -73,6 +73,14 @@ public class WiptoolConfiguration extends Configuration implements AssetsBundleC
 	}
 
 	@NotEmpty
+	private String issueIdCutOff;
+	
+	@JsonProperty
+	public String getIssueIdCutOff() {
+		return issueIdCutOff;
+	}
+
+	@NotEmpty
 	private String adminUserName;
 	
 	@NotEmpty
