@@ -4,7 +4,9 @@ import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
@@ -14,7 +16,6 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
-
 import com.taskadapter.redmineapi.RedmineException;
 import com.taskadapter.redmineapi.RedmineManager;
 import com.taskadapter.redmineapi.RedmineManagerFactory;
@@ -586,20 +587,28 @@ public class Redmine {
 					}
 				}
 				Integer include = null;
+				/*
+				 * fetch all the closed issues using custom params and add to
+				 * the list of open issues
+				 */
+				redmineManager.setObjectsPerPage(1000);
+				final Map<String, String> params = new HashMap<String, String>();
 
+				params.put("project_id", redmineProject.getIdentifier());
+				params.put("status_id", "5");
+				List<Issue> closedIssues = redmineManager.getIssueManager().getIssues(params).getResults();
 				List<Issue> issues = redmineManager.getIssueManager().getIssues(redmineProject.getIdentifier(),
 						include);
+				issues.addAll(closedIssues);
 				for (Issue issue : issues) {
 					int cutOff = Integer.parseInt(issueIdCutOff);
 					if (issue.getId() >= cutOff) {
-
 						if (redmineDAO.ifIssueExistsInProject(issue.getProjectId(), issue.getId()) == true) {
 							/*
 							 * here the current issue is already associated with
 							 * the current project and an entry exists in
 							 * database
 							 */
-
 							IssueTemplate updateIssue = new IssueTemplate();
 							updateIssue.setProjectId(issue.getProjectId());
 							updateIssue.setIssueId(issue.getId());
