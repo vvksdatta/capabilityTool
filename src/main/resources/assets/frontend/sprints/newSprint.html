@@ -115,39 +115,33 @@ $(".nav-tabs li").eq(3).removeClass("active").addClass("disabledTab");
                     </div>
                   </div>
                 </div>
-                <div class="form-group" ng-class="{ 'has-error': form.$submitted && form.selectedDomains.$invalid }">
+                <div class="form-group">
                   <label class="col-sm-3 control-label" for="selectedDomains">Associated domain(s)</label>
                   <div class="col-sm-5">
                     <div ng-repeat="(key, val) in domainsList">
                       <md-checkbox type="checkbox" name="selectedDomains" style="margin-bottom: 8px;" class="md-primary" ng-model="formData.selectedDomains[val.domainName]"
-                      ng-required="!someSelected(formData.selectedDomains)">  {{val.domainName}} </md-checkbox>
+                    >  {{val.domainName}} </md-checkbox>
                     </div>
                     <div ng-repeat="(key, val) in extraDomainsList" >
-                      <md-checkbox type="checkbox" name="selectedDomains" style="margin-bottom: 8px;" class="md-primary" ng-model="formData.selectedDomains[val.domainName]"  ng-required="!someSelected(formData.selectedDomains)">  {{val.domainName}} </md-checkbox>
+                      <md-checkbox type="checkbox" name="selectedDomains" style="margin-bottom: 8px;" class="md-primary" ng-model="formData.selectedDomains[val.domainName]" >  {{val.domainName}} </md-checkbox>
                     </div>
                   </div>
                   <div class="col-sm-5" >
                     <md-button  ng-click="openDialog($event)" class="add-tab  md-primary md-raised pull-center">Add new domain</md-button>
                   </div>
-                  <div ng-messages="form.$submitted && form.selectedDomains.$error" class="help-block col-sm-10">
-                    <div ng-message="required">Select atleast one domain</div>
-                  </div>
                 </div>
-                <div class="form-group" ng-class="{ 'has-error': form.$submitted && form.selectedAssets.$invalid }">
+                <div class="form-group">
                   <label class="col-sm-3 control-label" for="AssetsInvolved">Assets involved</label>
                   <div class="col-sm-5">
                     <div ng-repeat="(key, val) in assetsList">
-                      <md-checkbox type="checkbox" name="selectedAssets" style="margin-bottom: 8px;" class="md-primary" ng-model="formData2.selectedAssets[val.assetName]"ng-required="!someSelected(formData2.selectedAssets)">  {{val.assetName}} </md-checkbox>
+                      <md-checkbox type="checkbox" name="selectedAssets" style="margin-bottom: 8px;" class="md-primary" ng-model="formData2.selectedAssets[val.assetName]">  {{val.assetName}} </md-checkbox>
                     </div>
                     <div ng-repeat="(key, val) in extraAssetsList">
-                      <md-checkbox type="checkbox" name="selectedAssets" style="margin-bottom: 8px;" class="md-primary" ng-model="formData2.selectedAssets[val.assetName]"ng-required="!someSelected(formData2.selectedAssets)">  {{val.assetName}} </md-checkbox>
+                      <md-checkbox type="checkbox" name="selectedAssets" style="margin-bottom: 8px;" class="md-primary" ng-model="formData2.selectedAssets[val.assetName]">  {{val.assetName}} </md-checkbox>
                     </div>
                   </div>
                   <div class="col-sm-5" >
                     <md-button  ng-click="openDialog2($event)" class="add-tab  md-primary md-raised pull-center">Add new asset</md-button>
-                  </div>
-                  <div ng-messages="form.$submitted && form.selectedAssets.$error" class="help-block col-sm-10">
-                    <div ng-message="required">Select atleast one asset type</div>
                   </div>
                 </div>
                 <div >

@@ -60,6 +60,9 @@ public interface ProjectDAO {
 
 	@SqlQuery("select projectId, projectName from PROJECTS")
 	List<ProjectIdName> getAllProjects();
+	
+	@SqlQuery("select apiKey from LOGINCREDENTIALS where userId = :userId")
+	List<String> getApiKeyOfUser(@Bind("userId") int userId);
 
 	@SqlQuery("select projectId, projectName from PROJECTS where parentProjectId IS NULL or parentProjectId = 0")
 	List<ProjectIdName> getAllIndependentProjects();

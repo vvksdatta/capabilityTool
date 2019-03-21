@@ -152,42 +152,36 @@ $(".nav-tabs li").eq(5).removeClass("active");
                   </div>
                 </div>
               </div>
-              <div class="form-group" ng-class="{ 'has-error': form.$submitted && form.selectedDomains.$invalid }">
+              <div class="form-group">
                 <label class="col-sm-3 control-label" for="selectedDomains">Associated domain(s)</label>
                 <div class="col-sm-5">
                   <div ng-repeat="(key, val) in domainsList">
                     <md-checkbox type="checkbox" name="selectedDomains" ng-disabled="readOnly" style="margin-bottom: 8px;" class="md-primary" ng-model="formData.selectedDomains[val.domainName]"
-                    ng-required="!someSelected(formData.selectedDomains)">  {{val.domainName}} </md-checkbox>
+                    >  {{val.domainName}} </md-checkbox>
                   </div>
                   <div ng-repeat="(key, val) in extraDomainsList" >
                     <md-checkbox type="checkbox" name="selectedDomains" ng-disabled="readOnly" style="margin-bottom: 8px;" class="md-primary" ng-model="formData.selectedDomains[val.domainName]"
-                    ng-required="!someSelected(formData.selectedDomains)">  {{val.domainName}} </md-checkbox>
+                    >  {{val.domainName}} </md-checkbox>
                   </div>
                 </div>
                 <div class="col-sm-5" >
                   <md-button  ng-click="openDialog($event)" ng-hide="readOnly" class="add-tab  md-primary md-raised pull-center">Add new domain</md-button>
                 </div>
-                <div ng-messages="form.$submitted && form.selectedDomains.$error" class="help-block col-sm-10">
-                  <div ng-message="required">Select atleast one domain</div>
-                </div>
               </div>
-              <div class="form-group" ng-class="{ 'has-error': form.$submitted && form.selectedAssets.$invalid }">
+              <div class="form-group">
                 <label class="col-sm-3 control-label" for="AssetsInvolved">Assets involved</label>
                 <div class="col-sm-5">
                   <div ng-repeat="(key, val) in assetsList">
                     <md-checkbox type="checkbox" name="selectedAssets" ng-disabled="readOnly" style="margin-bottom: 8px;" class="md-primary" ng-model="formData2.selectedAssets[val.assetName]"
-                    ng-required="!someSelected(formData2.selectedAssets)">  {{val.assetName}} </md-checkbox>
+                  >  {{val.assetName}} </md-checkbox>
                   </div>
                   <div ng-repeat="(key, val) in extraAssetsList">
                     <md-checkbox type="checkbox" name="selectedAssets" ng-disabled="readOnly" style="margin-bottom: 8px;" class="md-primary" ng-model="formData2.selectedAssets[val.assetName]"
-                    ng-required="!someSelected(formData2.selectedAssets)">  {{val.assetName}} </md-checkbox>
+                    >  {{val.assetName}} </md-checkbox>
                   </div>
                 </div>
                 <div class="col-sm-5" >
                   <md-button  ng-click="openDialog2($event)" ng-hide="readOnly" class="add-tab  md-primary md-raised pull-center">Add new asset</md-button>
-                </div>
-                <div ng-messages="form.$submitted && form.selectedAssets.$error" class="help-block col-sm-10">
-                  <div ng-message="required">Select atleast one asset type</div>
                 </div>
               </div>
               <div >
@@ -231,9 +225,9 @@ $(".nav-tabs li").eq(5).removeClass("active");
                 </tr>
               </thead>
               <tbody>
-                <tr ng-repeat="participant in sprintParticipants"  ng-click="manageSprintParticipants(sprint)" >
+                <tr ng-repeat="participant in sprintParticipants | orderBy:'personName'"  ng-click="manageSprintParticipants(sprint)" >
                   <td >
-                    <span ng-model="letterLimit" class="avatar" alt="datta" data-toggle="tooltip" data-placement="top" data-container="body" style="background-color: #29516D; width: 28px; height: 26px; font-size: 12px; padding-top: 5px; margin-right: 3px" data-original-title={{participant.personName }}> {{ participant.personName | limitTo:2 | uppercase }}<md-tooltip ng-hide="project.projectStartDate" md-direction="right"> {{ participant.personName }}</md-tooltip></span>
+                    <span ng-model="letterLimit" class="avatar" data-toggle="tooltip" data-placement="top" data-container="body" style="background-color: #29516D; width: 28px; height: 26px; font-size: 12px; padding-top: 5px; margin-right: 3px" data-original-title={{participant.personName }}> {{ participant.personName | limitTo:2 | uppercase }}<md-tooltip ng-hide="project.projectStartDate" md-direction="right"> {{ participant.personName }}</md-tooltip></span>
                     {{ participant.personName}}
                   </td>
                   <td>{{participant.roleName}}</td>

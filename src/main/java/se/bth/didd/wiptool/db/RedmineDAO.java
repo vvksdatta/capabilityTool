@@ -198,6 +198,9 @@ public interface RedmineDAO {
 	@SqlQuery("Select * from SPRINTCOMPRISINGISSUES where issueId = :issueId")
 	List<SprintComprisingIssues> getSprintAssociatedWithIssue(@Bind("issueId") int issueId);
 
+	@SqlQuery("select apiKey from LOGINCREDENTIALS where userId = :userId")
+	List<String> getApiKeyOfUser(@Bind("userId") int userId);
+
 	@SqlQuery("select exists (select 1 from SPRINTS where projectId= :projectId and sprintId = :sprintId and sprintRedmineUpdate = :sprintRedmineUpdate)")
 	boolean ifSprintDetailsUnModified(@Bind("projectId") int projectId, @Bind("sprintId") int sprintId,
 			@Bind("sprintRedmineUpdate") Date sprintRedmineUpdate);

@@ -23,6 +23,10 @@ public class SprintIdProjectIdIssuesAllocated {
 	public Integer sprintId;
 	
 	@JsonProperty
+	@ColumnName("userId")
+	public Integer userId;
+	
+	@JsonProperty
 	public List<AllocatedIssue> issuesAllocated;
 	
 
@@ -65,4 +69,12 @@ public class SprintIdProjectIdIssuesAllocated {
 		this.issuesAllocated = issuesAllocated;
 	}
 
+	public Integer getUserId() {
+		return userId;
+	}
+
+	public void setUserId(Integer userId) {
+		this.userId = userId;
+	}
+	
 }

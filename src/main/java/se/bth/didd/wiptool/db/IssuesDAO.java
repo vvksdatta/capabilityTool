@@ -32,6 +32,9 @@ public interface IssuesDAO {
 	@SqlQuery("select exists( select 1 from SPRINTS where projectId= :projectId and sprintId = :sprintId)")
 	boolean ifSprintExists(@Bind("projectId") int projectId, @Bind("sprintId") int sprintId);
 
+	@SqlQuery("select apiKey from LOGINCREDENTIALS where userId = :userId")
+	List<String> getApiKeyOfUser(@Bind("userId") int userId);
+
 	@SqlQuery("select * from SPRINTS where projectId = :projectId and sprintId = :sprintId")
 	List<Sprint> getSprintName(@Bind("projectId") int projectId, @Bind("sprintId") int sprintId);
 

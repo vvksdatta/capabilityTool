@@ -60,12 +60,12 @@ svg:not(:root) {
                   <div class="panel-body" style="overflow-y: auto; max-height: 22vh;">
                     <table class="table table-hover" id="dev-table">
                       <tbody>
-                        <tr ng-repeat="(key, val) in developmentEnvironmentsList">
+                        <tr ng-repeat="(key, val) in developmentEnvironmentsList | orderBy:'envName'">
                           <td>
                             <md-checkbox type="checkbox" name="selectedEnvironments" style="margin-bottom: 8px;" class="md-primary" ng-model="formData.selectedEnvironments[val.envName]" ng-required="!someSelected(formData.selectedEnvironments) ">    {{val.envName}} </md-checkbox>
                           </td>
                         </tr>
-                        <tr ng-repeat="(key, val) in extraEnvironmentsList">
+                        <tr ng-repeat="(key, val) in extraEnvironmentsList | orderBy:'envName'">
                           <td>
                             <md-checkbox type="checkbox" name="selectedEnvironments" style="margin-bottom: 8px;" class="md-primary" ng-model="formData.selectedEnvironments[val.envName]" ng-required="!someSelected(formData.selectedEnvironments)">    {{val.envName}} </md-checkbox>
                           </td>

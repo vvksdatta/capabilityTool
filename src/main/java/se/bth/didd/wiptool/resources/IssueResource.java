@@ -29,12 +29,10 @@ import se.bth.didd.wiptool.db.IssuesDAO;
 public class IssueResource {
 
 	private String redmineUrl;
-	private String apiAccessKey;
 	private IssuesDAO issueDAO;
 
-	public IssueResource(IssuesDAO issueDAO, String redmineUrl, String apiAccessKey) {
+	public IssueResource(IssuesDAO issueDAO, String redmineUrl) {
 		this.redmineUrl = redmineUrl;
-		this.apiAccessKey = apiAccessKey;
 		this.issueDAO = issueDAO;
 	}
 
@@ -55,7 +53,13 @@ public class IssueResource {
 	@POST
 	@Path("/updateAllocatedIssues")
 	public Response updateAllocatedIssues(SprintIdProjectIdIssuesAllocated issuesAllocated) {
-		// List<Issue> updatedRedmineIssues = new ArrayList<Issue>();
+		String apiKey;
+		try {
+			 apiKey = issueDAO.getApiKeyOfUser(issuesAllocated.getUserId()).get(0);
+		} catch (Exception e1) {
+			System.out.println(e1);
+			return Response.status(Status.BAD_REQUEST).entity(e1).build();
+		}
 		for (AllocatedIssue eachAllocatedIssue : issuesAllocated.getIssuesAllocated()) {
 
 			/* Check whether the issue exists in the specified project */
@@ -67,7 +71,7 @@ public class IssueResource {
 				 */
 				if (issueDAO.ifIssueExistsInSprint(issuesAllocated.getProjectId(), issuesAllocated.getSprintId(),
 						eachAllocatedIssue.getIssueId()) == true) {
-					RedmineManager redmineManager = RedmineManagerFactory.createWithApiKey(redmineUrl, apiAccessKey);
+					RedmineManager redmineManager = RedmineManagerFactory.createWithApiKey(redmineUrl, apiKey);
 					/*
 					 * try { Issue existingIssueOnRedmine =
 					 * redmineManager.getIssueManager().getIssueById(

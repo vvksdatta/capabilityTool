@@ -46,13 +46,16 @@ public interface PeopleDAO {
 	@SqlQuery("select * from PEOPLE where personId = :personId")
 	List<People> getPersonDetails(@Bind("personId") int personId);
 
-	@SqlQuery("select userId, userFirstName, userlastName, userMailId, userName from LOGINCREDENTIALS")
+	@SqlQuery("select userId, userFirstName, userlastName, userMailId, userName, apiKey from LOGINCREDENTIALS")
 	List<UserTemplate> getUsersList();
 
-	@SqlQuery("select userId, userFirstName, userlastName, userMailId,  userName from LOGINCREDENTIALS where userId = :userId")
+	@SqlQuery("select userId, userFirstName, userlastName, userMailId,  userName, apiKey from LOGINCREDENTIALS where userId = :userId")
 	List<UserTemplate> getUserDetails(@Bind("userId") int userId);
 
-	@SqlUpdate("Update LOGINCREDENTIALS set  userFirstName = :userFirstName, userLastName = :userLastName, usermailId = :usermailId,  userName = :userName  where userId = :userId")
+	@SqlQuery("select apiKey from LOGINCREDENTIALS where userId = :userId")
+	List<String> getApiKeyOfUser(@Bind("userId") int userId);
+
+	@SqlUpdate("Update LOGINCREDENTIALS set  userFirstName = :userFirstName, userLastName = :userLastName, usermailId = :usermailId,  userName = :userName, apiKey = :apiKey  where userId = :userId")
 	void UpdateUserDetails(@BindBean UserTemplate user);
 
 	@SqlUpdate("Update LOGINCREDENTIALS set  userName = :userName, password = :newPassword where userId = :userId")

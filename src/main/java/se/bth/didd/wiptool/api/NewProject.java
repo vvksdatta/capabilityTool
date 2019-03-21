@@ -52,6 +52,10 @@ public class NewProject {
 	@JsonProperty
 	@ColumnName("projectLeader")
 	public Integer projectLeader;
+	
+	@JsonProperty
+	@ColumnName("userId")
+	public Integer userId;
 
 	public NewProject(Integer projectId, Integer parentProjectId, String projectName, String projectDescription,
 			Date projectStartDate, Date projectEndDate, Integer projectEstimatedEffort, String projectUpdatedBy,
@@ -146,6 +150,14 @@ public class NewProject {
 
 	public void setParentProjectId(Integer parentProjectId) {
 		this.parentProjectId = parentProjectId;
+	}
+
+	public Integer getUserId() {
+		return userId;
+	}
+
+	public void setUserId(Integer userId) {
+		this.userId = userId;
 	}
 
 }

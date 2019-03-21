@@ -9,9 +9,12 @@ import java.util.Random;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.Status;
+
 import com.taskadapter.redmineapi.RedmineException;
 import com.taskadapter.redmineapi.RedmineManager;
 import com.taskadapter.redmineapi.RedmineManagerFactory;
@@ -49,20 +52,19 @@ public class Redmine {
 	RedmineDAO redmineDAO;
 
 	private String redmineUrl;
-	private String apiAccessKey;
 
-	public Redmine(RedmineDAO redmineDAO, String redmineUrl, String apiAccessKey) {
+	public Redmine(RedmineDAO redmineDAO, String redmineUrl) {
 		this.redmineDAO = redmineDAO;
 		this.redmineUrl = redmineUrl;
-		this.apiAccessKey = apiAccessKey;
 	}
 
 	public Redmine() {
 
 	}
 
+	@Path("/{userId}")
 	@GET
-	public Response synchronizingWithRedmine() throws RedmineException {
+	public Response synchronizingWithRedmine(@PathParam("userId") Integer userId) throws RedmineException {
 
 		/*
 		 * Generating a random string for updating the identifiers on each
@@ -78,13 +80,21 @@ public class Redmine {
 			char c = alphabet.charAt(random.nextInt(26));
 			generatedRandomString += c;
 		}
+		/* fetch the unique API access key of the user using userId. */
+		String apiKey;
+		try {
+			apiKey = redmineDAO.getApiKeyOfUser(userId).get(0);
+		} catch (Exception e1) {
+			System.out.println(e1);
+			return Response.status(Status.BAD_REQUEST).entity(e1).build();
+		}
 
 		/*
 		 * Fetch list of project participants from each project in redmine. If
 		 * person is not already added, add as a new person.Else if the details
 		 * are modified, update the details of person
 		 */
-		RedmineManager redmineManager = RedmineManagerFactory.createWithApiKey(redmineUrl, apiAccessKey);
+		RedmineManager redmineManager = RedmineManagerFactory.createWithApiKey(redmineUrl, apiKey);
 
 		/*
 		 * Setting the limit for number of objects to be retrieved per page. The
@@ -480,7 +490,7 @@ public class Redmine {
 						.getMemberships(redmineProject.getId());
 
 				for (Membership projectParticipant : projectParticipants) {
-					
+
 					/*
 					 * The userId for a group is null. The list of
 					 * 'projectParticipants' presents all the participants
@@ -488,88 +498,91 @@ public class Redmine {
 					 * details of group
 					 */
 					if (projectParticipant.getUserId() != null) {
-					/*
-					 * for each project participant first we retrieve the list
-					 * of roles he/she is allocated on each project
-					 */
-					Collection<Role> rolesOfProjectParticipant = projectParticipant.getRoles();
-					for (Role role : rolesOfProjectParticipant) {
-
 						/*
-						 * check whether the person is already added to People
-						 * table. If the person is not added but exists in the
-						 * project participation list, it indicates that the
-						 * person account is locked. This person is first added
-						 * to list of people and then added to other tables.
+						 * for each project participant first we retrieve the
+						 * list of roles he/she is allocated on each project
 						 */
-
-						if (redmineDAO.ifPersonIdExists(projectParticipant.getUserId()) != true) {
-
-							User lockedUser = redmineManager.getUserManager()
-									.getUserById(projectParticipant.getUserId());
-							redmineDAO.insertIntoPeopleTable(lockedUser.getId(), lockedUser.getFullName(),
-									lockedUser.getFirstName(), lockedUser.getLastName(), lockedUser.getMail(),
-									generatedRandomString);
-							redmineDAO.updatePersonIdentifier(lockedUser.getId(), generatedRandomString);
-							redmineDAO.updateidentifierInAssessmentOfCapabilities(lockedUser.getId(),
-									generatedRandomString);
-							redmineDAO.updateidentifierInAssessmentOfSkills(lockedUser.getId(), generatedRandomString);
-						}
-
-						/*
-						 * check if the role is already added to the table that
-						 * displays the list of roles each person is capable of
-						 * taking up (RolesOfPeople Table)
-						 */
-						if (redmineDAO.ifRoleOfPersonExists(role.getId(), projectParticipant.getUserId()) != true) {
+						Collection<Role> rolesOfProjectParticipant = projectParticipant.getRoles();
+						for (Role role : rolesOfProjectParticipant) {
 
 							/*
-							 * If there is no registered record in database,
-							 * insert a new record to the table with the roleId
-							 * along with personId
+							 * check whether the person is already added to
+							 * People table. If the person is not added but
+							 * exists in the project participation list, it
+							 * indicates that the person account is locked. This
+							 * person is first added to list of people and then
+							 * added to other tables.
 							 */
-							redmineDAO.insertIntoRolesOfPeopleTable(projectParticipant.getUserId(), role.getId());
 
-						}
+							if (redmineDAO.ifPersonIdExists(projectParticipant.getUserId()) != true) {
 
-						/*
-						 * check if the project participation of the person is
-						 * already added to the database (ProjectParticipation
-						 * Table)
-						 */
-						if (redmineDAO.ifPersonExistsInProject(redmineProject.getId(),
-								projectParticipant.getUserId()) != true) {
+								User lockedUser = redmineManager.getUserManager()
+										.getUserById(projectParticipant.getUserId());
+								redmineDAO.insertIntoPeopleTable(lockedUser.getId(), lockedUser.getFullName(),
+										lockedUser.getFirstName(), lockedUser.getLastName(), lockedUser.getMail(),
+										generatedRandomString);
+								redmineDAO.updatePersonIdentifier(lockedUser.getId(), generatedRandomString);
+								redmineDAO.updateidentifierInAssessmentOfCapabilities(lockedUser.getId(),
+										generatedRandomString);
+								redmineDAO.updateidentifierInAssessmentOfSkills(lockedUser.getId(),
+										generatedRandomString);
+							}
 
-							if (redmineDAO.ifPersonParticipatesInProject(redmineProject.getId(),
-									projectParticipant.getUserId(), role.getId()) != true) {
+							/*
+							 * check if the role is already added to the table
+							 * that displays the list of roles each person is
+							 * capable of taking up (RolesOfPeople Table)
+							 */
+							if (redmineDAO.ifRoleOfPersonExists(role.getId(), projectParticipant.getUserId()) != true) {
+
 								/*
 								 * If there is no registered record in database,
 								 * insert a new record to the table with the
-								 * projectId along with personId and roleId
+								 * roleId along with personId
 								 */
-								redmineDAO.insertIntoProjectParticipation(redmineProject.getId(),
-										projectParticipant.getUserId(), role.getId());
+								redmineDAO.insertIntoRolesOfPeopleTable(projectParticipant.getUserId(), role.getId());
+
 							}
+
+							/*
+							 * check if the project participation of the person
+							 * is already added to the database
+							 * (ProjectParticipation Table)
+							 */
+							if (redmineDAO.ifPersonExistsInProject(redmineProject.getId(),
+									projectParticipant.getUserId()) != true) {
+
+								if (redmineDAO.ifPersonParticipatesInProject(redmineProject.getId(),
+										projectParticipant.getUserId(), role.getId()) != true) {
+									/*
+									 * If there is no registered record in
+									 * database, insert a new record to the
+									 * table with the projectId along with
+									 * personId and roleId
+									 */
+									redmineDAO.insertIntoProjectParticipation(redmineProject.getId(),
+											projectParticipant.getUserId(), role.getId());
+								}
+							}
+							redmineDAO.updateRedmineProjectIdentifierInParticipationTable(redmineProject.getId(),
+									projectParticipant.getUserId(), role.getId(), generatedRandomString);
+
+							redmineDAO.updateRedminePersonIdentifierInParticipationTable(redmineProject.getId(),
+									projectParticipant.getUserId(), role.getId(), generatedRandomString);
+
+							redmineDAO.updateidentifierInRolesOfPeople(projectParticipant.getUserId(), role.getId(),
+									generatedRandomString);
+
+							redmineDAO.updatePersonIdentifier(projectParticipant.getUserId(), generatedRandomString);
+							redmineDAO.updateidentifierInAssessmentOfCapabilities(projectParticipant.getUserId(),
+									generatedRandomString);
+							redmineDAO.updateidentifierInAssessmentOfSkills(projectParticipant.getUserId(),
+									generatedRandomString);
+
 						}
-						redmineDAO.updateRedmineProjectIdentifierInParticipationTable(redmineProject.getId(),
-								projectParticipant.getUserId(), role.getId(), generatedRandomString);
-
-						redmineDAO.updateRedminePersonIdentifierInParticipationTable(redmineProject.getId(),
-								projectParticipant.getUserId(), role.getId(), generatedRandomString);
-
-						redmineDAO.updateidentifierInRolesOfPeople(projectParticipant.getUserId(), role.getId(),
-								generatedRandomString);
-
-						redmineDAO.updatePersonIdentifier(projectParticipant.getUserId(), generatedRandomString);
-						redmineDAO.updateidentifierInAssessmentOfCapabilities(projectParticipant.getUserId(),
-								generatedRandomString);
-						redmineDAO.updateidentifierInAssessmentOfSkills(projectParticipant.getUserId(),
-								generatedRandomString);
 
 					}
-
 				}
-			}
 				Integer include = null;
 
 				List<Issue> issues = redmineManager.getIssueManager().getIssues(redmineProject.getIdentifier(),

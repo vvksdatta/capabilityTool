@@ -135,21 +135,21 @@ public class WiptoolApplication extends Application<WiptoolConfiguration> {
 		 * additional configuration parameters from YAML file, with resources
 		 */
 		environment.jersey().register(
-				new ProjectResource(projectDAO, configuration.getRedmineUrl(),configuration.getApiAccessKey()));
+				new ProjectResource(projectDAO, configuration.getRedmineUrl()));
 		environment.jersey().register(
-				new SprintResource(sprintDAO, configuration.getRedmineUrl(),configuration.getApiAccessKey()));
+				new SprintResource(sprintDAO, configuration.getRedmineUrl()));
 		environment.jersey().register(
-				new PeopleResource(peopleDAO, configuration.getRedmineUrl(),configuration.getApiAccessKey()));
+				new PeopleResource(peopleDAO, configuration.getRedmineUrl()));
 		environment.jersey().register(
 				new RolesResource(rolesDAO));
 		environment.jersey().register(
 				new CapabilityResource(capabilityDAO));
 		environment.jersey().register(
-				new Redmine(redmineDAO, configuration.getRedmineUrl(),configuration.getApiAccessKey()));
+				new Redmine(redmineDAO, configuration.getRedmineUrl()));
 		environment.jersey().register(
 				new SkillResource(skillDAO));
 		environment.jersey().register(
-				new IssueResource(issuesDAO, configuration.getRedmineUrl(),configuration.getApiAccessKey()));
+				new IssueResource(issuesDAO, configuration.getRedmineUrl()));
 		environment.jersey().register(new LoginResource(authDAO));
 		environment.jersey().register(
 				new OptionsResource(optionsDAO));

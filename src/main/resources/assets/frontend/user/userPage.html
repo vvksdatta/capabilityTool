@@ -93,6 +93,26 @@ $(".nav-tabs li").eq(3).removeClass("active");
                   </div>
                 </div>
               </div>
+              <div ng-show="readOnly" class="form-group" ng-class="{ 'has-error': form.$submitted && form.apiKey.$invalid }">
+                <label class="col-sm-3 control-label" for="apiKey">Redmine API access key</label>
+                <div class="col-sm-8">
+                  <input type="password" placeholder="Redmine API access key" id="apiKey" name="apiKey" ng-readonly="readOnly" class="form-control" ng-model="userDetails.apiKey" required>
+                  <div ng-messages="form.$submitted && form.apiKey.$error" class="help-block">
+                    <div ng-message="required">Redmine API access key is required</div>
+                  </div>
+                </div>
+              </div>
+              <div ng-hide="readOnly" class="form-group" ng-class="{ 'has-error': form.$submitted && form.apiKey.$invalid }">
+                <label class="col-sm-3 control-label" for="apiKey">Redmine API access key</label>
+                <div class="col-sm-8">
+                  <input type="text" placeholder="Redmine API access key" id="apiKey" name="apiKey" ng-minlength="40" ng-maxlength="40"  ng-readonly="readOnly" class="form-control" ng-model="userDetails.apiKey" required>
+                  <div ng-messages="form.$submitted && form.apiKey.$error" class="help-block">
+                    <div ng-message="required">Redmine API access key is required</div>
+                    <div ng-message="minlength">API key must contain atleast 40 characters</div>
+                    <div ng-message="maxlength">API key must not exceed 40 characters</div>
+                  </div>
+                </div>
+              </div>
               <div >
                 <div class="pull-right" style="margin-top: 5px;">
                   <md-button style="font-size: 15px; background-color: rgb(90, 132, 187);" ng-click="readOnly=false" ng-show="readOnly" class="add-tab md-primary md-raised"><i class="glyphicon glyphicon-edit"> </i> Edit </md-button>

@@ -29,7 +29,7 @@ p {
               </tr>
             </thead>
             <tbody>
-              <tr ng-repeat="person in people">
+              <tr ng-repeat="person in people | orderBy:'personName'">
                 <td>
                   <span ng-model="letterLimit"  class="avatar" data-toggle="tooltip" data-placement="top" data-container="body" title="{{person.personName | capitalize }}" style="background-color: #29516D; width: 28px;height: 26px;font-size: 12px;padding-top: 5px; margin-right: 3px;cursor: pointer;" data-original-title={{person.personName}}>{{ person.personName | limitTo:2 | uppercase }} <md-tooltip md-direction="top"> {{ person.personName }}</md-tooltip>
                   </span>

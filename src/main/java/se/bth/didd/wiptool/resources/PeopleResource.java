@@ -48,7 +48,6 @@ import se.bth.didd.wiptool.api.Roles;
 public class PeopleResource {
 
 	private String redmineUrl;
-	private String apiAccessKey;
 	private PeopleDAO peopleDAO;
 
 	/*
@@ -57,13 +56,16 @@ public class PeopleResource {
 	 * and 'apiAcessKey'.
 	 */
 
-	public PeopleResource(PeopleDAO peopleDAO, String redmineUrl, String apiAccessKey) {
+	public PeopleResource(PeopleDAO peopleDAO, String redmineUrl) {
 		this.redmineUrl = redmineUrl;
-		this.apiAccessKey = apiAccessKey;
 		this.peopleDAO = peopleDAO;
 		
 	}
 
+	public PeopleResource() {
+		
+	}
+	
 	@RolesAllowed({ UserRoles.ROLE_ONE })
 	@GET
 	@Path("/getPersonName/{id}")
@@ -76,7 +78,7 @@ public class PeopleResource {
 		}
 		return Response.ok(personDetails).build();
 	}
-
+	
 	@GET
 	@Path("/getUserName/{id}")
 	public Response getUser(@Auth User currentUser, @PathParam("id") Integer personId) throws SQLException {
@@ -334,7 +336,14 @@ public class PeopleResource {
 	@PUT
 	@Path("/addPerson")
 	public Response addNewPerson(@Auth User user, NewPerson newPerson) throws RedmineException {
-		RedmineManager redmineManager = RedmineManagerFactory.createWithApiKey(redmineUrl, apiAccessKey);
+		String apiKey;
+		try {
+			 apiKey = peopleDAO.getApiKeyOfUser(newPerson.getUserId()).get(0);
+		} catch (Exception e1) {
+			System.out.println(e1);
+			return Response.status(Status.BAD_REQUEST).entity(e1).build();
+		}
+		RedmineManager redmineManager = RedmineManagerFactory.createWithApiKey(redmineUrl, apiKey);
 		com.taskadapter.redmineapi.bean.User newUser = new com.taskadapter.redmineapi.bean.User();
 		People addedPerson = new People();
 		newUser.setFirstName(newPerson.getFirstName());
@@ -417,7 +426,14 @@ public class PeopleResource {
 	@PUT
 	@Path("/updatePerson")
 	public Response updatePerson(@Auth User user, NewPerson newPerson) throws RedmineException {
-		RedmineManager redmineManager = RedmineManagerFactory.createWithApiKey(redmineUrl, apiAccessKey);
+		String apiKey;
+		try {
+			 apiKey = peopleDAO.getApiKeyOfUser(newPerson.getUserId()).get(0);
+		} catch (Exception e1) {
+			System.out.println(e1);
+			return Response.status(Status.BAD_REQUEST).entity(e1).build();
+		}
+		RedmineManager redmineManager = RedmineManagerFactory.createWithApiKey(redmineUrl, apiKey);
 		com.taskadapter.redmineapi.bean.User newUser = new com.taskadapter.redmineapi.bean.User(
 				newPerson.getPersonId());
 

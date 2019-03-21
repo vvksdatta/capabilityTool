@@ -11,7 +11,6 @@ import java.util.List;
 import java.util.Map;
 import javax.annotation.security.RolesAllowed;
 import javax.ws.rs.Consumes;
-import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
@@ -56,7 +55,6 @@ import se.bth.didd.wiptool.db.ProjectDAO;
 public class ProjectResource {
 
 	private String redmineUrl;
-	private String apiAccessKey;
 	private ProjectDAO projectDAO;
 
 	/*
@@ -64,9 +62,8 @@ public class ProjectResource {
 	 * it maps the redmine configuration values to the variables 'redmineUrl'
 	 * and 'apiAcessKey'.
 	 */
-	public ProjectResource(ProjectDAO projectDAO, String redmineUrl, String apiAccessKey) {
+	public ProjectResource(ProjectDAO projectDAO, String redmineUrl) {
 		this.projectDAO = projectDAO;
-		this.apiAccessKey = apiAccessKey;
 		this.redmineUrl = redmineUrl;
 	}
 
@@ -265,14 +262,20 @@ public class ProjectResource {
 
 	@PUT
 	@Path("/newproject")
-	public Projects newProject(@Auth User user, NewProject newproject) throws RedmineException {
+	public Response newProject(@Auth User user, NewProject newproject) throws RedmineException, SQLException {
 		/*
 		 * This method aims at creating a new project on redmine using the
 		 * details provided from the frontend application. Besides updating
 		 * redmine, the details of new project are also updated in the database.
 		 */
-
-		RedmineManager redmineManager = RedmineManagerFactory.createWithApiKey(redmineUrl, apiAccessKey);
+		String apiKey;
+		try {
+			 apiKey = projectDAO.getApiKeyOfUser(newproject.getUserId()).get(0);
+		} catch (Exception e1) {
+			System.out.println(e1);
+			return Response.status(Status.BAD_REQUEST).entity(e1).build();
+		}
+		RedmineManager redmineManager = RedmineManagerFactory.createWithApiKey(redmineUrl, apiKey);
 		Project project = ProjectFactory.create();
 		Long timeStamp = Calendar.getInstance().getTimeInMillis();
 		String key = newproject.getProjectName().toLowerCase().replaceAll("\\s+", "") + timeStamp;
@@ -280,7 +283,12 @@ public class ProjectResource {
 		project.setName(newproject.getProjectName());
 		project.setDescription(newproject.getProjectDescription());
 		project.setParentId(newproject.getParentProjectId());
-		Project createdProject = redmineManager.getProjectManager().createProject(project);
+		Project createdProject;
+		try {
+			createdProject = redmineManager.getProjectManager().createProject(project);
+		} catch (Exception e) {
+			return Response.status(Status.BAD_REQUEST).entity(e).build();
+		}
 		Projects createNewProject = new Projects();
 
 		createNewProject.setProjectName(newproject.getProjectName());
@@ -301,15 +309,21 @@ public class ProjectResource {
 		// createNewProject.setProjectUpdatedBy("userOne");
 		createNewProject.setRedmineLastUpdate(createdProject.getUpdatedOn());
 		projectDAO.createProject(createNewProject);
-		return createNewProject;
-
+		return Response.ok().entity(createNewProject).build();
 	}
 
 	@PUT
-	@Path("/setProjectParticipants/{id}")
+	@Path("/setProjectParticipants/{projectId}/{userId}")
 	public Response setProjectParticipants(@Auth User user, List<RolesOfPeople> rolesOfPeople,
-			@PathParam("id") Integer projectId) throws RedmineException, SQLException {
-		RedmineManager redmineManager = RedmineManagerFactory.createWithApiKey(redmineUrl, apiAccessKey);
+			@PathParam("projectId") Integer projectId, @PathParam("userId") Integer userId) throws RedmineException, SQLException {
+		String apiKey;
+		try {
+			 apiKey = projectDAO.getApiKeyOfUser(userId).get(0);
+		} catch (Exception e1) {
+			System.out.println(e1);
+			return Response.status(Status.BAD_REQUEST).entity(e1).build();
+		}
+		RedmineManager redmineManager = RedmineManagerFactory.createWithApiKey(redmineUrl, apiKey);
 		MembershipManager membershipManager = redmineManager.getMembershipManager();
 		for (RolesOfPeople person : rolesOfPeople) {
 			try {
@@ -337,10 +351,17 @@ public class ProjectResource {
 	}
 
 	@PUT
-	@Path("/updateProjectParticipants/{id}")
+	@Path("/updateProjectParticipants/{projectId}/{userId}")
 	public Response updateProjectParticipants(@Auth User user, List<RolesOfPeople> rolesOfPeople,
-			@PathParam("id") Integer projectId) throws RedmineException, SQLException {
-		RedmineManager redmineManager = RedmineManagerFactory.createWithApiKey(redmineUrl, apiAccessKey);
+			@PathParam("projectId") Integer projectId, @PathParam("userId") Integer userId) throws RedmineException, SQLException {
+		String apiKey;
+		try {
+			 apiKey = projectDAO.getApiKeyOfUser(userId).get(0);
+		} catch (Exception e1) {
+			System.out.println(e1);
+			return Response.status(Status.BAD_REQUEST).entity(e1).build();
+		}
+		RedmineManager redmineManager = RedmineManagerFactory.createWithApiKey(redmineUrl, apiKey);
 		MembershipManager membershipManager = redmineManager.getMembershipManager();
 
 		try {
@@ -381,38 +402,6 @@ public class ProjectResource {
 		return Response.ok(success).build();
 	}
 
-	@DELETE
-	@Path("/deleteProjectParticipants/{id}")
-	public Response deleteProjectParticipants(@Auth User user, @PathParam("id") Integer projectId)
-			throws RedmineException, SQLException {
-		RedmineManager redmineManager = RedmineManagerFactory.createWithApiKey(redmineUrl, apiAccessKey);
-		MembershipManager membershipManager = redmineManager.getMembershipManager();
-
-		try {
-
-			List<Membership> members = membershipManager.getMemberships(projectId);
-			for (Membership member : members) {
-
-				for (Role roleDetails : member.getRoles()) {
-
-					if (projectDAO.ifPersonParticipatesInProject(projectId, member.getUserId(),
-							roleDetails.getId()) == true) {
-						projectDAO.deleteProjectParticipant(projectId, member.getUserId(), roleDetails.getId());
-
-					}
-				}
-
-				membershipManager.delete(member);
-			}
-
-		} catch (Exception e) {
-			System.out.println(e.toString());
-			return Response.status(Status.BAD_REQUEST).entity(e).build();
-		}
-
-		return Response.ok().build();
-	}
-
 	@PUT
 	@Path("/rolesOfPeopleInProject")
 	public Response rolesOfPeopleInProject(@Auth User user, Integer projectId) throws RedmineException {
@@ -436,8 +425,14 @@ public class ProjectResource {
 		 * the frontend application. Besides updating redmine, the details of
 		 * project are also updated in the database.
 		 */
-
-		RedmineManager redmineManager = RedmineManagerFactory.createWithApiKey(redmineUrl, apiAccessKey);
+		String apiKey;
+		try {
+			 apiKey = projectDAO.getApiKeyOfUser(updateProject.getUserId()).get(0);
+		} catch (Exception e1) {
+			System.out.println(e1);
+			return Response.status(Status.BAD_REQUEST).entity(e1).build();
+		}
+		RedmineManager redmineManager = RedmineManagerFactory.createWithApiKey(redmineUrl, apiKey);
 		Project project = redmineManager.getProjectManager().getProjectById(updateProject.projectId);
 		Long timeStamp = Calendar.getInstance().getTimeInMillis();
 		project.setName(updateProject.getProjectName());

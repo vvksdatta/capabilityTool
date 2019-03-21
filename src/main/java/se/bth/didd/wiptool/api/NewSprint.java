@@ -51,9 +51,10 @@ public class NewSprint {
 	@JsonProperty
 	@OneToMany("kindOfAssets")
 	public List<SprintAsset> kindOfAssets;
-
 	
-
+	@JsonProperty
+	@ColumnName("userId")
+	public Integer userId;
 
 	public NewSprint(Integer projectId, String sprintName, String sprintDescription, Date sprintStartDate,
 			Date sprintEndDate, Integer sprintEstimatedEffort, 
@@ -150,4 +151,12 @@ public class NewSprint {
 		this.kindOfAssets = kindOfAssets;
 	}
 
+	public Integer getUserId() {
+		return userId;
+	}
+
+	public void setUserId(Integer userId) {
+		this.userId = userId;
+	}
+	
 }

@@ -31,6 +31,10 @@ public class UserTemplate {
 	@ColumnName("usermailId")
 	public String usermailId;
 
+	@JsonProperty
+	@ColumnName("apiKey")
+	public String apiKey;
+	
 	public UserTemplate(Integer userId, String userName, String userFirstName, String userLastName, String usermailId) {
 		super();
 		this.userId = userId;
@@ -86,5 +90,10 @@ public class UserTemplate {
 	public void setUsermailId(String usermailId) {
 		this.usermailId = usermailId;
 	}
-
+	public String getApiKey() {
+		return apiKey;
+	}
+	public void setApiKey(String apiKey) {
+		this.apiKey = apiKey;
+	}
 }

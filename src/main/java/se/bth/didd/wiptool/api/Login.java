@@ -34,6 +34,10 @@ public class Login {
 	@JsonProperty
 	@ColumnName("password")
 	public String password;
+	
+	@JsonProperty
+	@ColumnName("apiKey")
+	public String apiKey;
 
 	
 	public Login(Integer userId, String userName, String userFirstName, String userLastName, String userMailId,
@@ -80,7 +84,13 @@ public class Login {
 	public String getUserLastName() {
 		return userLastName;
 	}
-
+	
+	public String getApiKey() {
+		return apiKey;
+	}
+	public void setApiKey(String apiKey) {
+		this.apiKey = apiKey;
+	}
 	public void setUserFirstName(String userFirstName) {
 		this.userFirstName = userFirstName;
 	}
@@ -104,5 +114,5 @@ public class Login {
 	public void setPassword(String password) {
 		this.password = password;
 	}
-
+	
 }

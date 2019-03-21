@@ -31,7 +31,7 @@ p {
             <col width="20%" />
             <col width="10%" />
             <tbody>
-              <tr ng-repeat="project in projects">
+              <tr ng-repeat="project in projects  | orderBy:'projectName'">
                 <td><div>{{project.projectName | capitalize }}</div>
                   <div style="display: inline-flex;margin-top:10px; font-size: 14px;color: rgb(90, 132, 187);" ng-repeat="parentProject in parentProjectsList[project.projectId].slice().reverse() track by $index " >
                     <span ng-show="($index + 1) != parentProjectsList[project.projectId].length && parentProjectsList[project.projectId].length != 1">

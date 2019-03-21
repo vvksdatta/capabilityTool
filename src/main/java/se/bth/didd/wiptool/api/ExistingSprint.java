@@ -77,8 +77,9 @@ public class ExistingSprint {
 	@ColumnName("expectedCoachingPotential")
 	public String expectedCoachingPotential;
 	
-
-
+	@JsonProperty
+	@ColumnName("userId")
+	public Integer userId;
 
 	public ExistingSprint(Integer projectId, Integer sprintId, String sprintName, String sprintDescription,
 			String sprintStatus, String sprintPhase, Date sprintStartDate, Date sprintEndDate,
@@ -230,4 +231,13 @@ public class ExistingSprint {
 	public void setExpectedCoachingPotential(String expectedCoachingPotential) {
 		this.expectedCoachingPotential = expectedCoachingPotential;
 	}
+
+	public Integer getUserId() {
+		return userId;
+	}
+
+	public void setUserId(Integer userId) {
+		this.userId = userId;
+	}
+	
 }

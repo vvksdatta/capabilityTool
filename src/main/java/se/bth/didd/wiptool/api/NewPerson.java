@@ -34,7 +34,9 @@ public class NewPerson {
 	@OneToMany("roles")
 	public List<Roles> roles;
 	
-	
+	@JsonProperty
+	@ColumnName("userId")
+	public Integer userId;
 	
 	public NewPerson(Integer personId, String firstName, String lastName, String emailID, List<Roles> roles) {
 		this.personId = personId;
@@ -89,6 +91,14 @@ public class NewPerson {
 
 	public void setRoles(List<Roles> roles) {
 		this.roles = roles;
+	}
+
+	public Integer getUserId() {
+		return userId;
+	}
+
+	public void setUserId(Integer userId) {
+		this.userId = userId;
 	}
 	
 }

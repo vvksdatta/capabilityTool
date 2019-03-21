@@ -31,7 +31,7 @@ p {
             <col width="20%" />
             <col width="10%" />
             <tbody>
-              <tr ng-repeat="project in projects"  ng-click="manageProject(project)" >
+              <tr ng-repeat="project in projects | orderBy:'projectName'"  ng-click="manageProject(project)" >
                 <td><div>{{project.projectName | capitalize }}</div>
                   <div style="display: inline-flex;margin-top:10px; font-size: 14px;color: rgb(90, 132, 187);" ng-repeat="parentProject in parentProjectsList[project.projectId].slice().reverse() track by $index " >
                     <span ng-show="($index + 1) != parentProjectsList[project.projectId].length && parentProjectsList[project.projectId].length != 1">
@@ -43,12 +43,12 @@ p {
                   </div>
                 </td>
                 <td>
-                  <span ng-model="letterLimit" ng-repeat="name in project.projectMembers" class="avatar" alt="datta" data-toggle="tooltip" data-placement="top" data-container="body" title="" style="background-color: #29516D; width: 28px; height: 26px; font-size: 12px; padding-top: 5px; margin-right: 3px;cursor: pointer;" data-original-title={{name.personName}}>{{ name.personName | limitTo:2 | uppercase }} <md-tooltip md-direction="top"> {{ name.personName }}</md-tooltip>
+                  <span ng-model="letterLimit" ng-repeat="name in project.projectMembers | orderBy:'personName'" class="avatar" alt="datta" data-toggle="tooltip" data-placement="top" data-container="body" title="" style="background-color: #29516D; width: 28px; height: 26px; font-size: 12px; padding-top: 5px; margin-right: 3px;cursor: pointer;" data-original-title={{name.personName}}>{{ name.personName | limitTo:2 | uppercase }} <md-tooltip md-direction="top"> {{ name.personName }}</md-tooltip>
                   </span>
                 </td>
                 <td>{{project.projectLeader | capitalize }}</td>
                 <td>
-                  <span ng-repeat="sprint in project.sprints">
+                  <span ng-repeat="sprint in project.sprints | orderBy:'sprintName'">
                     <ul class="align">
                       {{sprint.sprintName | capitalize}}
                     </ul>

@@ -70,7 +70,7 @@ $(".nav-tabs li").eq(0).removeClass("active");
                 </tr>
               </thead>
               <tbody>
-                <tr ng-repeat="user in usersList">
+                <tr ng-repeat="user in usersList |orderBy:'userName'">
                   <td >
                     {{user.userName | capitalize}}
                   </td>

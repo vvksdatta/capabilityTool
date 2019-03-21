@@ -137,6 +137,9 @@ public interface SprintDAO {
 	@SqlQuery("select * from SprintQuestionnaire where projectId = :projectId and sprintId = :sprintId")
 	List<SprintQuestionnaireTemplate> getSprintQuestionnaire(@Bind("projectId") int projectId,
 			@Bind("sprintId") int sprintId);
+	
+	@SqlQuery("select apiKey from LOGINCREDENTIALS where userId = :userId")
+	List<String> getApiKeyOfUser(@Bind("userId") int userId);
 
 	@SqlUpdate("insert into DEVELOPMENT_ENV_IN_A_SPRINT (projectId,sprintId,envId, redmineProjectIdentifier, redmineSprintIdentifier) values(:projectId,:sprintId,:envId, 'new', 'new')")
 	void insertDevelopmentEnvInaSprint(@Bind("projectId") int projectId, @Bind("sprintId") int sprintId,

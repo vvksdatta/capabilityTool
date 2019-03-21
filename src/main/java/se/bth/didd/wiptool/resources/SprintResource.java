@@ -59,7 +59,6 @@ import se.bth.didd.wiptool.api.ExistingSprint;
 public class SprintResource {
 
 	private String redmineUrl;
-	private String apiAccessKey;
 	private SprintDAO sprintDAO;
 
 	/*
@@ -68,10 +67,9 @@ public class SprintResource {
 	 * and 'apiAcessKey'.
 	 */
 
-	public SprintResource(SprintDAO sprintDao, String redmineUrl, String apiAccessKey) {
+	public SprintResource(SprintDAO sprintDao, String redmineUrl) {
 		super();
 		this.redmineUrl = redmineUrl;
-		this.apiAccessKey = apiAccessKey;
 		this.sprintDAO = sprintDao;
 	}
 
@@ -146,9 +144,15 @@ public class SprintResource {
 
 	@PUT
 	@Path("/addNewSprint")
-	public Response addNewSprint(NewSprint newSprint) throws RedmineException {
-
-		RedmineManager redmineManager = RedmineManagerFactory.createWithApiKey(redmineUrl, apiAccessKey);
+	public Response addNewSprint(NewSprint newSprint) throws RedmineException, SQLException {
+		String apiKey;
+		try {
+			 apiKey = sprintDAO.getApiKeyOfUser(newSprint.getUserId()).get(0);
+		} catch (Exception e1) {
+			System.out.println(e1);
+			return Response.status(Status.BAD_REQUEST).entity(e1).build();
+		}
+		RedmineManager redmineManager = RedmineManagerFactory.createWithApiKey(redmineUrl, apiKey);
 		Version newSprintOnRedmine = VersionFactory.create(newSprint.getProjectId(), newSprint.getSprintName());
 		newSprintOnRedmine.setDescription(newSprint.getSprintDescription());
 		newSprintOnRedmine.setDueDate(newSprint.getSprintEndDate());
@@ -210,8 +214,14 @@ public class SprintResource {
 	@POST
 	@Path("/updateSprint")
 	public Response updateSprint(ExistingSprint existingSprint) throws RedmineException {
-
-		RedmineManager redmineManager = RedmineManagerFactory.createWithApiKey(redmineUrl, apiAccessKey);
+		String apiKey;
+		try {
+			 apiKey = sprintDAO.getApiKeyOfUser(existingSprint.getUserId()).get(0);
+		} catch (Exception e1) {
+			System.out.println(e1);
+			return Response.status(Status.BAD_REQUEST).entity(e1).build();
+		}
+		RedmineManager redmineManager = RedmineManagerFactory.createWithApiKey(redmineUrl, apiKey);
 		Version existingSprintOnRedmine = VersionFactory.create(existingSprint.getSprintId());
 		existingSprintOnRedmine.setName(existingSprint.getSprintName());
 		existingSprintOnRedmine.setDescription(existingSprint.getSprintDescription());
@@ -230,7 +240,6 @@ public class SprintResource {
 					.getVersionById(existingSprint.getSprintId());
 			updatedSprintDetails.setSprintId(existingSprint.getSprintId());
 			updatedSprintDetails.setProjectId(existingSprint.getProjectId());
-
 			saveSprint.setProjectId(existingSprint.getProjectId());
 			saveSprint.setSprintId(existingSprint.getSprintId());
 			saveSprint.setSprintName(existingSprint.getSprintName());

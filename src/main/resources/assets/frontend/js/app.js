@@ -948,7 +948,7 @@
       }
     };
   });
-  app.controller('projectParticipants', function TodoCtrl($scope, $element,$log, $state, $stateParams, $filter, $location, $http, alertFactory, $base64, $q, dataService, alertFactory, $mdDialog, $rootScope ) {
+  app.controller('projectParticipants', function TodoCtrl($scope, $element,$log, $state, $stateParams, $filter, $location, $http, alertFactory, $localStorage, $base64, $q, dataService, alertFactory, $mdDialog, $rootScope ) {
     if($rootScope.alerts.length !=0){
       angular.forEach($rootScope.alerts, function(value, key) {
         var alert = {};
@@ -1093,9 +1093,7 @@
         this.push(txt2);
       },ee );
       $scope.ree = angular.bind(this,ee);
-      //$scope.jsn = angular.fromJson($scope.ree);
-      //$scope.wee = allocatedPeople;
-      $http.put('/api/projects/setProjectParticipants/'+currentProject.projectId,$scope.ree ).then(function(response) {
+      $http.put('/api/projects/setProjectParticipants/'+currentProject.projectId+"/"+$localStorage.currentUser.userId,$scope.ree ).then(function(response) {
         $state.go("management.projects.projectsTable");
         var $string = "Successfully added the project participants";
         var optionalDelay = 3000;
@@ -1194,7 +1192,7 @@
     }
     $scope.synchronize = function() {
       $scope.loading = true;
-      $http.get('/api/redmine').then(function(response) {
+      $http.get('/api/redmine/'+$localStorage.currentUser.userId).then(function(response) {
         $scope.loading = false;
         var $string = "Hurray! Successfully synchronized with Redmine!";
         var optionalDelay = 3000;
@@ -2305,6 +2303,7 @@
     };
     $scope.createProject = function(project) {
       project.projectUpdatedBy = $localStorage.currentUser.userFirstName;
+      project.userId =  $localStorage.currentUser.userId;
       $http.put('/api/projects/newproject',project).then(function(response) {
         var createdProject = response.data;
         $state.go("management.projects.addProject.participants",createdProject);
@@ -2314,7 +2313,7 @@
       })
       .catch(function(response, status) {
         var optionalDelay = 5000;
-        var $string = "Error in creating a new project";
+        var $string = response.data.message;
         alertFactory.addAuto('danger', $string, optionalDelay);
       });
     };
@@ -2394,7 +2393,7 @@
           },ee );
         }
         person.roles = angular.bind(this,ee);
-        //$scope.newPerson = person;
+        person.userId = $localStorage.currentUser.userId;
         $http.put('/api/people/updatePerson',person).then(function(response) {
           var updatedPerson = response.data;
           $state.go("management.people.editPerson.editCapabilities", updatedPerson);
@@ -5441,6 +5440,7 @@
         issueDetails.projectId = $scope.projectId;
         issueDetails.sprintId = $scope.sprintId;
         issueDetails.issuesAllocated = listOfIssuesAllocated;
+        issueDetails.userId = $localStorage.currentUser.userId;
         $http.post('/api/issues/updateAllocatedIssues',issueDetails).then(function(response) {
           $state.go("management.sprints.sprintsTable");
           var $string = "Successfully added people to issues";
@@ -6532,6 +6532,7 @@
               //}
               $scope.createSprint = createSprint;
             }).then(function(){
+              $scope.createSprint.userId = $localStorage.currentUser.userId;
               $http.post('/api/sprints/updateSprint',$scope.createSprint).then(function(response) {
                 var createdSprint = response.data;
                 $state.go("management.sprints.editSprint.companyFactors", createdSprint);
@@ -6733,6 +6734,7 @@
           createSprint.sprintUpdatedBy = $localStorage.currentUser.userFirstName;
           $scope.createSprint = createSprint;
         }).then(function(){
+          $scope.createSprint.userId =  $localStorage.currentUser.userId;
           $http.put('/api/sprints/addNewSprint',$scope.createSprint).then(function(response) {
             var createdSprint = response.data;
             $state.go("management.sprints.addSprint.companyFactors", createdSprint);
@@ -6744,6 +6746,11 @@
             $scope.extraDomainsList=[];
             $scope.extraAssetsList =[];
           })
+          .catch(function(response, status) {
+            var optionalDelay = 5000;
+            var $string = response.data.message;
+            alertFactory.addAuto('danger', $string, optionalDelay);
+          });
         })
         .catch(function(response, status) {
           var optionalDelay = 5000;
@@ -6947,6 +6954,7 @@
           },ee );
         }
         person.roles = angular.bind(this,ee);
+        person.userId = $localStorage.currentUser.userId;
         $http.put('/api/people/addPerson',person).then(function(response) {
           var createdPerson = response.data;
           $scope.userId = createdPerson.personId;
@@ -7734,7 +7742,7 @@
         }
       };
     });
-    app.controller('editProjectParticipants', function TodoCtrl($scope, $element,$log, $state, $stateParams, $filter, $location, $http, $base64, $q, dataService, alertFactory, $mdDialog, $rootScope ) {
+    app.controller('editProjectParticipants', function TodoCtrl($scope, $element,$log, $state, $stateParams, $filter, $location, $http, $base64, $q, dataService, alertFactory, $localStorage, $mdDialog, $rootScope ) {
       $scope.searchPeople = '';
       if($rootScope.alerts.length !=0){
         angular.forEach($rootScope.alerts, function(value, key) {
@@ -7910,7 +7918,7 @@
         $scope.ree = angular.bind(this,ee);
         //$scope.jsn = angular.fromJson($scope.ree);
         //$scope.wee = allocatedPeople;
-        $http.put('/api/projects/updateProjectParticipants/'+currentProject.projectId,$scope.ree ).then(function(response) {
+        $http.put('/api/projects/updateProjectParticipants/'+currentProject.projectId+"/"+$localStorage.currentUser.userId,$scope.ree ).then(function(response) {
           $state.go("management.projects.projectsTable");
           var $string = "Successfully updated the project participants";
           var optionalDelay = 3000;
