@@ -484,8 +484,8 @@ $(".nav-tabs li").eq(5).removeClass("active");
               <tr><tr ng-repeat="(key,value) in selectedRoles" ng-if="value!=0" ng-hide="selectedRole == key" >
                 <td style="padding-left: 0px;">
                   <div class="thumbnail" style="border: 5px dotted #5d5c5c; color: #333;margin-bottom: 10px;border-radius: 3px;" data-drop="drop[key]" ng-model='list2[key]' jqyoui-droppable>
-                    <div style="text-align: center;"  ng-if="value>1">  Add polo {{value}} {{key}}s </div>
-                    <div style="text-align: center;"  ng-if="value<=1">  Add polo {{value}} {{key}} </div>
+                    <div style="text-align: center;"  ng-if="value>1">  Add {{value}} {{key}}s </div>
+                    <div style="text-align: center;"  ng-if="value<=1">  Add {{value}} {{key}} </div>
                     <div ng-repeat="item in list2[key]">
                       <md-checkbox  type="checkbox" style="margin-bottom: 10px;width: 100%;display: block;" class="md-primary"  ng-model="removeSelected[item.personId]" >
                         <md-tooltip md-direction="left">Remove {{item.personName}}</md-tooltip>
