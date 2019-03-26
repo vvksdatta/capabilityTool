@@ -6860,6 +6860,7 @@
       }
     });
     app.controller('peopleManagementCtrl', function($scope, $state, $location, $http, alertFactory, $base64, $q, dataService,  $localStorage, $stateParams, $log, $window, $rootScope) {
+        $scope.oneAtATime = true;
       if($rootScope.alerts.length !=0){
         angular.forEach($rootScope.alerts, function(value, key) {
           var alert = {};

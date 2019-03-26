@@ -26,8 +26,8 @@
               </tr>
             </thead>
             <tbody>
-              <tr ng-repeat="sprint in sprints | orderBy:'sprintName'" ng-click="manageSprint(sprint)">
-                <td>{{sprint.sprintName | capitalize }}</td>
+              <tr ng-repeat="sprint in sprints | orderBy:'sprintName'">
+                <td ng-click="manageSprint(sprint)">{{sprint.sprintName | capitalize }}</td>
                 <td>{{sprint.projectName | capitalize }}</td>
                 <td>
                   <span ng-model="letterLimit" ng-repeat="name in sprint.teamMembers" class="avatar" alt="datta" data-toggle="tooltip" data-placement="top" data-container="body" title="" style="background-color: #29516D;width: 28px; height: 26px; font-size: 12px;padding-top: 5px;margin-right: 3px" data-original-title={{name.personName}}>{{ name.personName | limitTo:2 | uppercase }} <md-tooltip md-direction="top"> {{ name.personName }}</md-tooltip>

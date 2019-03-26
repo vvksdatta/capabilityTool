@@ -1,63 +1,61 @@
 <style>
-p {
-  display: inline;
-}
+  p {
+    display: inline;
+  }
+  .rTableRow:hover {
+    background-color: #f5f5f5;
+  }
+  .panel-group {
+      margin-bottom: 3px;
+  }
 </style>
-<!--
-<div class="col-md-8 col-md-offset-2">
--->
 <md-whiteframe class="md-whiteframe-18dp"  layout layout-align="center center" style="margin-bottom: 50px;">
-  <div class="col-md-12" style="padding-left: 0px; padding-right: 0px;">
+  <div class="col-md-12" style="padding-left: 0px;padding-right: 0px;">
     <div class="panel panel-default-table panel-table" style="margin-bottom: 0px;">
       <div class="panel-heading">
-        <h3 class="panel-title"><strong>People Summary</strong></h3>
-        <input type="text" class="form-control" type="text" style="margin-top: 10px;" id="dev-table-filter" data-action="filter" data-filters="#dev-table" placeholder="Filter People"/>
+        <md-button ng-disabled="enable" type="submit" style="font-size: 15px; background-color: rgb(90, 132, 187);" class="add-tab md-primary md-raised" ui-sref="management.people.addPerson.newPerson" > <i class="glyphicon glyphicon-plus"></i>Add person <md-tooltip  ng-show="enable"  md-direction="right"> This option has been disabled</md-tooltip> </md-button>
+        <input type="text" style="margin-top: 10px;" class="form-control" id="dev-table-filter" data-action="filter" data-filters="#dev-table" placeholder="Filter People"/>
         <div class="pull-right">
-          <span class="clickable filter" data-toggle="tooltip" title="Toggle table filter" data-container="body">
-          </span>
+          <span class="clickable filter" data-toggle="tooltip" title="Toggle table filter" data-container="body"></span>
         </div>
       </div>
-      <div class="panel-body table-responsive">
+      <div class="panel-body people-table-responsive">
         <md-whiteframe class="md-whiteframe-24dp"  layout layout-align="center center">
           <table class="table table-hover" id="dev-table">
             <thead>
               <tr>
                 <th>Person Name</th>
-                <th>Current Projects</th>
-                <th>Current Sprints</th>
-                <th>Number of Issues</th>
+                <th>Details of current projects</th>
               </tr>
             </thead>
+            <col width="40%" />
+            <col width="60%" />
             <tbody>
-              <tr ng-repeat="person in people | orderBy:'personName'">
+              <tr ng-repeat="person in people | orderBy:'personName'" >
                 <td>
-                  <span ng-model="letterLimit"  class="avatar" data-toggle="tooltip" data-placement="top" data-container="body" title="{{person.personName | capitalize }}" style="background-color: #29516D; width: 28px;height: 26px;font-size: 12px;padding-top: 5px; margin-right: 3px;cursor: pointer;" data-original-title={{person.personName}}>{{ person.personName | limitTo:2 | uppercase }} <md-tooltip md-direction="top"> {{ person.personName }}</md-tooltip>
-                  </span>
-                  {{person.personName | capitalize }}
+                  <span ng-model="letterLimit" class="avatar" alt="datta" data-toggle="tooltip" data-placement="top" data-container="body" style="background-color: #29516D; width: 28px;height: 26px;font-size: 12px;padding-top: 5px;margin-right: 3px" data-original-title={{participant.personName }}  > {{ person.personName | limitTo:2 | uppercase }}<md-tooltip md-direction="top"> {{ person.personName }}</md-tooltip>
+                  </span>   {{person.personName | capitalize }}
                 </td>
                 <td>
-                  <span ng-repeat="personProject in person.projects">
-                    <ul ng-repeat="(key,personSprints) in personProject.sprints">
-                      <span ng-show="key==0">{{personProject.projectName | capitalize }}
-                      </span>
-                      <span ng-show="key>0"> <br/>
-                      </span>
-                    </ul>
-                  </span>
-                </td>
-                <td>
-                  <span ng-repeat="personProject in person.projects">
-                    <ul ng-repeat="personSprints in personProject.sprints">
-                      {{personSprints.sprintName}}
-                    </ul>
-                  </span>
-                </td>
-                <td>
-                  <span ng-repeat="personProject in person.projects">
-                    <ul ng-repeat="personSprints in personProject.sprints">
-                      {{personSprints.numberofIssues}}
-                    </ul>
-                  </span>
+                  <accordion close-others="oneAtATime" ng-repeat="personProject in person.projects  | orderBy:'projectName'">
+                    <accordion-group is-open="personProject.isOpen"  style="width: 80%;"  >
+                      <accordion-heading >
+                        <i class="glyphicon-plus" ng-show= "!personProject.isOpen"style=" font-style: inherit;">  <md-tooltip md-direction="top"> Click to view participation in the project {{personProject.projectName | capitalize}}</md-tooltip>Participation in {{personProject.projectName | capitalize }} </i>
+                        <i class="glyphicon-minus" ng-hide= "!personProject.isOpen" style=" font-style: inherit;">  <md-tooltip md-direction="top"> Click to view participation in the project {{personProject.projectName | capitalize}}</md-tooltip>Participation in {{personProject.projectName | capitalize }} </i>
+                        <i class="pull-right glyphicon"  ng-class="{'glyphicon-chevron-down': personProject.isOpen, 'glyphicon-chevron-right': !personProject.isOpen}"></i>
+                      </accordion-heading>
+                      <div class="rTable" style="width: 100%;">
+                        <div class="rTableRow">
+                          <div class="rTableHead"><strong>Sprint Name</strong></div>
+                          <div class="rTableHead"><strong>Number of issues</strong></div>
+                        </div>
+                        <div class="rTableRow" ng-repeat="personSprints in personProject.sprints  | orderBy:'sprintName'" >
+                          <div class="rTableCell">{{personSprints.sprintName | capitalize }}</div>
+                          <div class="rTableCell">{{personSprints.numberofIssues}}</div>
+                        </div>
+                      </div>
+                    </accordion-group>
+                  </accordion>
                 </td>
               </tr>
               <tr ng-if="people.length == 0">
