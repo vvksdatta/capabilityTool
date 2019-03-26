@@ -17,6 +17,9 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 import java.util.Base64;
+import java.util.Collections;
+import java.util.Comparator;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.rkmk.container.FoldingList;
 import com.taskadapter.redmineapi.RedmineException;
@@ -296,6 +299,12 @@ public class PeopleResource {
 			newPerson.setProjects(null);
 			peopleSummary.add(newPerson);
 		}
+		
+		Collections.sort(peopleSummary, new Comparator<PeopleSummary>() {
+		    public int compare(PeopleSummary v1, PeopleSummary v2) {
+		        return v1.getPersonName().compareTo(v2.getPersonName());
+		    }
+		});
 		return peopleSummary;
 	}
 
