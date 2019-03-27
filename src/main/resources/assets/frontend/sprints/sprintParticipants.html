@@ -87,7 +87,7 @@ $(".nav-tabs li").eq(5).removeClass("active");
                     <td>
                       <div style="padding-top: 5px; display: inline-flex;">
                         <md-button style="font-size: 15px;min-width: 40px; background-color: rgb(90, 132, 187);" ng-click="increment(val.roleName,val.numberOfPeople);" class="add-tab md-primary md-raised"><i class="glyphicon glyphicon-plus"></i></md-button>
-                        <input type="number" min="0" max={{val.numberOfPeople}} style= "width: 60px;padding: 0 6px;margin: 5px 0px;height: 38px;" id="selectedRoles" name={{val.roleName}} class="form-control" ng-required="!someSelected(formData1.selectedRoles)" ng-model="formData1.selectedRoles[val.roleName]" ng-change="change(form, val.roleName, val.numberOfPeople)">
+                        <input type="number" min="0" max={{val.numberOfPeople}} style= "width: 8vh;padding: 0 6px;margin: 5px 0px;height: 38px;" id="selectedRoles" name={{val.roleName}} class="form-control" ng-required="!someSelected(formData1.selectedRoles)" ng-model="formData1.selectedRoles[val.roleName]" ng-change="change(form, val.roleName, val.numberOfPeople)">
                         <md-button style="font-size: 15px; min-width: 40px; background-color: rgb(90, 132, 187);" ng-click="decrement(val.roleName,val.numberOfPeople);" class="add-tab md-primary md-raised"><i class="glyphicon glyphicon-minus"></i></md-button>
                         <md-tooltip md-direction="right"> Maximum number of {{val.roleName}}s is {{val.numberOfPeople}} </md-tooltip>
                       </div>

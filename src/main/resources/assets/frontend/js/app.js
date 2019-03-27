@@ -5265,18 +5265,22 @@
     $scope.issueDetails = [];
     $scope.selectedSecurityRisk = [];
     $scope.removeSelected = {};
+    var initialList = [];
     var optionalDelay = "800000";
     var $string = "Note : Assigning an issue to a person will update the details on Redmine";
     alertFactory.addAuto('info', $string, optionalDelay);
     $http.get('/api/sprints/getSprintParticipants/'+$scope.sprintId+"/"+$scope.projectId).then(function(response)
     {
       $scope.peopleList = response.data;
+        angular.forEach(response.data, function(value,key){
+          initialList.push(value);
+        });
     })
     .catch(function(response, status) {
       var optionalDelay = 5000;
       var $string = "Error in fetching list of sprint participants";
       alertFactory.addAuto('danger', $string, optionalDelay);
-    });
+    }).then(function(){
     $http.get('api/issues/getSpecialIssuesInSprint/'+$scope.sprintId+"/"+$scope.projectId).then(function(response)
     {
       $scope.specialIssues = response.data;
@@ -5292,6 +5296,7 @@
             var assignedIssue = {};
             assignedIssue.personId = value2.personId;
             assignedIssue.personName =  value2.personName;
+            assignedIssue.roleName =  value2.roleName;
             assignedIssue.issueId = value.issueId;
             $scope.list2[value.issueId].push(assignedIssue);
             if($scope.drop[value.issueId] == true){
@@ -5321,35 +5326,7 @@
         $scope.issueDetails[issueId] = !$scope.issueDetails[issueId];
       }
       $scope.showRemove = false;
-      $scope.numberOfParticipants =0;
-      $scope.limitEntry = function(length,id,person){
-        var initialPeopleList = [];
-        $http.get('/api/sprints/getSprintParticipants/'+$scope.sprintId+"/"+$scope.projectId).then(function(response)
-        {
-          initialPeopleList   = response.data;
-          $scope.peopleList = response.data;
-        }).then(function(){
-          //$log.debug('Hello im here ' +person.personName+ '!');
-          $scope.showRemove = true;
-          $scope.numberOfParticipants = $scope.numberOfParticipants +	length;
-          person.issueId = id;
-          angular.forEach($scope.specialIssues, function(value,key){
-            var list3 = $scope.list2[value.issueId];
-            angular.forEach(list3, function(value3, key3) {
-              if(list3[key3].issueId == id && $scope.peopleList.length != initialPeopleList.length){
-                var tmp ={};
-                tmp.personId = list3[key3].personId;
-                tmp.personName = list3[key3].personName;
-                tmp.roleName = list3[key3].roleName;
-                $scope.peopleList.push(tmp);
-              }
-            });
-          });
-          if((length+1)>1){
-            return $scope.drop[id] = false;
-          }
-        });
-      };
+
       $scope.removePeopleToIssues = function(ev){
         var count = 0;
         angular.forEach($scope.specialIssues, function(value, key) {
@@ -5454,6 +5431,43 @@
         })
       };
     })
+
+  }).then(function(){
+    $scope.limitEntry = function(length,id,person){
+        $scope.peopleList = [];
+        $scope.showRemove = true;
+        person.issueId = id;
+      //peoplelistlength = initialList;
+      angular.forEach(initialList, function(value, key) {
+        if(value.personId == person.personId && value.personName == person.personName ){
+          initialList.splice(key,1);
+        }
+      });
+        angular.forEach($scope.specialIssues, function(value,key){
+          var list3 = $scope.list2[value.issueId];
+          angular.forEach(list3, function(value3, key3) {
+            if(list3[key3].issueId == id && $scope.peopleList.length != initialList.length){
+              var tmp ={};
+              tmp.personId = list3[key3].personId;
+              tmp.personName = list3[key3].personName;
+              tmp.roleName = list3[key3].roleName;
+              initialList.push(tmp);
+            }else if(initialList.length==0){
+              var tmp ={};
+              tmp.personId = list3[key3].personId;
+              tmp.personName = list3[key3].personName;
+              tmp.roleName = list3[key3].roleName;
+              initialList.push(tmp);
+            }
+          });
+              $scope.peopleList = initialList;
+        });
+        if((length+1)>1){
+           $scope.drop[id] = false;
+        }
+    };
+  })
+
   });
   app.controller('sprintRolesCtrl', function($scope, $state, $timeout, $http, $q, dataService, alertFactory,  $localStorage, $stateParams, $log, $window, $mdDialog, $rootScope) {
     if($rootScope.alerts.length !=0){
