@@ -894,7 +894,7 @@
       {
         var optionalDelay = 5000;
         var $string = "Successfully updated the details of user "+ userDetails.userFirstName;
-        $state.go('home');
+        //$state.go('home');
         alertFactory.addAuto('success', $string, optionalDelay);
       })
       .catch(function(response, status) {
@@ -5150,7 +5150,7 @@
           sprintDetails.sprintId = $scope.sprintId;
           sprintDetails.sprintParticipants = listOfParticipants;
           $http.put('/api/sprints/updateSprintParticipants',sprintDetails).then(function(response) {
-            $state.go("management.sprints.editSprint.peopleToIssues",sprintDetails);
+            //$state.go("management.sprints.editSprint.peopleToIssues",sprintDetails);
             var $string = "Successfully updated the sprint participants";
             var optionalDelay = 3000;
             alertFactory.addAuto('success', $string, optionalDelay);
@@ -5442,7 +5442,7 @@
         issueDetails.issuesAllocated = listOfIssuesAllocated;
         issueDetails.userId = $localStorage.currentUser.userId;
         $http.post('/api/issues/updateAllocatedIssues',issueDetails).then(function(response) {
-          $state.go("management.sprints.sprintsTable");
+          //$state.go("management.sprints.sprintsTable");
           var $string = "Successfully added people to issues";
           var optionalDelay = 3000;
           alertFactory.addAuto('success', $string, optionalDelay);
@@ -8102,8 +8102,9 @@
         $scope.updateProject = function(project) {
           project.projectUpdatedBy = $localStorage.currentUser.userFirstName;
           project.projectId = currentProject.projectId;
+          project.userId =  $localStorage.currentUser.userId;
           $http.put('/api/projects/updateProject',project).then(function(response) {
-            $state.go("management.projects.projectsTable");
+          //  $state.go("management.projects.projectsTable");
             var $string = "Successfully updated the project ";
             var optionalDelay = 3000;
             alertFactory.addAuto('success', $string, optionalDelay);

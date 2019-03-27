@@ -75,6 +75,9 @@ public class WiptoolConfiguration extends Configuration implements AssetsBundleC
 	@NotEmpty
 	private String issueIdCutOff;
 	
+	@NotEmpty
+	private String projectIdCutOff;
+	
 	@JsonProperty
 	public String getIssueIdCutOff() {
 		return issueIdCutOff;
@@ -104,5 +107,9 @@ public class WiptoolConfiguration extends Configuration implements AssetsBundleC
 	public void setAdminPassword(String adminPassword) {
 		this.adminPassword = adminPassword;
 	}
-
+	
+	public String getProjectIdCutOff() {
+		return projectIdCutOff;
+	}
+	
 }

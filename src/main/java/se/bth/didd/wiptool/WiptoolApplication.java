@@ -145,7 +145,7 @@ public class WiptoolApplication extends Application<WiptoolConfiguration> {
 		environment.jersey().register(
 				new CapabilityResource(capabilityDAO));
 		environment.jersey().register(
-				new Redmine(redmineDAO, configuration.getRedmineUrl(), configuration.getIssueIdCutOff()));
+				new Redmine(redmineDAO, configuration.getRedmineUrl(), configuration.getProjectIdCutOff(),  configuration.getIssueIdCutOff()));
 		environment.jersey().register(
 				new SkillResource(skillDAO));
 		environment.jersey().register(

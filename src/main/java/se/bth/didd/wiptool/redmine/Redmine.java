@@ -53,11 +53,13 @@ public class Redmine {
 	RedmineDAO redmineDAO;
 
 	private String redmineUrl;
+	private String projectIdCutOff;
 	private String issueIdCutOff;
 
-	public Redmine(RedmineDAO redmineDAO, String redmineUrl, String issueIdCutOff) {
+	public Redmine(RedmineDAO redmineDAO, String redmineUrl, String projectIdCutOff, String issueIdCutOff) {
 		this.redmineDAO = redmineDAO;
 		this.redmineUrl = redmineUrl;
+		this.projectIdCutOff = projectIdCutOff;
 		this.issueIdCutOff = issueIdCutOff;
 	}
 
@@ -165,8 +167,10 @@ public class Redmine {
 		}
 
 		/* update projects,sprints etc */
+		int projectCutOff = Integer.parseInt(projectIdCutOff);
 		List<Project> projects = redmineManager.getProjectManager().getProjects();
 		for (Project redmineProject : projects) {
+			if(redmineProject.getId()>= projectCutOff){
 			/* check if project already added to database */
 			if (redmineDAO.ifProjectExists(redmineProject.getId()) != true) {
 				/*
@@ -351,6 +355,7 @@ public class Redmine {
 				}
 			}
 		}
+	}
 
 		/*
 		 * The loop for inserting new projects has been isolated from the loop
@@ -368,6 +373,7 @@ public class Redmine {
 		Timestamp timestamp = new Timestamp(System.currentTimeMillis());
 
 		for (Project redmineProject : projects) {
+			if(redmineProject.getId()>= projectCutOff){
 			/* check if project already added to database */
 			if (redmineDAO.ifProjectExists(redmineProject.getId()) != false) {
 
@@ -896,6 +902,7 @@ public class Redmine {
 			redmineDAO.updateRedmineProjectIdentifier(redmineProject.getId(), generatedRandomString);
 
 		}
+	}
 
 		/*
 		 * After updating the projects and issuses, check whether all the
@@ -906,7 +913,7 @@ public class Redmine {
 		 */
 
 		for (Project redmineProject : projects) {
-
+			if(redmineProject.getId()>= projectCutOff){
 			List<Version> sprints = redmineManager.getProjectManager().getVersions(redmineProject.getId());
 			for (Version sprint : sprints) {
 				List<RolesOfPeopleSprint> sprintParticipants = redmineDAO.getSprintParticipants(redmineProject.getId(),
@@ -932,6 +939,7 @@ public class Redmine {
 
 				}
 			}
+		}
 		}
 
 		// Deleting roles that no longer exist on Redmine
