@@ -5434,30 +5434,34 @@
       $scope.limitEntry = function(length,id,person){
         $scope.showRemove = true;
         person.issueId = id;
-        //peoplelistlength = initialList;
         angular.forEach(initialList, function(value, key) {
           if(value.personId == person.personId && value.personName == person.personName ){
             initialList.splice(key,1);
           }
         });
+        var initialListIds = [];
+        angular.forEach(initialList, function(value, key) {
+          initialListIds.push(value.personId);
+        });
         $scope.peopleList = [];
-        angular.forEach($scope.specialIssues, function(value,key){
-          var list3 = $scope.list2[value.issueId];
-          angular.forEach(list3, function(value3, key3) {
-            if(list3[key3].issueId == id && $scope.peopleList.length != initialList.length){
-              var tmp ={};
-              tmp.personId = list3[key3].personId;
-              tmp.personName = list3[key3].personName;
-              tmp.roleName = list3[key3].roleName;
-              initialList.push(tmp);
-            }else if(initialList.length==0){
+        var list3 = $scope.list2[id];
+        angular.forEach(list3, function(value3, key3) {
+          if(list3[key3].issueId == id && initialList.length !=0){
+            if(initialListIds.indexOf(list3[key3].personId) == -1) {
               var tmp ={};
               tmp.personId = list3[key3].personId;
               tmp.personName = list3[key3].personName;
               tmp.roleName = list3[key3].roleName;
               initialList.push(tmp);
             }
-          });
+          }
+          if(initialList.length == 0){
+            var tmp ={};
+            tmp.personId = list3[key3].personId;
+            tmp.personName = list3[key3].personName;
+            tmp.roleName = list3[key3].roleName;
+            initialList.push(tmp);
+          }
         });
         if((length+1)>1){
           $scope.drop[id] = false;
