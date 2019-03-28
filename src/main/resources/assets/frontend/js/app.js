@@ -5432,7 +5432,6 @@
       })
     }).then(function(){
       $scope.limitEntry = function(length,id,person){
-        $scope.peopleList = [];
         $scope.showRemove = true;
         person.issueId = id;
         //peoplelistlength = initialList;
@@ -5441,6 +5440,7 @@
             initialList.splice(key,1);
           }
         });
+        $scope.peopleList = [];
         angular.forEach($scope.specialIssues, function(value,key){
           var list3 = $scope.list2[value.issueId];
           angular.forEach(list3, function(value3, key3) {
@@ -5458,11 +5458,11 @@
               initialList.push(tmp);
             }
           });
-          $scope.peopleList = initialList;
         });
         if((length+1)>1){
           $scope.drop[id] = false;
         }
+        $scope.peopleList = initialList;
       };
     })
   });
