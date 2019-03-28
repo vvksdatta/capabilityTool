@@ -8,8 +8,6 @@
   transition: .5s ease all;
   height: calc(100% - 150px);
 }
-
-
 select > option{ font-size:17px; }
 .list-group {
   margin-bottom: 0px;
@@ -54,6 +52,9 @@ canvas { background:#fff; }
 .md-button.md-default-theme.md-primary.md-fab:not([disabled]).md-focused, .md-button.md-primary.md-fab:not([disabled]).md-focused,.md-button.md-default-theme.md-primary.md-fab:not([disabled]):hover, .md-button.md-primary.md-fab:not([disabled]):hover,.md-button.md-default-theme.md-primary.md-raised:not([disabled]).md-focused, .md-button.md-primary.md-raised:not([disabled]).md-focused,.md-button.md-default-theme.md-primary.md-raised:not([disabled]):hover, .md-button.md-primary.md-raised:not([disabled]):hover {
   background-color: rgb(90, 132, 187);
 }
+.ui-state-disabled, .ui-widget-content .ui-state-disabled, .ui-widget-header .ui-state-disabled {
+opacity: 1;
+}
 </style>
 <script>
 $(".nav-tabs li").eq(3).addClass("active");
@@ -86,7 +87,7 @@ $(".nav-tabs li").eq(5).removeClass("active");
                     <td>
                       <div style="padding-top: 5px; display: inline-flex;">
                         <md-button style="font-size: 15px;min-width: 40px; background-color: rgb(90, 132, 187);" ng-click="increment(val.roleName,val.numberOfPeople);" class="add-tab md-primary md-raised"><i class="glyphicon glyphicon-plus"></i></md-button>
-                        <input type="number" min="0" max={{val.numberOfPeople}} style= "width: 60px;padding: 0 6px;margin: 5px 0px;height: 38px;" id="selectedRoles" name={{val.roleName}} class="form-control" ng-required="!someSelected(formData1.selectedRoles)" ng-model="formData1.selectedRoles[val.roleName]" ng-change="change(form, val.roleName, val.numberOfPeople)">
+                        <input type="number" min="0" max={{val.numberOfPeople}} style= "width: 8vh;padding: 0 6px;margin: 5px 0px;height: 38px;" id="selectedRoles" name={{val.roleName}} class="form-control" ng-required="!someSelected(formData1.selectedRoles)" ng-model="formData1.selectedRoles[val.roleName]" ng-change="change(form, val.roleName, val.numberOfPeople)">
                         <md-button style="font-size: 15px; min-width: 40px; background-color: rgb(90, 132, 187);" ng-click="decrement(val.roleName,val.numberOfPeople);" class="add-tab md-primary md-raised"><i class="glyphicon glyphicon-minus"></i></md-button>
                         <md-tooltip md-direction="right"> Maximum number of {{val.roleName}}s is {{val.numberOfPeople}} </md-tooltip>
                       </div>
@@ -189,17 +190,16 @@ $(".nav-tabs li").eq(5).removeClass("active");
         <strong>People</strong>
       </div>
       <div class="list-group-item">Select Role:
-        <select ng-model="selectedRole" ng-cloak ng-change="filterPeople(selectedRole)"> <option ng-repeat="role in rolesList | orderBy:'roleName'"   value= {{role.roleName}}> {{role.roleName}} </option></select>
+        <select ng-model="selectedRole" ng-cloak ng-change="filterPeople(selectedRole)"> <option ng-repeat="role in rolesList"   value= {{role.roleName}}> {{role.roleName}} </option></select>
       </div>
       <div style="max-height:23vh;overflow-x:hidden;overflow-y:auto;">
-        <input type="text" style="margin-top: 10px;" class="form-control" id="dev-table-filter" data-action="filter" data-filters="#dev-table" placeholder="Filter People" ng-model="searchPerson"/>
         <div   ng-if="item.roleName == selectedRole && show" ng-cloak class="" ng-repeat="item in rolesOfPeople"  class="btn btn-block btn-droppable list-group-item" data-drop="true" data-jqyoui-options="{accept:'.btn-draggable:not([ng-model=peopleList])'}"  jqyoui-droppable="{index: {{$index}}}" >
-          <div ng-if="item.roleName == selectedRole" style = "display: inline-flex;padding: 5px 10px;margin-bottom: 2px;" class="btn btn-block list-group-item" ng-repeat="person in peopleList | orderBy:'personName' | filter:searchPerson" ng-click="showGraph(person);" ng-show="person.personId == item.personId">
+          <div ng-if="item.roleName == selectedRole" style = "display: inline-flex;padding: 5px 10px;margin-bottom: 2px;" class="btn btn-block list-group-item" ng-repeat="person in peopleList" ng-click="showGraph(person);" ng-show="person.personId == item.personId" ng-model='peopleList'>
             <div style="margin-left: 0; width: 4%; text-align: left;display: inline-flex;" ng-show="person.personId == item.personId">
               <md-checkbox type="checkbox" name="selectedDomains" style="margin-bottom: 8px;" class="md-primary" ng-model="formData.selected[person.personId]" ng-change="optionToggled()">
               </div>
               <div style="margin-left: 5px;display: inline-flex;width: 100%;z-index:100;" ng-if="person.personId == item.personId"  ng-show="person.personId == item.personId" ng-cloak  ng-init="person.roleName= selectedRole" class="btn btn-default btn-block btn-draggable" data-drag="{{true}}" data-jqyoui-options="{revert: 'invalid',helper:'clone',appendTo:'.selectedPeople',containment:'document',scroll:'false',onDrop: addBack(peopleList)}" ng-model="peopleList" jqyoui-draggable="{index: {{$index}},placeholder:true,animate:false}" ng-hide="!person.personName">
-                <table style="width: 100%" id="dev-table">
+                <table style="width: 100%">
                   <thead>
                     <tr>
                       <th>Name
@@ -236,7 +236,7 @@ $(".nav-tabs li").eq(5).removeClass("active");
                       </td>
                       <td>
                         <span style="display: table-row;" ng-repeat="personProject in person.projects">
-                          <ul ng-repeat="personSprints in personProject.sprints | orderBy:'sprintName'">
+                          <ul ng-repeat="personSprints in personProject.sprints">
                             {{personSprints.sprintName}}
                           </ul>
                         </span>
@@ -248,7 +248,7 @@ $(".nav-tabs li").eq(5).removeClass("active");
                       </td>
                       <td>
                         <span style="display:  table-row;" ng-repeat="personProject in person.projects">
-                          <ul ng-repeat="personSprints in personProject.sprints | orderBy:'sprintName'">
+                          <ul ng-repeat="personSprints in personProject.sprints">
                             {{personSprints.numberofIssues}}
                           </ul>
                         </span >

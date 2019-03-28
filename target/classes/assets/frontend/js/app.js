@@ -180,50 +180,6 @@
       }
     };
   });
-  app.directive('tree', function() {
-  return {
-    restrict: 'E', // tells Angular to apply this to only html tag that is <tree>
-    replace: true, // tells Angular to replace <tree> by the whole template
-    scope: {
-      t: '=src' // create an isolated scope variable 't' and pass 'src' to it.
-    },
-    template: '<ul><branch ng-repeat="c in t.personSprints" src="c"></branch></ul>'
-  };
-})
-
-app.directive('branch', function($compile) {
-  return {
-    restrict: 'E', // tells Angular to apply this to only html tag that is <branch>
-    replace: true, // tells Angular to replace <branch> by the whole template
-    scope: {
-      b: '=src' // create an isolated scope variable 'b' and pass 'src' to it.
-    },
-    template: '<li><a>{{ b.sprintName }}</a></li>',
-    link: function(scope, element, attrs) {
-      //// Check if there are any children, otherwise we'll have infinite execution
-
-      var has_children = angular.isArray(scope.b.personSprints);
-
-      //// Manipulate HTML in DOM
-      if (has_children) {
-        element.append('<tree src="b"></tree>');
-
-        // recompile Angular because of manual appending
-        $compile(element.contents())(scope);
-      }
-
-      //// Bind events
-      element.on('click', function(event) {
-          event.stopPropagation();
-
-          if (has_children) {
-            element.toggleClass('collapsed');
-          }
-      });
-    }
-  };
-})
-
   app.directive('userCard', function () {
     return {
       restrict: 'E',
@@ -938,7 +894,7 @@ app.directive('branch', function($compile) {
       {
         var optionalDelay = 5000;
         var $string = "Successfully updated the details of user "+ userDetails.userFirstName;
-        $state.go('home');
+        //$state.go('home');
         alertFactory.addAuto('success', $string, optionalDelay);
       })
       .catch(function(response, status) {
@@ -5194,7 +5150,7 @@ app.directive('branch', function($compile) {
           sprintDetails.sprintId = $scope.sprintId;
           sprintDetails.sprintParticipants = listOfParticipants;
           $http.put('/api/sprints/updateSprintParticipants',sprintDetails).then(function(response) {
-            $state.go("management.sprints.editSprint.peopleToIssues",sprintDetails);
+            //$state.go("management.sprints.editSprint.peopleToIssues",sprintDetails);
             var $string = "Successfully updated the sprint participants";
             var optionalDelay = 3000;
             alertFactory.addAuto('success', $string, optionalDelay);
@@ -5309,18 +5265,22 @@ app.directive('branch', function($compile) {
     $scope.issueDetails = [];
     $scope.selectedSecurityRisk = [];
     $scope.removeSelected = {};
+    var initialList = [];
     var optionalDelay = "800000";
     var $string = "Note : Assigning an issue to a person will update the details on Redmine";
     alertFactory.addAuto('info', $string, optionalDelay);
     $http.get('/api/sprints/getSprintParticipants/'+$scope.sprintId+"/"+$scope.projectId).then(function(response)
     {
       $scope.peopleList = response.data;
+        angular.forEach(response.data, function(value,key){
+          initialList.push(value);
+        });
     })
     .catch(function(response, status) {
       var optionalDelay = 5000;
       var $string = "Error in fetching list of sprint participants";
       alertFactory.addAuto('danger', $string, optionalDelay);
-    });
+    }).then(function(){
     $http.get('api/issues/getSpecialIssuesInSprint/'+$scope.sprintId+"/"+$scope.projectId).then(function(response)
     {
       $scope.specialIssues = response.data;
@@ -5336,6 +5296,7 @@ app.directive('branch', function($compile) {
             var assignedIssue = {};
             assignedIssue.personId = value2.personId;
             assignedIssue.personName =  value2.personName;
+            assignedIssue.roleName =  value2.roleName;
             assignedIssue.issueId = value.issueId;
             $scope.list2[value.issueId].push(assignedIssue);
             if($scope.drop[value.issueId] == true){
@@ -5365,35 +5326,7 @@ app.directive('branch', function($compile) {
         $scope.issueDetails[issueId] = !$scope.issueDetails[issueId];
       }
       $scope.showRemove = false;
-      $scope.numberOfParticipants =0;
-      $scope.limitEntry = function(length,id,person){
-        var initialPeopleList = [];
-        $http.get('/api/sprints/getSprintParticipants/'+$scope.sprintId+"/"+$scope.projectId).then(function(response)
-        {
-          initialPeopleList   = response.data;
-          $scope.peopleList = response.data;
-        }).then(function(){
-          //$log.debug('Hello im here ' +person.personName+ '!');
-          $scope.showRemove = true;
-          $scope.numberOfParticipants = $scope.numberOfParticipants +	length;
-          person.issueId = id;
-          angular.forEach($scope.specialIssues, function(value,key){
-            var list3 = $scope.list2[value.issueId];
-            angular.forEach(list3, function(value3, key3) {
-              if(list3[key3].issueId == id && $scope.peopleList.length != initialPeopleList.length){
-                var tmp ={};
-                tmp.personId = list3[key3].personId;
-                tmp.personName = list3[key3].personName;
-                tmp.roleName = list3[key3].roleName;
-                $scope.peopleList.push(tmp);
-              }
-            });
-          });
-          if((length+1)>1){
-            return $scope.drop[id] = false;
-          }
-        });
-      };
+
       $scope.removePeopleToIssues = function(ev){
         var count = 0;
         angular.forEach($scope.specialIssues, function(value, key) {
@@ -5486,7 +5419,7 @@ app.directive('branch', function($compile) {
         issueDetails.issuesAllocated = listOfIssuesAllocated;
         issueDetails.userId = $localStorage.currentUser.userId;
         $http.post('/api/issues/updateAllocatedIssues',issueDetails).then(function(response) {
-          $state.go("management.sprints.sprintsTable");
+          //$state.go("management.sprints.sprintsTable");
           var $string = "Successfully added people to issues";
           var optionalDelay = 3000;
           alertFactory.addAuto('success', $string, optionalDelay);
@@ -5498,6 +5431,43 @@ app.directive('branch', function($compile) {
         })
       };
     })
+
+  }).then(function(){
+    $scope.limitEntry = function(length,id,person){
+        $scope.peopleList = [];
+        $scope.showRemove = true;
+        person.issueId = id;
+      //peoplelistlength = initialList;
+      angular.forEach(initialList, function(value, key) {
+        if(value.personId == person.personId && value.personName == person.personName ){
+          initialList.splice(key,1);
+        }
+      });
+        angular.forEach($scope.specialIssues, function(value,key){
+          var list3 = $scope.list2[value.issueId];
+          angular.forEach(list3, function(value3, key3) {
+            if(list3[key3].issueId == id && $scope.peopleList.length != initialList.length){
+              var tmp ={};
+              tmp.personId = list3[key3].personId;
+              tmp.personName = list3[key3].personName;
+              tmp.roleName = list3[key3].roleName;
+              initialList.push(tmp);
+            }else if(initialList.length==0){
+              var tmp ={};
+              tmp.personId = list3[key3].personId;
+              tmp.personName = list3[key3].personName;
+              tmp.roleName = list3[key3].roleName;
+              initialList.push(tmp);
+            }
+          });
+              $scope.peopleList = initialList;
+        });
+        if((length+1)>1){
+           $scope.drop[id] = false;
+        }
+    };
+  })
+
   });
   app.controller('sprintRolesCtrl', function($scope, $state, $timeout, $http, $q, dataService, alertFactory,  $localStorage, $stateParams, $log, $window, $mdDialog, $rootScope) {
     if($rootScope.alerts.length !=0){
@@ -6904,6 +6874,7 @@ app.directive('branch', function($compile) {
       }
     });
     app.controller('peopleManagementCtrl', function($scope, $state, $location, $http, alertFactory, $base64, $q, dataService,  $localStorage, $stateParams, $log, $window, $rootScope) {
+        $scope.oneAtATime = true;
       if($rootScope.alerts.length !=0){
         angular.forEach($rootScope.alerts, function(value, key) {
           var alert = {};
@@ -8145,8 +8116,9 @@ app.directive('branch', function($compile) {
         $scope.updateProject = function(project) {
           project.projectUpdatedBy = $localStorage.currentUser.userFirstName;
           project.projectId = currentProject.projectId;
+          project.userId =  $localStorage.currentUser.userId;
           $http.put('/api/projects/updateProject',project).then(function(response) {
-            $state.go("management.projects.projectsTable");
+          //  $state.go("management.projects.projectsTable");
             var $string = "Successfully updated the project ";
             var optionalDelay = 3000;
             alertFactory.addAuto('success', $string, optionalDelay);

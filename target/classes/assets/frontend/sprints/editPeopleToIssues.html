@@ -40,6 +40,9 @@ canvas { background:#fff; }
 .dropdown.dropdown-lg .dropdown-menu {
   min-width: 100%;
 }
+.ui-state-disabled, .ui-widget-content .ui-state-disabled, .ui-widget-header .ui-state-disabled {
+opacity: 1;
+}
 </style>
 <script>
 $(".nav-tabs li").eq(4).addClass("active");
@@ -59,7 +62,7 @@ $(".nav-tabs li").eq(5).removeClass("active");
       </div>
       <div style="max-height:60vh;overflow-x:hidden;overflow-y:auto;">
         <div    ng-cloak class=""   class="btn btn-block btn-droppable list-group-item" data-drop="true" data-jqyoui-options="{accept:'.btn-draggable:not([ng-model=peopleList])'}"  >
-          <div  ng-cloak style = "display: inline-flex;padding: 5px 10px;margin-bottom: 2px;" class="btn btn-block list-group-item" ng-repeat="person in peopleList" ng-hide="!person.personName" ng-model='peopleList'>
+          <div  ng-cloak style = "display: inline-flex;padding: 5px 10px;margin-bottom: 2px;" class="btn btn-block list-group-item" ng-repeat="person in peopleList" ng-hide="!person.personName">
             <div style="margin-left: 5px;display: inline-flex;width: 100%;z-index:100;" ng-cloak  class="btn btn-default btn-block btn-draggable" data-drag="{{true}}" data-jqyoui-options="{revert: 'invalid',helper:'clone',appendTo:'.selectedPeople',containment:'document',scroll:'false'}" ng-model="peopleList" jqyoui-draggable="{index: {{$index}},placeholder:true,animate:false}" ng-hide="!person.personName">
               <table style="width: 100%">
                 <col width="49%" />
