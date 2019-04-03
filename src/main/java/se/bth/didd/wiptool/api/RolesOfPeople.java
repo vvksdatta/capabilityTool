@@ -26,11 +26,16 @@ public class RolesOfPeople {
 	@ColumnName("roleName")
 	public String roleName;
 	
-	public RolesOfPeople(Integer roleId, Integer personId, String roleName) {
+	@JsonProperty
+	@ColumnName("personName")
+	public String personName;
+	
+	public RolesOfPeople(Integer roleId, Integer personId, String roleName, String personName) {
 		super();
 		this.roleId = roleId;
 		this.personId = personId;
 		this.roleName = roleName;
+		this.personName = personName;
 	}
 
 	public RolesOfPeople(){
@@ -62,4 +67,12 @@ public class RolesOfPeople {
 		this.roleName = roleName;
 	}
 
+	public String getPersonName() {
+		return personName;
+	}
+
+	public void setPersonName(String personName) {
+		this.personName = personName;
+	}
+	
 }

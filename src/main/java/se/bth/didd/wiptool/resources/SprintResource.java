@@ -5,6 +5,8 @@ import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
@@ -313,6 +315,11 @@ public class SprintResource {
 			@PathParam("projectId") Integer projectId) {
 		try {
 			List<RolesOfPeopleSprint> rolesOfPeople = sprintDAO.getSprintParticipants(projectId, sprintId);
+			Collections.sort(rolesOfPeople, new Comparator<RolesOfPeopleSprint>() {
+			    public int compare(RolesOfPeopleSprint v1, RolesOfPeopleSprint v2) {
+			        return v1.getPersonName().compareTo(v2.getPersonName());
+			    }
+			});
 			return Response.ok(rolesOfPeople).build();
 		} catch (Exception e) {
 			System.out.println(e);

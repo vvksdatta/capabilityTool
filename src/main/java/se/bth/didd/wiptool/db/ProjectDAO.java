@@ -39,8 +39,8 @@ public interface ProjectDAO {
 	void insertIntoProjectParticipation(@Bind("projectId") int projectId, @Bind("personId") int personId,
 			@Bind("roleId") int roleId);
 
-	@SqlQuery("select TableA.personId, TableA.roleId, ROLESDB.roleName from ROLESDB RIGHT JOIN "
-			+ "(select * from PROJECTPARTICIPATION where projectId = :projectId) AS TableA ON TableA.roleId = ROLESDB.roleId ")
+	@SqlQuery("select TableB.personId, TableB.roleId, TableB.roleName, PEOPLE.personName from PEOPLE RIGHT JOIN (select TableA.personId, TableA.roleId, ROLESDB.roleName from ROLESDB RIGHT JOIN "
+			+ "(select * from PROJECTPARTICIPATION where projectId = :projectId ) AS TableA ON TableA.roleId = ROLESDB.roleId ) AS TableB ON TableB.personId = PEOPLE.personId ")
 	List<RolesOfPeople> getRolesOfPeopleInProject(@Bind("projectId") int projectId);
 
 	@SqlQuery("select TableA.roleId, rolesDB.roleName from rolesDB RIGHT JOIN (select roleId from projectparticipation where projectId = :projectId) AS TableA ON TableA.roleId = rolesDB.roleId ")
@@ -60,7 +60,7 @@ public interface ProjectDAO {
 
 	@SqlQuery("select projectId, projectName from PROJECTS")
 	List<ProjectIdName> getAllProjects();
-	
+
 	@SqlQuery("select apiKey from LOGINCREDENTIALS where userId = :userId")
 	List<String> getApiKeyOfUser(@Bind("userId") int userId);
 

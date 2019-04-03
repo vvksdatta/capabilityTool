@@ -6,6 +6,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -34,6 +36,7 @@ import se.bth.didd.wiptool.api.Projects;
 import se.bth.didd.wiptool.api.ProjectsList;
 import se.bth.didd.wiptool.api.Roles;
 import se.bth.didd.wiptool.api.RolesOfPeople;
+import se.bth.didd.wiptool.api.RolesOfPeopleSprint;
 import se.bth.didd.wiptool.api.SuccessMessage;
 import se.bth.didd.wiptool.auth.jwt.User;
 import se.bth.didd.wiptool.auth.jwt.UserRoles;
@@ -407,6 +410,11 @@ public class ProjectResource {
 	public Response rolesOfPeopleInProject(@Auth User user, Integer projectId) throws RedmineException {
 		try {
 			List<RolesOfPeople> rolesOfPeople = projectDAO.getRolesOfPeopleInProject(projectId);
+			Collections.sort(rolesOfPeople, new Comparator<RolesOfPeople>() {
+			    public int compare(RolesOfPeople v1, RolesOfPeople v2) {
+			        return v1.getPersonName().compareTo(v2.getPersonName());
+			    }
+			});
 			return Response.ok(rolesOfPeople).build();
 		} catch (Exception e) {
 			System.out.println(e);

@@ -193,8 +193,9 @@ $(".nav-tabs li").eq(5).removeClass("active");
         <select ng-model="selectedRole" ng-cloak ng-change="filterPeople(selectedRole)"> <option ng-repeat="role in rolesList"   value= {{role.roleName}}> {{role.roleName}} </option></select>
       </div>
       <div style="max-height:23vh;overflow-x:hidden;overflow-y:auto;">
+        <input type="text" style="margin-top: 10px;" class="form-control" id="dev-table-filter" data-action="filter" ng-model="search" placeholder="Filter people"/>
         <div   ng-if="item.roleName == selectedRole && show" ng-cloak class="" ng-repeat="item in rolesOfPeople"  class="btn btn-block btn-droppable list-group-item" data-drop="true" data-jqyoui-options="{accept:'.btn-draggable:not([ng-model=peopleList])'}"  jqyoui-droppable="{index: {{$index}}}" >
-          <div ng-if="item.roleName == selectedRole" style = "display: inline-flex;padding: 5px 10px;margin-bottom: 2px;" class="btn btn-block list-group-item" ng-repeat="person in peopleList" ng-click="showGraph(person);" ng-show="person.personId == item.personId" ng-model='peopleList'>
+          <div ng-if="item.roleName == selectedRole" style = "display: inline-flex;padding: 5px 10px;margin-bottom: 2px;" class="btn btn-block list-group-item" ng-repeat="person in peopleList | filter:search" ng-click="showGraph(person);" ng-show="person.personId == item.personId" ng-model='peopleList'>
             <div style="margin-left: 0; width: 4%; text-align: left;display: inline-flex;" ng-show="person.personId == item.personId">
               <md-checkbox type="checkbox" name="selectedDomains" style="margin-bottom: 8px;" class="md-primary" ng-model="formData.selected[person.personId]" ng-change="optionToggled()">
               </div>
@@ -516,3 +517,4 @@ $(".nav-tabs li").eq(5).removeClass("active");
     </div>
   </div>
   <script src="js/searchText.js"> </script>
+{{list2['Developer']}}
