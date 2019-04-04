@@ -5314,13 +5314,12 @@
         $scope.countSelected = 0;
         angular.forEach($scope.selectedRoles, function(value, key) {
           angular.forEach(splicelist[key], function(value2, key2) {
-            //delete $scope.list2[key][value2];
-            //$scope.list2[key][value2] = 1;
-            // $scope.showRemove = false;
             angular.forEach($scope.list2[key], function(value3, key3) {
               if(value2.personId == value3.personId && value2.personName == value3.personName ){
-                //$log.debug('Hello ' +key3+ '!');
                 clearSelected[key].splice(key3,1);
+                var index = $scope.membersCountinList2[value3.personName.charAt(0).toUpperCase()].indexOf(value3.personName);
+                $scope.membersCountinList2[value3.personName.charAt(0).toUpperCase()].splice(index,1 );
+                //$log.debug('Hello ' +index+ " asdasd "+value3.personName+ "ff"+ '!');
               }
             })
           })
@@ -5341,6 +5340,15 @@
         }
         //return $scope.removeSelected = {};
       }).then(function(){
+        angular.forEach($scope.alphabets, function(val,key){
+          if($scope.membersCountinList2[val] != null){
+            if((  $scope.membersCount[val] -   $scope.membersCountinList2[val].length  ) == 0) {
+              $scope.alphabetsToDisplay[val] = false;
+            }else{
+              $scope.alphabetsToDisplay[val] = true;
+            }
+          }
+        });
         $scope.peopleList = currentPeopleList;
         $scope.list2 = clearSelected;
         $scope.removeSelected =remove;
