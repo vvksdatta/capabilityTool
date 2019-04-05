@@ -36,7 +36,6 @@ import se.bth.didd.wiptool.api.Projects;
 import se.bth.didd.wiptool.api.ProjectsList;
 import se.bth.didd.wiptool.api.Roles;
 import se.bth.didd.wiptool.api.RolesOfPeople;
-import se.bth.didd.wiptool.api.RolesOfPeopleSprint;
 import se.bth.didd.wiptool.api.SuccessMessage;
 import se.bth.didd.wiptool.auth.jwt.User;
 import se.bth.didd.wiptool.auth.jwt.UserRoles;
