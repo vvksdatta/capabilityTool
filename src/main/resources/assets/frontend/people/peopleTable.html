@@ -2,8 +2,11 @@
   p {
     display: inline;
   }
-  .rTableRow:hover {
+  .rTableRow {
     background-color: #f5f5f5;
+  }
+  .rTableRow:hover {
+    background-color: white;
   }
   .panel-group {
       margin-bottom: 3px;
@@ -38,7 +41,7 @@
                 </td>
                 <td>
                   <accordion close-others="oneAtATime" ng-repeat="personProject in person.projects  | orderBy:'projectName'">
-                    <accordion-group is-open="personProject.isOpen"  style="width: 80%;"  >
+                    <accordion-group is-open="personProject.isOpen"  style="width: 80%;background-color: #f5f5f5;">
                       <accordion-heading >
                         <i class="glyphicon-plus" ng-show= "!personProject.isOpen"style=" font-style: inherit;">  <md-tooltip md-direction="top"> Click to view participation in the project {{personProject.projectName | capitalize}}</md-tooltip>Participation in {{personProject.projectName | capitalize }} </i>
                         <i class="glyphicon-minus" ng-hide= "!personProject.isOpen" style=" font-style: inherit;">  <md-tooltip md-direction="top"> Click to view participation in the project {{personProject.projectName | capitalize}}</md-tooltip>Participation in {{personProject.projectName | capitalize }} </i>
@@ -50,7 +53,7 @@
                           <div class="rTableHead"><strong>Number of issues</strong></div>
                         </div>
                         <div class="rTableRow" ng-repeat="personSprints in personProject.sprints  | orderBy:'sprintName'" >
-                          <div class="rTableCell">{{personSprints.sprintName | capitalize }}</div>
+                          <div ng-click="manageSprint(personProject.projectId, personSprints.sprintId)" class="rTableCell">{{personSprints.sprintName | capitalize }}</div>
                           <div class="rTableCell">{{personSprints.numberofIssues}}</div>
                         </div>
                       </div>

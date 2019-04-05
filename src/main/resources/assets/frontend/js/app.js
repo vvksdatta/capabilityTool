@@ -2154,6 +2154,12 @@
       });
     };
     var parentProjectsList = [];
+    $scope.manageSprint = function(projectId, sprintId) {
+      var sprint = {};
+      sprint.projectId = projectId;
+      sprint.sprintId = sprintId;
+      $state.go("management.sprints.editSprint.existingSprint",sprint );
+    };
     $http.get('/api/projects/summary').then(function(response) {
       $scope.projects = response.data;
     }).then(function(){
@@ -7080,6 +7086,12 @@
             $rootScope.alerts.splice(key,1);
           }
         });
+      };
+      $scope.manageSprint = function(projectId, sprintId) {
+        var sprint = {};
+        sprint.projectId = projectId;
+        sprint.sprintId = sprintId;
+        $state.go("management.sprints.editSprint.existingSprint",sprint );
       };
       $http.get('/api/people/summary').then(function(response) {
         $scope.people= response.data;
