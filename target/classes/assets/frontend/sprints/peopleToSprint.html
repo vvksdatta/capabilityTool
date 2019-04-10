@@ -1,51 +1,59 @@
 <style>
-#sidebar-page-content {
-  position: absolute;
-  width: calc(95% - 50px);
-  left: 5%;
-  right: 5%;
-  padding: 5px;
-  transition: .5s ease all;
-  height: calc(100% - 150px);
-}
-
-select > option{ font-size:17px; }
-.list-group {
-  margin-bottom: 0px;
-  padding-left: 0;
-}
-.list-group {
-  margin-bottom: 0px;
-  padding-left: 0;
-  padding-right: 0;
-  border-radius: 8px;
-  border-color: #171515;
-}
-#page-wrapper.show-sidebar #sidebar-page-content {
-  width: calc(81% - 50px);
-}
-.md-cancel-button {
-  background: whitesmoke;
-}
-.md-confirm-button {
-  background: whitesmoke;
-}
-md-checkbox .md-label {
-  display: block;
-}
-canvas { background:#fff; }
-.btn-info {
-  background-color: #ddd3;
-}
-.btn-info:hover {
-  background-color: #ddd;
-}
-.btn-info:active {
-  background-color: #ddd;
-}
-.ui-state-disabled, .ui-widget-content .ui-state-disabled, .ui-widget-header .ui-state-disabled {
-opacity: 1;
-}
+  #sidebar-page-content {
+    position: absolute;
+    width: calc(95% - 50px);
+    left: 5%;
+    right: 5%;
+    padding: 5px;
+    transition: .5s ease all;
+    height: calc(100% - 150px);
+  }
+  select > option{ font-size:17px; }
+  .list-group {
+    margin-bottom: 0px;
+    padding-left: 0;
+  }
+  .list-group {
+    margin-bottom: 0px;
+    padding-left: 0;
+    padding-right: 0;
+    border-radius: 8px;
+    border-color: #171515;
+  }
+  #page-wrapper.show-sidebar #sidebar-page-content {
+    width: calc(81% - 50px);
+  }
+  .md-cancel-button {
+    background: whitesmoke;
+  }
+  .md-confirm-button {
+    background: whitesmoke;
+  }
+  md-checkbox .md-label {
+    display: block;
+  }
+  canvas { background:#fff; }
+  .btn-info {
+    background-color: #ddd3;
+  }
+  .btn-info:hover {
+    background-color: #ddd;
+  }
+  .btn-info:active {
+    background-color: #ddd;
+  }
+  .ui-state-disabled, .ui-widget-content .ui-state-disabled, .ui-widget-header .ui-state-disabled {
+    opacity: 1;
+  }
+  .glyphicon.glyphicon-search {
+    font-size: 15px;
+  }
+  .glyphicon-menu-left{
+    font-size: 15px;
+  }
+  .glyphicon-menu-right{
+    font-size: 15px;
+  }
 </style>
 <div class='parent'>
   <h2></h2>
@@ -152,23 +160,40 @@ opacity: 1;
         </div>
       </div >
       <div  class='col-xs-5'>
-        <div class="list-group" style="min-height: 110px; border: 1px solid #17151566; border-style: solid; padding-bottom: 1px;border-radius: 3px;">
+        <div style="width:1%; float:right">
+          <ul ng-hide="indexFilter" >
+            <span ng-repeat="letter in alphabets">
+              <li style="display: flex;" ng-show="alphabetsToDisplay[letter]" ng-click="goto(letter)" ><a style="color: black;">{{letter}}</a></li>
+              <li style="display: flex;" ng-hide="alphabetsToDisplay[letter]"  ><a style="text-decoration: none; color: grey;">{{letter}}</a></li>
+            </span>
+          </ul>
+        </div>
+        <div class="list-group" style="min-height: 110px; border: 1px solid #17151566; border-style: solid; padding-bottom: 1px;border-radius: 3px;width:98%; float:left">
           <div style="    color: #333; background-color: #d2d2d2; border-color: #d2d2d2;margin-top: 0; margin-bottom: 10px; border-bottom: 1px solid transparent; border-top-right-radius: 3px; border-top-left-radius: 3px; padding: 10px;" class="list-group-item">
             <strong>People</strong>
           </div>
-          <div class="list-group-item">
+          <div class="list-group-item" style= "margin-bottom: 10px; height:55px;">
             Select Role:
             <select ng-model="selectedRole" ng-cloak ng-change="filterPeople(selectedRole)"> <option ng-repeat="role in rolesList"   value= {{role.roleName}}> {{role.roleName}} </option></select>
+            <div class="pull-right">
+              <div ng-if="selectedRole">
+                <button type="button" style="font-size: 10px;" class="btn btn-default" ng-click="toggleIndexFilter()">
+                  <i class="glyphicon  glyphicon-search" ></i>
+                  <i ng-show="indexFilter" class="glyphicon glyphicon-menu-right" ></i>
+                  <i ng-hide="indexFilter" class="glyphicon glyphicon-menu-left" ></i>
+                  <md-tooltip md-direction="top"> Click a letter to scroll to the respective index</md-tooltip>
+                </button>
+              </div>
+            </div>
           </div>
           <div style="max-height:23vh;overflow-x:hidden;overflow-y:auto;">
             <div   ng-if="item.roleName == selectedRole && show" ng-cloak class="" ng-repeat="item in rolesOfPeople"  class="btn btn-block btn-droppable list-group-item" data-drop="true" data-jqyoui-options="{accept:'.btn-draggable:not([ng-model=peopleList])'}"  jqyoui-droppable="{index: {{$index}}}" >
               <div ng-if="item.roleName == selectedRole" style = "display: inline-flex;padding: 5px 10px;margin-bottom: 2px;" class="btn btn-block list-group-item" ng-repeat="person in peopleList" ng-click="showGraph(person);" ng-show="person.personId == item.personId" ng-model='peopleList'>
-
                 <div style="margin-left: 0; width: 4%; text-align: left;display: inline-flex;" ng-show="person.personId == item.personId">
                   <md-checkbox type="checkbox" name="selectedDomains" style="margin-bottom: 8px;" class="md-primary" ng-model="formData.selected[person.personId]" ng-change="optionToggled()">
                   </div>
                   <div style="margin-left: 5px;display: inline-flex;width: 100%;z-index:100;" ng-if="person.personId == item.personId"  ng-show="person.personId == item.personId" ng-cloak  ng-init="person.roleName= selectedRole" class="btn btn-default btn-block btn-draggable" data-drag="{{true}}" data-jqyoui-options="{revert: 'invalid',helper:'clone',appendTo:'.selectedPeople',containment:'document',scroll:'false',onDrop: addBack(peopleList)}" ng-model="peopleList" jqyoui-draggable="{index: {{$index}},placeholder:true,animate:false}" ng-hide="!person.personName">
-                    <table style="width: 100%">
+                    <table  id="{{person.personName | limitTo:1 | uppercase}}" style="width: 100%">
                       <thead>
                         <tr>
                           <th>Name
@@ -186,7 +211,6 @@ opacity: 1;
                       <col width="25%" />
                       <col width="14%" />
                       <tbody>
-
                         <tr>
                           <td >
                             <span ng-model="letterLimit"  class="avatar" style="background-color: #29516D; width: 28px; height: 26px; font-size: 12px; padding-top: 5px; margin-right: 3px" data-original-title={{person.personName}}>{{ person.personName | limitTo:2 | uppercase }}</span> {{person.personName | capitalize }}<md-tooltip md-direction="top"> {{person.personName | capitalize }}</md-tooltip>
@@ -447,36 +471,36 @@ opacity: 1;
                     </td>
                     <td>{{selectedRole}}</td>
                   </tr>
-                <tr ng-repeat="(key,value) in selectedRoles" ng-if="value!=0" ng-hide="selectedRole == key" >
-                  <td style="padding-left: 0px;">
-                    <div class="thumbnail" style="border: 5px dotted #5d5c5c; color: #333;margin-bottom: 10px;border-radius: 3px;" data-drop="drop[key]" ng-model='list2[key]' jqyoui-droppable>
-                      <div style="text-align: center;" ng-if="value>1">  Add {{value}} {{key}}s </div>
-                      <div style="text-align: center;" ng-if="value<=1">  Add {{value}} {{key}} </div>
-                      <div ng-repeat="item in list2[key]">
-                        <md-checkbox  type="checkbox" style="margin-bottom: 10px;width: 100%;display: block;" class="md-primary"  ng-model="removeSelected[item.personId]" >
-                          <md-tooltip md-direction="left">Remove {{item.personName}}</md-tooltip>
-                          <div class="list-group  btn-info btn-draggable" style="color: #333;cursor: pointer;"  data-drag="{{true}}"  data-jqyoui-options="{revert: 'invalid',helper:'clone',appendTo:'parent',containment:'document',scroll:'false',onDrop: limitEntry(list2[key].length,value,key)}" jqyoui-draggable="{index: {{$index}},placeholder:true,animate:false}">
-                            <div style="display: flex; border: 1px solid; border-radius: 8px;" ><span style=" text-align: left;">
-                              <span ng-model="letterLimit"  class="avatar"style="background-color: #29516D; width: 28px; height: 26px; font-size: 12px; padding-top: 5px; margin-right: 3px">{{ item.personName | limitTo:2 | uppercase }}</span>{{item.personName | capitalize }}
-                            </span>
+                  <tr ng-repeat="(key,value) in selectedRoles" ng-if="value!=0" ng-hide="selectedRole == key" >
+                    <td style="padding-left: 0px;">
+                      <div class="thumbnail" style="border: 5px dotted #5d5c5c; color: #333;margin-bottom: 10px;border-radius: 3px;" data-drop="drop[key]" ng-model='list2[key]' jqyoui-droppable>
+                        <div style="text-align: center;" ng-if="value>1">  Add {{value}} {{key}}s </div>
+                        <div style="text-align: center;" ng-if="value<=1">  Add {{value}} {{key}} </div>
+                        <div ng-repeat="item in list2[key]">
+                          <md-checkbox  type="checkbox" style="margin-bottom: 10px;width: 100%;display: block;" class="md-primary"  ng-model="removeSelected[item.personId]" >
+                            <md-tooltip md-direction="left">Remove {{item.personName}}</md-tooltip>
+                            <div class="list-group  btn-info btn-draggable" style="color: #333;cursor: pointer;"  data-drag="{{true}}"  data-jqyoui-options="{revert: 'invalid',helper:'clone',appendTo:'parent',containment:'document',scroll:'false',onDrop: limitEntry(list2[key].length,value,key)}" jqyoui-draggable="{index: {{$index}},placeholder:true,animate:false}">
+                              <div style="display: flex; border: 1px solid; border-radius: 8px;" ><span style=" text-align: left;">
+                                <span ng-model="letterLimit"  class="avatar"style="background-color: #29516D; width: 28px; height: 26px; font-size: 12px; padding-top: 5px; margin-right: 3px">{{ item.personName | limitTo:2 | uppercase }}</span>{{item.personName | capitalize }}
+                              </span>
+                            </div>
                           </div>
-                        </div>
-                      </md-checkbox>
+                        </md-checkbox>
+                      </div>
                     </div>
-                  </div>
-                </td>
-                <td>{{key}}</td>
-              </tr>
-              <tr>
-                <td colspan="2" style="border-top: 1px solid #fff; text-align: center" >
-                  <md-button type="reset" style="font-size: 15px;"  ng-if="showRemove" class="add-tab md-raised" ng-click="removeSprintParticipants()"> <i class="glyphicon glyphicon-edit"> </i> Remove  </md-button>
-                  <md-button type="submit" style=" font-size: 15px; background-color: rgb(90, 132, 187);" ng-if="showRemove"  class="add-tab md-primary md-raised" ng-click="saveSprintParticipants()"> Save </md-button>
-                </td>
-              </tr>
-            </tbody>
-          </table>
+                  </td>
+                  <td>{{key}}</td>
+                </tr>
+                <tr>
+                  <td colspan="2" style="border-top: 1px solid #fff; text-align: center" >
+                    <md-button type="reset" style="font-size: 15px;"  ng-if="showRemove" class="add-tab md-raised" ng-click="removeSprintParticipants()"> <i class="glyphicon glyphicon-edit"> </i> Remove  </md-button>
+                    <md-button type="submit" style=" font-size: 15px; background-color: rgb(90, 132, 187);" ng-if="showRemove"  class="add-tab md-primary md-raised" ng-click="saveSprintParticipants()"> Save </md-button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
         </div>
       </div>
     </div>
-  </div>
-  <script src="js/searchText.js"> </script>
+    <script src="js/searchText.js"> </script>

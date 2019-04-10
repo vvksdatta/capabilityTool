@@ -208,12 +208,12 @@
       <div class="list-group-item" style= "margin-bottom: 10px; height:55px;">Select Role:
         <select ng-model="selectedRole" ng-cloak ng-change="filterPeople(selectedRole)"> <option ng-repeat="role in rolesList"   value= {{role.roleName}}> {{role.roleName}} </option></select>
         <div class="pull-right">
-          <div>
+          <div ng-if="selectedRole">
             <button type="button" style="font-size: 10px;" class="btn btn-default" ng-click="toggleIndexFilter()">
               <i class="glyphicon  glyphicon-search" ></i>
               <i ng-show="indexFilter" class="glyphicon glyphicon-menu-right" ></i>
               <i ng-hide="indexFilter" class="glyphicon glyphicon-menu-left" ></i>
-              <md-tooltip md-direction="top"> click a letter to scroll to the respective index</md-tooltip>
+              <md-tooltip md-direction="top"> Click a letter to scroll to the respective index</md-tooltip>
             </button>
           </div>
         </div>
