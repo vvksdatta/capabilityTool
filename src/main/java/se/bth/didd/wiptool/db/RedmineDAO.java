@@ -296,6 +296,9 @@ public interface RedmineDAO {
 
 	@SqlQuery("select * from ISSUES where projectId = :projectId and issueId = :issueId")
 	List<IssueTemplate> selectSpecificIssueInSprint(@Bind("projectId") int projectId, @Bind("issueId") int issueId);
+	
+	@SqlQuery("SELECT * from ISSUES ORDER BY redmineLastUpdate DESC LIMIT 1")
+	List<IssueTemplate> selectLastUpdatedTime();
 
 	@SqlUpdate("Delete from SPRINTCOMPRISINGISSUES where  issueId = :issueId")
 	void deleteIssueAlreadyAllocatedToOtherSprint(@Bind("issueId") int issueId);
@@ -344,6 +347,18 @@ public interface RedmineDAO {
 	@SqlUpdate("DELETE FROM SPRINTCOMPRISINGISSUES WHERE redmineSprintIdentifier NOT IN (:redmineSprintIdentifier)")
 	void deleteNonExistingSprintsFromSprintComprisingIssuesTable(
 			@Bind("redmineSprintIdentifier") String redmineSprintIdentifier);
+	
+	@SqlUpdate("DELETE FROM SPRINTCOMPRISINGISSUES WHERE projectId < :projectCutOff")
+	void deleteIssuesInSprintComprisingIssuesTablebelowProjectCutOffId(@Bind("projectCutOff") int projectCutOff);
+	
+	@SqlUpdate("DELETE FROM SPRINTCOMPRISINGISSUES WHERE issueId < :issueIdCutOff")
+	void deleteIssuesInSprintComprisingIssuesTablebelowIssueCutOffId(@Bind("issueIdCutOff") int issueIdCutOff);
+
+	@SqlUpdate("DELETE FROM ISSUES WHERE projectId < :projectCutOff")
+	void deleteIssuesbelowProjectCutOffId(@Bind("projectCutOff") int projectCutOff);
+	
+	@SqlUpdate("DELETE FROM ISSUES WHERE issueId < :issueIdCutOff")
+	void deleteIssuesbelowIssueCutOffId(@Bind("issueIdCutOff") int issueIdCutOff);
 
 	@SqlUpdate("DELETE FROM DOMAINSINASPRINT WHERE redmineSprintIdentifier NOT IN (:redmineSprintIdentifier)")
 	void deleteNonExistingSprintsFromDomainsInSprintTable(

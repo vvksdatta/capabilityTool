@@ -224,6 +224,7 @@
     .state('home', {
       url:'/',
       templateUrl: 'home.html',
+      controller: 'homectrl',
       ncyBreadcrumb: {
         label: 'Home'
       }
@@ -709,6 +710,17 @@
       }
     });
   }
+  app.controller('homectrl', function($scope,$state, $location,$rootScope,alertFactory, $q){
+    if($rootScope.alerts.length !=0){
+      angular.forEach($rootScope.alerts, function(value, key) {
+        var alert = {};
+        alert = $rootScope.alerts[key];
+        if(alert.type == 'info'){
+          $rootScope.alerts.splice(key,1);
+        }
+      });
+    };
+  })
   app.controller('manageUserCtrl', function($scope, $state, $location, $http, alertFactory, $q, dataService,  $localStorage, $stateParams, $log, $timeout, $rootScope) {
     if($rootScope.alerts.length !=0){
       angular.forEach($rootScope.alerts, function(value, key) {
@@ -1220,9 +1232,16 @@
         alertFactory.addAuto('success', $string, optionalDelay);
       })
       .catch(function(response, status) {
-        $scope.loading = false;
+          $scope.loading = false;
+        if(response.data.message != null){
+          var optionalDelay = 12000;
+          var $string = response.data.message;
+        }
+        else{
+
         var optionalDelay = 5000;
         var $string = "Error in synchronizing with redmine";
+      }
         alertFactory.addAuto('danger', $string, optionalDelay);
       });
     }
@@ -2592,7 +2611,7 @@
         {
           var optionalDelay = 3000;
           var $string = "Updated the questionnaire";
-          $state.go("management.sprints.editSprint.existingSprint",response.data);
+        //  $state.go("management.sprints.editSprint.existingSprint",response.data);
           alertFactory.addAuto('success', $string, optionalDelay);
         })
         .catch(function(response, status) {

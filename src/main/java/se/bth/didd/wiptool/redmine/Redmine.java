@@ -1,13 +1,19 @@
 package se.bth.didd.wiptool.redmine;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.math.BigDecimal;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
+import java.util.Locale;
 import java.util.Random;
+import java.util.TimeZone;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -16,11 +22,13 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+import com.google.gson.Gson;
 import com.taskadapter.redmineapi.RedmineException;
 import com.taskadapter.redmineapi.RedmineManager;
 import com.taskadapter.redmineapi.RedmineManagerFactory;
-import com.taskadapter.redmineapi.bean.Issue;
-import com.taskadapter.redmineapi.bean.IssueCategory;
 import com.taskadapter.redmineapi.bean.Membership;
 import com.taskadapter.redmineapi.bean.Project;
 import com.taskadapter.redmineapi.bean.Role;
@@ -28,6 +36,7 @@ import com.taskadapter.redmineapi.bean.User;
 import com.taskadapter.redmineapi.bean.Version;
 import se.bth.didd.wiptool.api.IssueTemplate;
 import se.bth.didd.wiptool.api.IssueUpdateTemplate;
+import se.bth.didd.wiptool.api.IssuesTemplateForRedmineAPI;
 import se.bth.didd.wiptool.api.ProjectIdName;
 import se.bth.didd.wiptool.api.ProjectLeaderId;
 import se.bth.didd.wiptool.api.Projects;
@@ -69,7 +78,8 @@ public class Redmine {
 
 	@Path("/{userId}")
 	@GET
-	public Response synchronizingWithRedmine(@PathParam("userId") Integer userId) throws RedmineException {
+	public Response synchronizingWithRedmine(@PathParam("userId") Integer userId)
+			throws RedmineException, IOException, JSONException {
 
 		/*
 		 * Generating a random string for updating the identifiers on each
@@ -107,7 +117,13 @@ public class Redmine {
 		 */
 		redmineManager.setObjectsPerPage(100);
 
-		List<User> people = redmineManager.getUserManager().getUsers();
+		List<User> people = null;
+		try {
+			people = redmineManager.getUserManager().getUsers();
+		} catch (Exception e1) {
+			System.out.println(e1);
+			return Response.status(Status.BAD_REQUEST).entity(e1).build();
+		}
 
 		for (User person : people) {
 
@@ -168,6 +184,7 @@ public class Redmine {
 
 		/* update projects,sprints etc */
 		int projectCutOff = Integer.parseInt(projectIdCutOff);
+		int issueCutOff = Integer.parseInt(issueIdCutOff);
 		List<Project> projects = redmineManager.getProjectManager().getProjects();
 		for (Project redmineProject : projects) {
 			if (redmineProject.getId() >= projectCutOff) {
@@ -384,6 +401,12 @@ public class Redmine {
 		 * inserted, there is a chance for foreign key conflicts when a
 		 * 'grandChildproject1' details are not yet registered to the database.
 		 */
+		List<IssueTemplate> redmineLastUpdatedTime = redmineDAO.selectLastUpdatedTime();
+		SimpleDateFormat formatDate = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.UK);
+
+		// This parameter should be adjusted based on the time-zone to which the
+		// Redmine server is set
+		formatDate.setTimeZone(TimeZone.getTimeZone("GMT"));
 		Timestamp timestamp = new Timestamp(System.currentTimeMillis());
 
 		for (Project redmineProject : projects) {
@@ -616,35 +639,96 @@ public class Redmine {
 
 						}
 					}
-					Integer include = null;
-					/*
-					 * fetch all the closed issues using custom params and add
-					 * to the list of open issues
-					 */
-					redmineManager.setObjectsPerPage(1000);
-					final Map<String, String> params = new HashMap<String, String>();
 
-					params.put("project_id", redmineProject.getIdentifier());
-					params.put("status_id", "5");
-					List<Issue> closedIssues = redmineManager.getIssueManager().getIssues(params).getResults();
-					List<Issue> issues = redmineManager.getIssueManager().getIssues(redmineProject.getIdentifier(),
-							include);
-					issues.addAll(closedIssues);
-					for (Issue issue : issues) {
-						int cutOff = Integer.parseInt(issueIdCutOff);
-						if (issue.getId() >= cutOff) {
-							if (redmineDAO.ifIssueExistsInProject(issue.getProjectId(), issue.getId()) == true) {
+					/*
+					 * fetch all the issues using custom params and add
+					 * to the list of issues
+					 */
+					List<IssuesTemplateForRedmineAPI> listOfIssues = new ArrayList<IssuesTemplateForRedmineAPI>();
+					if (redmineLastUpdatedTime.size() != 0) {
+						String redmineLastUpdatedTimeStamp = formatDate
+								.format(redmineLastUpdatedTime.get(0).getRedmineLastUpdate());
+						String url = redmineUrl + "issues.json?updated_on=%3E%3D" + redmineLastUpdatedTimeStamp
+								+ "&project_id=" + redmineProject.getId() + "&limit=200&&status_id=*";
+						URL obj = new URL(url);
+						HttpURLConnection con = (HttpURLConnection) obj.openConnection();
+						con.setRequestMethod("GET");
+						// add request header
+						con.setRequestProperty("User-Agent", "CAST API");
+						con.setRequestProperty("Content-Type", "application/json");
+						con.setRequestProperty("X-Redmine-API-Key", apiKey);
+						BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
+						String inputLine;
+						StringBuffer response = new StringBuffer();
+						while ((inputLine = in.readLine()) != null) {
+							response.append(inputLine);
+						}
+						in.close();
+						JSONObject myResponse = new JSONObject(response.toString());
+						ArrayList<String> list = new ArrayList<String>();
+						Gson gson = new Gson();
+						JSONArray issuesFetched = myResponse.getJSONArray("issues");
+						if (issuesFetched != null) {
+							int len = issuesFetched.length();
+							for (int i = 0; i < len; i++) {
+								list.add(issuesFetched.get(i).toString());
+							}
+						}
+						for (String eachIssue : list) {
+							IssuesTemplateForRedmineAPI issue = gson.fromJson(eachIssue,
+									IssuesTemplateForRedmineAPI.class);
+							listOfIssues.add(issue);
+						}
+					} else {
+						String url = redmineUrl + "issues.json?project_id=" + redmineProject.getId()
+								+ "&limit=200&&status_id=*";
+						URL obj = new URL(url);
+						HttpURLConnection con = (HttpURLConnection) obj.openConnection();
+						con.setRequestMethod("GET");
+						// add request header
+						con.setRequestProperty("User-Agent", "CAST API");
+						con.setRequestProperty("Content-Type", "application/json");
+						con.setRequestProperty("X-Redmine-API-Key", apiKey);
+						BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
+						String inputLine;
+						StringBuffer response = new StringBuffer();
+						while ((inputLine = in.readLine()) != null) {
+							response.append(inputLine);
+						}
+						in.close();
+						JSONObject myResponse = new JSONObject(response.toString());
+						ArrayList<String> list = new ArrayList<String>();
+						Gson gson = new Gson();
+						JSONArray issuesFetched = myResponse.getJSONArray("issues");
+						if (issuesFetched != null) {
+							int len = issuesFetched.length();
+							for (int i = 0; i < len; i++) {
+								list.add(issuesFetched.get(i).toString());
+							}
+						}
+						for (String eachIssue : list) {
+							IssuesTemplateForRedmineAPI issue = gson.fromJson(eachIssue,
+									IssuesTemplateForRedmineAPI.class);
+							listOfIssues.add(issue);
+						}
+					}
+
+					for (IssuesTemplateForRedmineAPI issue : listOfIssues) {
+						
+						if (issue.getId() >= issueCutOff) {
+
+							if (redmineDAO.ifIssueExistsInProject(issue.getProject().getId(), issue.getId()) == true) {
 								/*
 								 * here the current issue is already associated
 								 * with the current project and an entry exists
 								 * in database
 								 */
 								IssueTemplate updateIssue = new IssueTemplate();
-								updateIssue.setProjectId(issue.getProjectId());
+								updateIssue.setProjectId(issue.getProject().getId());
 								updateIssue.setIssueId(issue.getId());
 								updateIssue.setIssueName(issue.getSubject());
-								updateIssue.setIssueStartDate(issue.getStartDate());
-								updateIssue.setIssueDueDate(issue.getDueDate());
+								updateIssue.setIssueStartDate(issue.getStart_date());
+								updateIssue.setIssueDueDate(issue.getDue_date());
 								updateIssue.setIssueDescription(issue.getDescription());
 								/*
 								 * Check whether the issue is marked as a
@@ -652,12 +736,12 @@ public class Redmine {
 								 * category name
 								 */
 								if (issue.getCategory() != null) {
-									IssueCategory retrievedCategory = issue.getCategory();
-									updateIssue.setIssueCategory(retrievedCategory.getName());
-								}
-								updateIssue.setIssuePriority(issue.getPriorityText());
 
-								if (issue.getAssigneeId() != null) {
+									updateIssue.setIssueCategory(issue.getCategory().getName());
+								}
+								updateIssue.setIssuePriority(issue.getPriority().getName());
+
+								if (issue.getAssigned_to() != null) {
 
 									/*
 									 * check whether the assignee is already
@@ -669,22 +753,22 @@ public class Redmine {
 									 * assignee ID for the issue will be
 									 * updated.
 									 */
-									if (redmineDAO.ifPersonIdExists(issue.getAssigneeId()) != true) {
+									if (redmineDAO.ifPersonIdExists(issue.getAssigned_to().getId()) != true) {
 
 										User lockedUser = redmineManager.getUserManager()
-												.getUserById(issue.getAssigneeId());
+												.getUserById(issue.getAssigned_to().getId());
 										redmineDAO.insertIntoPeopleTable(lockedUser.getId(), lockedUser.getFullName(),
 												lockedUser.getFirstName(), lockedUser.getLastName(),
 												lockedUser.getMail(), generatedRandomString);
 									}
 
-									updateIssue.setPersonId(issue.getAssigneeId());
+									updateIssue.setPersonId(issue.getAssigned_to().getId());
 								}
 
-								updateIssue.setIssueEstimatedTime(issue.getEstimatedHours());
-								updateIssue.setIssueDone(issue.getDoneRatio());
-								updateIssue.setIssueLastUpdate(timestamp);
-								updateIssue.setRedmineLastUpdate(issue.getUpdatedOn());
+								updateIssue.setIssueEstimatedTime(issue.getEstimated_hours());
+								updateIssue.setIssueDone(issue.getDone_ratio());
+								updateIssue.setIssueLastUpdate(issue.getUpdated_on());
+								updateIssue.setRedmineLastUpdate(timestamp);
 
 								// if issue already allocated to another
 								// sprint..delete it
@@ -692,8 +776,8 @@ public class Redmine {
 								List<SprintComprisingIssues> sprintDetails = redmineDAO
 										.getSprintAssociatedWithIssue(issue.getId());
 								for (SprintComprisingIssues eachIssue : sprintDetails) {
-									if (issue.getTargetVersion() != null) {
-										if (eachIssue.getSprintId().equals(issue.getTargetVersion()) == false) {
+									if (issue.getFixed_version() != null) {
+										if (eachIssue.getSprintId().equals(issue.getFixed_version().getId()) == false) {
 											redmineDAO.deleteIssueAlreadyAllocatedToOtherSprint(issue.getId());
 										}
 									} else {
@@ -707,21 +791,21 @@ public class Redmine {
 								List<IssueUpdateTemplate> projectDetails = redmineDAO
 										.getProjectAssocitaedWithIssue(issue.getId());
 								for (IssueUpdateTemplate project : projectDetails) {
-									if (!project.getProjectId().equals(issue.getProjectId())) {
+									if (!project.getProjectId().equals(issue.getProject().getId())) {
 										redmineDAO.deleteIssueAlreadyAllocatedToOProject(issue.getId());
 									}
 								}
 								/* update the issue with latest details */
 								redmineDAO.updateIssuesModifications(updateIssue);
 
-								if (issue.getTargetVersion() != null) {
-									Version issueTargetVersion = issue.getTargetVersion();
-									if (redmineDAO.ifSprintExists(issue.getProjectId(),
+								if (issue.getFixed_version() != null) {
+									se.bth.didd.wiptool.api.Status issueTargetVersion = issue.getFixed_version();
+									if (redmineDAO.ifSprintExists(issue.getProject().getId(),
 											issueTargetVersion.getId()) == true) {
-										if (redmineDAO.ifIssueExistsInSprint(issue.getProjectId(),
+										if (redmineDAO.ifIssueExistsInSprint(issue.getProject().getId(),
 												issueTargetVersion.getId(), issue.getId()) != true) {
 
-											redmineDAO.InsertIntoSprintComprisingIssuesTable(issue.getProjectId(),
+											redmineDAO.InsertIntoSprintComprisingIssuesTable(issue.getProject().getId(),
 													issueTargetVersion.getId(), issue.getId());
 											// System.out.println("Added the
 											// isses
@@ -729,12 +813,14 @@ public class Redmine {
 											// SprintComprisingIssues table");
 										}
 
-										if (issue.getAssigneeId() != null) {
-											if (redmineDAO.ifPersonParticipatesInSprint(issue.getProjectId(),
-													issueTargetVersion.getId(), issue.getAssigneeId()) != true) {
+										if (issue.getAssigned_to() != null) {
+											if (redmineDAO.ifPersonParticipatesInSprint(issue.getProject().getId(),
+													issueTargetVersion.getId(),
+													issue.getAssigned_to().getId()) != true) {
 
-												redmineDAO.InsertIntoSprintParticipationTable(issue.getProjectId(),
-														issueTargetVersion.getId(), issue.getAssigneeId());
+												redmineDAO.InsertIntoSprintParticipationTable(
+														issue.getProject().getId(), issueTargetVersion.getId(),
+														issue.getAssigned_to().getId());
 												// System.out.println("Updated
 												// the
 												// sprint participation table");
@@ -751,16 +837,17 @@ public class Redmine {
 									 * associated with the sprint, add a new
 									 * entry to the sprintComprisingIssues table
 									 */
-									if (issue != null && issue.getTargetVersion() != null) {
+									if (issue != null && issue.getFixed_version() != null) {
 
-										Version issueTargetVersion = issue.getTargetVersion();
-										if (redmineDAO.ifSprintExists(issue.getProjectId(),
+										se.bth.didd.wiptool.api.Status issueTargetVersion = issue.getFixed_version();
+										if (redmineDAO.ifSprintExists(issue.getProject().getId(),
 												issueTargetVersion.getId()) == true) {
-											if (redmineDAO.ifIssueExistsInSprint(issue.getProjectId(),
+											if (redmineDAO.ifIssueExistsInSprint(issue.getProject().getId(),
 													issueTargetVersion.getId(), issue.getId()) != true) {
 
-												redmineDAO.InsertIntoSprintComprisingIssuesTable(issue.getProjectId(),
-														issueTargetVersion.getId(), issue.getId());
+												redmineDAO.InsertIntoSprintComprisingIssuesTable(
+														issue.getProject().getId(), issueTargetVersion.getId(),
+														issue.getId());
 												// System.out.println("Added the
 												// isses
 												// to SprintComprisingIssues
@@ -770,14 +857,14 @@ public class Redmine {
 									}
 								}
 
-								if (issue.getTargetVersion() != null) {
-									redmineDAO.updateIdentifiersInSprintComprisingIssues(issue.getProjectId(),
-											issue.getId(), issue.getTargetVersion().getId(), generatedRandomString,
+								if (issue.getFixed_version() != null) {
+									redmineDAO.updateIdentifiersInSprintComprisingIssues(issue.getProject().getId(),
+											issue.getId(), issue.getFixed_version().getId(), generatedRandomString,
 											generatedRandomString, generatedRandomString);
 								}
-								if (issue.getAssigneeId() != null && issue.getTargetVersion() != null) {
-									redmineDAO.updateIdentifiersInSprintparticipation(issue.getProjectId(),
-											issue.getTargetVersion().getId(), issue.getAssigneeId(),
+								if (issue.getAssigned_to() != null && issue.getFixed_version() != null) {
+									redmineDAO.updateIdentifiersInSprintparticipation(issue.getProject().getId(),
+											issue.getFixed_version().getId(), issue.getAssigned_to().getId(),
 											generatedRandomString, generatedRandomString, generatedRandomString);
 								}
 							} else {
@@ -788,11 +875,11 @@ public class Redmine {
 								 * yet
 								 */
 								IssueTemplate newIssue = new IssueTemplate();
-								newIssue.setProjectId(issue.getProjectId());
+								newIssue.setProjectId(issue.getProject().getId());
 								newIssue.setIssueId(issue.getId());
 								newIssue.setIssueName(issue.getSubject());
-								newIssue.setIssueStartDate(issue.getStartDate());
-								newIssue.setIssueDueDate(issue.getDueDate());
+								newIssue.setIssueStartDate(issue.getStart_date());
+								newIssue.setIssueDueDate(issue.getDue_date());
 								newIssue.setIssueDescription(issue.getDescription());
 								/*
 								 * Check whether the issue is marked as a
@@ -800,11 +887,10 @@ public class Redmine {
 								 * category name
 								 */
 								if (issue.getCategory() != null) {
-									IssueCategory retrievedCategory = issue.getCategory();
-									newIssue.setIssueCategory(retrievedCategory.getName());
+									newIssue.setIssueCategory(issue.getCategory().getName());
 								}
-								newIssue.setIssuePriority(issue.getPriorityText());
-								if (issue.getAssigneeId() != null) {
+								newIssue.setIssuePriority(issue.getPriority().getName());
+								if (issue.getAssigned_to() != null) {
 									/*
 									 * check whether the assignee is already
 									 * added to the People Table. If the person
@@ -815,22 +901,22 @@ public class Redmine {
 									 * assignee ID for the issue will be
 									 * updated.
 									 */
-									if (redmineDAO.ifPersonIdExists(issue.getAssigneeId()) != true) {
+									if (redmineDAO.ifPersonIdExists(issue.getAssigned_to().getId()) != true) {
 
 										User lockedUser = redmineManager.getUserManager()
-												.getUserById(issue.getAssigneeId());
+												.getUserById(issue.getAssigned_to().getId());
 										redmineDAO.insertIntoPeopleTable(lockedUser.getId(), lockedUser.getFullName(),
 												lockedUser.getFirstName(), lockedUser.getLastName(),
 												lockedUser.getMail(), generatedRandomString);
 
 									}
 
-									newIssue.setPersonId(issue.getAssigneeId());
+									newIssue.setPersonId(issue.getAssigned_to().getId());
 								}
-								newIssue.setIssueEstimatedTime(issue.getEstimatedHours());
-								newIssue.setIssueDone(issue.getDoneRatio());
+								newIssue.setIssueEstimatedTime(issue.getEstimated_hours());
+								newIssue.setIssueDone(issue.getDone_ratio());
 								newIssue.setIssueLastUpdate(timestamp);
-								newIssue.setRedmineLastUpdate(issue.getUpdatedOn());
+								newIssue.setRedmineLastUpdate(issue.getUpdated_on());
 
 								// if issue already allocated to another
 								// sprint..delete
@@ -839,8 +925,8 @@ public class Redmine {
 								List<SprintComprisingIssues> sprintDetails = redmineDAO
 										.getSprintAssociatedWithIssue(issue.getId());
 								for (SprintComprisingIssues eachIssue : sprintDetails) {
-									if (issue.getTargetVersion() != null) {
-										if (eachIssue.getSprintId().equals(issue.getTargetVersion()) == false) {
+									if (issue.getFixed_version() != null) {
+										if (eachIssue.getSprintId().equals(issue.getFixed_version()) == false) {
 											redmineDAO.deleteIssueAlreadyAllocatedToOtherSprint(issue.getId());
 											// System.out.println("issue already
 											// allocated to other sprint. so
@@ -862,7 +948,7 @@ public class Redmine {
 								List<IssueUpdateTemplate> projectDetails = redmineDAO
 										.getProjectAssocitaedWithIssue(issue.getId());
 								for (IssueUpdateTemplate project : projectDetails) {
-									if (!project.getProjectId().equals(issue.getProjectId())) {
+									if (!project.getProjectId().equals(issue.getProject().getId())) {
 										redmineDAO.deleteIssueAlreadyAllocatedToOProject(issue.getId());
 										// System.out.println("issue already
 										// allocated
@@ -880,23 +966,25 @@ public class Redmine {
 								// +
 								// redmineProject.getName());
 
-								if (issue.getTargetVersion() != null) {
-									Version issueTargetVersion = issue.getTargetVersion();
-									if (redmineDAO.ifSprintExists(issue.getProjectId(),
+								if (issue.getFixed_version() != null) {
+									se.bth.didd.wiptool.api.Status issueTargetVersion = issue.getFixed_version();
+									if (redmineDAO.ifSprintExists(issue.getProject().getId(),
 											issueTargetVersion.getId()) == true) {
-										if (redmineDAO.ifIssueExistsInSprint(issue.getProjectId(),
+										if (redmineDAO.ifIssueExistsInSprint(issue.getProject().getId(),
 												issueTargetVersion.getId(), issue.getId()) != true) {
 
-											redmineDAO.InsertIntoSprintComprisingIssuesTable(issue.getProjectId(),
+											redmineDAO.InsertIntoSprintComprisingIssuesTable(issue.getProject().getId(),
 													issueTargetVersion.getId(), issue.getId());
 										}
 
-										if (issue.getAssigneeId() != null) {
-											if (redmineDAO.ifPersonParticipatesInSprint(issue.getProjectId(),
-													issueTargetVersion.getId(), issue.getAssigneeId()) != true) {
+										if (issue.getAssigned_to() != null) {
+											if (redmineDAO.ifPersonParticipatesInSprint(issue.getProject().getId(),
+													issueTargetVersion.getId(),
+													issue.getAssigned_to().getId()) != true) {
 
-												redmineDAO.InsertIntoSprintParticipationTable(issue.getProjectId(),
-														issueTargetVersion.getId(), issue.getAssigneeId());
+												redmineDAO.InsertIntoSprintParticipationTable(
+														issue.getProject().getId(), issueTargetVersion.getId(),
+														issue.getAssigned_to().getId());
 												// System.out.println("Added to
 												// the
 												// sprint participation table
@@ -910,18 +998,18 @@ public class Redmine {
 								}
 
 							}
-							redmineDAO.updateIdentifiersInIssues(issue.getProjectId(), issue.getId(),
+							redmineDAO.updateIdentifiersInIssues(issue.getProject().getId(), issue.getId(),
 									generatedRandomString, generatedRandomString);
-							if (issue.getTargetVersion() != null) {
-								redmineDAO.updateIdentifiersInSprintComprisingIssues(issue.getProjectId(),
-										issue.getId(), issue.getTargetVersion().getId(), generatedRandomString,
+							if (issue.getFixed_version() != null) {
+								redmineDAO.updateIdentifiersInSprintComprisingIssues(issue.getProject().getId(),
+										issue.getId(), issue.getFixed_version().getId(), generatedRandomString,
 										generatedRandomString, generatedRandomString);
 							}
 
-							if (issue.getAssigneeId() != null && issue.getTargetVersion() != null) {
-								redmineDAO.updateIdentifiersInSprintparticipation(issue.getProjectId(),
-										issue.getTargetVersion().getId(), issue.getAssigneeId(), generatedRandomString,
-										generatedRandomString, generatedRandomString);
+							if (issue.getAssigned_to() != null && issue.getFixed_version() != null) {
+								redmineDAO.updateIdentifiersInSprintparticipation(issue.getProject().getId(),
+										issue.getFixed_version().getId(), issue.getAssigned_to().getId(),
+										generatedRandomString, generatedRandomString, generatedRandomString);
 							}
 						}
 					}
@@ -977,7 +1065,13 @@ public class Redmine {
 
 		// Deleting roles that no longer exist on Redmine
 		redmineDAO.deleteNonExistingRoles(generatedRandomString);
-
+		
+		// Deleting all issues that are below cuttoff
+		redmineDAO.deleteIssuesInSprintComprisingIssuesTablebelowProjectCutOffId(projectCutOff);
+		redmineDAO.deleteIssuesInSprintComprisingIssuesTablebelowIssueCutOffId(issueCutOff);
+		redmineDAO.deleteIssuesbelowProjectCutOffId(projectCutOff);
+		redmineDAO.deleteIssuesbelowIssueCutOffId(issueCutOff);
+		
 		/*
 		 * * Deleting all projects from local database, that does not exist on
 		 * Redmine anymore
@@ -989,9 +1083,9 @@ public class Redmine {
 		redmineDAO.deleteNonExistingProjectsFromDomainsInSprintTable(generatedRandomString);
 		redmineDAO.deleteNonExistingProjectsFromSprintParticipationTable(generatedRandomString);
 		redmineDAO.deleteNonExistingProjectsFromSprintDevEnvTable(generatedRandomString);
-		redmineDAO.deleteNonExistingProjectsFromSprintComprisingIssuesTable(generatedRandomString);
+		// redmineDAO.deleteNonExistingProjectsFromSprintComprisingIssuesTable(generatedRandomString);
 		redmineDAO.deleteNonExistingProjectsFromSprintsTable(generatedRandomString);
-		redmineDAO.deleteNonExistingProjectsFromissuesTable(generatedRandomString);
+		// redmineDAO.deleteNonExistingProjectsFromissuesTable(generatedRandomString);
 
 		// deleting the projects removed from Redmine
 		redmineDAO.deleteNonExistingProjects(generatedRandomString);
@@ -1003,14 +1097,13 @@ public class Redmine {
 		redmineDAO.deleteNonExistingSprintsFromDomainsInSprintTable(generatedRandomString);
 		redmineDAO.deleteNonExistingSprintsFromSprintParticipationTable(generatedRandomString);
 		redmineDAO.deleteNonExistingSprintsFromSprintDevEnvTable(generatedRandomString);
-		redmineDAO.deleteNonExistingSprintsFromSprintComprisingIssuesTable(generatedRandomString);
-		redmineDAO.deleteNonExistingIssuesFromSprintComprisingIssuesTable(generatedRandomString);
-		redmineDAO.deleteNonExistingIssuesFromissuesTable(generatedRandomString);
+		// redmineDAO.deleteNonExistingSprintsFromSprintComprisingIssuesTable(generatedRandomString);
+		// redmineDAO.deleteNonExistingIssuesFromSprintComprisingIssuesTable(generatedRandomString);
+		// redmineDAO.deleteNonExistingIssuesFromissuesTable(generatedRandomString);
 		redmineDAO.deleteNonExistingSprintsFromSprintsTable(generatedRandomString);
 
 		// Deleting all the people removed from Redmine.
 
-		// redmineDAO.deletePeopleWhoNoLongerExistFromAssessmentOfCapabilities(generatedRandomString);
 		/*
 		 * Deleting the people who haven't been assigned the current(random
 		 * string for this iteration) status identifier i.e. the people who have
