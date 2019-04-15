@@ -81,7 +81,7 @@ How to start the Web application
     * Under database, update `password` and `url` details of PostgreSQL database server.
     * Update `adminUserName` and `adminPassword` in order to change the defualt username and password details for Web application.
     * Update `redmineUrl`. 
-    * Update  `issueIdCutOff` and `projectIdCutOff`, which corresponds to the issueId and projectId below which synchronization can be ignored.  
+    * Update  `issueIdCutOff` and `projectIdCutOff`, which correspond to the issueId and projectId below which synchronization can be ignored.  
   * Now using command line, change to `capabilityTool` directory and make sure you have `pom.xml` file for building the Web application. 
   * Run `mvn clean package` to build the Web application. This generates a .jar file under target folder.
   * Start the application with `java -jar target/wiptool-0.0.1-SNAPSHOT.jar server config.yml`.
