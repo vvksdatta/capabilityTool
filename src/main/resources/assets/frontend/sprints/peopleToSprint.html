@@ -115,14 +115,14 @@
                 </h4>
               </div>
               <div ng-if="collapseOne" class="panel-collapse collapse in">
-                <input type="text" style="margin-top: 10px;" class="form-control" id="dev-table-filter" data-action="filter" data-filters="#dev-table2" placeholder="Filter capability"/>
+                <input type="text" style="margin-top: 10px;" class="form-control" ng-model="searchCapabilityCompare" data-filters="#dev-table2" placeholder="Filter capability"/>
                 <div class="pull-right">
                   <span class="clickable filter" data-toggle="tooltip" title="Toggle table filter" data-container="body"></span>
                 </div>
                 <div class="panel-body" style="overflow-y: auto;max-height: 39vh;">
                   <table class="table table-hover" id="dev-table2">
                     <tbody>
-                      <tr ng-repeat="(key, val) in allCapabilitiesList" ng-click="showCompareCapabilities(formData.selected,val)">
+                      <tr ng-repeat="(key, val) in allCapabilitiesList | orderBy:'capabilityName' | filter: searchCapabilityCompare" ng-click="showCompareCapabilities(formData.selected,val)">
                         <td >
                           {{val.capabilityName | capitalize}} <md-tooltip md-direction="left"> Click to compare </md-tooltip>
                         </td>
@@ -139,14 +139,14 @@
                 </h4>
               </div>
               <div ng-if="collapseTwo" class="panel-collapse collapse in">
-                <input type="text" style="margin-top: 10px;" class="form-control" id="dev-table-filter" data-action="filter" data-filters="#dev-table3" placeholder="Filter skill"/>
+                <input type="text" style="margin-top: 10px;" class="form-control" ng-model="searchSkillCompare" data-filters="#dev-table3" placeholder="Filter skill"/>
                 <div class="pull-right">
                   <span class="clickable filter" data-toggle="tooltip" title="Toggle table filter"  data-container="body"></span>
                 </div>
                 <div class="panel-body" style="overflow-y: auto;max-height: 39vh;">
                   <table class="table table-hover" id="dev-table3">
                     <tbody>
-                      <tr ng-repeat="(key, val) in allProgrammingSkillsList" ng-click="showCompareProgrammingSkills(formData.selected,val)">
+                      <tr ng-repeat="(key, val) in allProgrammingSkillsList  | orderBy:'skillName' | filter: searchSkillCompare " ng-click="showCompareProgrammingSkills(formData.selected,val)">
                         <td >
                           {{val.skillName | capitalize}} <md-tooltip md-direction="left"> Click to compare </md-tooltip>
                         </td>
@@ -159,7 +159,7 @@
           </div>
         </div>
       </div >
-      <div  class='col-xs-5'>
+      <div  class='col-xs-5' style="padding-bottom: 20px;">
         <div style="width:1%; float:right">
           <ul ng-hide="indexFilter" >
             <span ng-repeat="letter in alphabets">
@@ -168,7 +168,7 @@
             </span>
           </ul>
         </div>
-        <div class="list-group" style="min-height: 110px; border: 1px solid #17151566; border-style: solid; padding-bottom: 1px;border-radius: 3px;width:98%; float:left">
+        <div class="list-group" style="min-height: 110px; border: 1px solid #17151566; border-style: solid; padding-bottom: 1px;border-radius: 3px;width:98%;">
           <div style="    color: #333; background-color: #d2d2d2; border-color: #d2d2d2;margin-top: 0; margin-bottom: 10px; border-bottom: 1px solid transparent; border-top-right-radius: 3px; border-top-left-radius: 3px; padding: 10px;" class="list-group-item">
             <strong>People</strong>
           </div>
@@ -259,7 +259,7 @@
               </div>
             </div>
           </div>
-          <div  ng-if="showOverviewGraph" style="margin-top: 10px; border: 1px solid #17151566; border-style: solid; padding-bottom: 1px;border-radius: 3px;">
+          <div  ng-if="showOverviewGraph" style="margin-top: 10px; border: 1px solid #17151566; border-style: solid; padding-bottom: 1px;border-radius: 3px;width:98%;margin-bottom: 20px;">
             <div style="color: #333; background-color: #d2d2d2; border-color: #d2d2d2;margin-top: 0; border-bottom: 1px solid transparent; border-top-right-radius: 3px; border-top-left-radius: 3px; padding: 10px;" class="list-group-item">
               <strong>Overview of {{personSelected.personName | capitalize}}'s capabilities</strong>
               <div class="pull-right dropdown">
@@ -283,7 +283,7 @@
               <div style="width:70%;"> Last update: {{capabilitiesLastUpdatedDate}}</div> <div style="width:30%;margin-left: 2%;">Last updated by: {{capabilitiesLastUpdatedBy}}</div>
             </div>
           </div>
-          <div  ng-if="programmingSkillsOverviewGraph" style="margin-top: 10px; border: 1px solid #17151566; border-style: solid; padding-bottom: 1px;border-radius: 3px;">
+          <div  ng-if="programmingSkillsOverviewGraph" style="margin-top: 10px; border: 1px solid #17151566; border-style: solid; padding-bottom: 1px;border-radius: 3px;width:98%;margin-bottom: 20px;">
             <div style="color: #333;background-color: #d2d2d2; border-color: #d2d2d2;margin-top: 0; border-bottom: 1px solid transparent; border-top-right-radius: 3px; border-top-left-radius: 3px; padding: 10px;" class="list-group-item">
               <strong>Overview of {{personSelected.personName | capitalize}}'s programming skills</strong>
               <div class="pull-right dropdown">
@@ -307,7 +307,7 @@
               <div style="width:70%;"> Last update: {{capabilitiesLastUpdatedDate}}</div> <div style="width:30%;margin-left: 1%;">Last updated by: {{capabilitiesLastUpdatedBy}}</div>
             </div>
           </div>
-          <div  class="col-md-12" ng-if="programmingSkillsTimelineGraph" style="padding-left: 0px;padding-right: 0px;margin-top: 10px; border: 1px solid #17151566; border-style: solid; padding-bottom: 1px;border-radius: 3px;">
+          <div  class="col-md-12" ng-if="programmingSkillsTimelineGraph" style="padding-left: 0px;padding-right: 0px;margin-top: 10px; border: 1px solid #17151566; border-style: solid; padding-bottom: 1px;border-radius: 3px;width:98%;margin-bottom: 20px;">
             <div  style="color: #333; background-color: #d2d2d2; border-color: #d2d2d2;margin-top: 0; border-bottom: 1px solid transparent; border-top-right-radius: 3px; border-top-left-radius: 3px; padding: 10px; display: flex" class="list-group-item col-md-12">
               <div style="width:60%;"><strong>{{personSelected.personName | capitalize}}'s programming skills timeline</strong>
               </div>
@@ -330,7 +330,7 @@
                 <div class="panel panel-default-table panel-table" style="margin-bottom: 0px;overflow-y: auto; max-height: 39vh;" >
                   <div class="panel-heading" style="padding: 10px 4px;">
                     <h3 class="panel-title" ><strong>Select skill </strong></h3>
-                    <input type="text" style="margin-top: 10px;" class="form-control" id="dev-table-filter" data-action="filter" data-filters="#dev-table" placeholder="Filter skill"/>
+                    <input type="text" style="margin-top: 10px;" class="form-control"  ng-model="searchSkill" data-filters="#dev-table" placeholder="Filter skill"/>
                     <div class="pull-right">
                       <span class="clickable filter" data-toggle="tooltip" title="Toggle table filter"data-container="body"></span>
                     </div>
@@ -338,7 +338,7 @@
                   <div class="panel-body">
                     <table class="table table-hover" id="dev-table">
                       <tbody>
-                        <tr ng-repeat="(key, val) in programmingSkillsList" ng-click="showProgrammingSkillsTimeline(personSelected,val)">
+                        <tr ng-repeat="(key, val) in programmingSkillsList  | orderBy:'skillName' | filter: searchSkill" ng-click="showProgrammingSkillsTimeline(personSelected,val)">
                           <td >
                             {{val.skillName | capitalize}}
                           </td>
@@ -360,7 +360,7 @@
             <div> Last update: {{skillLastUpdatedDate}}</div>
           </div>
         </div>
-        <div  class="col-md-12" ng-if="capabilitiesTimelineGraph" style="padding-left: 0px;padding-right: 0px;margin-top: 10px; border: 1px solid #17151566; border-style: solid; padding-bottom: 1px;border-radius: 3px;">
+        <div  class="col-md-12" ng-if="capabilitiesTimelineGraph" style="padding-left: 0px;padding-right: 0px;margin-top: 10px; border: 1px solid #17151566; border-style: solid; padding-bottom: 1px;border-radius: 3px;width:98%;margin-bottom: 20px;">
           <div  style="color: #333;background-color: #d2d2d2; border-color: #d2d2d2;margin-top: 0; border-bottom: 1px solid transparent; border-top-right-radius: 3px; border-top-left-radius: 3px; padding: 10px; display: flex" class="list-group-item col-md-12">
             <div style="width:45%;"><strong>{{personSelected.personName | capitalize}}'s capabilities timeline</strong>
             </div>
@@ -383,7 +383,7 @@
               <div class="panel panel-default-table panel-table" style="margin-bottom: 0px;overflow-y: auto;max-height: 39vh;" >
                 <div class="panel-heading" style="padding: 10px 4px;">
                   <h3 class="panel-title" ><strong>Select capability </strong></h3>
-                  <input type="text" style="margin-top: 10px;" class="form-control" id="dev-table-filter" data-action="filter"data-filters="#dev-table2" placeholder="Filter skill"/>
+                  <input type="text" style="margin-top: 10px;" class="form-control" ng-model="searchCapability" data-filters="#dev-table2" placeholder="Filter skill"/>
                   <div class="pull-right">
                     <span class="clickable filter" data-toggle="tooltip" title="Toggle table filter"data-container="body"></span>
                   </div>
@@ -391,7 +391,7 @@
                 <div class="panel-body" >
                   <table class="table table-hover" id="dev-table2">
                     <tbody>
-                      <tr ng-repeat="(key, val) in capabilitiesList" ng-click="showCapabilitiesTimeline(personSelected,val)">
+                      <tr ng-repeat="(key, val) in capabilitiesList | orderBy:'capabilityName' | filter: searchCapability " ng-click="showCapabilitiesTimeline(personSelected,val)">
                         <td >
                           {{val.capabilityName | capitalize}}
                         </td>
@@ -412,7 +412,7 @@
             <div> Last update: {{capabilityLastUpdatedDate}} </div>
           </div>
         </div>
-        <div  ng-if="capabilitiesCompareGraph" style="margin-top: 10px; border: 1px solid #17151566; border-style: solid; padding-bottom: 1px;border-radius: 3px;">
+        <div  ng-if="capabilitiesCompareGraph" style="margin-top: 10px; border: 1px solid #17151566; border-style: solid; padding-bottom: 1px;border-radius: 3px;width:98%;margin-bottom: 20px;">
           <div  style="color: #333; background-color: #d2d2d2; border-color: #d2d2d2;margin-top: 0; border-bottom: 1px solid transparent; border-top-right-radius: 3px; border-top-left-radius: 3px; padding: 10px; display: flex" class="list-group-item col-md-12">
             <div style="width:40%;"><strong>Comparison of capabilities</strong>
             </div>
@@ -426,7 +426,7 @@
             <div style="width:70%;"> Last update: {{capabilitiesLastUpdatedDate}} </div> <div style="width:30%;margin-left: 1%;">Last updated by: {{capabilitylastUpdatedBy}} </div>
           </div>
         </div>
-        <div  ng-if="skillsCompareGraph" style="margin-top: 10px; border: 1px solid #17151566; border-style: solid; padding-bottom: 1px;border-radius: 3px;">
+        <div  ng-if="skillsCompareGraph" style="margin-top: 10px; border: 1px solid #17151566; border-style: solid; padding-bottom: 1px;border-radius: 3px;width:98%;margin-bottom: 20px;">
           <div  style="color: #333; background-color: #d2d2d2; border-color: #d2d2d2;margin-top: 0; border-bottom: 1px solid transparent; border-top-right-radius: 3px; border-top-left-radius: 3px; padding: 10px; display: flex" class="list-group-item col-md-12">
             <div style="width:60%;"><strong>Comparison of programming skills </strong>
             </div>
