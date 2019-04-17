@@ -113,22 +113,27 @@ $(".nav-tabs li").eq(5).removeClass("active");
                   <div style="margin-left: 15px;" ng-message="required">End date can't be before start date</div>
                 </div>
               </div>
-              <div class="form-group" ng-readonly="readOnly" ng-class="{ 'has-error': form.$submitted && form.projectId.$invalid }">
+              <div class="form-group" ng-readonly="readOnly" ng-class="{ 'has-error': form.$submitted && (form.projectName.$invalid || form.projectId.$invalid) }">
                 <label class="col-sm-3 control-label" for="projectId">Associated project</label>
                 <div class="col-sm-10" style="padding-left: 0px;">
                   <div class="col-sm-8">
-                    <select  style="font-size: 17px;min-width: 80px;" ng-show="readOnly" disabled="readOnly" id="projectId" name="projectId" class="form-control"  ng-model="sprint.projectId" required>
-                      <option style="font-size: 17px;" value="" disabled selected>Select a project</option>
-                      <option  style="font-size: 17px; " ng-repeat="project in projectsList"   value= {{project.projectId}}> {{project.projectName}}</option>
+                    <select  style="font-size: 16px;min-width: 80px;" ng-show="readOnly" disabled="readOnly" id="projectId" name="projectId" class="form-control"  ng-model="sprint.projectId" required>
+                      <option style="font-size: 16px;" value="" disabled selected>Select a project</option>
+                      <option  style="font-size: 16px; " ng-repeat="project in projectsList"   value= {{project.projectId}}> {{project.projectName}}</option>
                     </select>
-                    <select  style="font-size: 17px;min-width: 80px;" ng-hide="readOnly" id="projectId" name="projectId" class="form-control"  ng-model="sprint.projectId" required>
-                      <option style="font-size: 17px;" value="" disabled selected>Select a project</option>
-                      <option  style="font-size: 17px; " ng-repeat="project in projectsList"   value= {{project.projectId}}> {{project.projectName}}</option>
-                    </select>
+                    <input type="text" list="projectsList" value="{{projectName}}" placeholder="Select a project"  style="font-size: 17px;min-width: 80px;" ng-hide="readOnly" id="projectId" name="projectId" class="form-control"  ng-model="projectName" ng-change="parentProject(sprint,projectName)"  required>
+                    <datalist id="projectsList">
+                      <option  style="font-size: 16px; " ng-repeat="project in projectsList"   value= "{{project.projectName}}">
+                    </datalist>
                   </div>
                   <div class="col-sm-8">
                     <div ng-messages="form.$submitted && form.projectId.$error" class="help-block">
                       <div ng-message="required">Project selection is required</div>
+                      <div ng-message="selection">Project name is invalid. Select a project from the list of projects.</div>
+                    </div>
+                    <div ng-messages="form.$submitted && form.projectName.$error" class="help-block">
+                      <div ng-message="required">Project selection is required</div>
+                          <div ng-message="selection">Project name is invalid. Select a project from the list of projects.</div>
                     </div>
                   </div>
                 </div>

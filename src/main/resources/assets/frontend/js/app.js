@@ -2353,6 +2353,7 @@
         }
       });
     };
+    $scope.project = {};
     $scope.projectLeader = function(project,projectLeaderName) {
       project.projectLeader = null;
       if( project.projectLeader != null && angular.isNumber(project.projectLeader)){
@@ -6577,6 +6578,29 @@
             }
           });
         }).then(function(){
+          angular.forEach($scope.projectsList, function(value,key){
+            if(value.projectId == $scope.sprint.projectId){
+              $scope.projectName = value.projectName;
+            }
+          });
+          $scope.parentProject = function(sprint,projectName) {
+    sprint.projectId = null;
+    if( sprint.projectId != null && angular.isNumber(sprint.projectId)){
+      sprint.projectId= null;
+    }
+    $scope.form.projectId.$invalid = true;
+    $scope.form.projectId.$error.selection= true;
+    // $scope.form.projectLeader.$error.required= false;
+    angular.forEach($scope.projectsList, function(value, key) {
+      if(projectName == value.projectName){
+      sprint.projectId = value.projectId;
+        $scope.form.projectId.$invalid = false;
+        $scope.form.projectId.$error.selection= false;
+      }
+    });
+    };
+        })
+        .then(function(){
           var existingSprint = $scope.sprint;
           $scope.sprintStartDate = new Date(existingSprint.sprintStartDate);
           if(existingSprint.sprintStartDate == null){
@@ -6754,6 +6778,7 @@
           $scope.updateSprint = function(sprint){
             //var newDomainNames = $scope.formData.selectedDomains ;
             //var newAssetNames = $scope.formData.selectedAssets ;
+              if( angular.isNumber(sprint.projectId)  && sprint.projectId != null){
             var createSprint = sprint;
             $http.get('/api/sprints/getAllSprintDomainsAssets').then(function(response)
             {
@@ -6823,7 +6848,12 @@
                 }
                 alertFactory.addAuto('danger', $string, optionalDelay);
               });
-            })
+            });
+          }
+else{
+$scope.form.projectId.$invalid = true;
+$scope.form.projectId.$error.selection= true;
+}
           }
           $scope.editSprintParticipants  = function(){
             var sprintDetails = {};
@@ -6837,7 +6867,8 @@
         var optionalDelay = 5000;
         var $string = "Error in fetching list of projects";
         alertFactory.addAuto('danger', $string, optionalDelay);
-      })
+      });
+
     });
     app.controller('newSprintCtrl', function($scope, $state, $timeout,$location, $http, $base64, $q, dataService, newDomains, alertFactory,  $localStorage, $stateParams, $log, $window, $mdDialog, GetSprintDomainsService, GetSprintAssetsService, newAssets, $rootScope) {
       if($rootScope.alerts.length !=0){
@@ -6866,6 +6897,7 @@
         var $string = "Error in fetching list of options";
         alertFactory.addAuto('danger', $string, optionalDelay);
       });
+      $scope.sprint = {};
       $scope.sprintStartDate = new Date();
       $scope.minDate = new Date(
         $scope.sprintStartDate.getFullYear(),
@@ -6964,6 +6996,7 @@
       $scope.createSprint = function(sprint){
         //var newDomainNames = $scope.formData.selectedDomains ;
         //var newAssetNames = $scope.formData.selectedAssets ;
+          if( angular.isNumber(sprint.projectId)  && sprint.projectId != null){
         var createSprint = sprint;
         $http.get('/api/sprints/getAllSprintDomainsAssets').then(function(response)
         {
@@ -7024,6 +7057,11 @@
           var $string = "Error in adding the sprint.";
           alertFactory.addAuto('danger', $string, optionalDelay);
         });
+      }
+  else{
+    $scope.form.projectId.$invalid = true;
+    $scope.form.projectId.$error.selection= true;
+  }
       }
       $scope.openDialog =function openDialog($event){
         $mdDialog.show({
@@ -7124,7 +7162,23 @@
       }
       if (newAssets.getAddedAssets() != []){
         $scope.extraAssetsList = newAssets.getAddedAssets();
-      }
+      };
+      $scope.parentProject = function(sprint,projectName) {
+  sprint.projectId = null;
+  if( sprint.projectId != null && angular.isNumber(sprint.projectId)){
+    sprint.projectId= null;
+  }
+  $scope.form.projectId.$invalid = true;
+  $scope.form.projectId.$error.selection= true;
+  // $scope.form.projectLeader.$error.required= false;
+  angular.forEach($scope.projectsList, function(value, key) {
+    if(projectName == value.projectName){
+    sprint.projectId = value.projectId;
+      $scope.form.projectId.$invalid = false;
+      $scope.form.projectId.$error.selection= false;
+    }
+  });
+};
     });
     app.controller('peopleManagementCtrl', function($scope, $state, $location, $http, alertFactory, $base64, $q, dataService,  $localStorage, $stateParams, $log, $window, $rootScope) {
       $scope.oneAtATime = true;

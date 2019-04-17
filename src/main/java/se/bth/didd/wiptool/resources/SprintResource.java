@@ -875,7 +875,7 @@ public class SprintResource {
 				}
 
 				try {
-					System.out.println("huu");
+					
 					if (eachenteredRequirement.getSprintRequirementDescription() != null) {
 						System.out.println(eachenteredRequirement);
 						sprintDAO.updateSprintRequirementDescription(

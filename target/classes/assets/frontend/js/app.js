@@ -1232,16 +1232,15 @@
         alertFactory.addAuto('success', $string, optionalDelay);
       })
       .catch(function(response, status) {
-          $scope.loading = false;
+        $scope.loading = false;
         if(response.data.message != null){
           var optionalDelay = 12000;
           var $string = response.data.message;
         }
         else{
-
-        var optionalDelay = 5000;
-        var $string = "Error in synchronizing with redmine";
-      }
+          var optionalDelay = 5000;
+          var $string = "Error in synchronizing with redmine";
+        }
         alertFactory.addAuto('danger', $string, optionalDelay);
       });
     }
@@ -2269,6 +2268,7 @@
         }
       });
     };
+    //  $scope.project = {};
     var optionalDelay = "800000";
     //$rootScope.alerts = [];
     var $string = "Note : The informaton entered on this page will be used to create a new project on Redmine.";
@@ -2347,38 +2347,33 @@
       return day === 1 || day === 2 || day  ==3 || day == 4 || day ==5;
     };
     $scope.parentProject = function(project,parentProject) {
-      $scope.form.projectLeader.$invalid = false;
-        $scope.form.projectLeader.$error.selection= false;
-          $scope.form.projectLeader.$error.required= false;
-        angular.forEach($scope.projectsList, function(value, key) {
+      angular.forEach($scope.projectsList, function(value, key) {
         if(parentProject == value.projectName){
-            project.parentProjectId = value.projectId;
-          }
-        });
-   };
-   $scope.projectLeader = function(project,projectLeader) {
-     $scope.form.projectLeader.$invalid = false;
-       $scope.form.projectLeader.$error.selection= false;
-           $scope.form.projectLeader.$error.required= false;
-       angular.forEach($scope.peopleList, function(value, key) {
-       if(projectLeader == value.personName){
-           project.projectLeader = value.personId;
-               $log.debug("id is "+ project.projectLeader );
-
-         }
-         else {
-           project.projectLeader = null;
-         }
-       });
-  };
+          project.parentProjectId = value.projectId;
+        }
+      });
+    };
+    $scope.project = {};
+    $scope.projectLeader = function(project,projectLeaderName) {
+      project.projectLeader = null;
+      if( project.projectLeader != null && angular.isNumber(project.projectLeader)){
+        project.projectLeader = null;
+      }
+      $scope.form.projectLeader.$invalid = true;
+      $scope.form.projectLeader.$error.selection= true;
+      // $scope.form.projectLeader.$error.required= false;
+      angular.forEach($scope.peopleList, function(value, key) {
+        if(projectLeaderName == value.personName){
+          project.projectLeader = value.personId;
+          $scope.form.projectLeader.$invalid = false;
+          $scope.form.projectLeader.$error.selection= false;
+        }
+      });
+    };
     $scope.createProject = function(project) {
-   $log.debug("project is "+ project.stringify);
-
-        $scope.form.projectLeader.$invalid = false;
-        $scope.form.projectLeader.$error.selection= false;
-         $log.debug("hi im here "+ angular.isNumber(project.projectLeader) +"num is "+ project.projectLeader);
+      $scope.form.projectLeader.$invalid = false;
+      $scope.form.projectLeader.$error.selection= false;
       if( angular.isNumber(project.projectLeader)  &&  project.projectLeader != null){
-
         project.projectUpdatedBy = $localStorage.currentUser.userFirstName;
         project.userId =  $localStorage.currentUser.userId;
         $http.put('/api/projects/newproject',project).then(function(response) {
@@ -2396,9 +2391,8 @@
       }
       else{
         $scope.form.projectLeader.$invalid = true;
-          $scope.form.projectLeader.$error.selection= true;
+        $scope.form.projectLeader.$error.selection= true;
       }
-
     };
   });
   app.controller('peopleEditCtrl', function($scope, $state, $location, $http, alertFactory, $base64, $q, dataService, alertFactory,  $localStorage, $stateParams, $log, $window, $rootScope) {
@@ -2649,7 +2643,7 @@
         {
           var optionalDelay = 3000;
           var $string = "Updated the questionnaire";
-        //  $state.go("management.sprints.editSprint.existingSprint",response.data);
+          //  $state.go("management.sprints.editSprint.existingSprint",response.data);
           alertFactory.addAuto('success', $string, optionalDelay);
         })
         .catch(function(response, status) {
@@ -6584,6 +6578,29 @@
             }
           });
         }).then(function(){
+          angular.forEach($scope.projectsList, function(value,key){
+            if(value.projectId == $scope.sprint.projectId){
+              $scope.projectName = value.projectName;
+            }
+          });
+          $scope.parentProject = function(sprint,projectName) {
+    sprint.projectId = null;
+    if( sprint.projectId != null && angular.isNumber(sprint.projectId)){
+      sprint.projectId= null;
+    }
+    $scope.form.projectId.$invalid = true;
+    $scope.form.projectId.$error.selection= true;
+    // $scope.form.projectLeader.$error.required= false;
+    angular.forEach($scope.projectsList, function(value, key) {
+      if(projectName == value.projectName){
+      sprint.projectId = value.projectId;
+        $scope.form.projectId.$invalid = false;
+        $scope.form.projectId.$error.selection= false;
+      }
+    });
+    };
+        })
+        .then(function(){
           var existingSprint = $scope.sprint;
           $scope.sprintStartDate = new Date(existingSprint.sprintStartDate);
           if(existingSprint.sprintStartDate == null){
@@ -6761,6 +6778,7 @@
           $scope.updateSprint = function(sprint){
             //var newDomainNames = $scope.formData.selectedDomains ;
             //var newAssetNames = $scope.formData.selectedAssets ;
+              if( angular.isNumber(sprint.projectId)  && sprint.projectId != null){
             var createSprint = sprint;
             $http.get('/api/sprints/getAllSprintDomainsAssets').then(function(response)
             {
@@ -6830,7 +6848,12 @@
                 }
                 alertFactory.addAuto('danger', $string, optionalDelay);
               });
-            })
+            });
+          }
+else{
+$scope.form.projectId.$invalid = true;
+$scope.form.projectId.$error.selection= true;
+}
           }
           $scope.editSprintParticipants  = function(){
             var sprintDetails = {};
@@ -6844,7 +6867,8 @@
         var optionalDelay = 5000;
         var $string = "Error in fetching list of projects";
         alertFactory.addAuto('danger', $string, optionalDelay);
-      })
+      });
+
     });
     app.controller('newSprintCtrl', function($scope, $state, $timeout,$location, $http, $base64, $q, dataService, newDomains, alertFactory,  $localStorage, $stateParams, $log, $window, $mdDialog, GetSprintDomainsService, GetSprintAssetsService, newAssets, $rootScope) {
       if($rootScope.alerts.length !=0){
@@ -6873,6 +6897,7 @@
         var $string = "Error in fetching list of options";
         alertFactory.addAuto('danger', $string, optionalDelay);
       });
+      $scope.sprint = {};
       $scope.sprintStartDate = new Date();
       $scope.minDate = new Date(
         $scope.sprintStartDate.getFullYear(),
@@ -6971,6 +6996,7 @@
       $scope.createSprint = function(sprint){
         //var newDomainNames = $scope.formData.selectedDomains ;
         //var newAssetNames = $scope.formData.selectedAssets ;
+          if( angular.isNumber(sprint.projectId)  && sprint.projectId != null){
         var createSprint = sprint;
         $http.get('/api/sprints/getAllSprintDomainsAssets').then(function(response)
         {
@@ -7031,6 +7057,11 @@
           var $string = "Error in adding the sprint.";
           alertFactory.addAuto('danger', $string, optionalDelay);
         });
+      }
+  else{
+    $scope.form.projectId.$invalid = true;
+    $scope.form.projectId.$error.selection= true;
+  }
       }
       $scope.openDialog =function openDialog($event){
         $mdDialog.show({
@@ -7131,7 +7162,23 @@
       }
       if (newAssets.getAddedAssets() != []){
         $scope.extraAssetsList = newAssets.getAddedAssets();
-      }
+      };
+      $scope.parentProject = function(sprint,projectName) {
+  sprint.projectId = null;
+  if( sprint.projectId != null && angular.isNumber(sprint.projectId)){
+    sprint.projectId= null;
+  }
+  $scope.form.projectId.$invalid = true;
+  $scope.form.projectId.$error.selection= true;
+  // $scope.form.projectLeader.$error.required= false;
+  angular.forEach($scope.projectsList, function(value, key) {
+    if(projectName == value.projectName){
+    sprint.projectId = value.projectId;
+      $scope.form.projectId.$invalid = false;
+      $scope.form.projectId.$error.selection= false;
+    }
+  });
+};
     });
     app.controller('peopleManagementCtrl', function($scope, $state, $location, $http, alertFactory, $base64, $q, dataService,  $localStorage, $stateParams, $log, $window, $rootScope) {
       $scope.oneAtATime = true;
@@ -8350,6 +8397,17 @@
             return day === 1 || day === 2 || day  ==3 || day == 4 || day ==5;
           };
           $scope.minDate2 = $scope.projectStartDate;
+        }).then(function(){
+          angular.forEach($scope.peopleList, function(value,key){
+            if(value.personId == $scope.finalProject.projectLeader){
+              $scope.projectLeaderName = value.personName;
+            }
+          });
+          angular.forEach($scope.projectsList, function(value,key){
+            if(value.projectId == $scope.finalProject.parentProjectId){
+              $scope.parentProjectName = value.projectName;
+            }
+          });
         })
         $http.get('/api/projects/participants/' +currentProject.projectId).then(function(response)
         {
@@ -8379,29 +8437,60 @@
         $scope.manageProject = function(project) {
           $state.go("management.projects.editProject",project );
         }
-        $scope.updateProject = function(project) {
-          project.projectUpdatedBy = $localStorage.currentUser.userFirstName;
-          project.projectId = currentProject.projectId;
-          project.userId =  $localStorage.currentUser.userId;
-          $http.put('/api/projects/updateProject',project).then(function(response) {
-            //  $state.go("management.projects.projectsTable");
-            var $string = "Successfully updated the project ";
-            var optionalDelay = 3000;
-            alertFactory.addAuto('success', $string, optionalDelay);
-          })
-          .catch(function(response, status) {
-            var optionalDelay = 5000;
-            var $string = {};
-            if(response.data.message !=null){
-              $string = response.data.message;
-              if($string = "Forbidden. Please check the user has proper permissions"){
-                $string = $string+". Perhaps, the project is closed!"
-              }
-            }else {
-              $string = "Error in updating the project";
+        $scope.parentProject = function(project,parentProject) {
+          angular.forEach($scope.projectsList, function(value, key) {
+            if(parentProject == value.projectName){
+              project.parentProjectId = value.projectId;
             }
-            alertFactory.addAuto('danger', $string, optionalDelay);
           });
+        };
+        $scope.projectLeader = function(project,projectLeaderName) {
+          project.projectLeader = null;
+          if( project.projectLeader != null && angular.isNumber(project.projectLeader)){
+            project.projectLeader = null;
+          }
+          $scope.editform.projectLeader.$invalid = true;
+          $scope.editform.projectLeader.$error.selection= true;
+          angular.forEach($scope.peopleList, function(value, key) {
+            if(projectLeaderName == value.personName){
+              project.projectLeader = value.personId;
+              $scope.editform.projectLeader.$invalid = false;
+              $scope.editform.projectLeader.$error.selection= false;
+              //  $scope.editform.projectLeader.$error.required= false;
+            }
+          });
+        };
+        $scope.updateProject = function(project) {
+          $scope.editform.projectLeader.$invalid = false;
+          $scope.editform.projectLeader.$error.selection= false;
+          if( angular.isNumber(project.projectLeader)  &&  project.projectLeader != null){
+            project.projectUpdatedBy = $localStorage.currentUser.userFirstName;
+            project.projectId = currentProject.projectId;
+            project.userId =  $localStorage.currentUser.userId;
+            $http.put('/api/projects/updateProject',project).then(function(response) {
+              //  $state.go("management.projects.projectsTable");
+              var $string = "Successfully updated the project ";
+              var optionalDelay = 3000;
+              alertFactory.addAuto('success', $string, optionalDelay);
+            })
+            .catch(function(response, status) {
+              var optionalDelay = 5000;
+              var $string = {};
+              if(response.data.message !=null){
+                $string = response.data.message;
+                if($string = "Forbidden. Please check the user has proper permissions"){
+                  $string = $string+". Perhaps, the project is closed!"
+                }
+              }else {
+                $string = "Error in updating the project";
+              }
+              alertFactory.addAuto('danger', $string, optionalDelay);
+            });
+          }
+          else{
+            $scope.editform.projectLeader.$invalid = true;
+            $scope.editform.projectLeader.$error.selection= true;
+          }
         };
         $scope.editProjectParticipants = function(){
           $state.go('management.projects.editProjectParticipants', currentProject);
