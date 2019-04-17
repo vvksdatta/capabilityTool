@@ -45,24 +45,26 @@
                 </div>
                 <!-- Text input-->
                 <div class="form-group" ng-class="{ 'has-error': form.$submitted && form.projectLeader.$invalid }">
-                  <label class="col-sm-3 control-label" for="textinput">Project lead</label>
+                  <label class="col-sm-3 control-label" for="textinput">Project lead </label>{{form.projectLeader}}
                   <div class="col-sm-8">
-                    <select ng-cloak style="font-size: 17px;min-width: 80px;" id="projectLeader" name="projectLeader" class="form-control"  ng-model="project.projectLeader" required>
-                      <option style="font-size: 17px;" value="" disabled selected>Select a project leader</option>
-                      <option  style="font-size: 17px;color:#555" ng-repeat="person in peopleList" value= {{person.personId}}> {{person.personName}}</option>
-                    </select>
+                    <input type="text" list="leadersList"  ng-cloak style="font-size: 16px;min-width: 80px;" placeholder="Select a project leader" id="projectLeader" name="projectLeader" class="form-control"  ng-model="projectLeaderName" ng-change="projectLeader(project,projectLeaderName)" required>
+                      <datalist id="leadersList">
+                      <option  style="font-size: 17px;color:#555" ng-repeat="person in peopleList" value= "{{person.personName}}">
+                    </datalist>
                     <div ng-messages="form.$submitted && form.projectLeader.$error" class="help-block">
                       <div ng-message="required">Project leader name is required</div>
+                        <div ng-message="selection">Project leader name is invalid. Select a name from the list of people.</div>
                     </div>
+
                   </div>
                 </div>
                 <div class="form-group" >
                   <label class="col-sm-3 control-label" for="parentProjectId">Associated project</label>
                   <div class="col-sm-8" >
-                    <select  style="font-size: 17px;min-width: 80px;"  id="parentProjectId" name="parentProjectId" class="form-control"  ng-model="project.parentProjectId">
-                      <option style="font-size: 17px;" value="" disabled selected>Select a project</option>
-                      <option  style="font-size: 17px; " ng-repeat="eachProject in projectsList"   value= {{eachProject.projectId}}> {{eachProject.projectName |capitalize}}</option>
-                    </select>
+                    <input type="text" list="projectsList" style="font-size: 16px;min-width: 80px;" placeholder="Select a project" id="parentProject" name="parentProject" class="form-control"  ng-model="parentProjectName" ng-change="parentProject(project,parentProjectName)">
+                    <datalist id="projectsList">
+                      <option  style="font-size: 17px; " ng-repeat="eachProject in projectsList" value= "{{eachProject.projectName}}">
+                  </datalist>
                   </div>
                 </div>
                 <div class="form-group" ng-class="{ 'has-error': form.$submitted && form.projectEstimatedEffort.$invalid }">
@@ -92,7 +94,7 @@
               </div>
               <div >
                 <div class="pull-right" style="margin-top: 15px;">
-                  <md-button type="submit" style="font-size: 15px; background-color: rgb(90, 132, 187);"  class="add-tab md-primary md-raised">Save </md-button>
+                  <md-button id="submit" type="submit" style="font-size: 15px; background-color: rgb(90, 132, 187);"  class="add-tab md-primary md-raised">Save </md-button>
                   <md-button class="md-raised" style="font-size: 15px; "  type="reset" ng-click="form.$setPristine();">Clear </md-button>
                 </div>
               </div>

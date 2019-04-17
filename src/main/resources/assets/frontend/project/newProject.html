@@ -1,21 +1,21 @@
 <style>
-.md-button.md-icon-button {
-  margin: -4px 2px;
-}
-.md-button.md-icon-button {
-  margin: -4px 2px;
-}
-.md-icon-button + .md-datepicker-input-container {
-  margin-left: 0px;
-}
-._md-datepicker-has-triangle-icon {
-  padding-right: 0px;
-  margin-right: 0px;
-}
-.md-datepicker-input {
-  min-width: 80px;
-  color: #555;
-}
+  .md-button.md-icon-button {
+    margin: -4px 2px;
+  }
+  .md-button.md-icon-button {
+    margin: -4px 2px;
+  }
+  .md-icon-button + .md-datepicker-input-container {
+    margin-left: 0px;
+  }
+  ._md-datepicker-has-triangle-icon {
+    padding-right: 0px;
+    margin-right: 0px;
+  }
+  .md-datepicker-input {
+    min-width: 80px;
+    color: #555;
+  }
 </style>
 <md-content style="overflow: unset;margin-bottom: 50px;" >
   <md-whiteframe class="md-whiteframe-18dp"  layout layout-align="center center">
@@ -37,72 +37,77 @@
                   </div>
                 </div>
                 <!-- Text input-->
-                <div class="form-group" ">
+                <div class="form-group">
                   <label class="col-sm-3 control-label" for="textinput">Description</label>
                   <div class="col-sm-8">
                     <textarea rows="3" cols="50" class="form-control-textarea"  id="projectDescription" name="projectDescription" placeholder="Description of the project"  ng-model="project.projectDescription" > </textarea>
                   </div>
                 </div>
                 <!-- Text input-->
-                <div class="form-group" ng-class="{ 'has-error': form.$submitted && form.projectLeader.$invalid }">
-                  <label class="col-sm-3 control-label" for="textinput">Project lead</label>
+                <div class="form-group" ng-class="{ 'has-error': form.$submitted && (form.projectLeaderName.$invalid || form.projectLeader.$invalid  ) }">
+                  <label class="col-sm-3 control-label" for="textinput">Project lead </label>
                   <div class="col-sm-8">
-                    <select ng-cloak style="font-size: 17px;min-width: 80px;" id="projectLeader" name="projectLeader" class="form-control"  ng-model="project.projectLeader" required>
-                      <option style="font-size: 17px;" value="" disabled selected>Select a project leader</option>
-                      <option  style="font-size: 17px;color:#555" ng-repeat="person in peopleList" value= {{person.personId}}> {{person.personName}}</option>
-                    </select>
-                    <div ng-messages="form.$submitted && form.projectLeader.$error" class="help-block">
-                      <div ng-message="required">Project leader name is required</div>
+                    <input type="text" list="leadersList"  ng-cloak style="font-size: 16px;min-width: 80px;" placeholder="Select a project leader" id="projectLeader" name="projectLeader" class="form-control"  ng-model="projectLeaderName" ng-change="projectLeader(project,projectLeaderName)" required>
+                    <datalist id="leadersList">
+                      <option  style="font-size: 16px;color:#555" ng-repeat="person in peopleList" value= "{{person.personName}}">
+                      </datalist>
+                      <div ng-messages="form.$submitted && form.projectLeader.$error" class="help-block">
+                        <div ng-message="required">Project leader name is required</div>
+                        <div ng-message="selection">Project leader name is invalid. Select a name from the list of people.</div>
+                      </div>
+                      <div ng-messages="form.$submitted && form.projectLeaderName.$error" class="help-block">
+                        <div ng-message="required">Project leader name is required</div>
+                        <div ng-message="selection">Project leader name is invalid. Select a name from the list of people.</div>
+                      </div>
                     </div>
                   </div>
-                </div>
-                <div class="form-group" >
-                  <label class="col-sm-3 control-label" for="parentProjectId">Associated project</label>
-                  <div class="col-sm-8" >
-                    <select  style="font-size: 17px;min-width: 80px;"  id="parentProjectId" name="parentProjectId" class="form-control"  ng-model="project.parentProjectId">
-                      <option style="font-size: 17px;" value="" disabled selected>Select a project</option>
-                      <option  style="font-size: 17px; " ng-repeat="eachProject in projectsList"   value= {{eachProject.projectId}}> {{eachProject.projectName |capitalize}}</option>
-                    </select>
-                  </div>
-                </div>
-                <div class="form-group" ng-class="{ 'has-error': form.$submitted && form.projectEstimatedEffort.$invalid }">
-                  <label class="col-sm-3 control-label" for="textinput">Project's estimated effort</label>
-                  <div class="col-sm-8">
-                    <input type="number" min='0' class="form-control" id="projectEstimatedEffort" name="projectEstimatedEffort" placeholder="Person/hours"  ng-model="project.projectEstimatedEffort" required>
-                    <div ng-messages="form.$submitted && form.projectEstimatedEffort.$error" class="help-block">
-                      <div ng-message="required">Estimated effort is required</div>
+                  <div class="form-group" >
+                    <label class="col-sm-3 control-label" for="parentProjectId">Associated project</label>
+                    <div class="col-sm-8" >
+                      <input type="text" list="projectsList" style="font-size: 16px;min-width: 80px;" placeholder="Select a project" id="parentProject" name="parentProject" class="form-control"  ng-model="parentProjectName" ng-change="parentProject(project,parentProjectName)">
+                      <datalist id="projectsList">
+                        <option  style="font-size: 16px; " ng-repeat="eachProject in projectsList" value= "{{eachProject.projectName}}">
+                        </datalist>
+                      </div>
+                    </div>
+                    <div class="form-group" ng-class="{ 'has-error': form.$submitted && form.projectEstimatedEffort.$invalid }">
+                      <label class="col-sm-3 control-label" for="textinput">Project's estimated effort</label>
+                      <div class="col-sm-8">
+                        <input type="number" min='0' class="form-control" id="projectEstimatedEffort" name="projectEstimatedEffort" placeholder="Person/hours"  ng-model="project.projectEstimatedEffort" required>
+                        <div ng-messages="form.$submitted && form.projectEstimatedEffort.$error" class="help-block">
+                          <div ng-message="required">Estimated effort is required</div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="form-group col-sm-10"  style="background-color: transparent;padding-left: 0px;" ng-class="{ 'has-error': form.$submitted &&  form.projectEndDate.$invalid }">
+                      <div  class="col-sm-6 control-label"><label   form-control>Start date</label>
+                        <md-datepicker type="date" id="projectStartDate"    name="projectStartDate" class="form-control"   style="padding: 0px 0px;" ng-model="project.projectStartDate" md-placeholder="Start date" md-min-date="minDate" md-max-date="maxDate"  md-date-filter="onlyWeekdaysPredicate" required ></md-datepicker>
+                      </div>
+                      <div  class="col-sm-6 control-label"><label   form-control>End date</label>
+                        <md-datepicker    ng-hide="project.projectStartDate"  id="projectEndDate" name="projectEndDate" class="form-control"   style="padding: 0px 0px;" ng-model="project.projectEndDate" md-placeholder="End date" disabled ></md-datepicker><md-tooltip ng-hide="project.projectStartDate" md-direction="right"> Select the project start date first</md-tooltip>
+                        <md-datepicker type="date" id="projectEndDate" ng-show="project.projectStartDate"  name="projectEndDate" class="form-control"   style="padding: 0px 0px;" ng-model="project.projectEndDate" md-placeholder="End date" md-min-date="project.projectStartDate" md-date-filter="onlyWeekdaysPredicate" required ></md-datepicker>
+                      </div>
+                      <div ng-messages="form.$submitted && form.projectEndDate.$error" class="help-block">
+                        <div style="margin-left: 15px;" ng-message="required">Both the dates are required</div>
+                      </div>
+                      <div ng-messages="form.submitted && form.projectEndDate.$invalid" class="help-block">
+                        <div style="margin-left: 15px;" ng-message="required">End date can't be before start date</div>
+                      </div>
                     </div>
                   </div>
-                </div>
-                <div class="form-group col-sm-10"  style="background-color: transparent;padding-left: 0px;" ng-class="{ 'has-error': form.$submitted &&  form.projectEndDate.$invalid }">
-                  <div  class="col-sm-6 control-label"><label   form-control>Start date</label>
-                    <md-datepicker type="date" id="projectStartDate"    name="projectStartDate" class="form-control"   style="padding: 0px 0px;" ng-model="project.projectStartDate" md-placeholder="Start date" md-min-date="minDate" md-max-date="maxDate"  md-date-filter="onlyWeekdaysPredicate" required ></md-datepicker>
+                  <div >
+                    <div class="pull-right" style="margin-top: 15px;">
+                      <md-button id="submit" type="submit" style="font-size: 15px; background-color: rgb(90, 132, 187);"  class="add-tab md-primary md-raised">Save </md-button>
+                      <md-button class="md-raised" style="font-size: 15px; "  type="reset" ng-click="form.$setPristine();">Clear </md-button>
+                    </div>
                   </div>
-                  <div  class="col-sm-6 control-label"><label   form-control>End date</label>
-                    <md-datepicker    ng-hide="project.projectStartDate"  id="projectEndDate" name="projectEndDate" class="form-control"   style="padding: 0px 0px;" ng-model="project.projectEndDate" md-placeholder="End date" disabled ></md-datepicker><md-tooltip ng-hide="project.projectStartDate" md-direction="right"> Select the project start date first</md-tooltip>
-                    <md-datepicker type="date" id="projectEndDate" ng-show="project.projectStartDate"  name="projectEndDate" class="form-control"   style="padding: 0px 0px;" ng-model="project.projectEndDate" md-placeholder="End date" md-min-date="project.projectStartDate" md-date-filter="onlyWeekdaysPredicate" required ></md-datepicker>
-                  </div>
-                  <div ng-messages="form.$submitted && form.projectEndDate.$error" class="help-block">
-                    <div style="margin-left: 15px;" ng-message="required">Both the dates are required</div>
-                  </div>
-                  <div ng-messages="form.submitted && form.projectEndDate.$invalid" class="help-block">
-                    <div style="margin-left: 15px;" ng-message="required">End date can't be before start date</div>
-                  </div>
-                </div>
-              </div>
-              <div >
-                <div class="pull-right" style="margin-top: 15px;">
-                  <md-button type="submit" style="font-size: 15px; background-color: rgb(90, 132, 187);"  class="add-tab md-primary md-raised">Save </md-button>
-                  <md-button class="md-raised" style="font-size: 15px; "  type="reset" ng-click="form.$setPristine();">Clear </md-button>
-                </div>
-              </div>
-            </fieldset>
-          </form>
+                </fieldset>
+              </form>
+            </div>
+          </div>
         </div>
-      </div>
-    </div>
-    <div ng-show="participants" class="container" >
-      <div ui-view></div>
-    </div>
-  </md-whiteframe>
-</md-content>
+        <div ng-show="participants" class="container" >
+          <div ui-view></div>
+        </div>
+      </md-whiteframe>
+    </md-content>

@@ -2259,7 +2259,7 @@
       $state.go("management.projects.editProject",project );
     }
   });
-  app.controller('addProjectCtrl', function($scope, $state, $location, $http, alertFactory, $base64, $q, dataService, alertFactory,  $localStorage, $rootScope) {
+  app.controller('addProjectCtrl', function($scope, $state,$log, $location, $http, alertFactory, $base64, $q, dataService, alertFactory,  $localStorage, $rootScope) {
     if($rootScope.alerts.length !=0){
       angular.forEach($rootScope.alerts, function(value, key) {
         var alert = {};
@@ -2346,21 +2346,59 @@
       var day = date.getDay();
       return day === 1 || day === 2 || day  ==3 || day == 4 || day ==5;
     };
+    $scope.parentProject = function(project,parentProject) {
+      $scope.form.projectLeader.$invalid = false;
+        $scope.form.projectLeader.$error.selection= false;
+          $scope.form.projectLeader.$error.required= false;
+        angular.forEach($scope.projectsList, function(value, key) {
+        if(parentProject == value.projectName){
+            project.parentProjectId = value.projectId;
+          }
+        });
+   };
+   $scope.projectLeader = function(project,projectLeader) {
+     $scope.form.projectLeader.$invalid = false;
+       $scope.form.projectLeader.$error.selection= false;
+           $scope.form.projectLeader.$error.required= false;
+       angular.forEach($scope.peopleList, function(value, key) {
+       if(projectLeader == value.personName){
+           project.projectLeader = value.personId;
+               $log.debug("id is "+ project.projectLeader );
+
+         }
+         else {
+           project.projectLeader = null;
+         }
+       });
+  };
     $scope.createProject = function(project) {
-      project.projectUpdatedBy = $localStorage.currentUser.userFirstName;
-      project.userId =  $localStorage.currentUser.userId;
-      $http.put('/api/projects/newproject',project).then(function(response) {
-        var createdProject = response.data;
-        $state.go("management.projects.addProject.participants",createdProject);
-        var $string = "Successfully created a new project!";
-        var optionalDelay = 3000;
-        alertFactory.addAuto('success', $string, optionalDelay);
-      })
-      .catch(function(response, status) {
-        var optionalDelay = 5000;
-        var $string = response.data.message;
-        alertFactory.addAuto('danger', $string, optionalDelay);
-      });
+   $log.debug("project is "+ project.stringify);
+
+        $scope.form.projectLeader.$invalid = false;
+        $scope.form.projectLeader.$error.selection= false;
+         $log.debug("hi im here "+ angular.isNumber(project.projectLeader) +"num is "+ project.projectLeader);
+      if( angular.isNumber(project.projectLeader)  &&  project.projectLeader != null){
+
+        project.projectUpdatedBy = $localStorage.currentUser.userFirstName;
+        project.userId =  $localStorage.currentUser.userId;
+        $http.put('/api/projects/newproject',project).then(function(response) {
+          var createdProject = response.data;
+          $state.go("management.projects.addProject.participants",createdProject);
+          var $string = "Successfully created a new project!";
+          var optionalDelay = 3000;
+          alertFactory.addAuto('success', $string, optionalDelay);
+        })
+        .catch(function(response, status) {
+          var optionalDelay = 5000;
+          var $string = response.data.message;
+          alertFactory.addAuto('danger', $string, optionalDelay);
+        });
+      }
+      else{
+        $scope.form.projectLeader.$invalid = true;
+          $scope.form.projectLeader.$error.selection= true;
+      }
+
     };
   });
   app.controller('peopleEditCtrl', function($scope, $state, $location, $http, alertFactory, $base64, $q, dataService, alertFactory,  $localStorage, $stateParams, $log, $window, $rootScope) {
