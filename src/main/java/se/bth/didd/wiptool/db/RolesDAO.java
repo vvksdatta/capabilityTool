@@ -38,8 +38,7 @@ public interface RolesDAO {
 	@SqlQuery("select * from ROLESDB where roleName= :roleName")
 	List<Roles> getRoleId(@Bind("roleName") String roleName);
 
-	@SqlQuery("select TableA.personId, TableA.roleId, ROLESDB.roleName from ROLESDB RIGHT JOIN "
-			+ "(select * from ROLESOFPEOPLE) AS TableA ON TableA.roleId = ROLESDB.roleId ")
+	@SqlQuery("select TableB.personId, TableB.roleId, TableB.roleName, PEOPLE.personName from PEOPLE RIGHT JOIN (select TableA.personId, TableA.roleId, ROLESDB.roleName from ROLESDB RIGHT JOIN "
+			+ "(select * from ROLESOFPEOPLE ) AS TableA ON TableA.roleId = ROLESDB.roleId ) AS TableB ON TableB.personId = PEOPLE.personId ")
 	List<RolesOfPeople> getRolesOfPeople();
-
 }

@@ -38,6 +38,15 @@ select > option{ font-size:17px; }
 #page-wrapper.show-sidebar #sidebar-page-content {
   width: calc(95% - 50px);
 }
+.glyphicon.glyphicon-search {
+    font-size: 15px;
+  }
+  .glyphicon-menu-left{
+    font-size: 15px;
+  }
+  .glyphicon-menu-right{
+    font-size: 15px;
+  }
 </style>
 <div class='parent'>
   <h2></h2>
@@ -88,19 +97,38 @@ select > option{ font-size:17px; }
           </div>
         </div>
       </div >
-      <div class='col-xs-5 list-group' style="min-height: 110px; border: 1px solid; border-style: solid; padding-bottom: 1px;">
+        <div class='col-xs-5'>
+          <div style="width:1%; float:right">
+          <ul ng-hide="indexFilter" >
+            <span ng-repeat="letter in alphabets">
+              <li style="display: flex;" ng-show="alphabetsToDisplay[letter]" ng-click="goto(letter)" ><a style="color: black;">{{letter}}</a></li>
+              <li style="display: flex;" ng-hide="alphabetsToDisplay[letter]"  ><a style="text-decoration: none; color: grey;">{{letter}}</a></li>
+            </span>
+          </ul>
+        </div>
+      <div class='list-group' style="min-height: 110px; border: 1px solid; border-style: solid; padding-bottom: 1px;width:98%;">
         <div style="    color: #333;background-color: #d2d2d2; border-color: #d2d2d2;margin-top: 0; margin-bottom: 10px; border-bottom: 1px solid transparent; border-top-right-radius: 3px; border-top-left-radius: 3px; padding: 10px;" class="list-group-item">
           <strong>People</strong>
         </div>
-        <div class="list-group-item">
+        <div class="list-group-item" style= "margin-bottom: 10px; height:55px;">
           Select Role:
           <select    ng-model="selectedRole" ng-change="filterPeople()"> <option ng-repeat="role in rolesList"   value= {{role.roleId}}> {{role.roleName}} </option></select>
+          <div class="pull-right">
+              <div ng-if="selectedRole">
+                <button type="button" style="font-size: 10px;" class="btn btn-default" ng-click="toggleIndexFilter()">
+                  <i class="glyphicon  glyphicon-search" ></i>
+                  <i ng-show="indexFilter" class="glyphicon glyphicon-menu-right" ></i>
+                  <i ng-hide="indexFilter" class="glyphicon glyphicon-menu-left" ></i>
+                  <md-tooltip md-direction="top"> Click a letter to scroll to the respective index</md-tooltip>
+                </button>
+              </div>
+            </div>
         </div>
         <div style="max-height:50vh;overflow-x:hidden;overflow-y:auto;">
           <div  ng-if="item.roleId == selectedRole"  class="" ng-repeat="item in rolesOfPeople" >
             <div ng-if="item.roleId == selectedRole"  ng-cloak class="btn btn-block btn-droppable list-group-item" ng-repeat="person in peopleList" ng-show="person.personId == item.personId" data-drop="true" ng-model='peopleList' data-jqyoui-options="{accept:'.btn-draggable:not([ng-model=peopleList])'}"  jqyoui-droppable="{index: {{$index}}}">
               <div style="display: inline-flex;" ng-if="person.personId == item.personId"  ng-show="person.personId == item.personId" ng-cloak  ng-init="person.roleId= selectedRole" class="btn btn-default btn-block btn-draggable" data-drag="{{true}}" data-jqyoui-options="{revert: 'invalid',helper:'clone',appendTo:'.selectedPeople',containment:'document',scroll:'false'}" ng-model="peopleList" jqyoui-draggable="{index: {{$index}},placeholder:true,animate:true}" ng-hide="!person.personName">
-                <table style="width: 100%">
+                <table id="{{person.personName | limitTo:1 | uppercase}}" style="width: 100%">
                   <thead>
                     <tr>
                       <th>Name
@@ -151,6 +179,7 @@ select > option{ font-size:17px; }
             </div>
           </div>
         </div>
+      </div>
       </div>
       <div class='col-xs-3 selectedPeople' style="margin-bottom: 50px;">
         <div class="panel panel-default-table panel-table">

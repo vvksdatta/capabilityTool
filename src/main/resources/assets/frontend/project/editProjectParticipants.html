@@ -1,43 +1,52 @@
 <style>
-#sidebar-page-content {
-  position: absolute;
-  width: 100%;
-  left: 5%;
-  right: 5%;
-  padding: 5px;
-  transition: .5s ease all;
-  height: calc(100% - 150px);
-}
-.breadcrumb {
-  width : 82%;
-}
-.alert {
-  width: 82%;
-}
-select > option{ font-size:17px; }
-.list-group {
-  margin-bottom: 0px;
-  padding-left: 0;
-}
-.btn-info {
-  background-color: #ddd3;
-}
-.btn-info:hover {
-  background-color: #ddd;
-}
-.btn-info:active {
-  background-color: #ddd;
-}
-.list-group {
-  margin-bottom: 0px;
-  padding-left: 0;
-  padding-right: 0;
-  border-radius: 4px;
-  border-color: #171515;
-}
-#page-wrapper.show-sidebar #sidebar-page-content {
-  width: calc(95% - 50px);
-}
+  #sidebar-page-content {
+    position: absolute;
+    width: 100%;
+    left: 5%;
+    right: 5%;
+    padding: 5px;
+    transition: .5s ease all;
+    height: calc(100% - 150px);
+  }
+  .breadcrumb {
+    width : 82%;
+  }
+  .alert {
+    width: 82%;
+  }
+  select > option{ font-size:17px; }
+  .list-group {
+    margin-bottom: 0px;
+    padding-left: 0;
+  }
+  .btn-info {
+    background-color: #ddd3;
+  }
+  .btn-info:hover {
+    background-color: #ddd;
+  }
+  .btn-info:active {
+    background-color: #ddd;
+  }
+  .list-group {
+    margin-bottom: 0px;
+    padding-left: 0;
+    padding-right: 0;
+    border-radius: 4px;
+    border-color: #171515;
+  }
+  #page-wrapper.show-sidebar #sidebar-page-content {
+    width: calc(95% - 50px);
+  }
+  .glyphicon.glyphicon-search {
+    font-size: 15px;
+  }
+  .glyphicon-menu-left{
+    font-size: 15px;
+  }
+  .glyphicon-menu-right{
+    font-size: 15px;
+  }
 </style>
 <div class='parent'>
   <h2></h2>
@@ -88,65 +97,85 @@ select > option{ font-size:17px; }
           </div>
         </div>
       </div >
-      <div class='col-xs-5 list-group' style="min-height: 110px; border: 1px solid; border-style: solid; padding-bottom: 1px;">
-        <div style="    color: #333;background-color: #d2d2d2; border-color: #d2d2d2;margin-top: 0; margin-bottom: 10px; border-bottom: 1px solid transparent; border-top-right-radius: 3px; border-top-left-radius: 3px; padding: 10px;" class="list-group-item">
-          <strong>People</strong>
+      <div class='col-xs-5'>
+        <div style="width:1%; float:right">
+          <ul ng-hide="indexFilter" >
+            <span ng-repeat="letter in alphabets">
+              <li style="display: flex;" ng-show="alphabetsToDisplay[letter]" ng-click="goto(letter)" ><a style="color: black;">{{letter}}</a></li>
+              <li style="display: flex;" ng-hide="alphabetsToDisplay[letter]"  ><a style="text-decoration: none; color: grey;">{{letter}}</a></li>
+            </span>
+          </ul>
         </div>
-        <div class="list-group-item">
-          Select Role:
-          <select    ng-model="selectedRole" ng-change="filterPeople()"> <option ng-repeat="role in rolesList"   value= {{role.roleId}}> {{role.roleName}} </option></select>
-        </div>
-        <div style="max-height:50vh;overflow-x:hidden;overflow-y:auto;">
-          <div  ng-if="item.roleId == selectedRole"  class="" ng-repeat="item in rolesOfPeople" >
-            <div ng-if="item.roleId == selectedRole"  ng-cloak class="btn btn-block btn-droppable list-group-item" ng-repeat="person in peopleList" ng-show="person.personId == item.personId" data-drop="true" ng-model='peopleList' data-jqyoui-options="{accept:'.btn-draggable:not([ng-model=peopleList])'}"  jqyoui-droppable="{index: {{$index}}}">
-              <div style="display: inline-flex;" ng-if="person.personId == item.personId"  ng-show="person.personId == item.personId" ng-cloak  ng-init="person.roleId= selectedRole" class="btn btn-default btn-block btn-draggable" data-drag="{{true}}" data-jqyoui-options="{revert: 'invalid',helper:'clone',appendTo:'.selectedPeople',containment:'document',scroll:'false'}" ng-model="peopleList" jqyoui-draggable="{index: {{$index}},placeholder:true,animate:true}" ng-hide="!person.personName">
-                <table style="width: 100%">
-                  <thead>
-                    <tr>
-                      <th>Name
-                      </th>
-                      <th>Projects
-                      </th>
-                      <th>Sprints
-                      </th>
-                      <th>Issues assigned
-                      </th>
-                    </tr>
-                  </thead>
-                  <col width="35%" />
-                  <col width="25%" />
-                  <col width="25%" />
-                  <col width="14%" />
-                  <tbody>
-                    <tr>
-                      <td >
-                        <span ng-model="letterLimit"  class="avatar" alt="datta" data-toggle="tooltip" data-placement="top" data-container="body"  style="background-color: #29516D;width: 28px; height: 26px; font-size: 12px; padding-top: 5px; margin-right: 3px" data-original-title={{person.personName}}>{{ person.personName | limitTo:2 | uppercase }}</span>
-                        {{person.personName | capitalize }}
-                      </td>
-                      <td>
-                        <span style="display: table-row;" ng-repeat="personProject in person.projects">
-                          <ul>
-                            {{personProject.projectName | capitalize }}
-                          </ul>
-                        </span>
-                      </td>
-                      <td>
-                        <span style="display: table-row;" ng-repeat="personProject in person.projects">
-                          <ul ng-repeat="personSprints in personProject.sprints">
-                            {{personSprints.sprintName}}
-                          </ul>
-                        </span>
-                      </td>
-                      <td>
-                        <span style="display:  table-row;" ng-repeat="personProject in person.projects">
-                          <ul ng-repeat="personSprints in personProject.sprints">
-                            {{personSprints.numberofIssues}}
-                          </ul>
-                        </span>
-                      </td>
-                    </tr>
-                  </tbody>
-                </table>
+        <div class='list-group' style="min-height: 110px; border: 1px solid; border-style: solid; padding-bottom: 1px;width:98%;">
+          <div style="    color: #333;background-color: #d2d2d2; border-color: #d2d2d2;margin-top: 0; margin-bottom: 10px; border-bottom: 1px solid transparent; border-top-right-radius: 3px; border-top-left-radius: 3px; padding: 10px;" class="list-group-item">
+            <strong>People</strong>
+          </div>
+          <div class="list-group-item" style= "margin-bottom: 10px; height:55px;">
+            Select Role:
+            <select    ng-model="selectedRole" ng-change="filterPeople()"> <option ng-repeat="role in rolesList"   value= {{role.roleId}}> {{role.roleName}} </option></select>
+            <div class="pull-right">
+              <div ng-if="selectedRole">
+                <button type="button" style="font-size: 10px;" class="btn btn-default" ng-click="toggleIndexFilter()">
+                  <i class="glyphicon  glyphicon-search" ></i>
+                  <i ng-show="indexFilter" class="glyphicon glyphicon-menu-right" ></i>
+                  <i ng-hide="indexFilter" class="glyphicon glyphicon-menu-left" ></i>
+                  <md-tooltip md-direction="top"> Click a letter to scroll to the respective index</md-tooltip>
+                </button>
+              </div>
+            </div>
+          </div>
+          <div style="max-height:50vh;overflow-x:hidden;overflow-y:auto;">
+            <div  ng-if="item.roleId == selectedRole"  class="" ng-repeat="item in rolesOfPeople" >
+              <div ng-if="item.roleId == selectedRole"  ng-cloak class="btn btn-block btn-droppable list-group-item" ng-repeat="person in peopleList" ng-show="person.personId == item.personId" data-drop="true" ng-model='peopleList' data-jqyoui-options="{accept:'.btn-draggable:not([ng-model=peopleList])'}"  jqyoui-droppable="{index: {{$index}}}">
+                <div style="display: inline-flex;" ng-if="person.personId == item.personId"  ng-show="person.personId == item.personId" ng-cloak  ng-init="person.roleId= selectedRole" class="btn btn-default btn-block btn-draggable" data-drag="{{true}}" data-jqyoui-options="{revert: 'invalid',helper:'clone',appendTo:'.selectedPeople',containment:'document',scroll:'false'}" ng-model="peopleList" jqyoui-draggable="{index: {{$index}},placeholder:true,animate:true}" ng-hide="!person.personName">
+                  <table id="{{person.personName | limitTo:1 | uppercase}}" style="width: 100%">
+                    <thead>
+                      <tr>
+                        <th>Name
+                        </th>
+                        <th>Projects
+                        </th>
+                        <th>Sprints
+                        </th>
+                        <th>Issues assigned
+                        </th>
+                      </tr>
+                    </thead>
+                    <col width="35%" />
+                    <col width="25%" />
+                    <col width="25%" />
+                    <col width="14%" />
+                    <tbody>
+                      <tr>
+                        <td >
+                          <span ng-model="letterLimit"  class="avatar" alt="datta" data-toggle="tooltip" data-placement="top" data-container="body"  style="background-color: #29516D;width: 28px; height: 26px; font-size: 12px; padding-top: 5px; margin-right: 3px" data-original-title={{person.personName}}>{{ person.personName | limitTo:2 | uppercase }}</span>
+                          {{person.personName | capitalize }}
+                        </td>
+                        <td>
+                          <span style="display: table-row;" ng-repeat="personProject in person.projects">
+                            <ul>
+                              {{personProject.projectName | capitalize }}
+                            </ul>
+                          </span>
+                        </td>
+                        <td>
+                          <span style="display: table-row;" ng-repeat="personProject in person.projects">
+                            <ul ng-repeat="personSprints in personProject.sprints">
+                              {{personSprints.sprintName}}
+                            </ul>
+                          </span>
+                        </td>
+                        <td>
+                          <span style="display:  table-row;" ng-repeat="personProject in person.projects">
+                            <ul ng-repeat="personSprints in personProject.sprints">
+                              {{personSprints.numberofIssues}}
+                            </ul>
+                          </span>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
               </div>
             </div>
           </div>
@@ -172,7 +201,7 @@ select > option{ font-size:17px; }
                       <div ng-repeat="item in list2">
                         <md-checkbox  type="checkbox" style="margin-bottom: 10px;width: 100%;display: grid;" class="md-primary"  ng-model="removeSelected[item.personId]" >
                           <md-tooltip md-direction="left">Remove {{item.personName}}</md-tooltip>
-                          <div class="list-group  btn-info btn-draggable" style="color: #333;cursor: pointer;" ng-show="item.personId" data-drag="{{true}}"  data-jqyoui-options="{revert: 'invalid',helper:'clone',appendTo:'parent',containment:'document',scroll:'false',onDrop: addBack(showRemove)}" jqyoui-draggable="{index: {{$index}},placeholder:true,animate:false}">
+                          <div class="list-group  btn-info btn-draggable" style="color: #333;cursor: pointer;" ng-show="item.personId" data-drag="{{true}}"  data-jqyoui-options="{revert: 'invalid',helper:'clone',appendTo:'parent',containment:'document',scroll:'false',onDrop: limitEntry(list2.length)}" jqyoui-draggable="{index: {{$index}},placeholder:true,animate:false}">
                             <div   ng-repeat="role in rolesList" ng-if=" item.roleId == role.roleId " style="display: flex; border: 1px solid; border-radius: 8px;" >
                               <table style=" width: 100%;">
                                 <tr style=" width: 100%;">
