@@ -980,7 +980,7 @@
       }
     };
   });
-  app.controller('projectParticipants', function TodoCtrl($scope, $element,$log, $state, $stateParams, $filter, $location, $http, alertFactory, $localStorage, $base64, $q, dataService, alertFactory, $mdDialog, $rootScope ) {
+  app.controller('projectParticipants', function TodoCtrl($scope, $element,$log, $state, $stateParams, $filter, $location, $http, alertFactory, $localStorage, $base64, $q, dataService, alertFactory, $mdDialog, $rootScope, myScroll, $location, $anchorScroll  ) {
     if($rootScope.alerts.length !=0){
       angular.forEach($rootScope.alerts, function(value, key) {
         var alert = {};
@@ -990,14 +990,51 @@
         }
       });
     };
+    $scope.ids = [' ','A', 'B', 'C', 'D', 'E','F', 'G', 'H', 'I' , 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'];
+    $scope.goto = function(letter){
+      var current  =   myScroll.getCurrentValue();
+      var charNum = null;
+      for(var i=65; i<=90; i++){
+        if(letter == String.fromCharCode(i)){
+          charNum = i;
+        }
+      }
+      charNum = (charNum -64);
+      for(var k = $scope.ids.length - 1; k >= 0; k--){
+        if (current == charNum)
+        {
+          myScroll.scrollTo(current, $location, $anchorScroll, $log );
+        } else if(current < charNum) {
+          current++;
+          myScroll.setCurrentValue(current);
+        }
+        else if(current > charNum ){
+          current--;
+          myScroll.setCurrentValue(current);
+        }
+      }
+    }
+    $scope.alphabets = [];
+    $scope.alphabetsPresent = [];
+    $scope.alphabetsToDisplay = [];
+    $scope.membersCount = [];
+    $scope.namesPresent = [];
+    $scope.membersCountinList2 = [];
+    $scope.indexFilter = true;
+    $scope.numberOfParticipants =0;
+    for(var i=65; i<=90; i++){
+      $scope.alphabets.push(String.fromCharCode(i));
+    }
+    $scope.toggleIndexFilter = function(){
+      if(  $scope.indexFilter == true){
+        $scope.indexFilter = false;
+      }else{
+        $scope.indexFilter = true;
+      }
+    }
     var currentProject = $stateParams;
     $scope.showRemove = true;
     $scope.removeSelected = {};
-    $scope.addBack = function(showRemove){
-      $scope.showRemove = true;
-      showRemove = true;
-      return showRemove;
-    }
     $scope.removeProjectParticipants = function(){
       var currentPeopleList = $scope.peopleList;
       var clearSelected  = $scope.list2;
@@ -1037,6 +1074,8 @@
             if(value2.personId == value3.personId && value2.personName == value3.personName ){
               //$log.debug('Hello ' +key3+ '!');
               clearSelected.splice(key3,1);
+              var index = $scope.membersCountinList2[value3.personName.charAt(0).toUpperCase()].indexOf(value3.personName);
+              $scope.membersCountinList2[value3.personName.charAt(0).toUpperCase()].splice(index,1 );
             }
           })
           //$scope.list2[key].remove(0,1,2,3,4);
@@ -1047,6 +1086,15 @@
         }
         //return $scope.removeSelected = {};
       }).then(function(){
+        angular.forEach($scope.alphabets, function(val,key){
+          if($scope.membersCountinList2[val] != null){
+            if((  $scope.membersCount[val] -   $scope.membersCountinList2[val].length  ) == 0) {
+              $scope.alphabetsToDisplay[val] = false;
+            }else{
+              $scope.alphabetsToDisplay[val] = true;
+            }
+          }
+        });
         $scope.peopleList = currentPeopleList;
         $scope.list2 = clearSelected;
         $scope.removeSelected =remove;
@@ -1057,6 +1105,32 @@
     {
       var rolesOfPeople = response.data;
       $scope.rolesOfPeople= rolesOfPeople;
+    }).then(function(){
+      angular.forEach($scope.rolesOfPeople, function(val,key){
+        //console.log("hi theval is "+val.personName);
+        if($scope.alphabetsPresent.indexOf(val.personName.charAt(0).toUpperCase()) == -1) {
+          $scope.alphabetsPresent.push(val.personName.charAt(0).toUpperCase());
+        }
+      });
+      angular.forEach($scope.alphabets, function(val,key){
+        if($scope.alphabetsPresent.indexOf(val) == -1) {
+          $scope.alphabetsToDisplay[val] = false;
+        }else{
+          $scope.alphabetsToDisplay[val] = true;
+        }
+        //   $log.debug("for "+val+ " is "+   $scope.alphabetsToDisplay[val] )
+      });
+      angular.forEach($scope.alphabets, function(val,key){
+        $scope.membersCount[val] = 0;
+        $scope.membersCountinList2[val] = [];
+      });
+      angular.forEach($scope.rolesOfPeople, function(val1,key1){
+        if($scope.namesPresent.indexOf(val1.personName) == -1) {
+          $scope.membersCount[val1.personName.charAt(0).toUpperCase()]++;
+          //$log.debug("for name "+val1.personName +"char is "+val1.personName.charAt(0)+ " is " +  $scope.membersCount[val1.personName.charAt(0).toUpperCase()]);
+          $scope.namesPresent.push(val1.personName);
+        }
+      });
     })
     .catch(function(response, status) {
       //	$scope.loading = false;
@@ -1116,6 +1190,26 @@
     //	$scope.demo = [{ "personId": 1, "personName": "sai datta Admin", "projects": [ { "projectId": 1, "projectName": "Project1", "sprints": [ { "sprintId": 4, "sprintName": "sprintlog", "issues": [ { "issueId": 7 }, { "issueId": 6 } ], "numberofIssues": 2 }, { "sprintId": 8, "sprintName": "demosprint", "issues": [ { "issueId": 0 }, { "issueId": 1 } ], "numberofIssues": 2 } ] } ], "roleId": "3", "jqyoui_pos": 1 } ];
     $scope.filterPeople = function() {
       roleName= $scope.selectedRole;
+    }
+    $scope.limitEntry = function(length){
+      $scope.showRemove = true;
+      angular.forEach($scope.list2, function(val1,key1){
+        if(  $scope.membersCountinList2[val1.personName.charAt(0).toUpperCase()].indexOf(val1.personName) == -1) {
+          $scope.membersCountinList2[val1.personName.charAt(0).toUpperCase()].push(val1.personName) ;
+          //  $log.debug("for char "+val1.personName+ " is " +  $scope.membersCount[val1.personName.charAt(0).toUpperCase()]);
+        }
+      });
+      angular.forEach($scope.alphabets, function(val,key){
+        if($scope.membersCountinList2[val] != null){
+          if((  $scope.membersCount[val] -   $scope.membersCountinList2[val].length  ) == 0) {
+            $scope.alphabetsToDisplay[val] = false;
+          }else{
+            $scope.alphabetsToDisplay[val] = true;
+          }
+        }
+        //  $log.debug("for "+val+ " is "+   $scope.alphabetsToDisplay[val] )
+      });
+      $scope.numberOfParticipants = $scope.numberOfParticipants +	length;
     }
     $scope.addProjectParticipants =function(participants){
       var ee = [];
@@ -8359,7 +8453,7 @@
         angular.forEach($scope.list2, function(val1,key1){
           if(  $scope.membersCountinList2[val1.personName.charAt(0).toUpperCase()].indexOf(val1.personName) == -1) {
             $scope.membersCountinList2[val1.personName.charAt(0).toUpperCase()].push(val1.personName) ;
-            $log.debug("for char "+val1.personName+ " is " +  $scope.membersCount[val1.personName.charAt(0).toUpperCase()]);
+            //  $log.debug("for char "+val1.personName+ " is " +  $scope.membersCount[val1.personName.charAt(0).toUpperCase()]);
           }
         });
         angular.forEach($scope.alphabets, function(val,key){

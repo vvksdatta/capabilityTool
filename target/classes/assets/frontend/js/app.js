@@ -6584,21 +6584,21 @@
             }
           });
           $scope.parentProject = function(sprint,projectName) {
-    sprint.projectId = null;
-    if( sprint.projectId != null && angular.isNumber(sprint.projectId)){
-      sprint.projectId= null;
-    }
-    $scope.form.projectId.$invalid = true;
-    $scope.form.projectId.$error.selection= true;
-    // $scope.form.projectLeader.$error.required= false;
-    angular.forEach($scope.projectsList, function(value, key) {
-      if(projectName == value.projectName){
-      sprint.projectId = value.projectId;
-        $scope.form.projectId.$invalid = false;
-        $scope.form.projectId.$error.selection= false;
-      }
-    });
-    };
+            sprint.projectId = null;
+            if( sprint.projectId != null && angular.isNumber(sprint.projectId)){
+              sprint.projectId= null;
+            }
+            $scope.form.projectId.$invalid = true;
+            $scope.form.projectId.$error.selection= true;
+            // $scope.form.projectLeader.$error.required= false;
+            angular.forEach($scope.projectsList, function(value, key) {
+              if(projectName == value.projectName){
+                sprint.projectId = value.projectId;
+                $scope.form.projectId.$invalid = false;
+                $scope.form.projectId.$error.selection= false;
+              }
+            });
+          };
         })
         .then(function(){
           var existingSprint = $scope.sprint;
@@ -6778,82 +6778,82 @@
           $scope.updateSprint = function(sprint){
             //var newDomainNames = $scope.formData.selectedDomains ;
             //var newAssetNames = $scope.formData.selectedAssets ;
-              if( angular.isNumber(sprint.projectId)  && sprint.projectId != null){
-            var createSprint = sprint;
-            $http.get('/api/sprints/getAllSprintDomainsAssets').then(function(response)
-            {
-              var list = response.data;
-              $scope.latestdomainsList = list.latestdomainsList;
-              $scope.latestassetsList = list.latestassetsList ;
-            }).then(function(){
-              var ee =[];
-              for (var i =  $scope.latestdomainsList.length - 1; i >= 0; i--) {
-                angular.forEach($scope.formData.selectedDomains, function(value2, key2) {
-                  if ($scope.latestdomainsList[i].domainName == key2) {
-                    if (value2 == true) {
-                      var txt = "{\"domainId\":"+$scope.latestdomainsList[i].domainId+",\"domainName\":\""+$scope.latestdomainsList[i].domainName+"\"}";
-                      var txt2 = angular.fromJson(txt);
-                      this.push(txt2);
+            if( angular.isNumber(sprint.projectId)  && sprint.projectId != null){
+              var createSprint = sprint;
+              $http.get('/api/sprints/getAllSprintDomainsAssets').then(function(response)
+              {
+                var list = response.data;
+                $scope.latestdomainsList = list.latestdomainsList;
+                $scope.latestassetsList = list.latestassetsList ;
+              }).then(function(){
+                var ee =[];
+                for (var i =  $scope.latestdomainsList.length - 1; i >= 0; i--) {
+                  angular.forEach($scope.formData.selectedDomains, function(value2, key2) {
+                    if ($scope.latestdomainsList[i].domainName == key2) {
+                      if (value2 == true) {
+                        var txt = "{\"domainId\":"+$scope.latestdomainsList[i].domainId+",\"domainName\":\""+$scope.latestdomainsList[i].domainName+"\"}";
+                        var txt2 = angular.fromJson(txt);
+                        this.push(txt2);
+                      }
                     }
-                  }
-                },ee );
-              }
-              createSprint.applicationDomain = angular.bind(this,ee);
-            }).then(function(){
-              var an =[];
-              for (var i =  $scope.latestassetsList.length - 1; i >= 0; i--) {
-                angular.forEach($scope.formData2.selectedAssets, function(value2, key2) {
-                  if ($scope.latestassetsList[i].assetName == key2) {
-                    if (value2 == true) {
-                      var txt = "{\"assetId\":"+$scope.latestassetsList[i].assetId+",\"assetName\":\""+$scope.latestassetsList[i].assetName+"\"}";
-                      var txt2 = angular.fromJson(txt);
-                      this.push(txt2);
-                    }
-                  }
-                },an );
-              }
-              createSprint.kindOfAssets = angular.bind(this,an);
-              createSprint.sprintUpdatedBy = $localStorage.currentUser.userFirstName;
-              createSprint.sprintStartDate = new Date(sprint.sprintStartDate);
-              createSprint.sprintEndDate = new Date(sprint.sprintEndDate);
-              //if($scope.sprintStatus == true){
-              //createSprint.sprintStatus = 'true';
-              //	}
-              //else if($scope.sprintStatus == false){
-              //createSprint.sprintStatus = 'false';
-              //}
-              $scope.createSprint = createSprint;
-            }).then(function(){
-              $scope.createSprint.userId = $localStorage.currentUser.userId;
-              $http.post('/api/sprints/updateSprint',$scope.createSprint).then(function(response) {
-                var createdSprint = response.data;
-                $state.go("management.sprints.editSprint.companyFactors", createdSprint);
-                var $string = "Successfully updated the sprint " +sprint.sprintName;
-                var optionalDelay = 3000;
-                alertFactory.addAuto('success', $string, optionalDelay);
-                newDomains.resetDomains();
-                newAssets.resetAssets();
-                $scope.extraDomainsList=[];
-                $scope.extraAssetsList =[];
-              }) .catch(function(response, status) {
-                var optionalDelay = 5000;
-                var $string = {};
-                if(response.data.message !=null){
-                  $string = response.data.message;
-                  if($string = "Forbidden. Please check whether the user has proper permissions"){
-                    $string = $string+". Perhaps, the project is closed!"
-                  }
-                }else {
-                  $string = "Error in updating the sprint.";
+                  },ee );
                 }
-                alertFactory.addAuto('danger', $string, optionalDelay);
+                createSprint.applicationDomain = angular.bind(this,ee);
+              }).then(function(){
+                var an =[];
+                for (var i =  $scope.latestassetsList.length - 1; i >= 0; i--) {
+                  angular.forEach($scope.formData2.selectedAssets, function(value2, key2) {
+                    if ($scope.latestassetsList[i].assetName == key2) {
+                      if (value2 == true) {
+                        var txt = "{\"assetId\":"+$scope.latestassetsList[i].assetId+",\"assetName\":\""+$scope.latestassetsList[i].assetName+"\"}";
+                        var txt2 = angular.fromJson(txt);
+                        this.push(txt2);
+                      }
+                    }
+                  },an );
+                }
+                createSprint.kindOfAssets = angular.bind(this,an);
+                createSprint.sprintUpdatedBy = $localStorage.currentUser.userFirstName;
+                createSprint.sprintStartDate = new Date(sprint.sprintStartDate);
+                createSprint.sprintEndDate = new Date(sprint.sprintEndDate);
+                //if($scope.sprintStatus == true){
+                //createSprint.sprintStatus = 'true';
+                //	}
+                //else if($scope.sprintStatus == false){
+                //createSprint.sprintStatus = 'false';
+                //}
+                $scope.createSprint = createSprint;
+              }).then(function(){
+                $scope.createSprint.userId = $localStorage.currentUser.userId;
+                $http.post('/api/sprints/updateSprint',$scope.createSprint).then(function(response) {
+                  var createdSprint = response.data;
+                  $state.go("management.sprints.editSprint.companyFactors", createdSprint);
+                  var $string = "Successfully updated the sprint " +sprint.sprintName;
+                  var optionalDelay = 3000;
+                  alertFactory.addAuto('success', $string, optionalDelay);
+                  newDomains.resetDomains();
+                  newAssets.resetAssets();
+                  $scope.extraDomainsList=[];
+                  $scope.extraAssetsList =[];
+                }) .catch(function(response, status) {
+                  var optionalDelay = 5000;
+                  var $string = {};
+                  if(response.data.message !=null){
+                    $string = response.data.message;
+                    if($string = "Forbidden. Please check whether the user has proper permissions"){
+                      $string = $string+". Perhaps, the project is closed!"
+                    }
+                  }else {
+                    $string = "Error in updating the sprint.";
+                  }
+                  alertFactory.addAuto('danger', $string, optionalDelay);
+                });
               });
-            });
-          }
-else{
-$scope.form.projectId.$invalid = true;
-$scope.form.projectId.$error.selection= true;
-}
+            }
+            else{
+              $scope.form.projectId.$invalid = true;
+              $scope.form.projectId.$error.selection= true;
+            }
           }
           $scope.editSprintParticipants  = function(){
             var sprintDetails = {};
@@ -6868,7 +6868,6 @@ $scope.form.projectId.$error.selection= true;
         var $string = "Error in fetching list of projects";
         alertFactory.addAuto('danger', $string, optionalDelay);
       });
-
     });
     app.controller('newSprintCtrl', function($scope, $state, $timeout,$location, $http, $base64, $q, dataService, newDomains, alertFactory,  $localStorage, $stateParams, $log, $window, $mdDialog, GetSprintDomainsService, GetSprintAssetsService, newAssets, $rootScope) {
       if($rootScope.alerts.length !=0){
@@ -6996,72 +6995,72 @@ $scope.form.projectId.$error.selection= true;
       $scope.createSprint = function(sprint){
         //var newDomainNames = $scope.formData.selectedDomains ;
         //var newAssetNames = $scope.formData.selectedAssets ;
-          if( angular.isNumber(sprint.projectId)  && sprint.projectId != null){
-        var createSprint = sprint;
-        $http.get('/api/sprints/getAllSprintDomainsAssets').then(function(response)
-        {
-          var list = response.data;
-          $scope.latestdomainsList = list.latestdomainsList;
-          $scope.latestassetsList = list.latestassetsList ;
-        }).then(function(){
-          var ee =[];
-          for (var i =  $scope.latestdomainsList.length - 1; i >= 0; i--) {
-            angular.forEach($scope.formData.selectedDomains, function(value2, key2) {
-              if ($scope.latestdomainsList[i].domainName == key2) {
-                if (value2 == true) {
-                  var txt = "{\"domainId\":"+$scope.latestdomainsList[i].domainId+",\"domainName\":\""+$scope.latestdomainsList[i].domainName+"\"}";
-                  var txt2 = angular.fromJson(txt);
-                  this.push(txt2);
+        if( angular.isNumber(sprint.projectId)  && sprint.projectId != null){
+          var createSprint = sprint;
+          $http.get('/api/sprints/getAllSprintDomainsAssets').then(function(response)
+          {
+            var list = response.data;
+            $scope.latestdomainsList = list.latestdomainsList;
+            $scope.latestassetsList = list.latestassetsList ;
+          }).then(function(){
+            var ee =[];
+            for (var i =  $scope.latestdomainsList.length - 1; i >= 0; i--) {
+              angular.forEach($scope.formData.selectedDomains, function(value2, key2) {
+                if ($scope.latestdomainsList[i].domainName == key2) {
+                  if (value2 == true) {
+                    var txt = "{\"domainId\":"+$scope.latestdomainsList[i].domainId+",\"domainName\":\""+$scope.latestdomainsList[i].domainName+"\"}";
+                    var txt2 = angular.fromJson(txt);
+                    this.push(txt2);
+                  }
                 }
-              }
-            },ee );
-          }
-          createSprint.applicationDomain = angular.bind(this,ee);
-        }).then(function(){
-          var an =[];
-          for (var i =  $scope.latestassetsList.length - 1; i >= 0; i--) {
-            angular.forEach($scope.formData2.selectedAssets, function(value2, key2) {
-              if ($scope.latestassetsList[i].assetName == key2) {
-                if (value2 == true) {
-                  var txt = "{\"assetId\":"+$scope.latestassetsList[i].assetId+",\"assetName\":\""+$scope.latestassetsList[i].assetName+"\"}";
-                  var txt2 = angular.fromJson(txt);
-                  this.push(txt2);
+              },ee );
+            }
+            createSprint.applicationDomain = angular.bind(this,ee);
+          }).then(function(){
+            var an =[];
+            for (var i =  $scope.latestassetsList.length - 1; i >= 0; i--) {
+              angular.forEach($scope.formData2.selectedAssets, function(value2, key2) {
+                if ($scope.latestassetsList[i].assetName == key2) {
+                  if (value2 == true) {
+                    var txt = "{\"assetId\":"+$scope.latestassetsList[i].assetId+",\"assetName\":\""+$scope.latestassetsList[i].assetName+"\"}";
+                    var txt2 = angular.fromJson(txt);
+                    this.push(txt2);
+                  }
                 }
-              }
-            },an );
-          }
-          createSprint.kindOfAssets = angular.bind(this,an);
-          createSprint.sprintUpdatedBy = $localStorage.currentUser.userFirstName;
-          $scope.createSprint = createSprint;
-        }).then(function(){
-          $scope.createSprint.userId =  $localStorage.currentUser.userId;
-          $http.put('/api/sprints/addNewSprint',$scope.createSprint).then(function(response) {
-            var createdSprint = response.data;
-            $state.go("management.sprints.addSprint.companyFactors", createdSprint);
-            var $string = "Successfully added the sprint " +sprint.sprintName;
-            var optionalDelay = 3000;
-            alertFactory.addAuto('success', $string, optionalDelay);
-            newDomains.resetDomains();
-            newAssets.resetAssets();
-            $scope.extraDomainsList=[];
-            $scope.extraAssetsList =[];
+              },an );
+            }
+            createSprint.kindOfAssets = angular.bind(this,an);
+            createSprint.sprintUpdatedBy = $localStorage.currentUser.userFirstName;
+            $scope.createSprint = createSprint;
+          }).then(function(){
+            $scope.createSprint.userId =  $localStorage.currentUser.userId;
+            $http.put('/api/sprints/addNewSprint',$scope.createSprint).then(function(response) {
+              var createdSprint = response.data;
+              $state.go("management.sprints.addSprint.companyFactors", createdSprint);
+              var $string = "Successfully added the sprint " +sprint.sprintName;
+              var optionalDelay = 3000;
+              alertFactory.addAuto('success', $string, optionalDelay);
+              newDomains.resetDomains();
+              newAssets.resetAssets();
+              $scope.extraDomainsList=[];
+              $scope.extraAssetsList =[];
+            })
+            .catch(function(response, status) {
+              var optionalDelay = 5000;
+              var $string = response.data.message;
+              alertFactory.addAuto('danger', $string, optionalDelay);
+            });
           })
           .catch(function(response, status) {
             var optionalDelay = 5000;
-            var $string = response.data.message;
+            var $string = "Error in adding the sprint.";
             alertFactory.addAuto('danger', $string, optionalDelay);
           });
-        })
-        .catch(function(response, status) {
-          var optionalDelay = 5000;
-          var $string = "Error in adding the sprint.";
-          alertFactory.addAuto('danger', $string, optionalDelay);
-        });
-      }
-  else{
-    $scope.form.projectId.$invalid = true;
-    $scope.form.projectId.$error.selection= true;
-  }
+        }
+        else{
+          $scope.form.projectId.$invalid = true;
+          $scope.form.projectId.$error.selection= true;
+        }
       }
       $scope.openDialog =function openDialog($event){
         $mdDialog.show({
@@ -7164,21 +7163,21 @@ $scope.form.projectId.$error.selection= true;
         $scope.extraAssetsList = newAssets.getAddedAssets();
       };
       $scope.parentProject = function(sprint,projectName) {
-  sprint.projectId = null;
-  if( sprint.projectId != null && angular.isNumber(sprint.projectId)){
-    sprint.projectId= null;
-  }
-  $scope.form.projectId.$invalid = true;
-  $scope.form.projectId.$error.selection= true;
-  // $scope.form.projectLeader.$error.required= false;
-  angular.forEach($scope.projectsList, function(value, key) {
-    if(projectName == value.projectName){
-    sprint.projectId = value.projectId;
-      $scope.form.projectId.$invalid = false;
-      $scope.form.projectId.$error.selection= false;
-    }
-  });
-};
+        sprint.projectId = null;
+        if( sprint.projectId != null && angular.isNumber(sprint.projectId)){
+          sprint.projectId= null;
+        }
+        $scope.form.projectId.$invalid = true;
+        $scope.form.projectId.$error.selection= true;
+        // $scope.form.projectLeader.$error.required= false;
+        angular.forEach($scope.projectsList, function(value, key) {
+          if(projectName == value.projectName){
+            sprint.projectId = value.projectId;
+            $scope.form.projectId.$invalid = false;
+            $scope.form.projectId.$error.selection= false;
+          }
+        });
+      };
     });
     app.controller('peopleManagementCtrl', function($scope, $state, $location, $http, alertFactory, $base64, $q, dataService,  $localStorage, $stateParams, $log, $window, $rootScope) {
       $scope.oneAtATime = true;
@@ -8081,57 +8080,54 @@ $scope.form.projectId.$error.selection= true;
           }
         });
       };
-    $scope.ids = [' ','A', 'B', 'C', 'D', 'E','F', 'G', 'H', 'I' , 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'];
-    $scope.goto = function(letter){
-      var current  =   myScroll.getCurrentValue();
-      var charNum = null;
+      $scope.ids = [' ','A', 'B', 'C', 'D', 'E','F', 'G', 'H', 'I' , 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'];
+      $scope.goto = function(letter){
+        var current  =   myScroll.getCurrentValue();
+        var charNum = null;
+        for(var i=65; i<=90; i++){
+          if(letter == String.fromCharCode(i)){
+            charNum = i;
+          }
+        }
+        charNum = (charNum -64);
+        for(var k = $scope.ids.length - 1; k >= 0; k--){
+          if (current == charNum)
+          {
+            myScroll.scrollTo(current, $location, $anchorScroll, $log );
+          } else if(current < charNum) {
+            current++;
+            myScroll.setCurrentValue(current);
+          }
+          else if(current > charNum ){
+            current--;
+            myScroll.setCurrentValue(current);
+          }
+        }
+      }
+      $scope.alphabets = [];
+      $scope.alphabetsPresent = [];
+      $scope.alphabetsToDisplay = [];
+      $scope.membersCount = [];
+      $scope.namesPresent = [];
+      $scope.membersCountinList2 = [];
+      $scope.indexFilter = true;
+      $scope.numberOfParticipants =0;
       for(var i=65; i<=90; i++){
-        if(letter == String.fromCharCode(i)){
-          charNum = i;
+        $scope.alphabets.push(String.fromCharCode(i));
+      }
+      $scope.toggleIndexFilter = function(){
+        if(  $scope.indexFilter == true){
+          $scope.indexFilter = false;
+        }else{
+          $scope.indexFilter = true;
         }
       }
-      charNum = (charNum -64);
-      for(var k = $scope.ids.length - 1; k >= 0; k--){
-        if (current == charNum)
-        {
-          myScroll.scrollTo(current, $location, $anchorScroll, $log );
-        } else if(current < charNum) {
-          current++;
-          myScroll.setCurrentValue(current);
-        }
-        else if(current > charNum ){
-          current--;
-          myScroll.setCurrentValue(current);
-        }
-      }
-    }
-    $scope.alphabets = [];
-    $scope.alphabetsPresent = [];
-    $scope.alphabetsToDisplay = [];
-    $scope.membersCount = [];
-    $scope.membersCountinList2 = [];
-    $scope.indexFilter = true;
-    for(var i=65; i<=90; i++){
-      $scope.alphabets.push(String.fromCharCode(i));
-    }
-    $scope.toggleIndexFilter = function(){
-      if(  $scope.indexFilter == true){
-        $scope.indexFilter = false;
-      }else{
-        $scope.indexFilter = true;
-      }
-    }
       var optionalDelay = "800000";
       var $string = "Note : Modifying the participants on this page will update the details on Redmine";
       alertFactory.addAuto('info', $string, optionalDelay);
       var currentProject = $stateParams;
       $scope.showRemove = true;
       $scope.removeSelected = {};
-      $scope.addBack = function(showRemove){
-        $scope.showRemove = true;
-        showRemove = true;
-        return showRemove;
-      }
       $scope.removeProjectParticipants = function(){
         $scope.filterPeople();
         var currentPeopleList = $scope.peopleList;
@@ -8185,14 +8181,14 @@ $scope.form.projectId.$error.selection= true;
           //return $scope.removeSelected = {};
         }).then(function(){
           angular.forEach($scope.alphabets, function(val,key){
-       if($scope.membersCountinList2[val] != null){
-         if((  $scope.membersCount[val] -   $scope.membersCountinList2[val].length  ) == 0) {
-           $scope.alphabetsToDisplay[val] = false;
-         }else{
-           $scope.alphabetsToDisplay[val] = true;
-         }
-       }
-     });
+            if($scope.membersCountinList2[val] != null){
+              if((  $scope.membersCount[val] -   $scope.membersCountinList2[val].length  ) == 0) {
+                $scope.alphabetsToDisplay[val] = false;
+              }else{
+                $scope.alphabetsToDisplay[val] = true;
+              }
+            }
+          });
           $scope.peopleList = currentPeopleList;
           $scope.list2 = clearSelected;
           $scope.removeSelected =remove;
@@ -8205,7 +8201,7 @@ $scope.form.projectId.$error.selection= true;
         $scope.rolesOfPeople= rolesOfPeople;
       }).then(function(){
         angular.forEach($scope.rolesOfPeople, function(val,key){
-          console.log("hi theval is "+val.personName);
+          //console.log("hi theval is "+val.personName);
           if($scope.alphabetsPresent.indexOf(val.personName.charAt(0).toUpperCase()) == -1) {
             $scope.alphabetsPresent.push(val.personName.charAt(0).toUpperCase());
           }
@@ -8216,15 +8212,18 @@ $scope.form.projectId.$error.selection= true;
           }else{
             $scope.alphabetsToDisplay[val] = true;
           }
-          //  $log.debug("for "+val+ " is "+   $scope.alphabetsToDisplay[val] )
+          //   $log.debug("for "+val+ " is "+   $scope.alphabetsToDisplay[val] )
         });
         angular.forEach($scope.alphabets, function(val,key){
           $scope.membersCount[val] = 0;
           $scope.membersCountinList2[val] = [];
         });
         angular.forEach($scope.rolesOfPeople, function(val1,key1){
-          $scope.membersCount[val1.personName.charAt(0).toUpperCase()]++;
-          //$log.debug("for char "+val1.personName.charAt(0)+ " is " +  $scope.membersCount[val1.personName.charAt(0).toUpperCase()]);
+          if($scope.namesPresent.indexOf(val1.personName) == -1) {
+            $scope.membersCount[val1.personName.charAt(0).toUpperCase()]++;
+            //$log.debug("for name "+val1.personName +"char is "+val1.personName.charAt(0)+ " is " +  $scope.membersCount[val1.personName.charAt(0).toUpperCase()]);
+            $scope.namesPresent.push(val1.personName);
+          }
         });
       })
       .catch(function(response, status) {
@@ -8355,27 +8354,26 @@ $scope.form.projectId.$error.selection= true;
           $scope.list2= [];
         });
       }
-      $scope.limitEntry = function(length,value,key){
-          $scope.showRemove = true;
-          angular.forEach($scope.list2[key], function(val1,key1){
-            if(  $scope.membersCountinList2[val1.personName.charAt(0).toUpperCase()].indexOf(val1.personName) == -1) {
-              $scope.membersCountinList2[val1.personName.charAt(0).toUpperCase()].push(val1.personName) ;
-              //  $log.debug("for char "+val1.personName+ " is " +  $scope.membersCount[val1.personName.charAt(0).toUpperCase()]);
+      $scope.limitEntry = function(length){
+        $scope.showRemove = true;
+        angular.forEach($scope.list2, function(val1,key1){
+          if(  $scope.membersCountinList2[val1.personName.charAt(0).toUpperCase()].indexOf(val1.personName) == -1) {
+            $scope.membersCountinList2[val1.personName.charAt(0).toUpperCase()].push(val1.personName) ;
+            $log.debug("for char "+val1.personName+ " is " +  $scope.membersCount[val1.personName.charAt(0).toUpperCase()]);
+          }
+        });
+        angular.forEach($scope.alphabets, function(val,key){
+          if($scope.membersCountinList2[val] != null){
+            if((  $scope.membersCount[val] -   $scope.membersCountinList2[val].length  ) == 0) {
+              $scope.alphabetsToDisplay[val] = false;
+            }else{
+              $scope.alphabetsToDisplay[val] = true;
             }
-          });
-          angular.forEach($scope.alphabets, function(val,key){
-            if($scope.membersCountinList2[val] != null){
-              if((  $scope.membersCount[val] -   $scope.membersCountinList2[val].length  ) == 0) {
-                $scope.alphabetsToDisplay[val] = false;
-              }else{
-                $scope.alphabetsToDisplay[val] = true;
-              }
-            }
-            //  $log.debug("for "+val+ " is "+   $scope.alphabetsToDisplay[val] )
-          });
-          $scope.numberOfParticipants = $scope.numberOfParticipants +	length;
-
-        }
+          }
+          //  $log.debug("for "+val+ " is "+   $scope.alphabetsToDisplay[val] )
+        });
+        $scope.numberOfParticipants = $scope.numberOfParticipants +	length;
+      }
       $scope.manageProject = function(project) {
         $state.go("management.projects.editProject",project );
       };
