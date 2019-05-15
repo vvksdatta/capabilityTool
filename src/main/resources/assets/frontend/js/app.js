@@ -79,15 +79,15 @@
       },
     }
   });
-  app.factory('alertFactory',['$rootScope',
-  function($rootScope) {
+  app.factory('alertFactory',['$rootScope',"$log",
+  function($rootScope, $log) {
     var alertService = {};
     $rootScope.alerts = [];
     alertService.addAuto = function(type, msg, delay) {
       var alert = {'type': type, 'msg': msg};
       $rootScope.alerts.push(alert);
       if (!delay ) {
-        delay = 2500; // default delay is 2500ms
+        delay = 6000; // default delay is 2500ms
       }
       window.setTimeout(function() {
         var index = $rootScope.alerts.indexOf(alert);
@@ -97,7 +97,7 @@
         }
       }, delay);
     };
-    alertService.closeAlert = function(index) {
+    $rootScope.closeAlert = function(index) {
       //remove the alert from the array to avoid showing previous alerts
       $rootScope.alerts.splice(index, 1);
     };
@@ -720,7 +720,7 @@
         }
       });
     };
-  })
+  });
   app.controller('manageUserCtrl', function($scope, $state, $location, $http, alertFactory, $q, dataService,  $localStorage, $stateParams, $log, $timeout, $rootScope) {
     if($rootScope.alerts.length !=0){
       angular.forEach($rootScope.alerts, function(value, key) {
@@ -1321,7 +1321,7 @@
       $http.get('/api/redmine/'+$localStorage.currentUser.userId).then(function(response) {
         $scope.loading = false;
         var $string = "Hurray! Successfully synchronized with Redmine!";
-        var optionalDelay = 3000;
+        var optionalDelay = 600000;
         $state.reload();
         alertFactory.addAuto('success', $string, optionalDelay);
       })
@@ -1332,7 +1332,7 @@
           var $string = response.data.message;
         }
         else{
-          var optionalDelay = 5000;
+          var optionalDelay = 600000;
           var $string = "Error in synchronizing with redmine";
         }
         alertFactory.addAuto('danger', $string, optionalDelay);
@@ -8687,4 +8687,4 @@
         };
       });
     })
-  })();
+ })();
