@@ -182,7 +182,7 @@ $(".nav-tabs li").eq(5).removeClass("active");
                 </div>
               </div>
               <div >
-                <div class="pull-right" style="margin-top: 5px;">
+                <div  style="margin-top: 5px; display: flex; justify-content: center;">
                   <md-button style="font-size: 15px; background-color: rgb(90, 132, 187);" ng-click="updateReadOnly(readOnly)" ng-show="readOnly" class="add-tab md-primary md-raised"><i class="glyphicon glyphicon-edit"> </i> Edit </md-button>
                   <md-button type="submit" style="font-size: 15px;  background-color: rgb(90, 132, 187);" ng-hide="readOnly"  class="add-tab md-primary md-raised">Next </md-button>
                   <md-button class="md-raised" style="font-size: 15px; " ng-hide="readOnly"  ng-click="clearSprint($event, sprint)">Clear </md-button>
@@ -218,7 +218,6 @@ $(".nav-tabs li").eq(5).removeClass("active");
                 <tr>
                   <th>Name</th>
                   <th>Role</th>
-
                 </tr>
               </thead>
               <tbody>
@@ -237,23 +236,19 @@ $(".nav-tabs li").eq(5).removeClass("active");
               </tbody>
             </table>
           </div>
-
         <div  ng-if="displayInfo == true;"  class="panel-body">
           <div ng-cloak style="margin-top: 15px;" class="alert alert-info" role="alert">
           <strong>Info: </strong>Issue(s) have been moved to this project from another project. This is why the role of some member(s) is blank.
           </div>
         </div>
-
-
     <div ng-if="displayAddButton == true;"  class="panel-body">
       <div ng-cloak style="margin-top: 15px;" class="alert alert-info" role="alert">
         No participants exist in this sprint.
       </div>
-      <div class="col-sm-3 pull-right" >
+      <div style="display: flex; justify-content: center;">
         <md-button type="submit" style="font-size: 15px; background-color: rgb(90, 132, 187);"  class="add-tab md-primary md-raised" ng-click="editSprintParticipants()"> <i class="glyphicon glyphicon-plus"> </i> Add  </md-button>
       </div>
     </div>
-
         </div>
       </div>
     </div>

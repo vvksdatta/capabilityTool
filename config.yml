@@ -35,4 +35,4 @@ redmineUrl: http://localhost/redmine/
 issueIdCutOff: 60
 
 # ProjectId below which synchronization can be ignored
-projectIdCutOff: 160
+projectIdCutOff: 150

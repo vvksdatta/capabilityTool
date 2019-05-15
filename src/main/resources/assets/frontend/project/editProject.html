@@ -132,8 +132,8 @@
                     </div>
                   </div>
                 </div>
-                <div class="form-group col-sm-9" style="padding-top: 15px;">
-                  <div class="pull-right">
+                <div class="form-group col-xs-8" style="margin-top: 15px;">
+                  <div style="display: flex; justify-content: center;">
                     <md-button style="font-size: 15px; background-color: rgb(90, 132, 187);" ng-click="updateReadOnly(readOnly)" ng-show="readOnly" class="add-tab md-primary md-raised"><i class="glyphicon glyphicon-edit"> </i> Edit </md-button>
                     <md-button type="submit" style="font-size: 15px; background-color: rgb(90, 132, 187);" ng-hide="readOnly" class="add-tab md-primary md-raised">Save </md-button>
                     <md-button class="md-raised" style="font-size: 15px; "  ng-click=" clearProject($event, finalProject);" ng-hide="readOnly" >Clear</md-button>
@@ -191,7 +191,7 @@
               <div style="margin-top: 15px;" class="alert alert-info" role="alert">
                 No sprints exist in this project.
               </div>
-              <div class="col-sm-3 pull-right">
+              <div style="display: flex; justify-content: center;">
                 <md-button type="submit" style="font-size: 15px; background-color: rgb(90, 132, 187);"  class="add-tab md-primary md-raised" ng-click="createNewSprint()"> <i class="glyphicon glyphicon-plus"> </i> Add  </md-button>
               </div>
             </div>
@@ -228,7 +228,7 @@
               <div style="margin-top: 15px;" class="alert alert-info" role="alert">
                 No participants exist in this project.
               </div>
-              <div class="col-sm-3 pull-right">
+              <div style="display: flex; justify-content: center;">
                 <md-button type="submit" style="font-size: 15px; background-color: rgb(90, 132, 187);"  class="add-tab md-primary md-raised" ng-click="editProjectParticipants()"> <i class="glyphicon glyphicon-plus"> </i> Add  </md-button>
               </div>
             </div>
