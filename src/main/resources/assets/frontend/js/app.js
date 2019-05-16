@@ -5627,7 +5627,7 @@
       alertFactory.addAuto('danger', $string, optionalDelay);
     });
     $scope.openIssueOnRedmine = function(issueId){
-        $window.open(redmineURL+"issues"+"/"+issueId, '_blank');
+      $window.open(redmineURL+"issues"+"/"+issueId, '_blank');
     }
     $http.get('/api/sprints/getSprintParticipants/'+$scope.sprintId+"/"+$scope.projectId).then(function(response)
     {
