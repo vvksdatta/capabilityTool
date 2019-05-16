@@ -23,10 +23,10 @@ p {
             <a ui-sref="management.sprints.sprintsTable">Sprints<span class="pull-right"><i class="glyphicon glyphicon-tasks"><md-tooltip  md-direction="right">  Sprints </md-tooltip></i></span></a>
           </li>
           <li>
-            <a ui-sref="management.people.peopleTable">People<span class="pull-right"><i class="fa fa-users"></i><md-tooltip md-direction="right"> People </md-tooltip></i></span></a>
+            <a ui-sref="management.people.peopleTable">People<span class="pull-right"><i class="fa fa-users"><md-tooltip md-direction="right"> People </md-tooltip></i></span></a>
           </li>
           <li>
-            <a ui-sref="management.repositories.editSkillRepository">Repositories<span class="pull-right"><i class="glyphicon glyphicon-hdd"></i><md-tooltip md-direction="right"> Repositories </md-tooltip></i></span></a>
+            <a ui-sref="management.repositories.editSkillRepository">Repositories<span class="pull-right"><i class="glyphicon glyphicon-hdd"><md-tooltip md-direction="right"> Repositories </md-tooltip></i></span></a>
           </li>
         </ul>
       </div>
@@ -34,7 +34,7 @@ p {
         <div ncy-breadcrumb="" ng-cloak >
         </div>
         <div class="alert"  style="z-index:1" uib-alert ng-repeat="alert in alerts" ng-class="'alert-' + (alert.type || 'warning')" close="closeAlert($index)" ng-cloak> {{alert.msg}}
-          <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+          <button type="button" class="close" data-dismiss="alert" aria-label="Close" ng-click="closeAlert($index)">
             <span aria-hidden="true">&times;</span>
           </button>
         </div>

@@ -79,15 +79,15 @@
       },
     }
   });
-  app.factory('alertFactory',['$rootScope',
-  function($rootScope) {
+  app.factory('alertFactory',['$rootScope',"$log",
+  function($rootScope, $log) {
     var alertService = {};
     $rootScope.alerts = [];
     alertService.addAuto = function(type, msg, delay) {
       var alert = {'type': type, 'msg': msg};
       $rootScope.alerts.push(alert);
       if (!delay ) {
-        delay = 2500; // default delay is 2500ms
+        delay = 6000; // default delay is 2500ms
       }
       window.setTimeout(function() {
         var index = $rootScope.alerts.indexOf(alert);
@@ -97,7 +97,7 @@
         }
       }, delay);
     };
-    alertService.closeAlert = function(index) {
+    $rootScope.closeAlert = function(index) {
       //remove the alert from the array to avoid showing previous alerts
       $rootScope.alerts.splice(index, 1);
     };
@@ -720,7 +720,7 @@
         }
       });
     };
-  })
+  });
   app.controller('manageUserCtrl', function($scope, $state, $location, $http, alertFactory, $q, dataService,  $localStorage, $stateParams, $log, $timeout, $rootScope) {
     if($rootScope.alerts.length !=0){
       angular.forEach($rootScope.alerts, function(value, key) {
@@ -1321,7 +1321,7 @@
       $http.get('/api/redmine/'+$localStorage.currentUser.userId).then(function(response) {
         $scope.loading = false;
         var $string = "Hurray! Successfully synchronized with Redmine!";
-        var optionalDelay = 60000;
+        var optionalDelay = 600000;
         $state.reload();
         alertFactory.addAuto('success', $string, optionalDelay);
       })
@@ -1332,7 +1332,7 @@
           var $string = response.data.message;
         }
         else{
-          var optionalDelay = 60000;
+          var optionalDelay = 600000;
           var $string = "Error in synchronizing with redmine";
         }
         alertFactory.addAuto('danger', $string, optionalDelay);
@@ -8508,9 +8508,10 @@
       };
       $http.get('/api/projects/getAllProjectsNested').then(function(response)
       {
-        var projects = response.data;
         var projectsList = [];
-        angular.forEach(projects, function(value, key) {
+        var projectsHierarchy = response.data;
+        $scope.ProjectsHierarchy = projectsHierarchy;
+        angular.forEach(projectsHierarchy, function(value, key) {
           var project = {};
           project.projectId = value.projectId;
           project.projectName = value.projectName;
@@ -8521,12 +8522,82 @@
           }
         });
         $scope.projectsList = projectsList;
+      }). then(function(){
+        $scope.getParentOf = function(project, parentProjectDetails){
+          angular.forEach($scope.projects, function(value, key) {
+            if(value.projectId == project.parentProjectId){
+              parentProjectDetails.projectId = value.projectId;
+              parentProjectDetails.projectName = value.projectName;
+              parentProjectDetails.parentProjectId = value.parentProjectId;
+            }
+          });
+        }
+        function existsInArray( arr, item ) {
+          for( var i = 0; i < arr.length; i++ )
+          if( arr[ i ].projectId === item.projectId ) return true;
+          return false;
+        }
+        $scope.getParentProjects = function(project){
+          angular.forEach($scope.ProjectsHierarchy, function(value, key) {
+            if(value.projectId == project.projectId){
+              return;
+            }
+          });
+          var projectsList = [];
+          projectsList.push(project);
+          var currentProject = project;
+          while(!existsInArray( $scope.ProjectsHierarchy, currentProject ) ){
+            var parentProjectDetails = {};
+            $scope.getParentOf(currentProject, parentProjectDetails);
+            projectsList.push(parentProjectDetails);
+            if(parentProjectDetails.parentProjectId != null){
+              currentProject = parentProjectDetails;
+            }else{
+              break;
+            }
+          }
+          return 	projectsList;
+        }
+      }).then(function(){
+        angular.forEach($scope.projects, function(value,key){
+          parentProjectsList[value.projectId] = $scope.getParentProjects(value);
+        });
+        $scope.parentProjectsList = parentProjectsList;
       })
       .catch(function(response, status) {
         var optionalDelay = 5000;
         var $string = "Error in fetching list of projects";
         alertFactory.addAuto('danger', $string, optionalDelay);
-      });
+      })
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
       $http.get('api/sprints/listOfSprintsInProject/'+currentProject.projectId).then(function(response) {
         $scope.sprintsInProject= response.data;
       })
@@ -8687,4 +8758,4 @@
         };
       });
     })
-  })();
+ })();

@@ -21,8 +21,8 @@
   <md-whiteframe class="md-whiteframe-18dp"  layout layout-align="center center">
     <div class="container" >
       <div class="row top-buffer-addProject">
-        <div class="col-xs-7 ">
           <form class="form-horizontal" name="form" ng-submit="form.$valid && createProject(project) "  novalidate>
+           <div class="col-xs-7 ">
             <fieldset>
               <div class="control-group" >
                 <!-- Form Name -->
@@ -95,15 +95,13 @@
                       </div>
                     </div>
                   </div>
-                  <div >
-                    <div class="pull-right" style="margin-top: 15px;">
-                      <md-button id="submit" type="submit" style="font-size: 15px; background-color: rgb(90, 132, 187);"  class="add-tab md-primary md-raised">Save </md-button>
-                      <md-button class="md-raised" style="font-size: 15px; "  type="reset" ng-click="form.$setPristine();">Clear </md-button>
-                    </div>
-                  </div>
                 </fieldset>
-              </form>
+              </div>
+            <div class="col-sm-12" style="margin-top: 20px; display: flex; justify-content: center;">
+              <md-button id="submit" type="submit" style="font-size: 15px; background-color: rgb(90, 132, 187);"  class="add-tab md-primary md-raised">Save </md-button>
+              <md-button class="md-raised" style="font-size: 15px; "  type="reset" ng-click="form.$setPristine();">Clear </md-button>
             </div>
+          </form>
           </div>
         </div>
         <div ng-show="participants" class="container" >

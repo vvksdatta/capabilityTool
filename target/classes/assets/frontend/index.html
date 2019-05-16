@@ -102,8 +102,16 @@
           <div ncy-breadcrumb="" ng-cloak ng-if="location.path() === '/'">
           </div>
           <div id="row">
-            <div class="alert"  style="z-index:1" uib-alert ng-repeat="alert in alerts" ng-class="'alert-' + (alert.type || 'warning')" close="closeAlert($index)" ng-cloak ng-if="location.path() === '/'   "> {{alert.msg}}</div>
-            <div class="alert"  style="z-index:1" uib-alert ng-repeat="alert in alerts" ng-class="'alert-' + (alert.type || 'warning')" close="closeAlert($index)" ng-cloak ng-if="location.path() === '/login' "> {{alert.msg}}</div>
+            <div class="alert"  style="z-index:1" uib-alert ng-repeat="alert in alerts" ng-class="'alert-' + (alert.type || 'warning')" close="closeAlert($index)" ng-cloak ng-if="location.path() === '/'   "> {{alert.msg}}
+              <button type="button" class="close" data-dismiss="alert" aria-label="Close" ng-click="closeAlert($index)">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="alert"  style="z-index:1" uib-alert ng-repeat="alert in alerts" ng-class="'alert-' + (alert.type || 'warning')" close="closeAlert($index)" ng-cloak ng-if="location.path() === '/login' "> {{alert.msg}}
+              <button type="button" class="close" data-dismiss="alert" aria-label="Close" ng-click="closeAlert($index)">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
             <div ui-view></div>
           </div>
         </div>

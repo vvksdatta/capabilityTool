@@ -194,7 +194,7 @@ public class ProjectResource {
 		 * that has projectId, projectName and a list of projectsList(using same
 		 * class). using the initial list of independent projects (i.e. projects
 		 * that are not sub projects of any other projects), we fetch the list
-		 * of sub projects for each independent project. after setting the
+		 * of sub projects for each independent project. After setting the
 		 * List<ProjectsList> using the fetched list, we then inspect whether
 		 * any of the projects in the former list have sub projects. If so, same
 		 * as in previous step a list<ProjectsList> is fetched and set. Thus,
