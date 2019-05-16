@@ -144,8 +144,7 @@
                   <div class="col-sm-12" ng-repeat="project in projects | orderBy:'projectName'"  ng-if="finalProject.projectId == project.projectId">
                     <div style="margin-top:10px; font-size: 14px;" ng-repeat="parentProject in parentProjectsList[project.projectId].slice().reverse() track by $index">
                       <ul>
-                        <li ng-repeat="project in ProjectsHierarchy" ng-if="project.projectId == parentProject.projectId && project.projectList.length>1" ng-include="'categoryTree'"></li>
-                        <li ng-repeat="project in ProjectsHierarchy" style="color: rgb(90, 132, 187);" ng-if="project.projectId == parentProject.projectId &&  !project.projectList" ng-include="'categoryTree'"></li>
+                        <li ng-repeat="project in ProjectsHierarchy" ng-if="project.projectId == parentProject.projectId"  ng-include="'categoryTree'"></li>
                       </ul>
                     </div>
                   </div>
