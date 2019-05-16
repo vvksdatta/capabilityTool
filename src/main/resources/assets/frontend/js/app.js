@@ -5616,6 +5616,19 @@
     var optionalDelay = "800000";
     var $string = "Note : Assigning an issue to a person will update the details on Redmine";
     alertFactory.addAuto('info', $string, optionalDelay);
+    var redmineURL = "";
+    $http.get('/api/redmine/getRedmineURL').then(function(response)
+    {
+      redmineURL= response.data.success;
+    })
+    .catch(function(response, status) {
+      var optionalDelay = 5000;
+      var $string = "Error in fetching Redmine URL";
+      alertFactory.addAuto('danger', $string, optionalDelay);
+    });
+    $scope.openIssueOnRedmine = function(issueId){
+        $window.open(redmineURL+"issues"+"/"+issueId, '_blank');
+    }
     $http.get('/api/sprints/getSprintParticipants/'+$scope.sprintId+"/"+$scope.projectId).then(function(response)
     {
       $scope.peopleList = response.data;

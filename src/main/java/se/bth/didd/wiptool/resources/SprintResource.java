@@ -184,6 +184,12 @@ public class SprintResource {
 				return Response.status(Status.BAD_REQUEST).entity(e).build();
 			}
 
+			try {
+				sprintDAO.insertSharedSprints(newCreatedSprint.getSprintId(), newSprint.getProjectId(), newSprint.getProjectId());
+			} catch (Exception e) {
+				System.out.println(e);
+				return Response.status(Status.BAD_REQUEST).entity(e).build();
+			}
 		} catch (RedmineException e) {
 
 			return Response.status(Status.BAD_REQUEST).entity(e).build();

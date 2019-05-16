@@ -1290,6 +1290,19 @@ public class Redmine {
 		return Response.ok(success).build();
 	}
 
+	@GET
+	@Path("/getRedmineURL")
+	public Response getRedmineURL() {
+		try {
+			SuccessMessage success = new SuccessMessage();
+			success.setSuccess(redmineUrl);
+			return Response.ok(success).build();
+		} catch (Exception e) {
+			System.out.println(e);
+			return Response.status(Status.BAD_REQUEST).entity(e).build();
+		}
+	}
+	
 	public static float round(float number, int decimalPlace) {
 		BigDecimal bd = new BigDecimal(number);
 		bd = bd.setScale(decimalPlace, BigDecimal.ROUND_HALF_UP);

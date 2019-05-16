@@ -148,8 +148,10 @@ $(".nav-tabs li").eq(5).removeClass("active");
           </select>
         </div>
         <div style="margin-left: 15px;margin-top: 10px; width: 20vw; text-align: left;display: inline-block;">
-          <i class="glyphicon glyphicon-modal-window"></i>
-          <span >{{issue.issueName | capitalize}}</span>
+         <a ng-click="openIssueOnRedmine(issue.issueId)">
+             <i class="glyphicon glyphicon-modal-window"></i>
+          <span >{{issue.issueName | capitalize}}</span> <md-tooltip  md-direction="top">Click to view the issue on Redmine </md-tooltip>
+          </a>
         </div>
         <div style="margin-left: 15px;margin-top: 10px; width: 10vw; text-align: left;display: inline-block;">
           <button type="button" style="font-size: 10px;" class="btn btn-default" ng-click="showDetails(issue.issueId)">
