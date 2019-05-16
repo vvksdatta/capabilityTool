@@ -94,7 +94,7 @@ public class SprintResource {
 	public Response getListOfSprintsInProject(@PathParam("projectId") Integer projectId) {
 
 		try {
-			FoldingList<SprintSummary> foldedResult = sprintDAO.getListOfSprintsInProject(projectId);
+			FoldingList<SprintSummary> foldedResult = sprintDAO.getListOfSharedSprintsInProject(projectId);
 			List<SprintSummary> sprintSummary = foldedResult.getValues();
 			return Response.ok(sprintSummary).build();
 

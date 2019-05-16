@@ -10,6 +10,7 @@ import se.bth.didd.wiptool.api.CompanyDrivenFactorsNames;
 import se.bth.didd.wiptool.api.RedmineProjectIdentifier;
 import se.bth.didd.wiptool.api.RolesOfPeopleSprint;
 import se.bth.didd.wiptool.api.SelectedSprintRequirement;
+import se.bth.didd.wiptool.api.SharedSprint;
 import se.bth.didd.wiptool.api.Sprint;
 import se.bth.didd.wiptool.api.SprintAsset;
 import se.bth.didd.wiptool.api.SprintBriefSummary;
@@ -29,6 +30,11 @@ public interface SprintDAO {
 			+ "sprintRedmineUpdate timestamp with time zone, sprintUpdatedBy varchar(20), expectedTeamKnowledgeDiversity "
 			+ "varchar(10), expectedCoachingPotential varchar(20), redmineProjectIdentifier varchar(10), redmineSprintIdentifier varchar(10), PRIMARY KEY (projectid,sprintid))")
 	void createSprintTable();
+
+	@SqlUpdate("create table if not exists SHAREDSPRINTS (sprintId int, parentProjectId int REFERENCES PROJECTS(projectId), associatedProjectId int,"
+			+ " parentProjectIdentifier varchar(10),  associatedProjectIdentifier varchar(10),  redmineSprintIdentifier varchar(10),  PRIMARY KEY(parentProjectId,"
+			+ "sprintId,associatedProjectId))")
+	void createSharedSprintsTable();
 
 	@SqlUpdate("create table if not exists SprintQuestionnaire (sprintId int, projectId int REFERENCES PROJECTS(projectId), "
 			+ "question1 text, question2 text, question3 text, question4 text,question5 text, question6 text, question7 text, question8 text, question1Comment text, question2Comment text, question3Comment text, question4Comment text, question5Comment text, question6Comment text, question7Comment text, question8Comment text, other text, lastUpdate timestamp, updatedBy varchar(20),redmineprojectIdentifier varchar(10), redmineSprintIdentifier varchar(10),"
@@ -83,12 +89,16 @@ public interface SprintDAO {
 	@SqlUpdate("insert into SPRINTDOMAINSDB (domainName) values(:domainName)")
 	void insertSprintDomainsDB(@Bind("domainName") String domainName);
 
+	@SqlUpdate("insert into SHAREDSPRINTS (sprintId, parentProjectId, associatedProjectId) values(:sprintId, :parentProjectId, :associatedProjectId )")
+	void insertSharedSprints(@Bind("sprintId") int sprintId, @Bind("parentProjectId") int parentProjectId,
+			@Bind("associatedProjectId") int associatedProjectId);
+
 	@SqlUpdate("insert into SPRINTASSETSDB (assetName) values(:assetName)")
 	void insertSprintAssetsDB(@Bind("assetName") String assetName);
 
 	@SqlUpdate("insert into SPRINTREQUIREMENTSDB (sprintRequirementName) values(:sprintRequirementName)")
 	void insertNewSprintRequirement(@Bind("sprintRequirementName") String sprintRequirementName);
-	
+
 	@SqlUpdate("insert into SPRINTREQUIREMENTSDB (sprintRequirementName, sprintRequirementDescription) values(:sprintRequirementName, :sprintRequirementDescription)")
 	void insertNewSprintRequirementAndDescription(@BindBean SprintRequirement sprintRequirement);
 
@@ -137,7 +147,10 @@ public interface SprintDAO {
 	@SqlQuery("select * from SprintQuestionnaire where projectId = :projectId and sprintId = :sprintId")
 	List<SprintQuestionnaireTemplate> getSprintQuestionnaire(@Bind("projectId") int projectId,
 			@Bind("sprintId") int sprintId);
-	
+
+	@SqlQuery("select * from SHAREDSPRINTS where associatedProjectId = :associatedProjectId")
+	List<SharedSprint> getSharedSprints(@Bind("associatedProjectId") int associatedProjectId);
+
 	@SqlQuery("select apiKey from LOGINCREDENTIALS where userId = :userId")
 	List<String> getApiKeyOfUser(@Bind("userId") int userId);
 
@@ -260,6 +273,17 @@ public interface SprintDAO {
 			+ "TableA.projectId) AS TableB ON PEOPLE.personId = TableB.personId")
 	FoldingList<SprintSummary> getListOfSprintsInProject(@Bind("projectId") int projectId);
 
+	@SqlQuery("select TableB.projectId projectId, TableB.projectName projectName, TableB.sprintid sprintId, TableB.sprintName sprintName, "
+			+ "TableB.sprintProgress sprintProgress, TableB.personId AS teamMembers$personId, PEOPLE.personName AS teamMembers$personName "
+			+ "from PEOPLE RIGHT JOIN (select TableA.projectId, TableA.projectName, TableA.sprintid, TableA.sprintName, TableA.sprintProgress, "
+			+ "SPRINTPARTICIPATION.personId from SPRINTPARTICIPATION RIGHT JOIN (select PROJECTS.projectId, PROJECTS.projectName, TableC.sprintId, "
+			+ " TableC.sprintName, TableC.sprintProgress from PROJECTS RIGHT JOIN (select SHAREDSPRINTS.sprintId, SHAREDSPRINTS.parentProjectId, "
+			+ "SPRINTS.sprintName, SPRINTS.sprintProgress from SHAREDSPRINTS RIGHT JOIN SPRINTS ON SHAREDSPRINTS.sprintId = SPRINTS.sprintId and "
+			+ "SHAREDSPRINTS.parentProjectId = SPRINTS.projectId where SPRINTS.sprintId IS NOT NULL and SHAREDSPRINTS.associatedProjectId = :projectId)"
+			+ " AS TableC ON TableC.parentProjectId = PROJECTS.projectId ) AS TableA ON SPRINTPARTICIPATION.sprintId = TableA.sprintId and "
+			+ "SPRINTPARTICIPATION.projectId = TableA.projectId) AS TableB ON PEOPLE.personId = TableB.personId")
+	FoldingList<SprintSummary> getListOfSharedSprintsInProject(@Bind("projectId") int projectId);
+
 	@SqlQuery("select exists( select 1 from SPRINTS where projectId= :projectId and sprintId = :sprintId)")
 	boolean ifSprintExists(@Bind("projectId") int projectId, @Bind("sprintId") int sprintId);
 
@@ -273,9 +297,13 @@ public interface SprintDAO {
 	@SqlQuery("select exists( select 1 from SprintQuestionnaire where projectId = :projectId and sprintId = :sprintId)")
 	boolean IfSprintQuestionnaireAnswered(@Bind("projectId") int projectId, @Bind("sprintId") int sprintId);
 
+	@SqlQuery("select exists( select 1 from sharedsprints where parentProjectId = :parentProjectId and sprintId = :sprintId and associatedprojectid = :associatedprojectid)")
+	boolean IfsprintAssociationExists(@Bind("parentProjectId") int parentProjectId, @Bind("sprintId") int sprintId,
+			@Bind("associatedprojectid") int associatedprojectid);
+
 	@SqlUpdate("insert into SPRINTPARTICIPATION (projectId, personId, sprintId, redmineProjectIdentifier, redmineSprintIdentifier, redminePersonIdentifier) values (:projectId, :personId, :sprintId, :identifier, :identifier, :identifier)")
 	void insertIntoSprintParticipation(@Bind("projectId") int projectId, @Bind("personId") int personId,
-			@Bind("sprintId") int sprintId,  @Bind("identifier") String identifier);
+			@Bind("sprintId") int sprintId, @Bind("identifier") String identifier);
 
 	@SqlQuery("select exists( select 1 from DOMAINSINASPRINT where projectId= :projectId and sprintId = :sprintId and domainId = :domainId)")
 	boolean ifDomainExistsInASprint(@Bind("projectId") int projectId, @Bind("sprintId") int sprintId,
@@ -287,7 +315,7 @@ public interface SprintDAO {
 
 	@SqlQuery("select redmineprojectidentifier from sprintparticipation where redmineprojectidentifier not in ('new') order by redmineprojectidentifier DESC LIMIT 1")
 	List<RedmineProjectIdentifier> getLatestRedmineProjectIdentifier();
-	
+
 	@SqlQuery("select exists( select 1 from REQUIREMENTSSELECTEDFORSPRINT where projectId= :projectId and sprintId = :sprintId and sprintRequirementId = :sprintRequirementId)")
 	boolean ifRequirementSelected(@Bind("projectId") int projectId, @Bind("sprintId") int sprintId,
 			@Bind("sprintRequirementId") int sprintRequirementId);
@@ -308,17 +336,17 @@ public interface SprintDAO {
 
 	@SqlUpdate("update SPRINTPARTICIPATION set redmineprojectidentifier = :identifier, redmineSprintIdentifier = :identifier, redminePersonIdentifier = :identifier where projectId = :projectId and sprintId = :sprintId and personId = :personId")
 	void updateIdentifiersInSprintParticipationTable(@Bind("projectId") int projectId, @Bind("sprintId") int sprintId,
-			@Bind("personId") int personId, @Bind("identifier") String identifier );
-	
+			@Bind("personId") int personId, @Bind("identifier") String identifier);
+
 	@SqlUpdate("update SPRINTDEVELOPMENTENVDB set envName= :envName where envId = :envId")
 	void updateEnv(@BindBean SprintDevelopmentEnvironment env);
-	
+
 	@SqlUpdate("update SPRINTASSETSDB set assetName= :assetName where assetId = :assetId")
 	void updateAsset(@BindBean SprintAsset env);
-	
+
 	@SqlUpdate("update SPRINTDOMAINSDB set domainName= :domainName where domainId = :domainId")
 	void updateDomain(@BindBean SprintDomain env);
-	
+
 	@SqlUpdate("update SPRINTREQUIREMENTSDB set sprintRequirementName= :sprintRequirementName, sprintRequirementDescription = :sprintRequirementDescription  where sprintRequirementId = :sprintRequirementId")
 	void updateRequirement(@BindBean SprintRequirement requirement);
 
@@ -327,25 +355,25 @@ public interface SprintDAO {
 
 	@SqlUpdate("Delete from SPRINTDEVELOPMENTENVDB where envId = :envId")
 	void deleteEnvironment(@Bind("envId") Integer envId);
-	
+
 	@SqlUpdate("Delete from DEVELOPMENT_ENV_IN_A_SPRINT where envId = :envId")
 	void deleteEnvFromSprintDevDB(@Bind("envId") Integer envId);
-	
+
 	@SqlUpdate("Delete from SPRINTASSETSDB where assetId = :assetId")
 	void deleteAsset(@Bind("assetId") Integer assetId);
-	
+
 	@SqlUpdate("Delete from ASSETSINASPRINT where assetId = :assetId")
 	void deleteAssetFromAssetsInSprint(@Bind("assetId") Integer assetId);
-	
+
 	@SqlUpdate("Delete from SPRINTREQUIREMENTSDB where sprintRequirementId = :sprintRequirementId")
 	void deleteRequirement(@Bind("sprintRequirementId") Integer sprintRequirementId);
-	
+
 	@SqlUpdate("Delete from REQUIREMENTSSELECTEDFORSPRINT where sprintRequirementId = :sprintRequirementId")
 	void deleteRequirementFromRequirementInSprint(@Bind("sprintRequirementId") Integer sprintRequirementId);
-	
+
 	@SqlUpdate("Delete from SPRINTDOMAINSDB where domainId = :domainId")
 	void deleteDoamin(@Bind("domainId") Integer domainId);
-	
+
 	@SqlUpdate("Delete from DOMAINSINASPRINT where domainId = :domainId")
 	void deleteDomainFromDomainsInSprint(@Bind("domainId") Integer domainId);
 }

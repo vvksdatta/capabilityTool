@@ -8492,6 +8492,8 @@
       var currentProject = $stateParams;
       var editProject = null;
       var finalProject = null;
+      var parentProjectsList = [];
+      $scope.editAssociatedProject = false;
       $scope.formatProjects = function(projectsList, currentProject, indent){
         for(var i=0; i<currentProject.projectList.length; i++){
           var project = {};
@@ -8506,12 +8508,23 @@
           }
         }
       };
+      $scope.manageProjectWithId = function(id) {
+        var project = {};
+        project.projectId= id;
+        $state.go("management.projects.editProject",project );
+      };
+      $scope.invertEditAssociatedProject = function(){
+        if(  $scope.editAssociatedProject == false){
+          $scope.editAssociatedProject  = true;
+        }else{
+          $scope.editAssociatedProject = false;
+        }
+      }
       $http.get('/api/projects/getAllProjectsNested').then(function(response)
       {
+        var projects = response.data;
         var projectsList = [];
-        var projectsHierarchy = response.data;
-        $scope.ProjectsHierarchy = projectsHierarchy;
-        angular.forEach(projectsHierarchy, function(value, key) {
+        angular.forEach(projects, function(value, key) {
           var project = {};
           project.projectId = value.projectId;
           project.projectName = value.projectName;
@@ -8522,82 +8535,12 @@
           }
         });
         $scope.projectsList = projectsList;
-      }). then(function(){
-        $scope.getParentOf = function(project, parentProjectDetails){
-          angular.forEach($scope.projects, function(value, key) {
-            if(value.projectId == project.parentProjectId){
-              parentProjectDetails.projectId = value.projectId;
-              parentProjectDetails.projectName = value.projectName;
-              parentProjectDetails.parentProjectId = value.parentProjectId;
-            }
-          });
-        }
-        function existsInArray( arr, item ) {
-          for( var i = 0; i < arr.length; i++ )
-          if( arr[ i ].projectId === item.projectId ) return true;
-          return false;
-        }
-        $scope.getParentProjects = function(project){
-          angular.forEach($scope.ProjectsHierarchy, function(value, key) {
-            if(value.projectId == project.projectId){
-              return;
-            }
-          });
-          var projectsList = [];
-          projectsList.push(project);
-          var currentProject = project;
-          while(!existsInArray( $scope.ProjectsHierarchy, currentProject ) ){
-            var parentProjectDetails = {};
-            $scope.getParentOf(currentProject, parentProjectDetails);
-            projectsList.push(parentProjectDetails);
-            if(parentProjectDetails.parentProjectId != null){
-              currentProject = parentProjectDetails;
-            }else{
-              break;
-            }
-          }
-          return 	projectsList;
-        }
-      }).then(function(){
-        angular.forEach($scope.projects, function(value,key){
-          parentProjectsList[value.projectId] = $scope.getParentProjects(value);
-        });
-        $scope.parentProjectsList = parentProjectsList;
       })
       .catch(function(response, status) {
         var optionalDelay = 5000;
         var $string = "Error in fetching list of projects";
         alertFactory.addAuto('danger', $string, optionalDelay);
-      })
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+      });
       $http.get('api/sprints/listOfSprintsInProject/'+currentProject.projectId).then(function(response) {
         $scope.sprintsInProject= response.data;
       })
@@ -8666,6 +8609,62 @@
               $scope.parentProjectName = value.projectName;
             }
           });
+        }).then(function(){
+          $http.get('/api/projects/summary').then(function(response) {
+            $scope.projects = response.data;
+          }).then(function(){
+            $http.get('/api/projects/getAllProjectsNested').then(function(response)
+            {
+              var projectsHierarchy = response.data;
+              $scope.ProjectsHierarchy = projectsHierarchy;
+            }). then(function(){
+              $scope.getParentOf = function(project, parentProjectDetails){
+                angular.forEach($scope.projects, function(value, key) {
+                  if(value.projectId == project.parentProjectId){
+                    parentProjectDetails.projectId = value.projectId;
+                    parentProjectDetails.projectName = value.projectName;
+                    parentProjectDetails.parentProjectId = value.parentProjectId;
+                  }
+                });
+              }
+              function existsInArray( arr, item ) {
+                for( var i = 0; i < arr.length; i++ )
+                if( arr[ i ].projectId === item.projectId ) return true;
+                return false;
+              }
+              $scope.getParentProjects = function(project){
+                angular.forEach($scope.ProjectsHierarchy, function(value, key) {
+                  if(value.projectId == project.projectId){
+                    return;
+                  }
+                });
+                var projectsList = [];
+                projectsList.push(project);
+                var currentProject = project;
+                while(!existsInArray( $scope.ProjectsHierarchy, currentProject ) ){
+                  var parentProjectDetails = {};
+                  $scope.getParentOf(currentProject, parentProjectDetails);
+                  projectsList.push(parentProjectDetails);
+                  if(parentProjectDetails.parentProjectId != null){
+                    currentProject = parentProjectDetails;
+                  }else{
+                    break;
+                  }
+                }
+                return 	projectsList;
+              }
+            }).then(function(){
+              angular.forEach($scope.projects, function(value,key){
+                parentProjectsList[value.projectId] = $scope.getParentProjects(value);
+              });
+              $scope.parentProjectsList = parentProjectsList;
+            })
+          })
+          .catch(function(response, status) {
+            var optionalDelay = 5000;
+            var $string = "Error in fetching list of nested projects";
+            alertFactory.addAuto('danger', $string, optionalDelay);
+          })
         })
         $http.get('/api/projects/participants/' +currentProject.projectId).then(function(response)
         {
@@ -8730,6 +8729,7 @@
               var $string = "Successfully updated the project ";
               var optionalDelay = 3000;
               alertFactory.addAuto('success', $string, optionalDelay);
+              $state.reload();
             })
             .catch(function(response, status) {
               var optionalDelay = 5000;
@@ -8758,4 +8758,4 @@
         };
       });
     })
- })();
+  })();

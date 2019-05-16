@@ -107,6 +107,7 @@ public class WiptoolApplication extends Application<WiptoolConfiguration> {
 		peopleDAO.createPeopleTable();
 		projectDAO.createProjectTable();
 		sprintDAO.createSprintTable();
+		sprintDAO.createSharedSprintsTable();
 		sprintDAO.createSprintParticipationTable();
 		sprintDAO.createSprintDomainsDbTable();
 		sprintDAO.createSprintAssetsDbTable();

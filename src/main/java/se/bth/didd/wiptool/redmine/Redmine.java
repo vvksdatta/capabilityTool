@@ -42,6 +42,7 @@ import se.bth.didd.wiptool.api.ProjectLeaderId;
 import se.bth.didd.wiptool.api.Projects;
 import se.bth.didd.wiptool.api.Roles;
 import se.bth.didd.wiptool.api.RolesOfPeopleSprint;
+import se.bth.didd.wiptool.api.SharedSprint;
 import se.bth.didd.wiptool.api.Sprint;
 import se.bth.didd.wiptool.api.SprintComprisingIssues;
 import se.bth.didd.wiptool.api.SprintNameProgress;
@@ -215,9 +216,9 @@ public class Redmine {
 							 * check if a sprint is already added to the list of
 							 * sprints. If false, add as a new sprint
 							 */
-
+							
 							if (redmineDAO.ifSprintExists(sprint.getProjectId(), sprint.getId()) != true) {
-
+								
 								/*
 								 * A sprint can sometimes be hierarchical i.e
 								 * the sprints of sub projects can be shared
@@ -251,6 +252,14 @@ public class Redmine {
 								// System.out.println("Updated new sprint
 								// details to
 								// database");
+							}
+							
+							if(redmineDAO.IfsprintAssociationExists(sprint.getProjectId(), sprint.getId(), redmineProject.getId()) != true){
+								SharedSprint sharedSprint = new SharedSprint();
+								sharedSprint.setParentProjectId(sprint.getProjectId());
+								sharedSprint.setSprintId(sprint.getId());
+								sharedSprint.setAssociatedProjectId(redmineProject.getId());
+								redmineDAO.insertSharedSprints(sharedSprint);
 							}
 						}
 					}
@@ -498,6 +507,14 @@ public class Redmine {
 								// details to
 								// database");
 							}
+							
+							if(redmineDAO.IfsprintAssociationExists(sprint.getProjectId(), sprint.getId(), redmineProject.getId()) != true){
+								SharedSprint sharedSprint = new SharedSprint();
+								sharedSprint.setParentProjectId(sprint.getProjectId());
+								sharedSprint.setSprintId(sprint.getId());
+								sharedSprint.setAssociatedProjectId(redmineProject.getId());
+								redmineDAO.insertSharedSprints(sharedSprint);
+							}
 							/*
 							 * Check whether the current sprint details on
 							 * Redmine have been modified since last recorded
@@ -522,6 +539,8 @@ public class Redmine {
 
 							redmineDAO.updateIdentifiersInSprint(sprint.getProjectId(), sprint.getId(),
 									generatedRandomString, generatedRandomString);
+							redmineDAO.updateIdentifiersInSharedSprint(sprint.getProjectId(), sprint.getId(),redmineProject.getId(),
+									generatedRandomString, generatedRandomString, generatedRandomString);
 							redmineDAO.updateIdentifiersInSprintQuestionnaire(sprint.getProjectId(), sprint.getId(),
 									generatedRandomString, generatedRandomString);
 							redmineDAO.updateIdentifiersInSprintRequirement(sprint.getProjectId(), sprint.getId(),
@@ -1084,6 +1103,7 @@ public class Redmine {
 		redmineDAO.deleteNonExistingProjectsFromSprintParticipationTable(generatedRandomString);
 		redmineDAO.deleteNonExistingProjectsFromSprintDevEnvTable(generatedRandomString);
 		// redmineDAO.deleteNonExistingProjectsFromSprintComprisingIssuesTable(generatedRandomString);
+		redmineDAO.deleteNonExistingProjectsFromSharedSprintsTable(generatedRandomString);
 		redmineDAO.deleteNonExistingProjectsFromSprintsTable(generatedRandomString);
 		// redmineDAO.deleteNonExistingProjectsFromissuesTable(generatedRandomString);
 
@@ -1100,6 +1120,8 @@ public class Redmine {
 		// redmineDAO.deleteNonExistingSprintsFromSprintComprisingIssuesTable(generatedRandomString);
 		// redmineDAO.deleteNonExistingIssuesFromSprintComprisingIssuesTable(generatedRandomString);
 		// redmineDAO.deleteNonExistingIssuesFromissuesTable(generatedRandomString);
+		redmineDAO.deleteNonExistingSharedSprintsFromSharedSprintsTable(generatedRandomString);
+		redmineDAO.deleteNonExistingAssociationsFromSharedSprintsTable(generatedRandomString);
 		redmineDAO.deleteNonExistingSprintsFromSprintsTable(generatedRandomString);
 
 		// Deleting all the people removed from Redmine.

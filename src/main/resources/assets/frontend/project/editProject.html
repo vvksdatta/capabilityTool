@@ -35,7 +35,7 @@
 </style>
 <script type="text/ng-template" id="categoryTree">
   <p  ng-if="project.projectId == finalProject.projectId" style="color: rgb(90, 132, 187);" > {{project.projectName  |capitalize}}
-    <a  ng-hide="readOnly" ng-click="invertEditAssociatedProject()" class="add-tab md-primary md-raised"><span class="glyphicon glyphicon-pencil"> </span>  <md-tooltip  md-direction="right">Edit associated project </md-tooltip> </a>
+    <a  ng-hide="readOnly" ng-click="invertEditAssociatedProject()" class="add-tab md-primary md-raised"><span class="glyphicon glyphicon-pencil"> </span>  <md-tooltip  md-direction="right">Change parent project </md-tooltip> </a>
   </p>
   <a  ng-if="project.projectId != finalProject.projectId" ng-click="manageProjectWithId(project.projectId)"> {{project.projectName  |capitalize}} <md-tooltip  md-direction="right"> Project: {{ project.projectName  |capitalize}} </a> </p>
     <ul ng-if="project.projectList">
@@ -140,7 +140,7 @@
                   </div>
                 </div>
                 <div class="form-group col-xs-8" style="margin-top: 10px;"  ng-hide="editAssociatedProject">
-                  <label class="col-sm-3 control-label" for="parentProjectId">Project hierarchy</label>
+                  <label class="col-sm-3 control-label" for="parentProjectId">Hierarchy of projects</label>
                   <div class="col-sm-12" ng-repeat="project in projects | orderBy:'projectName'"  ng-if="finalProject.projectId == project.projectId">
                     <div style="margin-top:10px; font-size: 14px;" ng-repeat="parentProject in parentProjectsList[project.projectId].slice().reverse() track by $index">
                       <ul>
@@ -151,7 +151,7 @@
                 </div>
                 <div class="form-group" ng-show="editAssociatedProject">
                   <div class="col-xs-6">
-                    <label class="col-sm-3 control-label" for="parentProjectId">Associated project</label>
+                    <label class="col-sm-3 control-label" for="parentProjectId">Parent project</label>
                     <div class="col-sm-12" >
                       <input  type="text" list="projectsList"  value="{{parentProjectName}}" style="font-size: 16px;min-width: 80px;" ng-hide="readOnly" id="parentProjectId" name="parentProjectId" class="form-control"  ng-model="parentProjectName" ng-change="parentProject(finalProject,parentProjectName)">
                       <datalist id="projectsList">
