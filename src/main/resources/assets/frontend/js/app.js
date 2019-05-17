@@ -1302,7 +1302,7 @@
       }
     }
   })();
-  app.controller('NavController', function($state, $http, alertFactory, $q ,$scope, $localStorage, $location, $window, $rootScope) {
+  app.controller('NavController', function($state, $http, alertFactory, $q ,$scope, $localStorage, $location, $window, $rootScope, $log) {
     if($rootScope.alerts.length !=0){
       angular.forEach($rootScope.alerts, function(value, key) {
         var alert = {};
@@ -1320,7 +1320,8 @@
       $scope.loading = true;
       $http.get('/api/redmine/'+$localStorage.currentUser.userId).then(function(response) {
         $scope.loading = false;
-        var $string = "Hurray! Successfully synchronized with Redmine!";
+        var syncTimeStamp = moment().format('MMM D, YYYY [at] h:mm A.');
+        var $string = "Hurray! Successfully synchronized with Redmine on "+ syncTimeStamp;
         var optionalDelay = 600000;
         $state.reload();
         alertFactory.addAuto('success', $string, optionalDelay);
