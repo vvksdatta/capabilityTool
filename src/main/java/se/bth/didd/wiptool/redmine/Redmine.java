@@ -375,7 +375,7 @@ public class Redmine {
 									}
 								}
 								redmineDAO.updateRedmineProjectIdentifierInParticipationTable(redmineProject.getId(),
-										projectParticipant.getUserId(), role.getId(), generatedRandomString);
+										projectParticipant.getUserId(), generatedRandomString);
 
 								redmineDAO.updateRedminePersonIdentifierInParticipationTable(redmineProject.getId(),
 										projectParticipant.getUserId(), role.getId(), generatedRandomString);
@@ -639,7 +639,7 @@ public class Redmine {
 									}
 								}
 								redmineDAO.updateRedmineProjectIdentifierInParticipationTable(redmineProject.getId(),
-										projectParticipant.getUserId(), role.getId(), generatedRandomString);
+										projectParticipant.getUserId(), generatedRandomString);
 
 								redmineDAO.updateRedminePersonIdentifierInParticipationTable(redmineProject.getId(),
 										projectParticipant.getUserId(), role.getId(), generatedRandomString);
@@ -1250,6 +1250,47 @@ public class Redmine {
 
 			}
 
+		}
+		
+		for (Project redmineProject : projects) {
+			if (redmineProject.getId() >= projectCutOff) {
+				List<Membership> projectParticipants = redmineManager.getMembershipManager()
+						.getMemberships(redmineProject.getId());
+
+				for (Membership projectParticipant : projectParticipants) {
+
+					if (projectParticipant.getUserId() != null) {
+
+						Collection<Role> rolesOfProjectParticipant = projectParticipant.getRoles();
+						for (Role role : rolesOfProjectParticipant) {
+
+							/*
+							 * check if the project participation of the person
+							 * is already added to the database
+							 * (ProjectParticipation Table)
+							 */
+							if (redmineDAO.ifPersonExistsInProject(redmineProject.getId(),
+									projectParticipant.getUserId()) != true) {
+
+								if (redmineDAO.ifPersonParticipatesInProject(redmineProject.getId(),
+										projectParticipant.getUserId(), role.getId()) != true) {
+
+									redmineDAO.insertIntoProjectParticipation(redmineProject.getId(),
+											projectParticipant.getUserId(), role.getId());
+								}
+							}
+
+							redmineDAO.updateRedminePersonIdentifierInParticipationTable(redmineProject.getId(),
+									projectParticipant.getUserId(), role.getId(), generatedRandomString);
+
+							redmineDAO.updateidentifierInRolesOfPeople(projectParticipant.getUserId(), role.getId(),
+									generatedRandomString);
+
+						}
+
+					}
+				}
+			}
 		}
 		/*
 		 * Computing the percentage of done at project Level.ALL This is based

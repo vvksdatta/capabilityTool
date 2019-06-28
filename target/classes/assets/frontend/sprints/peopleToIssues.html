@@ -42,6 +42,9 @@
   .ui-state-disabled, .ui-widget-content .ui-state-disabled, .ui-widget-header .ui-state-disabled {
     opacity: 1;
   }
+  .thumbnail {
+    min-height: unset;
+}
 </style>
 <div class='parent' ng-if="specialIssues.length!=0">
   <h2></h2>
@@ -105,7 +108,7 @@
           <div  class="list-group-item" style="display: inline-flex; width: 100%; text-align: left; padding: 5px 10px;"  >
             <div style="margin-left: 15px; width: 30vw; text-align: left">
               <div class="thumbnail" style="border: 5px dotted #5d5c5c; color: #333;margin-bottom: 10px;border-radius: 3px;" data-drop="drop[issue.issueId]" ng-model='list2[issue.issueId]' jqyoui-droppable>
-                <div ng-if="drop[issue.issueId]" style="text-align: center;" >  Add Person </div>
+                <div ng-if="drop[issue.issueId]" style="text-align: center; min-height: 120px;" >  Add Person </div>
                 <div ng-repeat="item in list2[issue.issueId]">
                   <md-checkbox  type="checkbox" style="margin-bottom: 10px;width: 100%;display: block;" class="md-primary"  ng-model="removeSelected[item.issueId]" >
                     <md-tooltip md-direction="left">Remove {{item.personName}}</md-tooltip>

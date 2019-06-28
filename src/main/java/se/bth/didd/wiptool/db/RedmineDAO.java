@@ -75,9 +75,9 @@ public interface RedmineDAO {
 	void updateProjectLeaderIdentifier(@Bind("projectId") int projectId,
 			@Bind("projectLeaderIdentifier") String projectLeaderIdentifier);
 
-	@SqlUpdate("update PROJECTPARTICIPATION set redmineProjectIdentifier = :redmineProjectIdentifier where projectId = :projectId and personId = :personId and roleId = :roleId")
+	@SqlUpdate("update PROJECTPARTICIPATION set redmineProjectIdentifier = :redmineProjectIdentifier where projectId = :projectId and personId = :personId")
 	void updateRedmineProjectIdentifierInParticipationTable(@Bind("projectId") int projectId,
-			@Bind("personId") int personId, @Bind("roleId") int roleId,
+			@Bind("personId") int personId,
 			@Bind("redmineProjectIdentifier") String redmineProjectIdentifier);
 
 	@SqlUpdate("update PROJECTPARTICIPATION set redminePersonIdentifier = :redminePersonIdentifier where projectId = :projectId and personId = :personId and roleId = :roleId")
