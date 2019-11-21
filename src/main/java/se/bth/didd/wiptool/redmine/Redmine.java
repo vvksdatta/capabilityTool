@@ -421,6 +421,7 @@ public class Redmine {
 		for (Project redmineProject : projects) {
 			if (redmineProject.getId() >= projectCutOff) {
 				/* check if project already added to database */
+				if(redmineProject.getId() != 179){
 				if (redmineDAO.ifProjectExists(redmineProject.getId()) != false) {
 
 					/*
@@ -1040,7 +1041,7 @@ public class Redmine {
 				redmineDAO.updateRedmineProjectIdentifier(redmineProject.getId(), generatedRandomString);
 			}
 		}
-
+	}
 		/*
 		 * After updating the projects and issuses, check whether all the
 		 * participants in sprintparticipation table still remain as valid users
