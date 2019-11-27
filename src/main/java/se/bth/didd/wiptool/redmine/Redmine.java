@@ -158,7 +158,8 @@ public class Redmine {
 		 */
 		List<Role> roles = redmineManager.getUserManager().getRoles();
 		for (Role role : roles) {
-			if (redmineDAO.ifRoleIdExists(role.getId()) != true) {
+			if(role.getId() != 5){
+			if (redmineDAO.ifRoleIdExists(role.getId()) != true)  {
 
 				Roles newRoles = new Roles();
 				newRoles.setRoleId(role.getId());
@@ -180,6 +181,7 @@ public class Redmine {
 			 * Setting an identifier for each role. This is to check and remove
 			 * roles that have been deleted from Redmine.
 			 */
+		}
 			redmineDAO.updateRoleStatus(role.getId(), generatedRandomString);
 		}
 
@@ -282,7 +284,8 @@ public class Redmine {
 							 */
 							Collection<Role> rolesOfProjectParticipant = projectParticipant.getRoles();
 							for (Role role : rolesOfProjectParticipant) {
-
+								if(role.getId() != 5){
+								
 								/*
 								 * check whether the person is already added to
 								 * People table. If the person is not added but
@@ -374,6 +377,7 @@ public class Redmine {
 										// ProjectParticipation table");
 									}
 								}
+								 }
 								redmineDAO.updateRedmineProjectIdentifierInParticipationTable(redmineProject.getId(),
 										projectParticipant.getUserId(), generatedRandomString);
 
@@ -576,7 +580,7 @@ public class Redmine {
 							 */
 							Collection<Role> rolesOfProjectParticipant = projectParticipant.getRoles();
 							for (Role role : rolesOfProjectParticipant) {
-
+								if(role.getId() != 5){
 								/*
 								 * check whether the person is already added to
 								 * People table. If the person is not added but
@@ -638,6 +642,7 @@ public class Redmine {
 										redmineDAO.insertIntoProjectParticipation(redmineProject.getId(),
 												projectParticipant.getUserId(), role.getId());
 									}
+								}
 								}
 								redmineDAO.updateRedmineProjectIdentifierInParticipationTable(redmineProject.getId(),
 										projectParticipant.getUserId(), generatedRandomString);

@@ -87,7 +87,7 @@
       var alert = {'type': type, 'msg': msg};
       $rootScope.alerts.push(alert);
       if (!delay ) {
-        delay = 6000; // default delay is 2500ms
+        delay = 800000; // default delay is 2500ms
       }
       window.setTimeout(function() {
         var index = $rootScope.alerts.indexOf(alert);
@@ -738,7 +738,7 @@
         $scope.newUserName = response.data.personName;
       })
       .catch(function(response, status) {
-        var optionalDelay = 5000;
+        var optionalDelay = 800000;
         var $string = "Error in fetching user name";
         alertFactory.addAuto('danger', $string, optionalDelay);
       })
@@ -789,7 +789,7 @@
       }
     })
     .catch(function(response, status) {
-      var optionalDelay = 5000;
+      var optionalDelay = 800000;
       var $string = "Error in fetching list of options";
       alertFactory.addAuto('danger', $string, optionalDelay);
     });
@@ -811,14 +811,14 @@
         options.addNewSprint = '0';
       }
       $http.post('/api/options/updateOptions',options).then(function(response){
-        var optionalDelay = 3000;
+        var optionalDelay = 800000;
         var $string = "Updated the options";
         $state.go("manageUser.manageOptions",response.data);
         alertFactory.addAuto('success', $string, optionalDelay);
       })
       .catch(function(response, status) {
         //	$scope.loading = false;
-        var optionalDelay = 5000;
+        var optionalDelay = 800000;
         var $string = "Error in updating the options";
         alertFactory.addAuto('danger', $string, optionalDelay);
       });
@@ -839,7 +839,7 @@
       $scope.usersList = response.data;
     })
     .catch(function(response, status) {
-      var optionalDelay = 5000;
+      var optionalDelay = 800000;
       var $string = "Error in fetching list of users";
       alertFactory.addAuto('danger', $string, optionalDelay);
     });
@@ -855,12 +855,12 @@
         for (var i =  $scope.usersList.length - 1; i >= 0; i--) {
           if ($scope.usersList[i].userId == user.userId) {
             $http.delete('/api/people/deleteUser/'+user.userId).then(function(response) {
-              var optionalDelay = 5000;
+              var optionalDelay = 800000;
               var $string = "Deleted the user "+ user.userFirstName;
               alertFactory.addAuto('success', $string, optionalDelay);
             })
             .catch(function(response, status) {
-              var optionalDelay = 5000;
+              var optionalDelay = 800000;
               var $string = "Error in removing the user "+ user.userFirstName;
               alertFactory.addAuto('danger', $string, optionalDelay);
               $scope.usersList.push(user);
@@ -884,12 +884,12 @@
     $scope.addUser = function(register) {
       $http.put('/api/auth/register', register).then(function(response) {
         var $string = response.data;
-        var optionalDelay = 3000;
+        var optionalDelay = 800000;
         alertFactory.addAuto('success', $string.success, optionalDelay);
         $state.go("manageUser.myDetails");
       })
       .catch(function(response, status) {
-        var optionalDelay = 5000;
+        var optionalDelay = 800000;
         var $string = "Email ID or user name already registered! Use another one";
         alertFactory.addAuto('danger', $string, optionalDelay);
       });
@@ -916,7 +916,7 @@
         $scope.userDetails = response.data;
       })
       .catch(function(response, status) {
-        var optionalDelay = 5000;
+        var optionalDelay = 800000;
         var $string = "Error in fetching user details";
         alertFactory.addAuto('danger', $string, optionalDelay);
       });
@@ -924,27 +924,27 @@
     $scope.updateUserDetails = function(userDetails){
       $http.put('/api/people/updateUserDetails/',userDetails).then(function(response)
       {
-        var optionalDelay = 5000;
+        var optionalDelay = 800000;
         var $string = "Successfully updated the details of user "+ userDetails.userFirstName;
         //$state.go('home');
         alertFactory.addAuto('success', $string, optionalDelay);
       })
       .catch(function(response, status) {
-        var optionalDelay = 5000;
+        var optionalDelay = 800000;
         var $string = "Error in fetching user details";
         alertFactory.addAuto('danger', $string, optionalDelay);
       });
     };
     $scope.updateUserPassword = function(form2, userPasswordChange){
       if(userPasswordChange.newPassword != userPasswordChange.newPasswordRepeat){
-        var optionalDelay = 5000;
+        var optionalDelay = 800000;
         var $string = "The new passwords aren't the same";
         alertFactory.addAuto('danger', $string, optionalDelay);
         form2.newPasswordRepeat.$invalid = true;
         form2.newPassword.$invalid = true;
         return form2;
       } else if(userPasswordChange.newPassword == userPasswordChange.currentPassword || userPasswordChange.newPasswordRepeat == userPasswordChange.currentPassword){
-        var optionalDelay = 5000;
+        var optionalDelay = 800000;
         var $string = "Your new password can't be same as the current one";
         alertFactory.addAuto('danger', $string, optionalDelay);
         form2.newPasswordRepeat.$invalid = true;
@@ -958,7 +958,7 @@
         var encoded = $base64.encode(JSON.stringify(userPasswordChange));
         $http.put('/api/people/updateUserPassword/',encoded).then(function(response)
         {
-          var optionalDelay = 5000;
+          var optionalDelay = 800000;
           var $string = "Successfully updated the password";
           $scope.readOnly = true;
           $scope.changePassword = false;
@@ -967,7 +967,7 @@
           alertFactory.addAuto('success', $string, optionalDelay);
         })
         .catch(function(response, status) {
-          var optionalDelay = 5000;
+          var optionalDelay = 800000;
           var $string = "";
           if(!response.data){
             $string = "Error in updating the user details";
@@ -1134,7 +1134,7 @@
     })
     .catch(function(response, status) {
       //	$scope.loading = false;
-      var optionalDelay = 5000;
+      var optionalDelay = 800000;
       var $string = "Error in fetching roles of people";
       alertFactory.addAuto('danger', $string, optionalDelay);
     });
@@ -1146,7 +1146,7 @@
     })
     .catch(function(response, status) {
       //	$scope.loading = false;
-      var optionalDelay = 5000;
+      var optionalDelay = 800000;
       var $string = "Error in fetching roles";
       alertFactory.addAuto('danger', $string, optionalDelay);
     });
@@ -1175,14 +1175,14 @@
       })
       .catch(function(response, status) {
         //	$scope.loading = false;
-        var optionalDelay = 5000;
+        var optionalDelay = 800000;
         var $string = "Error in fetching project  details";
         alertFactory.addAuto('danger', $string, optionalDelay);
       });
     })
     .catch(function(response, status) {
       //	$scope.loading = false;
-      var optionalDelay = 5000;
+      var optionalDelay = 800000;
       var $string = "Error in fetching list of people";
       alertFactory.addAuto('danger', $string, optionalDelay);
     });
@@ -1222,11 +1222,11 @@
       $http.put('/api/projects/setProjectParticipants/'+currentProject.projectId+"/"+$localStorage.currentUser.userId,$scope.ree ).then(function(response) {
         $state.go("management.projects.projectsTable");
         var $string = "Successfully added the project participants";
-        var optionalDelay = 3000;
+        var optionalDelay = 800000;
         alertFactory.addAuto('success', $string, optionalDelay);
       })
       .catch(function(response, status) {
-        var optionalDelay = 5000;
+        var optionalDelay = 800000;
         var $string = {};
         if(response.data.message !=null){
           $string = response.data.message;
@@ -1322,18 +1322,18 @@
         $scope.loading = false;
         var syncTimeStamp = moment().format('MMM D, YYYY [at] h:mm A.');
         var $string = "Hurray! Successfully synchronized with Redmine on "+ syncTimeStamp;
-        var optionalDelay = 600000;
+        var optionalDelay = 800000;
         $state.reload();
         alertFactory.addAuto('success', $string, optionalDelay);
       })
       .catch(function(response, status) {
         $scope.loading = false;
         if(response.data.message != null){
-          var optionalDelay = 12000;
+          var optionalDelay = 800000;
           var $string = response.data.message;
         }
         else{
-          var optionalDelay = 600000;
+          var optionalDelay = 800000;
           var $string = "Error in synchronizing with redmine";
         }
         alertFactory.addAuto('danger', $string, optionalDelay);
@@ -1361,7 +1361,7 @@
       vm.loading = true;
       AuthenticationService.Login(vm.username, vm.password, function (result) {
         if (result === true) {
-          var optionalDelay = 2000;
+          var optionalDelay = 800000;
           var $string = "Login successful!";
           alertFactory.addAuto('success', $string, optionalDelay);
           $location.path('/');
@@ -1372,7 +1372,7 @@
           $scope.form.$setUntouched();
           $scope.form.$rollbackViewValue();
           //vm.error = 'Username or password is incorrect';
-          var optionalDelay = 5000;
+          var optionalDelay = 800000;
           var $string = "Username or password is incorrect!";
           alertFactory.addAuto('Danger', $string, optionalDelay);
           vm.loading = false;
@@ -1414,7 +1414,7 @@
       }
     })
     .catch(function(response, status) {
-      var optionalDelay = 5000;
+      var optionalDelay = 800000;
       var $string = "Error in fetching list of options";
       alertFactory.addAuto('danger', $string, optionalDelay);
     });
@@ -1435,7 +1435,7 @@
     $http.get('/api/sprints/summary').then(function(response) {
       $scope.sprints= response.data;
     }).catch(function(response, status) {
-      var optionalDelay = 5000;
+      var optionalDelay = 800000;
       var $string = "Error in fetching summary of sprints";
       alertFactory.addAuto('danger', $string, optionalDelay);
     });
@@ -1501,12 +1501,12 @@
         $scope.parentProjectsList = parentProjectsList;
       })
       .catch(function(response, status) {
-        var optionalDelay = 5000;
+        var optionalDelay = 800000;
         var $string = "Error in fetching list of projects";
         alertFactory.addAuto('danger', $string, optionalDelay);
       })
     }) .catch(function(response, status) {
-      var optionalDelay = 5000;
+      var optionalDelay = 800000;
       var $string = "Error in fetching summary of projects";
       alertFactory.addAuto('danger', $string, optionalDelay);
     });
@@ -1524,7 +1524,7 @@
     $http.get('/api/people/summary').then(function(response) {
       $scope.people= response.data;
     }).catch(function(response, status) {
-      var optionalDelay = 5000;
+      var optionalDelay = 800000;
       var $string = "Error in fetching summary of people";
       alertFactory.addAuto('danger', $string, optionalDelay);
     });
@@ -1559,7 +1559,7 @@
       $scope.programmingSkillsList = response.data;
     }).catch(function(response, status) {
       //	$scope.loading = false;
-      var optionalDelay = 5000;
+      var optionalDelay = 800000;
       var $string = "Error in fetching list of programming skills";
       alertFactory.addAuto('danger', $string, optionalDelay);
     });
@@ -1573,12 +1573,12 @@
           $scope.finish = function($event, skill) {
             $http.post('/api/skills/editSkillDetails',skill).then(function(response) {
               var $string = "updated "+skill.skillName+" skill!";
-              var optionalDelay = 2000;
+              var optionalDelay = 800000;
               $mdDialog.hide();
               alertFactory.addAuto('success', $string, optionalDelay);
             })
             .catch(function(response, status) {
-              var optionalDelay = 5000;
+              var optionalDelay = 800000;
               var $string = "Error in updating "+skill.skillName+" skill";
               alertFactory.addAuto('danger', $string, optionalDelay);
             });
@@ -1615,7 +1615,7 @@
             if(  $scope.searchText != ""){
               $http.post('/api/skills/insertSkill',skill).then(function(response) {
                 var $string = "Added "+skill+ " to skills database!";
-                var optionalDelay = 3000;
+                var optionalDelay = 800000;
                 $mdDialog.hide();
                 alertFactory.addAuto('success', $string, optionalDelay);
               }).then(function(){
@@ -1624,19 +1624,19 @@
                   $scope.programmingSkillsList = response.data;
                 }).catch(function(response, status) {
                   //	$scope.loading = false;
-                  var optionalDelay = 5000;
+                  var optionalDelay = 800000;
                   var $string = "Error in fetching list of programming skills";
                   alertFactory.addAuto('danger', $string, optionalDelay);
                 });
               })
               .catch(function(response, status) {
-                var optionalDelay = 5000;
+                var optionalDelay = 800000;
                 var $string = "Error in adding skill to skills database";
                 alertFactory.addAuto('danger', $string, optionalDelay);
               });
             }
             else{
-              var optionalDelay = 3000;
+              var optionalDelay = 800000;
               var $string = "Skill name cannot be empty";
               alertFactory.addAuto('danger', $string, optionalDelay);
             }
@@ -1662,12 +1662,12 @@
       $mdDialog.show(confirm).then(function() {
         $http.delete('/api/skills/deleteSkill/'+skill.skillId).then(function(response) {
           var $string = "Deleted the skill "+skill.skillName;
-          var optionalDelay = 3000;
+          var optionalDelay = 800000;
           alertFactory.addAuto('success', $string, optionalDelay);
           $scope.programmingSkillsList = response.data;
         })
         .catch(function(response, status) {
-          var optionalDelay = 5000;
+          var optionalDelay = 800000;
           var $string = "Error in deleting the skill "+skill.skillName;
           alertFactory.addAuto('danger', $string, optionalDelay);
         });
@@ -1689,7 +1689,7 @@
       $scope.developmentEnvironmentsList = response.data;
     })
     .catch(function(response, status) {
-      var optionalDelay = 5000;
+      var optionalDelay = 800000;
       var $string = "Error in fetching list of development environments";
       alertFactory.addAuto('danger', $string, optionalDelay);
     })
@@ -1718,12 +1718,12 @@
           $scope.finish = function($event, env) {
             $http.post('/api/sprints/editEnvDetails',env).then(function(response) {
               var $string = "updated the development environment "+env.envName+"!";
-              var optionalDelay = 2000;
+              var optionalDelay = 800000;
               $mdDialog.hide();
               alertFactory.addAuto('success', $string, optionalDelay);
             })
             .catch(function(response, status) {
-              var optionalDelay = 5000;
+              var optionalDelay = 800000;
               var $string = "Error in updating "+env.envName;
               alertFactory.addAuto('danger', $string, optionalDelay);
             });
@@ -1760,7 +1760,7 @@
             if(  $scope.searchText != ""){
               $http.post('/api/sprints/insertEnvironment',envi).then(function(response) {
                 var $string = "Added "+ envi +" to the catalogue of enironments!";
-                var optionalDelay = 2000;
+                var optionalDelay = 800000;
                 $mdDialog.hide();
                 alertFactory.addAuto('success', $string, optionalDelay);
               }).then(function(){
@@ -1769,19 +1769,19 @@
                   $scope.developmentEnvironmentsList = response.data;
                 })
                 .catch(function(response, status) {
-                  var optionalDelay = 5000;
+                  var optionalDelay = 800000;
                   var $string = "Error in fetching list of development environments";
                   alertFactory.addAuto('danger', $string, optionalDelay);
                 })
               })
               .catch(function(response, status) {
-                var optionalDelay = 5000;
+                var optionalDelay = 800000;
                 var $string = "Error in adding"+envi+" to the list of environments";
                 alertFactory.addAuto('danger', $string, optionalDelay);
               });
             }
             else{
-              var optionalDelay = 3000;
+              var optionalDelay = 800000;
               var $string = "Environment name cannot be empty";
               alertFactory.addAuto('danger', $string, optionalDelay);
             }
@@ -1807,12 +1807,12 @@
       $mdDialog.show(confirm).then(function() {
         $http.delete('/api/sprints/deleteEnv/'+env.envId).then(function(response) {
           var $string = "Deleted the development environment "+env.envName;
-          var optionalDelay = 3000;
+          var optionalDelay = 800000;
           alertFactory.addAuto('success', $string, optionalDelay);
           $scope.developmentEnvironmentsList = response.data;
         })
         .catch(function(response, status) {
-          var optionalDelay = 5000;
+          var optionalDelay = 800000;
           var $string = "Error in deleting the environment "+env.envName;
           alertFactory.addAuto('danger', $string, optionalDelay);
         });
@@ -1835,7 +1835,7 @@
     })
     .catch(function(response, status) {
       //	$scope.loading = false;
-      var optionalDelay = 5000;
+      var optionalDelay = 800000;
       var $string = "Error in fetching updated list of assets";
       alertFactory.addAuto('danger', $string, optionalDelay);
     });
@@ -1864,12 +1864,12 @@
           $scope.finish = function($event, env) {
             $http.post('/api/sprints/editAssetDetails',env).then(function(response) {
               var $string = "updated the asset "+env.assetName+"!";
-              var optionalDelay = 2000;
+              var optionalDelay = 800000;
               $mdDialog.hide();
               alertFactory.addAuto('success', $string, optionalDelay);
             })
             .catch(function(response, status) {
-              var optionalDelay = 5000;
+              var optionalDelay = 800000;
               var $string = "Error in updating "+env.assetName;
               alertFactory.addAuto('danger', $string, optionalDelay);
             });
@@ -1904,7 +1904,7 @@
             if(  $scope.searchText != ""){
               $http.post('/api/sprints/insertAsset',asset).then(function(response) {
                 var $string = "Added "+asset+" to the catalogue of assets!";
-                var optionalDelay = 2000;
+                var optionalDelay = 800000;
                 $mdDialog.hide();
                 alertFactory.addAuto('success', $string, optionalDelay);
               }).then(function(){
@@ -1914,19 +1914,19 @@
                 })
                 .catch(function(response, status) {
                   //	$scope.loading = false;
-                  var optionalDelay = 5000;
+                  var optionalDelay = 800000;
                   var $string = "Error in fetching updated list of assets";
                   alertFactory.addAuto('danger', $string, optionalDelay);
                 });
               })
               .catch(function(response, status) {
-                var optionalDelay = 5000;
+                var optionalDelay = 800000;
                 var $string = "Error in adding "+envi+" to the list of assets";
                 alertFactory.addAuto('danger', $string, optionalDelay);
               });
             }
             else{
-              var optionalDelay = 3000;
+              var optionalDelay = 800000;
               var $string = "Asset name cannot be empty";
               alertFactory.addAuto('danger', $string, optionalDelay);
             }
@@ -1952,12 +1952,12 @@
       $mdDialog.show(confirm).then(function() {
         $http.delete('/api/sprints/deleteAsset/'+env.assetId).then(function(response) {
           var $string = "Deleted the asset "+env.assetName;
-          var optionalDelay = 3000;
+          var optionalDelay = 800000;
           alertFactory.addAuto('success', $string, optionalDelay);
           $scope.assetsList = response.data;
         })
         .catch(function(response, status) {
-          var optionalDelay = 5000;
+          var optionalDelay = 800000;
           var $string = "Error in deleting the asset "+env.assetName;
           alertFactory.addAuto('danger', $string, optionalDelay);
         });
@@ -1980,7 +1980,7 @@
     })
     .catch(function(response, status) {
       //	$scope.loading = false;
-      var optionalDelay = 5000;
+      var optionalDelay = 800000;
       var $string = "Error in fetching updated list of domains";
       alertFactory.addAuto('danger', $string, optionalDelay);
     });
@@ -2009,12 +2009,12 @@
           $scope.finish = function($event, env) {
             $http.post('/api/sprints/editDomainDetails',env).then(function(response) {
               var $string = "updated the domain "+env.domainName+"!";
-              var optionalDelay = 2000;
+              var optionalDelay = 800000;
               $mdDialog.hide();
               alertFactory.addAuto('success', $string, optionalDelay);
             })
             .catch(function(response, status) {
-              var optionalDelay = 5000;
+              var optionalDelay = 800000;
               var $string = "Error in updating "+env.domainName;
               alertFactory.addAuto('danger', $string, optionalDelay);
             });
@@ -2048,7 +2048,7 @@
             if(  $scope.searchText != ""){
               $http.post('/api/sprints/insertDomain',domain).then(function(response) {
                 var $string = "Added "+ domain +" to the catalogue of domains!";
-                var optionalDelay = 2000;
+                var optionalDelay = 800000;
                 $mdDialog.hide();
                 alertFactory.addAuto('success', $string, optionalDelay);
               }).then(function(){
@@ -2058,19 +2058,19 @@
                 })
                 .catch(function(response, status) {
                   //	$scope.loading = false;
-                  var optionalDelay = 5000;
+                  var optionalDelay = 800000;
                   var $string = "Error in fetching updated list of domains";
                   alertFactory.addAuto('danger', $string, optionalDelay);
                 });
               })
               .catch(function(response, status) {
-                var optionalDelay = 5000;
+                var optionalDelay = 800000;
                 var $string = "Error in adding "+domain+" to the list of domains";
                 alertFactory.addAuto('danger', $string, optionalDelay);
               });
             }
             else{
-              var optionalDelay = 3000;
+              var optionalDelay = 800000;
               var $string = "Domain name cannot be empty";
               alertFactory.addAuto('danger', $string, optionalDelay);
             }
@@ -2096,12 +2096,12 @@
       $mdDialog.show(confirm).then(function() {
         $http.delete('/api/sprints/deleteDomain/'+env.domainId).then(function(response) {
           var $string = "Deleted the domain "+env.domainName;
-          var optionalDelay = 3000;
+          var optionalDelay = 800000;
           alertFactory.addAuto('success', $string, optionalDelay);
           $scope.domainsList = response.data;
         })
         .catch(function(response, status) {
-          var optionalDelay = 5000;
+          var optionalDelay = 800000;
           var $string = "Error in deleting the domain "+env.domainName;
           alertFactory.addAuto('danger', $string, optionalDelay);
         });
@@ -2124,7 +2124,7 @@
     })
     .catch(function(response, status) {
       //	$scope.loading = false;
-      var optionalDelay = 5000;
+      var optionalDelay = 800000;
       var $string = "Error in fetching list of sprint requirements";
       alertFactory.addAuto('danger', $string, optionalDelay);
     });
@@ -2153,12 +2153,12 @@
           $scope.finish = function($event, env) {
             $http.post('/api/sprints/editRequirementDetails',env).then(function(response) {
               var $string = "updated the requirement "+env.sprintRequirementName+"!";
-              var optionalDelay = 2000;
+              var optionalDelay = 800000;
               $mdDialog.hide();
               alertFactory.addAuto('success', $string, optionalDelay);
             })
             .catch(function(response, status) {
-              var optionalDelay = 5000;
+              var optionalDelay = 800000;
               var $string = "Error in updating "+env.sprintRequirementName;
               alertFactory.addAuto('danger', $string, optionalDelay);
             });
@@ -2195,7 +2195,7 @@
               requirement.sprintRequirementDescription = description;
               $http.post('/api/sprints/insertRequirementAndDescription',requirement).then(function(response) {
                 var $string = "Added "+req+" to the catalogue of requirements!";
-                var optionalDelay = 2000;
+                var optionalDelay = 800000;
                 $mdDialog.hide();
                 alertFactory.addAuto('success', $string, optionalDelay);
               }).then(function(){
@@ -2205,19 +2205,19 @@
                 })
                 .catch(function(response, status) {
                   //	$scope.loading = false;
-                  var optionalDelay = 5000;
+                  var optionalDelay = 800000;
                   var $string = "Error in fetching list of sprint requirements";
                   alertFactory.addAuto('danger', $string, optionalDelay);
                 });
               })
               .catch(function(response, status) {
-                var optionalDelay = 5000;
+                var optionalDelay = 800000;
                 var $string = "Error in adding "+req+" to the list of requirements";
                 alertFactory.addAuto('danger', $string, optionalDelay);
               });
             }
             else{
-              var optionalDelay = 3000;
+              var optionalDelay = 800000;
               var $string = "Sprint requirement name cannot be empty";
               alertFactory.addAuto('danger', $string, optionalDelay);
             }
@@ -2244,12 +2244,12 @@
       $mdDialog.show(confirm).then(function() {
         $http.delete('/api/sprints/deleteRequirement/'+env.sprintRequirementId).then(function(response) {
           var $string = "Deleted the requirement "+env.sprintRequirementName;
-          var optionalDelay = 3000;
+          var optionalDelay = 800000;
           alertFactory.addAuto('success', $string, optionalDelay);
           $scope.requirementsList = response.data;
         })
         .catch(function(response, status) {
-          var optionalDelay = 5000;
+          var optionalDelay = 800000;
           var $string = "Error in deleting the requirement "+env.sprintRequirementName;
           alertFactory.addAuto('danger', $string, optionalDelay);
         });
@@ -2323,12 +2323,12 @@
         $scope.parentProjectsList = parentProjectsList;
       })
       .catch(function(response, status) {
-        var optionalDelay = 5000;
+        var optionalDelay = 800000;
         var $string = "Error in fetching list of projects";
         alertFactory.addAuto('danger', $string, optionalDelay);
       })
     }) .catch(function(response, status) {
-      var optionalDelay = 5000;
+      var optionalDelay = 800000;
       var $string = "Error in fetching summary of projects";
       alertFactory.addAuto('danger', $string, optionalDelay);
     });
@@ -2340,7 +2340,7 @@
       }
     })
     .catch(function(response, status) {
-      var optionalDelay = 5000;
+      var optionalDelay = 800000;
       var $string = "Error in fetching list of options";
       alertFactory.addAuto('danger', $string, optionalDelay);
     });
@@ -2364,21 +2364,21 @@
       });
     };
     //  $scope.project = {};
-    var optionalDelay = "800000";
+    var optionalDelay = 800000;
     //$rootScope.alerts = [];
     var $string = "Note : The informaton entered on this page will be used to create a new project on Redmine.";
     alertFactory.addAuto('info', $string, optionalDelay);
     $http.get('/api/options/statusOfOptions').then(function(response) {
       var optionValues = response.data;
       if(optionValues.addNewProject == '0'){
-        var optionalDelay = 6000;
+        var optionalDelay = 800000;
         var $string = "This page cannot be accessed as adding new projects option has been disabled. Check options on user >> my page";
         alertFactory.addAuto('danger', $string, optionalDelay);
         $state.go("management.projects.projectsTable" );
       }
     })
     .catch(function(response, status) {
-      var optionalDelay = 5000;
+      var optionalDelay = 800000;
       var $string = "Error in fetching list of options";
       alertFactory.addAuto('danger', $string, optionalDelay);
     });
@@ -2413,7 +2413,7 @@
       $scope.projectsList = projectsList;
     })
     .catch(function(response, status) {
-      var optionalDelay = 5000;
+      var optionalDelay = 800000;
       var $string = "Error in fetching list of projects";
       alertFactory.addAuto('danger', $string, optionalDelay);
     });
@@ -2421,7 +2421,7 @@
     {
       $scope.peopleList = response.data;
     }).catch(function(response, status) {
-      var optionalDelay = 5000;
+      var optionalDelay = 800000;
       var $string = "Error in fetching list of people";
       alertFactory.addAuto('danger', $string, optionalDelay);
     });
@@ -2475,11 +2475,11 @@
           var createdProject = response.data;
           $state.go("management.projects.addProject.participants",createdProject);
           var $string = "Successfully created a new project!";
-          var optionalDelay = 3000;
+          var optionalDelay = 800000;
           alertFactory.addAuto('success', $string, optionalDelay);
         })
         .catch(function(response, status) {
-          var optionalDelay = 5000;
+          var optionalDelay = 800000;
           var $string = response.data.message;
           alertFactory.addAuto('danger', $string, optionalDelay);
         });
@@ -2570,11 +2570,11 @@
           var updatedPerson = response.data;
           $state.go("management.people.editPerson.editCapabilities", updatedPerson);
           var $string = "Successfully updated " +person.firstName;
-          var optionalDelay = 3000;
+          var optionalDelay = 800000;
           alertFactory.addAuto('success', $string, optionalDelay);
         })
         .catch(function(response, status) {
-          var optionalDelay = 5000;
+          var optionalDelay = 800000;
           var $string = "Error in updating person. "+ response.data.errors[0]+"!";
           alertFactory.addAuto('danger', $string, optionalDelay);
         });
@@ -2736,14 +2736,14 @@
         questionnaire.sprintId = $scope.sprintId;
         $http.post('/api/sprints/updateQuestionnaire',questionnaire).then(function(response)
         {
-          var optionalDelay = 3000;
+          var optionalDelay = 800000;
           var $string = "Updated the questionnaire";
           //  $state.go("management.sprints.editSprint.existingSprint",response.data);
           alertFactory.addAuto('success', $string, optionalDelay);
         })
         .catch(function(response, status) {
           //	$scope.loading = false;
-          var optionalDelay = 5000;
+          var optionalDelay = 800000;
           var $string = "Error in updating the questionnaire";
           alertFactory.addAuto('danger', $string, optionalDelay);
         });
@@ -2825,7 +2825,7 @@
       $scope.projectRolesList= response.data;
     }).catch(function(response, status) {
       //	$scope.loading = false;
-      var optionalDelay = 5000;
+      var optionalDelay = 800000;
       var $string = "Error in fetching roles";
       alertFactory.addAuto('danger', $string, optionalDelay);
     }).then(function(){
@@ -2921,7 +2921,7 @@
           $http.get('/api/sprints/getSprintParticipants/'+$scope.sprintId+'/'+$scope.projectId).then(function(response)
           {
             if(response.data.length==0){
-              var optionalDelay = 7000;
+              var optionalDelay = 800000;
               var $string = "Redirected due to no sprint participants or page refresh.Do not refresh while selecting people";
               $state.go('management.sprints.editSprint.existingSprint', {projectId: $scope.projectId , sprintId: $scope.sprintId});
               alertFactory.addAuto('danger', $string, optionalDelay);
@@ -3001,7 +3001,7 @@
         })
         .catch(function(response, status) {
           //	$scope.loading = false;
-          var optionalDelay = 5000;
+          var optionalDelay = 800000;
           var $string = "Error in fetching list of roles";
           alertFactory.addAuto('danger', $string, optionalDelay);
         });
@@ -3010,7 +3010,7 @@
           $scope.allCapabilitiesList = response.data;
         }).catch(function(response, status) {
           //	$scope.loading = false;
-          var optionalDelay = 5000;
+          var optionalDelay = 800000;
           var $string = "Error in fetching list of capabilities";
           alertFactory.addAuto('danger', $string, optionalDelay);
         });
@@ -3019,7 +3019,7 @@
           $scope.allProgrammingSkillsList = response.data;
         }).catch(function(response, status) {
           //	$scope.loading = false;
-          var optionalDelay = 5000;
+          var optionalDelay = 800000;
           var $string = "Error in fetching list of programming skills";
           alertFactory.addAuto('danger', $string, optionalDelay);
         });
@@ -3063,7 +3063,7 @@
               $scope.showOverviewGraph = false;
               $scope.programmingSkillsTimelineGraph = false;
               $scope.capabilitiesTimelineGraph = false;
-              var optionalDelay = 5000;
+              var optionalDelay = 800000;
               var $string = person.personName+"'s programming skills haven't been updated!";
               alertFactory.addAuto('danger', $string, optionalDelay);
             }
@@ -3176,7 +3176,7 @@
               $scope.programmingSkillsOverviewGraph = false;
               $scope.showOverviewGraph = false;
               $scope.capabilitiesTimelineGraph = false;
-              var optionalDelay = 5000;
+              var optionalDelay = 800000;
               var $string = person.personName+"'s programming skills haven't been updated!";
               alertFactory.addAuto('danger', $string, optionalDelay);
             }
@@ -3330,7 +3330,7 @@
             }
             if($scope.capabilitiesList.length ==0){
               $scope.capabilitiesTimelineGraph  = false;
-              var optionalDelay = 5000;
+              var optionalDelay = 800000;
               var $string = "List of capabilities haven't been updated!";
               alertFactory.addAuto('danger', $string, optionalDelay);
             }
@@ -3351,7 +3351,7 @@
               $scope.programmingSkillsOverviewGraph = false;
               $scope.showOverviewGraph = false;
               $scope.programmingSkillsTimelineGraph = false;
-              var optionalDelay = 5000;
+              var optionalDelay = 800000;
               var $string = person.personName+"'s capabilities haven't been updated!";
               alertFactory.addAuto('danger', $string, optionalDelay);
             }
@@ -3585,7 +3585,7 @@
               }
               else{
                 //$scope.capabilityComparedataValues.push('0');
-                var optionalDelay = 5000;
+                var optionalDelay = 800000;
                 var $string = value.personName+"'s programming skills haven't been updated!";
                 alertFactory.addAuto('danger', $string, optionalDelay);
               }
@@ -3595,7 +3595,7 @@
           }).then(function(){
             if($scope.skillComparelineData.length ==0){
               $scope.skillsCompareGraph =false;
-              var optionalDelay = 5000;
+              var optionalDelay = 800000;
               var $string = "The skill '"+skill.skillName+"' for the selected people hasn't been updated!";
               alertFactory.addAuto('danger', $string, optionalDelay);
             }
@@ -3657,7 +3657,7 @@
                 {
                   personName = response.data.PersonName;
                 }).then(function(){
-                  var optionalDelay = 5000;
+                  var optionalDelay = 800000;
                   var $string = personName+"'s capabilities haven't been updated!";
                   alertFactory.addAuto('danger', $string, optionalDelay);
                 });
@@ -3762,7 +3762,7 @@
             }).then(function(){
               if($scope.capabilityComparelineData.length ==0){
                 $scope.capabilitiesCompareGraph =false;
-                var optionalDelay = 5000;
+                var optionalDelay = 800000;
                 var $string = "The capabilities of the selected people haven't been updated!";
                 alertFactory.addAuto('danger', $string, optionalDelay);
               }
@@ -3785,7 +3785,7 @@
               $scope.programmingSkillsOverviewGraph = false;
               $scope.programmingSkillsTimelineGraph = false;
               $scope.skillsCompareGraph =false;
-              var optionalDelay = 5000;
+              var optionalDelay = 800000;
               var $string = person.personName+"'s capabilities haven't been updated!";
               alertFactory.addAuto('danger', $string, optionalDelay);
             }
@@ -3936,7 +3936,7 @@
         })
         .catch(function(response, status) {
           //	$scope.loading = false;
-          var optionalDelay = 5000;
+          var optionalDelay = 800000;
           var $string = "Error in fetching sprint summary details";
           alertFactory.addAuto('danger', $string, optionalDelay);
         });
@@ -3999,11 +3999,11 @@
             sprint.sprintId = $scope.sprintId;
             $http.delete('/api/sprints/deleteSprintParticipants/'+$scope.sprintId+"/"+$scope.projectId).then(function(response) {
               var $string = "Cleared sprint participants!";
-              var optionalDelay = 3000;
+              var optionalDelay = 800000;
               //alertFactory.addAuto('success', $string, optionalDelay);
             })
             .catch(function(response, status) {
-              var optionalDelay = 5000;
+              var optionalDelay = 800000;
               var $string = "Error in deleting sprint participants";
               alertFactory.addAuto('danger', $string, optionalDelay);
             });
@@ -4036,11 +4036,11 @@
           $http.put('/api/sprints/updateSprintParticipants',sprintDetails).then(function(response) {
             $state.go("management.sprints.peopleToIssues",sprintDetails);
             var $string = "Successfully added the sprint participants";
-            var optionalDelay = 3000;
+            var optionalDelay = 800000;
             alertFactory.addAuto('success', $string, optionalDelay);
           })
           .catch(function(response, status) {
-            var optionalDelay = 5000;
+            var optionalDelay = 800000;
             var $string = "Error in adding sprint participants";
             alertFactory.addAuto('danger', $string, optionalDelay);
           })
@@ -4072,25 +4072,25 @@
           $http.put('/api/sprints/updateSprintParticipants',sprintDetails).then(function(response) {
             $state.go("management.sprints.peopleToIssues",sprintDetails);
             var $string = "Successfully added the sprint participants";
-            var optionalDelay = 3000;
+            var optionalDelay = 800000;
             alertFactory.addAuto('success', $string, optionalDelay);
           })
           .catch(function(response, status) {
-            var optionalDelay = 5000;
+            var optionalDelay = 800000;
             var $string = "Error in adding sprint participants";
             alertFactory.addAuto('danger', $string, optionalDelay);
           })
         };
       })
       .catch(function(response, status) {
-        var optionalDelay = 5000;
+        var optionalDelay = 800000;
         var $string = "Error in fetching list of people";
         alertFactory.addAuto('danger', $string, optionalDelay);
       });
     })
     .catch(function(response, status) {
       //	$scope.loading = false;
-      var optionalDelay = 5000;
+      var optionalDelay = 800000;
       var $string = "Error in fetching roles of people";
       alertFactory.addAuto('danger', $string, optionalDelay);
     });
@@ -4255,7 +4255,7 @@
       $scope.sprintDetails = response.data;
     })
     .catch(function(response, status) {
-      var optionalDelay = 5000;
+      var optionalDelay = 800000;
       var $string = "Error in fetching sprint details";
       alertFactory.addAuto('danger', $string, optionalDelay);
     });
@@ -4264,7 +4264,7 @@
       $scope.projectRolesList= response.data;
     }).catch(function(response, status) {
       //	$scope.loading = false;
-      var optionalDelay = 5000;
+      var optionalDelay = 800000;
       var $string = "Error in fetching roles";
       alertFactory.addAuto('danger', $string, optionalDelay);
     }).then(function(){
@@ -4374,7 +4374,7 @@
           $http.get('/api/sprints/getSprintParticipants/'+$scope.sprintId+'/'+$scope.projectId).then(function(response)
           {
             if(response.data.length==0){
-              var optionalDelay = 7000;
+              var optionalDelay = 800000;
               var $string = "No sprint participant exists!";
               // $state.go('management.sprints.editSprint.existingSprint', {projectId: $scope.projectId , sprintId: $scope.sprintId});
               alertFactory.addAuto('info', $string, optionalDelay);
@@ -4457,7 +4457,7 @@
         })
         .catch(function(response, status) {
           //	$scope.loading = false;
-          var optionalDelay = 5000;
+          var optionalDelay = 800000;
           var $string = "Error in fetching list of roles";
           alertFactory.addAuto('danger', $string, optionalDelay);
         });
@@ -4466,7 +4466,7 @@
           $scope.allCapabilitiesList = response.data;
         }).catch(function(response, status) {
           //	$scope.loading = false;
-          var optionalDelay = 5000;
+          var optionalDelay = 800000;
           var $string = "Error in fetching list of capabilities";
           alertFactory.addAuto('danger', $string, optionalDelay);
         });
@@ -4475,7 +4475,7 @@
           $scope.allProgrammingSkillsList = response.data;
         }).catch(function(response, status) {
           //	$scope.loading = false;
-          var optionalDelay = 5000;
+          var optionalDelay = 800000;
           var $string = "Error in fetching list of programming skills";
           alertFactory.addAuto('danger', $string, optionalDelay);
         });
@@ -4519,7 +4519,7 @@
               $scope.showOverviewGraph = false;
               $scope.programmingSkillsTimelineGraph = false;
               $scope.capabilitiesTimelineGraph = false;
-              var optionalDelay = 5000;
+              var optionalDelay = 800000;
               var $string = person.personName+"'s programming skills haven't been updated!";
               alertFactory.addAuto('danger', $string, optionalDelay);
             }
@@ -4632,7 +4632,7 @@
               $scope.programmingSkillsOverviewGraph = false;
               $scope.showOverviewGraph = false;
               $scope.capabilitiesTimelineGraph = false;
-              var optionalDelay = 5000;
+              var optionalDelay = 800000;
               var $string = person.personName+"'s programming skills haven't been updated!";
               alertFactory.addAuto('danger', $string, optionalDelay);
             }
@@ -4786,7 +4786,7 @@
             }
             if($scope.capabilitiesList.length ==0){
               $scope.capabilitiesTimelineGraph  = false;
-              var optionalDelay = 5000;
+              var optionalDelay = 800000;
               var $string = "List of capabilities haven't been updated!";
               alertFactory.addAuto('danger', $string, optionalDelay);
             }
@@ -4807,7 +4807,7 @@
               $scope.programmingSkillsOverviewGraph = false;
               $scope.showOverviewGraph = false;
               $scope.programmingSkillsTimelineGraph = false;
-              var optionalDelay = 5000;
+              var optionalDelay = 800000;
               var $string = person.personName+"'s capabilities haven't been updated!";
               alertFactory.addAuto('danger', $string, optionalDelay);
             }
@@ -5041,7 +5041,7 @@
               }
               else{
                 //$scope.capabilityComparedataValues.push('0');
-                var optionalDelay = 5000;
+                var optionalDelay = 800000;
                 var $string = value.personName+"'s programming skills haven't been updated!";
                 alertFactory.addAuto('danger', $string, optionalDelay);
               }
@@ -5051,7 +5051,7 @@
           }).then(function(){
             if($scope.skillComparelineData.length ==0){
               $scope.skillsCompareGraph =false;
-              var optionalDelay = 5000;
+              var optionalDelay = 800000;
               var $string = "The skill '"+skill.skillName+"' for the selected people hasn't been updated!";
               alertFactory.addAuto('danger', $string, optionalDelay);
             }
@@ -5113,7 +5113,7 @@
                 {
                   personName = response.data.PersonName;
                 }).then(function(){
-                  var optionalDelay = 5000;
+                  var optionalDelay = 800000;
                   var $string = personName+"'s capabilities haven't been updated!";
                   alertFactory.addAuto('danger', $string, optionalDelay);
                 });
@@ -5218,7 +5218,7 @@
             }).then(function(){
               if($scope.capabilityComparelineData.length ==0){
                 $scope.capabilitiesCompareGraph =false;
-                var optionalDelay = 5000;
+                var optionalDelay = 800000;
                 var $string = "The capabilities of the selected people haven't been updated!";
                 alertFactory.addAuto('danger', $string, optionalDelay);
               }
@@ -5241,7 +5241,7 @@
               $scope.programmingSkillsOverviewGraph = false;
               $scope.programmingSkillsTimelineGraph = false;
               $scope.skillsCompareGraph =false;
-              var optionalDelay = 5000;
+              var optionalDelay = 800000;
               var $string = person.personName+"'s capabilities haven't been updated!";
               alertFactory.addAuto('danger', $string, optionalDelay);
             }
@@ -5392,7 +5392,7 @@
         })
         .catch(function(response, status) {
           //	$scope.loading = false;
-          var optionalDelay = 5000;
+          var optionalDelay = 800000;
           var $string = "Error in fetching sprint summary details";
           alertFactory.addAuto('danger', $string, optionalDelay);
         });
@@ -5455,11 +5455,11 @@
             sprint.sprintId = $scope.sprintId;
             $http.delete('/api/sprints/deleteSprintParticipants/'+$scope.sprintId+"/"+$scope.projectId).then(function(response) {
               var $string = "Cleared sprint participants!";
-              var optionalDelay = 3000;
+              var optionalDelay = 800000;
               //alertFactory.addAuto('success', $string, optionalDelay);
             })
             .catch(function(response, status) {
-              var optionalDelay = 5000;
+              var optionalDelay = 800000;
               var $string = "Error in deleting sprint participants";
               alertFactory.addAuto('danger', $string, optionalDelay);
             });
@@ -5492,25 +5492,25 @@
           $http.put('/api/sprints/updateSprintParticipants',sprintDetails).then(function(response) {
             //$state.go("management.sprints.editSprint.peopleToIssues",sprintDetails);
             var $string = "Successfully updated the sprint participants";
-            var optionalDelay = 3000;
+            var optionalDelay = 800000;
             alertFactory.addAuto('success', $string, optionalDelay);
           })
           .catch(function(response, status) {
-            var optionalDelay = 5000;
+            var optionalDelay = 800000;
             var $string = "Error in adding sprint participants";
             alertFactory.addAuto('danger', $string, optionalDelay);
           })
         };
       })
       .catch(function(response, status) {
-        var optionalDelay = 5000;
+        var optionalDelay = 800000;
         var $string = "Error in fetching list of people";
         alertFactory.addAuto('danger', $string, optionalDelay);
       });
     })
     .catch(function(response, status) {
       //	$scope.loading = false;
-      var optionalDelay = 5000;
+      var optionalDelay = 800000;
       var $string = "Error in fetching roles of people";
       alertFactory.addAuto('danger', $string, optionalDelay);
     });
@@ -5614,7 +5614,7 @@
     $scope.selectedSecurityRisk = [];
     $scope.removeSelected = {};
     var initialList = [];
-    var optionalDelay = "800000";
+    var optionalDelay = 800000;
     var $string = "Note : Assigning an issue to a person will update the details on Redmine";
     alertFactory.addAuto('info', $string, optionalDelay);
     var redmineURL = "";
@@ -5623,7 +5623,7 @@
       redmineURL= response.data.success;
     })
     .catch(function(response, status) {
-      var optionalDelay = 5000;
+      var optionalDelay = 800000;
       var $string = "Error in fetching Redmine URL";
       alertFactory.addAuto('danger', $string, optionalDelay);
     });
@@ -5638,7 +5638,7 @@
       });
     })
     .catch(function(response, status) {
-      var optionalDelay = 5000;
+      var optionalDelay = 800000;
       var $string = "Error in fetching list of sprint participants";
       alertFactory.addAuto('danger', $string, optionalDelay);
     }).then(function(){
@@ -5695,7 +5695,7 @@
             }
           });
           if(count == 0 ){
-            var optionalDelay = 4000;
+            var optionalDelay = 800000;
             var $string = "Select atleast one assignee";
             alertFactory.addAuto('warning', $string, optionalDelay);
             return null;
@@ -5781,11 +5781,11 @@
           $http.post('/api/issues/updateAllocatedIssues',issueDetails).then(function(response) {
             //$state.go("management.sprints.sprintsTable");
             var $string = "Successfully added people to issues";
-            var optionalDelay = 3000;
+            var optionalDelay = 800000;
             alertFactory.addAuto('success', $string, optionalDelay);
           })
           .catch(function(response, status) {
-            var optionalDelay = 5000;
+            var optionalDelay = 800000;
             var $string = "Error in adding people to issues";
             alertFactory.addAuto('danger', $string, optionalDelay);
           })
@@ -5852,7 +5852,7 @@
         $scope.sprintDetails = response.data;
       })
       .catch(function(response, status) {
-        var optionalDelay = 5000;
+        var optionalDelay = 800000;
         var $string = "Error in fetching sprint details";
         alertFactory.addAuto('danger', $string, optionalDelay);
       })
@@ -5862,7 +5862,7 @@
       $scope.rolesList= response.data;
     }).catch(function(response, status) {
       //	$scope.loading = false;
-      var optionalDelay = 5000;
+      var optionalDelay = 800000;
       var $string = "Error in fetching roles";
       alertFactory.addAuto('danger', $string, optionalDelay);
     }).then(function(){
@@ -5992,7 +5992,7 @@
       $scope.addTab = function (title, view) {
         for (var i =  tabs.length - 1; i >= 0; i--) {
           if(tabs[i].title == title){
-            var optionalDelay = 5000;
+            var optionalDelay = 800000;
             var $string = "You already selected the requirement "+ title;
             alertFactory.addAuto('warning', $string, optionalDelay);
             return;
@@ -6064,11 +6064,11 @@
               var txt = "{\"value\":\""+req+"\",\"display\":\""+req+"\"}";
               $scope.selectedItem = angular.fromJson(txt);
               // $scope.selectedItem= programmingSkillEntered.value;
-              var optionalDelay = 3000;
+              var optionalDelay = 800000;
               alertFactory.addAuto('success', $string, optionalDelay);
             })
             .catch(function(response, status) {
-              var optionalDelay = 5000;
+              var optionalDelay = 800000;
               var $string = "Error in adding the requirement to the catalogue of requirements";
               alertFactory.addAuto('danger', $string, optionalDelay);
             });
@@ -6091,14 +6091,14 @@
         $scope.requirements =RequirementsEntered ;
         $http.post('/api/sprints/updateRequirementsSelection',$scope.requirements).then(function(response)
         {
-          var optionalDelay = 3000;
+          var optionalDelay = 800000;
           var $string = "Sprint requirements updated!";
           $state.go("management.sprints.editSprint.sprintParticipants", response.data);
           alertFactory.addAuto('success', $string, optionalDelay);
         })
         .catch(function(response, status) {
           //	$scope.loading = false;
-          var optionalDelay = 3000;
+          var optionalDelay = 800000;
           var $string = "Error in adding sprint requirements";
           alertFactory.addAuto('danger', $string, optionalDelay);
         });
@@ -6208,11 +6208,11 @@
             var txt = "{\"value\":\""+req+"\",\"display\":\""+req+"\"}";
             $scope.selectedItem = angular.fromJson(txt);
             // $scope.selectedItem= programmingSkillEntered.value;
-            var optionalDelay = 3000;
+            var optionalDelay = 800000;
             alertFactory.addAuto('success', $string, optionalDelay);
           })
           .catch(function(response, status) {
-            var optionalDelay = 5000;
+            var optionalDelay = 800000;
             var $string = "Error in adding the requirement to the catalogue of requirements";
             alertFactory.addAuto('danger', $string, optionalDelay);
           });
@@ -6234,14 +6234,14 @@
       $scope.requirements =RequirementsEntered ;
       $http.put('/api/sprints/insertRequirementsSelection',$scope.requirements).then(function(response)
       {
-        var optionalDelay = 3000;
+        var optionalDelay = 800000;
         var $string = "Sprint requirements saved!";
         $state.go("management.sprints.addSprint.sprintRoles", response.data);
         alertFactory.addAuto('success', $string, optionalDelay);
       })
       .catch(function(response, status) {
         //	$scope.loading = false;
-        var optionalDelay = 3000;
+        var optionalDelay = 800000;
         var $string = "Error in adding sprint requirements";
         alertFactory.addAuto('danger', $string, optionalDelay);
       });
@@ -6252,7 +6252,7 @@
     $scope.addTab = function (title, view) {
       for (var i =  tabs.length - 1; i >= 0; i--) {
         if(tabs[i].title == title){
-          var optionalDelay = 5000;
+          var optionalDelay = 800000;
           var $string = "You already selected the requirement "+ title;
           alertFactory.addAuto('warning', $string, optionalDelay);
           return;
@@ -6310,7 +6310,7 @@
       $scope.developmentEnvironmentsList = response.data;
     })
     .catch(function(response, status) {
-      var optionalDelay = 5000;
+      var optionalDelay = 800000;
       var $string = "Error in fetching list of development environments";
       alertFactory.addAuto('danger', $string, optionalDelay);
     })
@@ -6371,14 +6371,14 @@
         }).then (function(){
           $http.post('/api/sprints/insertCompanyDrivenFactors',$scope.factors).then(function(response)
           {
-            var optionalDelay = 3000;
+            var optionalDelay = 800000;
             var $string = "Updated company driven factors of the sprint";
             newEnvironments.resetEnvironments();
             $scope.extraEnvironmentsList =[];
             alertFactory.addAuto('success', $string, optionalDelay);
             $state.go("management.sprints.editSprint.sprintRequirements", response.data, {reload: true} );
           }).catch(function(response, status) {
-            var optionalDelay = 5000;
+            var optionalDelay = 800000;
             var $string = "Error in adding company driven factors to the sprint. "+ response.data.error;
             alertFactory.addAuto('danger', $string, optionalDelay);
           })
@@ -6412,12 +6412,12 @@
                 addedEnvironment.envName = envi;
                 //$scope.extraDomainsList = addedDomain;
                 newEnvironments.setAddedEnvironments(addedEnvironment);
-                var optionalDelay = 2000;
+                var optionalDelay = 800000;
                 $mdDialog.hide();
                 alertFactory.addAuto('success', $string, optionalDelay);
               })
               .catch(function(response, status) {
-                var optionalDelay = 5000;
+                var optionalDelay = 800000;
                 var $string = "Error in adding"+envi+" to the list of environments";
                 alertFactory.addAuto('danger', $string, optionalDelay);
               });
@@ -6478,7 +6478,7 @@
         $scope.developmentEnvironmentsList = response.data;
       })
       .catch(function(response, status) {
-        var optionalDelay = 5000;
+        var optionalDelay = 800000;
         var $string = "Error in fetching list of development environments";
         alertFactory.addAuto('danger', $string, optionalDelay);
       })
@@ -6526,7 +6526,7 @@
         }).then (function(){
           $http.post('/api/sprints/insertCompanyDrivenFactors',$scope.factors).then(function(response)
           {
-            var optionalDelay = 3000;
+            var optionalDelay = 800000;
             var $string = "Added company driven factors to the sprint";
             newEnvironments.resetEnvironments();
             $scope.extraEnvironmentsList =[];
@@ -6535,7 +6535,7 @@
           })
         })
         .catch(function(response, status) {
-          var optionalDelay = 5000;
+          var optionalDelay = 800000;
           var $string = "Error in adding company driven factors to the sprint. "+ response.data.error;
           alertFactory.addAuto('danger', $string, optionalDelay);
         })
@@ -6568,12 +6568,12 @@
                 addedEnvironment.envName = envi;
                 //$scope.extraDomainsList = addedDomain;
                 newEnvironments.setAddedEnvironments(addedEnvironment);
-                var optionalDelay = 2000;
+                var optionalDelay = 800000;
                 $mdDialog.hide();
                 alertFactory.addAuto('success', $string, optionalDelay);
               })
               .catch(function(response, status) {
-                var optionalDelay = 5000;
+                var optionalDelay = 800000;
                 var $string = "Error in adding"+envi+" to the list of environments";
                 alertFactory.addAuto('danger', $string, optionalDelay);
               });
@@ -6603,7 +6603,7 @@
       $scope.updateReadOnly  = function (readOnly){
         readOnly=false;
         $scope.readOnly = readOnly;
-        var optionalDelay = "800000";
+        var optionalDelay = 800000;
         var $string = "Note : Modifying the sprint name, description, end date and associated project fields will update the details on Redmine";
         alertFactory.addAuto('info', $string, optionalDelay);
       };
@@ -6653,7 +6653,7 @@
         })
         .catch(function(response, status) {
           //	$scope.loading = false;
-          var optionalDelay = 5000;
+          var optionalDelay = 800000;
           var $string = "Error in fetching updated list of domains";
           alertFactory.addAuto('danger', $string, optionalDelay);
         });
@@ -6664,7 +6664,7 @@
         })
         .catch(function(response, status) {
           //	$scope.loading = false;
-          var optionalDelay = 5000;
+          var optionalDelay = 800000;
           var $string = "Error in fetching updated list of assets";
           alertFactory.addAuto('danger', $string, optionalDelay);
         });
@@ -6807,12 +6807,12 @@
                     addedDomain.domainName = domain;
                     //$scope.extraDomainsList = addedDomain;
                     newDomains.setAddedDomains(addedDomain);
-                    var optionalDelay = 2000;
+                    var optionalDelay = 800000;
                     $mdDialog.hide();
                     alertFactory.addAuto('success', $string, optionalDelay);
                   })
                   .catch(function(response, status) {
-                    var optionalDelay = 5000;
+                    var optionalDelay = 800000;
                     var $string = "Error in adding domain to the list of domains";
                     alertFactory.addAuto('danger', $string, optionalDelay);
                   });
@@ -6853,12 +6853,12 @@
                     addedAsset.assetName = asset;
                     //$scope.extraDomainsList = addedDomain;
                     newAssets.setAddedAssets(addedAsset);
-                    var optionalDelay = 2000;
+                    var optionalDelay = 800000;
                     $mdDialog.hide();
                     alertFactory.addAuto('success', $string, optionalDelay);
                   })
                   .catch(function(response, status) {
-                    var optionalDelay = 5000;
+                    var optionalDelay = 800000;
                     var $string = "Error in adding asset to the list of assets";
                     alertFactory.addAuto('danger', $string, optionalDelay);
                   });
@@ -6937,14 +6937,14 @@
                   var createdSprint = response.data;
                   $state.go("management.sprints.editSprint.companyFactors", createdSprint);
                   var $string = "Successfully updated the sprint " +sprint.sprintName;
-                  var optionalDelay = 3000;
+                  var optionalDelay = 800000;
                   alertFactory.addAuto('success', $string, optionalDelay);
                   newDomains.resetDomains();
                   newAssets.resetAssets();
                   $scope.extraDomainsList=[];
                   $scope.extraAssetsList =[];
                 }) .catch(function(response, status) {
-                  var optionalDelay = 5000;
+                  var optionalDelay = 800000;
                   var $string = {};
                   if(response.data.message !=null){
                     $string = response.data.message;
@@ -6972,7 +6972,7 @@
         });
       })
       .catch(function(response, status) {
-        var optionalDelay = 5000;
+        var optionalDelay = 800000;
         var $string = "Error in fetching list of projects";
         alertFactory.addAuto('danger', $string, optionalDelay);
       });
@@ -6987,20 +6987,20 @@
           }
         });
       };
-      var optionalDelay = "800000";
+      var optionalDelay = 800000;
       var $string = "Note : The informaton entered on this page will be used to create a new sprint on Redmine.";
       alertFactory.addAuto('info', $string, optionalDelay);
       $http.get('/api/options/statusOfOptions').then(function(response) {
         var optionValues = response.data;
         if(optionValues.addNewSprint == '0'){
-          var optionalDelay = 6000;
+          var optionalDelay = 800000;
           var $string = "This page cannot be accessed as adding new sprints option has been disabled. Check options on user >> my page";
           alertFactory.addAuto('danger', $string, optionalDelay);
           $state.go("management.sprints.sprintsTable" );
         }
       })
       .catch(function(response, status) {
-        var optionalDelay = 5000;
+        var optionalDelay = 800000;
         var $string = "Error in fetching list of options";
         alertFactory.addAuto('danger', $string, optionalDelay);
       });
@@ -7076,7 +7076,7 @@
         $scope.projectsList = projectsList;
       })
       .catch(function(response, status) {
-        var optionalDelay = 5000;
+        var optionalDelay = 800000;
         var $string = "Error in fetching list of projects";
         alertFactory.addAuto('danger', $string, optionalDelay);
       })
@@ -7086,7 +7086,7 @@
       })
       .catch(function(response, status) {
         //	$scope.loading = false;
-        var optionalDelay = 5000;
+        var optionalDelay = 800000;
         var $string = "Error in fetching updated list of domains";
         alertFactory.addAuto('danger', $string, optionalDelay);
       });
@@ -7096,7 +7096,7 @@
       })
       .catch(function(response, status) {
         //	$scope.loading = false;
-        var optionalDelay = 5000;
+        var optionalDelay = 800000;
         var $string = "Error in fetching updated list of assets";
         alertFactory.addAuto('danger', $string, optionalDelay);
       });
@@ -7146,7 +7146,7 @@
               var createdSprint = response.data;
               $state.go("management.sprints.addSprint.companyFactors", createdSprint);
               var $string = "Successfully added the sprint " +sprint.sprintName;
-              var optionalDelay = 3000;
+              var optionalDelay = 800000;
               alertFactory.addAuto('success', $string, optionalDelay);
               newDomains.resetDomains();
               newAssets.resetAssets();
@@ -7154,13 +7154,13 @@
               $scope.extraAssetsList =[];
             })
             .catch(function(response, status) {
-              var optionalDelay = 5000;
+              var optionalDelay = 800000;
               var $string = response.data.message;
               alertFactory.addAuto('danger', $string, optionalDelay);
             });
           })
           .catch(function(response, status) {
-            var optionalDelay = 5000;
+            var optionalDelay = 800000;
             var $string = "Error in adding the sprint.";
             alertFactory.addAuto('danger', $string, optionalDelay);
           });
@@ -7201,12 +7201,12 @@
                 addedDomain.domainName = domain;
                 //$scope.extraDomainsList = addedDomain;
                 newDomains.setAddedDomains(addedDomain);
-                var optionalDelay = 2000;
+                var optionalDelay = 800000;
                 $mdDialog.hide();
                 alertFactory.addAuto('success', $string, optionalDelay);
               })
               .catch(function(response, status) {
-                var optionalDelay = 5000;
+                var optionalDelay = 800000;
                 var $string = "Error in adding domain to the list of domains";
                 alertFactory.addAuto('danger', $string, optionalDelay);
               });
@@ -7247,12 +7247,12 @@
                 addedAsset.assetName = asset;
                 //$scope.extraDomainsList = addedDomain;
                 newAssets.setAddedAssets(addedAsset);
-                var optionalDelay = 2000;
+                var optionalDelay = 800000;
                 $mdDialog.hide();
                 alertFactory.addAuto('success', $string, optionalDelay);
               })
               .catch(function(response, status) {
-                var optionalDelay = 5000;
+                var optionalDelay = 800000;
                 var $string = "Error in adding asset to the list of assets";
                 alertFactory.addAuto('danger', $string, optionalDelay);
               });
@@ -7315,7 +7315,7 @@
         }
       })
       .catch(function(response, status) {
-        var optionalDelay = 5000;
+        var optionalDelay = 800000;
         var $string = "Error in fetching list of options";
         alertFactory.addAuto('danger', $string, optionalDelay);
       });
@@ -7336,14 +7336,14 @@
       $http.get('/api/options/statusOfOptions').then(function(response) {
         var optionValues = response.data;
         if(optionValues.addNewPerson == '0'){
-          var optionalDelay = 6000;
+          var optionalDelay = 800000;
           var $string = "This page cannot be accessed as adding new people option has been disabled. Check options on user >> my page";
           alertFactory.addAuto('danger', $string, optionalDelay);
           $state.go("management.people.peopleTable" );
         }
       })
       .catch(function(response, status) {
-        var optionalDelay = 5000;
+        var optionalDelay = 800000;
         var $string = "Error in fetching list of options";
         alertFactory.addAuto('danger', $string, optionalDelay);
       });
@@ -7395,11 +7395,11 @@
           $scope.userId = createdPerson.personId;
           $state.go("management.people.addPerson.capabilities", createdPerson );
           var $string = "Successfully added " +person.firstName;
-          var optionalDelay = 3000;
+          var optionalDelay = 800000;
           alertFactory.addAuto('success', $string, optionalDelay);
         })
         .catch(function(response, status) {
-          var optionalDelay = 5000;
+          var optionalDelay = 800000;
           var $string = "Error in adding person. "+ response.data.errors[0]+"!";
           alertFactory.addAuto('danger', $string, optionalDelay);
         });
@@ -7413,7 +7413,7 @@
       })
       .catch(function(response, status) {
         //	$scope.loading = false;
-        var optionalDelay = 5000;
+        var optionalDelay = 800000;
         var $string = "Error in fetching roles";
         alertFactory.addAuto('danger', $string, optionalDelay);
       });
@@ -7435,7 +7435,7 @@
           $scope.newUserName = response.data.personName;
         })
         .catch(function(response, status) {
-          var optionalDelay = 5000;
+          var optionalDelay = 800000;
           var $string = "Error in updating capability details";
           alertFactory.addAuto('danger', $string, optionalDelay);
         })
@@ -7621,7 +7621,7 @@
         $scope.newPerson = newPerson;
         $http.post('/api/capabilities/insertCapabilities/'+currentPerson.personId,newPerson).then(function(response)
         {
-          var optionalDelay = 5000;
+          var optionalDelay = 800000;
           var $string = "Successfully updated capability details";
           alertFactory.addAuto('success', $string, optionalDelay);
           // $state.go('management.people.addPerson.programmingSkills',currentPerson);
@@ -7630,7 +7630,7 @@
           });
         })
         .catch(function(response, status) {
-          var optionalDelay = 5000;
+          var optionalDelay = 800000;
           var $string = "Error in updating capability details";
           alertFactory.addAuto('danger', $string, optionalDelay);
         })
@@ -7838,7 +7838,7 @@
             $scope.newPerson = newPerson;
             $http.post('/api/capabilities/insertCapabilities/'+currentPerson.personId,newPerson).then(function(response)
             {
-              var optionalDelay = 5000;
+              var optionalDelay = 800000;
               var $string = "Successfully updated capability details";
               alertFactory.addAuto('success', $string, optionalDelay);
               // $state.go('management.people.addPerson.programmingSkills',currentPerson);
@@ -7847,7 +7847,7 @@
               });
             })
             .catch(function(response, status) {
-              var optionalDelay = 5000;
+              var optionalDelay = 800000;
               var $string = "Error in updating capability details";
               alertFactory.addAuto('danger', $string, optionalDelay);
             })
@@ -7883,7 +7883,7 @@
           $scope.newUserName = response.data.personName;
         })
         .catch(function(response, status) {
-          var optionalDelay = 5000;
+          var optionalDelay = 800000;
           var $string = "Error in updating capability details";
           alertFactory.addAuto('danger', $string, optionalDelay);
         })
@@ -7964,11 +7964,11 @@
                 var txt = "{\"value\":\""+skill+"\",\"display\":\""+skill+"\"}";
                 $scope.selectedItem = angular.fromJson(txt);
                 // $scope.selectedItem= programmingSkillEntered.value;
-                var optionalDelay = 3000;
+                var optionalDelay = 800000;
                 alertFactory.addAuto('success', $string, optionalDelay);
               })
               .catch(function(response, status) {
-                var optionalDelay = 5000;
+                var optionalDelay = 800000;
                 var $string = "Error in adding skill to skills database";
                 alertFactory.addAuto('danger', $string, optionalDelay);
               });
@@ -7988,14 +7988,14 @@
           $scope.skills =programmingSkillsEntered ;
           $http.post('/api/skills/insertSkillsAssessment/'+$scope.userId, $scope.skills).then(function(response)
           {
-            var optionalDelay = 3000;
+            var optionalDelay = 800000;
             var $string = "Programming skills saved!";
             $state.go("management.people.peopleTable");
             alertFactory.addAuto('success', $string, optionalDelay);
           })
           .catch(function(response, status) {
             //	$scope.loading = false;
-            var optionalDelay = 3000;
+            var optionalDelay = 800000;
             var $string = "Error in adding skills";
             alertFactory.addAuto('danger', $string, optionalDelay);
           });
@@ -8017,7 +8017,7 @@
         $scope.addTab = function (title, view) {
           for (var i =  tabs.length - 1; i >= 0; i--) {
             if(tabs[i].title == title){
-              var optionalDelay = 5000;
+              var optionalDelay = 800000;
               var $string = "You already selected the skill "+ title;
               alertFactory.addAuto('warning', $string, optionalDelay);
               return;
@@ -8050,7 +8050,7 @@
           $scope.newUserName = response.data.personName;
         })
         .catch(function(response, status) {
-          var optionalDelay = 5000;
+          var optionalDelay = 800000;
           var $string = "Error in updating capability details";
           alertFactory.addAuto('danger', $string, optionalDelay);
         })
@@ -8110,11 +8110,11 @@
               var txt = "{\"value\":\""+skill+"\",\"display\":\""+skill+"\"}";
               $scope.selectedItem = angular.fromJson(txt);
               // $scope.selectedItem= programmingSkillEntered.value;
-              var optionalDelay = 3000;
+              var optionalDelay = 800000;
               alertFactory.addAuto('success', $string, optionalDelay);
             })
             .catch(function(response, status) {
-              var optionalDelay = 5000;
+              var optionalDelay = 800000;
               var $string = "Error in adding skill to skills database";
               alertFactory.addAuto('danger', $string, optionalDelay);
             });
@@ -8134,14 +8134,14 @@
         $scope.skills =programmingSkillsEntered ;
         $http.post('/api/skills/insertSkillsAssessment/'+$scope.userId, $scope.skills).then(function(response)
         {
-          var optionalDelay = 3000;
+          var optionalDelay = 800000;
           var $string = "Programming skills saved!";
           $state.go("management.people.peopleTable");
           alertFactory.addAuto('success', $string, optionalDelay);
         })
         .catch(function(response, status) {
           //	$scope.loading = false;
-          var optionalDelay = 3000;
+          var optionalDelay = 800000;
           var $string = "Error in adding skills";
           alertFactory.addAuto('danger', $string, optionalDelay);
         });
@@ -8163,7 +8163,7 @@
       $scope.addTab = function (title, view) {
         for (var i =  tabs.length - 1; i >= 0; i--) {
           if(tabs[i].title == title){
-            var optionalDelay = 5000;
+            var optionalDelay = 800000;
             var $string = "You already selected the skill "+ title;
             alertFactory.addAuto('warning', $string, optionalDelay);
             return;
@@ -8230,7 +8230,7 @@
           $scope.indexFilter = true;
         }
       }
-      var optionalDelay = "800000";
+      var optionalDelay = 800000;
       var $string = "Note : Modifying the participants on this page will update the details on Redmine";
       alertFactory.addAuto('info', $string, optionalDelay);
       var currentProject = $stateParams;
@@ -8336,7 +8336,7 @@
       })
       .catch(function(response, status) {
         //	$scope.loading = false;
-        var optionalDelay = 5000;
+        var optionalDelay = 800000;
         var $string = "Error in fetching roles of people";
         alertFactory.addAuto('danger', $string, optionalDelay);
       });
@@ -8347,7 +8347,7 @@
       })
       .catch(function(response, status) {
         //	$scope.loading = false;
-        var optionalDelay = 5000;
+        var optionalDelay = 800000;
         var $string = "Error in fetching project participants details";
         alertFactory.addAuto('danger', $string, optionalDelay);
       });
@@ -8377,14 +8377,14 @@
         })
         .catch(function(response, status) {
           //	$scope.loading = false;
-          var optionalDelay = 5000;
+          var optionalDelay = 800000;
           var $string = "Error in fetching project  details";
           alertFactory.addAuto('danger', $string, optionalDelay);
         });
       })
       .catch(function(response, status) {
         //	$scope.loading = false;
-        var optionalDelay = 5000;
+        var optionalDelay = 800000;
         var $string = "Error in fetching list of people";
         alertFactory.addAuto('danger', $string, optionalDelay);
       });
@@ -8396,7 +8396,7 @@
       })
       .catch(function(response, status) {
         //	$scope.loading = false;
-        var optionalDelay = 5000;
+        var optionalDelay = 800000;
         var $string = "Error in fetching roles";
         alertFactory.addAuto('danger', $string, optionalDelay);
       });
@@ -8430,11 +8430,11 @@
         $http.put('/api/projects/updateProjectParticipants/'+currentProject.projectId+"/"+$localStorage.currentUser.userId,$scope.ree ).then(function(response) {
           $state.go("management.projects.projectsTable");
           var $string = "Successfully updated the project participants";
-          var optionalDelay = 3000;
+          var optionalDelay = 800000;
           alertFactory.addAuto('success', $string, optionalDelay);
         })
         .catch(function(response, status) {
-          var optionalDelay = 5000;
+          var optionalDelay = 800000;
           var $string = {};
           if(response.data.message !=null){
             $string = response.data.message;
@@ -8499,7 +8499,7 @@
       $scope.updateReadOnly  = function (readOnly){
         readOnly=false;
         $scope.readOnly = readOnly;
-        var optionalDelay = "800000";
+        var optionalDelay = 800000;
         var $string = "Note : Modifying the project name, description and associated project fields will update the details on Redmine";
         alertFactory.addAuto('info', $string, optionalDelay);
       };
@@ -8551,7 +8551,7 @@
         $scope.projectsList = projectsList;
       })
       .catch(function(response, status) {
-        var optionalDelay = 5000;
+        var optionalDelay = 800000;
         var $string = "Error in fetching list of projects";
         alertFactory.addAuto('danger', $string, optionalDelay);
       });
@@ -8559,7 +8559,7 @@
         $scope.sprintsInProject= response.data;
       })
       .catch(function(response, status) {
-        var optionalDelay = 5000;
+        var optionalDelay = 800000;
         var $string = "Error in fetching list of sprints in the project";
         alertFactory.addAuto('danger', $string, optionalDelay);
       });
@@ -8570,7 +8570,7 @@
       {
         $scope.peopleList = response.data;
       }).catch(function(response, status) {
-        var optionalDelay = 5000;
+        var optionalDelay = 800000;
         var $string = "Error in fetching list of people";
         alertFactory.addAuto('danger', $string, optionalDelay);
       }).then(function(){
@@ -8580,7 +8580,7 @@
           finalProject = editProject;
         })
         .catch(function(response, status) {
-          var optionalDelay = 5000;
+          var optionalDelay = 800000;
           var $string = "Error in fetching project details";
           alertFactory.addAuto('danger', $string, optionalDelay);
         }).then(function(){
@@ -8675,7 +8675,7 @@
             })
           })
           .catch(function(response, status) {
-            var optionalDelay = 5000;
+            var optionalDelay = 800000;
             var $string = "Error in fetching list of nested projects";
             alertFactory.addAuto('danger', $string, optionalDelay);
           })
@@ -8687,7 +8687,7 @@
         })
         .catch(function(response, status) {
           //	$scope.loading = false;
-          var optionalDelay = 5000;
+          var optionalDelay = 800000;
           var $string = "Error in fetching project participants details";
           alertFactory.addAuto('danger', $string, optionalDelay);
         });
@@ -8741,12 +8741,12 @@
             $http.put('/api/projects/updateProject',project).then(function(response) {
               //  $state.go("management.projects.projectsTable");
               var $string = "Successfully updated the project ";
-              var optionalDelay = 3000;
+              var optionalDelay = 800000;
               alertFactory.addAuto('success', $string, optionalDelay);
               $state.reload();
             })
             .catch(function(response, status) {
-              var optionalDelay = 5000;
+              var optionalDelay = 800000;
               var $string = {};
               if(response.data.message !=null){
                 $string = response.data.message;

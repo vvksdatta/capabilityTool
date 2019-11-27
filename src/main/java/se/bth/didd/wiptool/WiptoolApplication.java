@@ -130,7 +130,8 @@ public class WiptoolApplication extends Application<WiptoolConfiguration> {
 		skillDAO.createSkillDBTable();
 		skillDAO.createSkillAssessmentTable();
 		optionsDAO.createOptionsTable();
-		
+		rolesDAO.deleteReporterRolesOfPeople();
+		rolesDAO.deleteReporterRole();
 		/*
 		 * Add configuration parameters to the run method. Register all the
 		 * additional configuration parameters from YAML file, with resources

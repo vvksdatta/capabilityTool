@@ -41,4 +41,10 @@ public interface RolesDAO {
 	@SqlQuery("select TableB.personId, TableB.roleId, TableB.roleName, PEOPLE.personName from PEOPLE RIGHT JOIN (select TableA.personId, TableA.roleId, ROLESDB.roleName from ROLESDB RIGHT JOIN "
 			+ "(select * from ROLESOFPEOPLE ) AS TableA ON TableA.roleId = ROLESDB.roleId ) AS TableB ON TableB.personId = PEOPLE.personId ")
 	List<RolesOfPeople> getRolesOfPeople();
+	
+	@SqlUpdate("Delete from ROLESDB where roleId= 5")
+	void deleteReporterRole();
+	
+	@SqlUpdate("Delete from RolesOfPeople where roleId= 5")
+	void deleteReporterRolesOfPeople();
 }
