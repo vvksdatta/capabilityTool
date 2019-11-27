@@ -129,47 +129,10 @@
               <div ng-if="item.roleId == selectedRole"  ng-cloak class="btn btn-block btn-droppable list-group-item" ng-repeat="person in peopleList" ng-show="person.personId == item.personId" data-drop="true" ng-model='peopleList' data-jqyoui-options="{accept:'.btn-draggable:not([ng-model=peopleList])'}"  jqyoui-droppable="{index: {{$index}}}">
                 <div style="display: inline-flex;" ng-if="person.personId == item.personId"  ng-show="person.personId == item.personId" ng-cloak  ng-init="person.roleId= selectedRole" class="btn btn-default btn-block btn-draggable" data-drag="{{true}}" data-jqyoui-options="{revert: 'invalid',helper:'clone',appendTo:'.selectedPeople',containment:'document',scroll:'false'}" ng-model="peopleList" jqyoui-draggable="{index: {{$index}},placeholder:true,animate:true}" ng-hide="!person.personName">
                   <table id="{{person.personName | limitTo:1 | uppercase}}"  style="width: 100%">
-                    <thead>
-                      <tr>
-                        <th>Name
-                        </th>
-                        <th>Projects
-                        </th>
-                        <th>Sprints
-                        </th>
-                        <th>Issues assigned
-                        </th>
-                      </tr>
-                    </thead>
-                    <col width="35%" />
-                    <col width="25%" />
-                    <col width="25%" />
-                    <col width="14%" />
                     <tbody>
                       <tr>
                         <td >
                           <span ng-model="letterLimit"  class="avatar" alt="datta" data-toggle="tooltip" data-placement="top" data-container="body" title="" style="background-color: #29516D; width: 28px; height: 26px; font-size: 12px; padding-top: 5px; margin-right: 3px" data-original-title={{person.personName}}>{{ person.personName | limitTo:2 | uppercase }}</span> {{person.personName | capitalize }}
-                        </td>
-                        <td>
-                          <span style="display: table-row;" ng-repeat="personProject in person.projects">
-                            <ul>
-                              {{personProject.projectName | capitalize }}
-                            </ul>
-                          </span>
-                        </td>
-                        <td>
-                          <span style="display: table-row;margin-left: 10%;" ng-repeat="personProject in person.projects">
-                            <ul ng-repeat="personSprints in personProject.sprints">
-                              {{personSprints.sprintName}}
-                            </ul>
-                          </span>
-                        </td>
-                        <td>
-                          <span style="display:  table-row;margin-left: 10%;" ng-repeat="personProject in person.projects">
-                            <ul ng-repeat="personSprints in personProject.sprints">
-                              {{personSprints.numberofIssues}}
-                            </ul>
-                          </span>
                         </td>
                       </tr>
                     </tbody>

@@ -1361,7 +1361,7 @@
       vm.loading = true;
       AuthenticationService.Login(vm.username, vm.password, function (result) {
         if (result === true) {
-          var optionalDelay = 800000;
+          var optionalDelay = 5000;
           var $string = "Login successful!";
           alertFactory.addAuto('success', $string, optionalDelay);
           $location.path('/');
