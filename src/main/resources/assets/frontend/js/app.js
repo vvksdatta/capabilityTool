@@ -1385,6 +1385,21 @@
       return (!!text) ? text.charAt(0).toUpperCase() + text.substr(1).toLowerCase() : '';
     }
   });
+
+  app.filter('unique', function() {
+  return function(collection, keyname) {
+    var output = [],
+      keys = [];
+    angular.forEach(collection, function(item) {
+      var key = item[keyname];
+      if (keys.indexOf(key) === -1) {
+        keys.push(key);
+        output.push(item);
+      }
+    });
+    return output;
+  };
+});
   function RootCtrl($rootScope, $location, alertService) {
     $rootScope.changeView = function(view) {
       $location.path(view);
@@ -8402,8 +8417,8 @@
       });
       $scope.list2 = [];
       //	$scope.demo = [{ "personId": 1, "personName": "sai datta Admin", "projects": [ { "projectId": 1, "projectName": "Project1", "sprints": [ { "sprintId": 4, "sprintName": "sprintlog", "issues": [ { "issueId": 7 }, { "issueId": 6 } ], "numberofIssues": 2 }, { "sprintId": 8, "sprintName": "demosprint", "issues": [ { "issueId": 0 }, { "issueId": 1 } ], "numberofIssues": 2 } ] } ], "roleId": "3", "jqyoui_pos": 1 } ];
-      $scope.filterPeople = function() {
-        //roleName= $scope.selectedRole;
+      $scope.filterPeople = function(selectedRole) {
+    //  $log.debug("this is for role "+ selectedRole);
         var peoplelength =$scope.peopleList.length;
         var list1 =  $scope.peopleList;
         for (var i =  peoplelength - 1; i >= 0; i--) {
@@ -8414,6 +8429,34 @@
             }
           })
         }
+        $scope.show = true;
+        return $scope.peopleList = list1;
+      };
+
+      $scope.filterPeople2 = function(selectedRole) {
+    //  $log.debug("this is for role "+ selectedRole);
+        var rolesOfPeopleLength =$scope.rolesOfPeople.length;
+        var list1 =  $scope.rolesOfPeople;
+
+
+      //  for (var i =  rolesOfPeopleLength - 1; i >= 0; i--) {
+        //  angular.forEach($scope.list2, function(value2, key2) {
+          //  if ($scope.peopleList[i].personId == value2.personId) {
+            //  // $log.debug("this is for person "+ value2.personName);
+              //list1.splice(i, 1);
+          //  }
+          //})
+        //}
+
+        for (var i =  $scope.list2.length - 1; i >= 0; i--) {
+          angular.forEach($scope.rolesOfPeople, function(value2, key2) {
+            if ($scope.list2[i].personId == value2.personId && value2.roleId == selectedRole) {
+              // $log.debug("this is for person "+ value2.personName);
+              list1.splice(i, 1);
+            }
+          })
+        }
+
         $scope.show = true;
         return $scope.peopleList = list1;
       };

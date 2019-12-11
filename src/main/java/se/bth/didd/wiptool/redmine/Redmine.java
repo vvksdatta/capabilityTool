@@ -377,7 +377,7 @@ public class Redmine {
 										// ProjectParticipation table");
 									}
 								}
-								 }
+								
 								redmineDAO.updateRedmineProjectIdentifierInParticipationTable(redmineProject.getId(),
 										projectParticipant.getUserId(), generatedRandomString);
 
@@ -394,7 +394,7 @@ public class Redmine {
 										generatedRandomString);
 
 							}
-
+						  }
 						}
 					}
 				}
@@ -643,7 +643,7 @@ public class Redmine {
 												projectParticipant.getUserId(), role.getId());
 									}
 								}
-								}
+								
 								redmineDAO.updateRedmineProjectIdentifierInParticipationTable(redmineProject.getId(),
 										projectParticipant.getUserId(), generatedRandomString);
 
@@ -661,7 +661,7 @@ public class Redmine {
 										generatedRandomString);
 
 							}
-
+						  }
 						}
 					}
 
@@ -1269,7 +1269,7 @@ public class Redmine {
 
 						Collection<Role> rolesOfProjectParticipant = projectParticipant.getRoles();
 						for (Role role : rolesOfProjectParticipant) {
-
+							if(role.getId() != 5){
 							/*
 							 * check if the project participation of the person
 							 * is already added to the database
@@ -1293,6 +1293,7 @@ public class Redmine {
 									generatedRandomString);
 
 						}
+					 }
 
 					}
 				}

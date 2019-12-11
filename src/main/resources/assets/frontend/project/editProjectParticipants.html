@@ -109,10 +109,11 @@
         <div class='list-group' style="min-height: 110px; border: 1px solid; border-style: solid; padding-bottom: 1px;width:98%;">
           <div style="    color: #333;background-color: #d2d2d2; border-color: #d2d2d2;margin-top: 0; margin-bottom: 10px; border-bottom: 1px solid transparent; border-top-right-radius: 3px; border-top-left-radius: 3px; padding: 10px;" class="list-group-item">
             <strong>People</strong>
+
           </div>
           <div class="list-group-item" style= "margin-bottom: 10px; height:55px;">
             Select Role:
-            <select    ng-model="selectedRole" ng-change="filterPeople()"> <option ng-repeat="role in rolesList"   value= {{role.roleId}}> {{role.roleName}} </option></select>
+            <select    ng-model="selectedRole" ng-change="filterPeople2(selectedRole)"> <option ng-repeat="role in rolesList"   value= {{role.roleId}}> {{role.roleName}} </option></select>
             <div class="pull-right">
               <div ng-if="selectedRole">
                 <button type="button" style="font-size: 10px;" class="btn btn-default" ng-click="toggleIndexFilter()">
@@ -125,15 +126,16 @@
             </div>
           </div>
           <div style="max-height:50vh;overflow-x:hidden;overflow-y:auto;">
-            <div  ng-if="item.roleId == selectedRole"  class="" ng-repeat="item in rolesOfPeople" >
-              <div ng-if="item.roleId == selectedRole"  ng-cloak class="btn btn-block btn-droppable list-group-item" ng-repeat="person in peopleList" ng-show="person.personId == item.personId" data-drop="true" ng-model='peopleList' data-jqyoui-options="{accept:'.btn-draggable:not([ng-model=peopleList])'}"  jqyoui-droppable="{index: {{$index}}}">
-                <div style="display: inline-flex;" ng-if="person.personId == item.personId"  ng-show="person.personId == item.personId" ng-cloak  ng-init="person.roleId= selectedRole" class="btn btn-default btn-block btn-draggable" data-drag="{{true}}" data-jqyoui-options="{revert: 'invalid',helper:'clone',appendTo:'.selectedPeople',containment:'document',scroll:'false'}" ng-model="peopleList" jqyoui-draggable="{index: {{$index}},placeholder:true,animate:true}" ng-hide="!person.personName">
-                  <table id="{{person.personName | limitTo:1 | uppercase}}" style="width: 100%">
+            <div  ng-if="item.roleId == selectedRole"  class="" ng-repeat="item in rolesOfPeople | unique:personId" >
+              {{item.personName}}
+              <div ng-if="item.roleId == selectedRole"  ng-cloak class="btn btn-block btn-droppable list-group-item"  data-drop="true" ng-model='peopleList' data-jqyoui-options="{accept:'.btn-draggable:not([ng-model=rolesOfPeople])'}"  jqyoui-droppable="{index: {{$index}}}">
+                <div style="display: inline-flex;"   ng-cloak  ng-init="item.roleId= selectedRole" class="btn btn-default btn-block btn-draggable" data-drag="{{true}}" data-jqyoui-options="{revert: 'invalid',helper:'clone',appendTo:'.selectedPeople',containment:'document',scroll:'false'}" ng-model="rolesOfPeople" jqyoui-draggable="{index: {{$index}},placeholder:true,animate:true}" ng-hide="!item.personName">
+                  <table id="{{item.personName | limitTo:1 | uppercase}}" style="width: 100%">
                     <tbody>
                       <tr>
                         <td >
-                          <span ng-model="letterLimit"  class="avatar" alt="datta" data-toggle="tooltip" data-placement="top" data-container="body"  style="background-color: #29516D;width: 28px; height: 26px; font-size: 12px; padding-top: 5px; margin-right: 3px" data-original-title={{person.personName}}>{{ person.personName | limitTo:2 | uppercase }}</span>
-                          {{person.personName | capitalize }}
+                          <span ng-model="letterLimit"  class="avatar" alt="datta" data-toggle="tooltip" data-placement="top" data-container="body"  style="background-color: #29516D;width: 28px; height: 26px; font-size: 12px; padding-top: 5px; margin-right: 3px" data-original-title={{item.personName}}>{{ item.personName | limitTo:2 | uppercase }}</span>
+                          {{item.personName | capitalize }}
                         </td>
                       </tr>
                     </tbody>

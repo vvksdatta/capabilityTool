@@ -194,62 +194,10 @@
                   </div>
                   <div style="margin-left: 5px;display: inline-flex;width: 100%;z-index:100;" ng-if="person.personId == item.personId"  ng-show="person.personId == item.personId" ng-cloak  ng-init="person.roleName= selectedRole" class="btn btn-default btn-block btn-draggable" data-drag="{{true}}" data-jqyoui-options="{revert: 'invalid',helper:'clone',appendTo:'.selectedPeople',containment:'document',scroll:'false',onDrop: addBack(peopleList)}" ng-model="peopleList" jqyoui-draggable="{index: {{$index}},placeholder:true,animate:false}" ng-hide="!person.personName">
                     <table  id="{{person.personName | limitTo:1 | uppercase}}" style="width: 100%">
-                      <thead>
-                        <tr>
-                          <th>Name
-                          </th>
-                          <th>Projects
-                          </th>
-                          <th>Sprints
-                          </th>
-                          <th>Issues assigned
-                          </th>
-                        </tr>
-                      </thead>
-                      <col width="35%" />
-                      <col width="25%" />
-                      <col width="25%" />
-                      <col width="14%" />
                       <tbody>
                         <tr>
                           <td >
                             <span ng-model="letterLimit"  class="avatar" style="background-color: #29516D; width: 28px; height: 26px; font-size: 12px; padding-top: 5px; margin-right: 3px" data-original-title={{person.personName}}>{{ person.personName | limitTo:2 | uppercase }}</span> {{person.personName | capitalize }}<md-tooltip md-direction="top"> {{person.personName | capitalize }}</md-tooltip>
-                          </td>
-                          <td>
-                            <span style="display: table-row;" ng-repeat="personProject in person.projects">
-                              <ul>
-                                {{personProject.projectName | capitalize }}
-                              </ul>
-                            </span>
-                            <span  style="display:  table-row;"  ng-if="!person.projects">
-                              <ul>
-                                -
-                              </ul>
-                            </span>
-                          </td>
-                          <td>
-                            <span style="display: table-row;" ng-repeat="personProject in person.projects">
-                              <ul ng-repeat="personSprints in personProject.sprints">
-                                {{personSprints.sprintName}}
-                              </ul>
-                            </span>
-                            <span  style="display:  table-row;"  ng-if="!person.projects">
-                              <ul>
-                                -
-                              </ul>
-                            </span>
-                          </td>
-                          <td>
-                            <span style="display:  table-row;" ng-repeat="personProject in person.projects">
-                              <ul ng-repeat="personSprints in personProject.sprints">
-                                {{personSprints.numberofIssues}}
-                              </ul>
-                            </span >
-                            <span  style="display:  table-row;"  ng-if="!person.projects">
-                              <ul>
-                                -
-                              </ul>
-                            </span>
                           </td>
                         </tr>
                       </tbody>
