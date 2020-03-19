@@ -1269,29 +1269,30 @@ public class Redmine {
 
 						Collection<Role> rolesOfProjectParticipant = projectParticipant.getRoles();
 						for (Role role : rolesOfProjectParticipant) {
+							if (role.getId() != 5) {
+								/*
+								 * check if the project participation of the
+								 * person is already added to the database
+								 * (ProjectParticipation Table)
+								 */
+								if (redmineDAO.ifPersonExistsInProject(redmineProject.getId(),
+										projectParticipant.getUserId()) != true) {
 
-							/*
-							 * check if the project participation of the person
-							 * is already added to the database
-							 * (ProjectParticipation Table)
-							 */
-							if (redmineDAO.ifPersonExistsInProject(redmineProject.getId(),
-									projectParticipant.getUserId()) != true) {
+									if (redmineDAO.ifPersonParticipatesInProject(redmineProject.getId(),
+											projectParticipant.getUserId(), role.getId()) != true) {
 
-								if (redmineDAO.ifPersonParticipatesInProject(redmineProject.getId(),
-										projectParticipant.getUserId(), role.getId()) != true) {
-
-									redmineDAO.insertIntoProjectParticipation(redmineProject.getId(),
-											projectParticipant.getUserId(), role.getId());
+										redmineDAO.insertIntoProjectParticipation(redmineProject.getId(),
+												projectParticipant.getUserId(), role.getId());
+									}
 								}
+
+								redmineDAO.updateRedminePersonIdentifierInParticipationTable(redmineProject.getId(),
+										projectParticipant.getUserId(), role.getId(), generatedRandomString);
+
+								redmineDAO.updateidentifierInRolesOfPeople(projectParticipant.getUserId(), role.getId(),
+										generatedRandomString);
+
 							}
-
-							redmineDAO.updateRedminePersonIdentifierInParticipationTable(redmineProject.getId(),
-									projectParticipant.getUserId(), role.getId(), generatedRandomString);
-
-							redmineDAO.updateidentifierInRolesOfPeople(projectParticipant.getUserId(), role.getId(),
-									generatedRandomString);
-
 						}
 
 					}

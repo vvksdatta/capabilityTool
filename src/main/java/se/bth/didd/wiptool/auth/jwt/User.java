@@ -9,12 +9,12 @@ public class User implements Principal {
 
 	private final long id;
 	private final String name;
-	private final String roles;
+	private final String role;
 
-	public User(long id, String name, String roles) {
+	public User(long id, String name, String role) {
 		this.id = id;
 		this.name = name;
-		this.roles = roles;
+		this.role = role;
 	}
 
 	public long getId() {
@@ -26,8 +26,8 @@ public class User implements Principal {
 		return name;
 	}
 
-	public String getRoles() {
-		return roles;
+	public String getRole() {
+		return role;
 	}
 
 	@Override
@@ -47,14 +47,14 @@ public class User implements Principal {
 		if (name != null ? !name.equals(exampleUser.name) : exampleUser.name != null) {
 			return false;
 		}
-		return roles != null ? roles.equals(exampleUser.roles) : exampleUser.roles == null;
+		return role != null ? role.equals(exampleUser.role) : exampleUser.role == null;
 	}
 
 	@Override
 	public int hashCode() {
 		int result = (int) (id ^ (id >>> 32));
 		result = 31 * result + (name != null ? name.hashCode() : 0);
-		result = 31 * result + (roles != null ? roles.hashCode() : 0);
+		result = 31 * result + (role != null ? role.hashCode() : 0);
 		return result;
 	}
 }

@@ -20,7 +20,6 @@ import se.bth.didd.wiptool.api.Login;
 import se.bth.didd.wiptool.api.People;
 import se.bth.didd.wiptool.api.SuccessMessage;
 import se.bth.didd.wiptool.auth.Secrets;
-import se.bth.didd.wiptool.auth.jwt.UserRoles;
 import se.bth.didd.wiptool.db.AuthDAO;
 import se.bth.didd.wiptool.resources.dto.LoginResponse;
 
@@ -48,13 +47,30 @@ public class LoginResource {
 		for (Login client : person) {
 			newUser.setPersonId(client.getUserId());
 			newUser.setPersonName(client.getUserFirstName());
+			newUser.setRole(client.getRole());
 
 		}
 
-		return Response.ok(new LoginResponse(buildToken(user).getCompactSerialization(), newUser.getPersonName(),
-				newUser.getPersonId())).build();
+		return Response.ok(new LoginResponse(buildToken(user, newUser.getRole() ).getCompactSerialization(), newUser.getPersonName(),
+				newUser.getPersonId(), newUser.getRole() )).build();
 	}
+	
+	/*@GET
+	@Path("/updatedUserDetails/{id}")
+	
+	public Response updatedUserDetails(@Auth User user, @PathParam("id") Integer userId) throws JoseException {
+		People newUser = new People();
+		List<Login> person = authDAO.getUserById(userId);
+		for (Login client : person) {
+			newUser.setPersonId(client.getUserId());
+			newUser.setPersonName(client.getUserFirstName());
+			newUser.setRole(client.getRole());
 
+		}
+
+		return Response.ok(newUser).build();
+	}
+*/
 	@PUT
 	@Path("/register")
 	public Response registerNewUser(Login login) {
@@ -73,12 +89,12 @@ public class LoginResource {
 	}
 
 	/* token builder */
-	private JsonWebSignature buildToken(PrincipalImpl user) {
+	private JsonWebSignature buildToken(PrincipalImpl user, String role) {
 		// These claims would be tightened up for production
 
 		final JwtClaims claims = new JwtClaims();
 		claims.setSubject("1");
-		claims.setStringClaim("roles", UserRoles.ROLE_ONE);
+		claims.setStringClaim("roles", role);
 		claims.setStringClaim("user", user.getName());
 		claims.setIssuedAtToNow();
 		claims.setGeneratedJwtId();

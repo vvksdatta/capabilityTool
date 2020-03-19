@@ -6,7 +6,7 @@ package se.bth.didd.wiptool.auth.jwt;
  */
 public class UserRoles {
 
-	public static final String ROLE_ONE = "Manager";
-	public static final String ROLE_TWO = "RoleTWO";
+	public static final String ROLE_ONE = "Administrator";
+	public static final String ROLE_TWO = "User";
 
 }

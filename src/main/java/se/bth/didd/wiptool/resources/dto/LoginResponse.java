@@ -8,11 +8,12 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  */
 public class LoginResponse {
 
-	public LoginResponse(String token, String userFirstName, Integer userId) {
+	public LoginResponse(String token, String userFirstName, Integer userId, String role) {
 		super();
 		this.token = token;
 		this.userFirstName = userFirstName;
 		this.userId = userId;
+		this.role = role;
 	}
 
 	@JsonProperty("token")
@@ -23,5 +24,8 @@ public class LoginResponse {
 
 	@JsonProperty("userId")
 	public Integer userId;
+	
+	@JsonProperty("role")
+	public String role;
 
 }

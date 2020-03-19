@@ -38,24 +38,30 @@ public class Login {
 	@JsonProperty
 	@ColumnName("apiKey")
 	public String apiKey;
+	
+	@JsonProperty
+	@ColumnName("role")
+	public String role;
 
 	
 	public Login(Integer userId, String userName, String userFirstName, String userLastName, String userMailId,
-			String password) {
+			String password, String role) {
 		this.userId = userId;
 		this.userName = userName;
 		this.userFirstName = userFirstName;
 		this.userLastName = userLastName;
 		this.userMailId = userMailId;
 		this.password = password;
+		this.role = role;
 	}
 	public Login(String userName, String userFirstName, String userLastName, String userMailId,
-			String password) {
+			String password, String role) {
 		this.userName = userName;
 		this.userFirstName = userFirstName;
 		this.userLastName = userLastName;
 		this.userMailId = userMailId;
 		this.password = password;
+		this.role = role;
 	}
 	public Login() {
 
@@ -113,6 +119,12 @@ public class Login {
 
 	public void setPassword(String password) {
 		this.password = password;
+	}
+	public String getRole() {
+		return role;
+	}
+	public void setRole(String role) {
+		this.role = role;
 	}
 	
 }

@@ -20,7 +20,7 @@ public class JwtAuthoriser implements Authorizer<User> {
 			return false;
 		}
 
-		String roles = exampleUser.getRoles();
+		String roles = exampleUser.getRole();
 		if (roles == null) {
 			LOGGER.warn("msg=roles were null, user={}, userId={}", exampleUser.getName(), exampleUser.getId());
 			return false;

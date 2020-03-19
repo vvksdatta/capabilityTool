@@ -4,16 +4,16 @@
   $(".nav-tabs li").eq(2).removeClass("active");
   $(".nav-tabs li").eq(3).removeClass("active");
 </script>
-<md-content style="overflow: unset;" >
-  <md-whiteframe class="md-whiteframe-18dp"  layout layout-align="center center">
+<md-content style="overflow: unset;">
+  <md-whiteframe class="md-whiteframe-18dp" layout layout-align="center center">
     <div class="col-md-12">
-      <div class="col-md-7">
-        <form name="form2" class="form-horizontal"  ng-submit="form2.$valid && addUser(register)"  novalidate>
-          <div class="control-group" >
+      <form name="form2" class="form-horizontal" ng-submit="form2.$valid && addUser(register)" novalidate>
+        <div class="col-md-7">
+          <div class="control-group">
             <div class="form-group" ng-class="{ 'has-error': form2.$submitted && form2.userName.$invalid }">
               <label class="col-sm-3 control-label" for="userName">User Name</label>
               <div class="col-sm-8">
-                <input type="text" id="userName" name="userName" placeholder="User Name"  class="form-control" ng-model="register.userName" required>
+                <input type="text" id="userName" name="userName" placeholder="User Name" class="form-control" ng-model="register.userName" required>
                 <div ng-messages="form2.$submitted && form2.userName.$error" class="help-block">
                   <div ng-message="required">Username is required</div>
                 </div>
@@ -31,7 +31,7 @@
             <div class="form-group" ng-class="{ 'has-error': form2.$submitted && form2.userLastName.$invalid }">
               <label class="col-sm-3 control-label" for="userLastName">Last Name</label>
               <div class="col-sm-8">
-                <input type="text" id="userLastName" name="userLastName" placeholder="Last Name"   class="form-control" ng-model="register.userLastName" required>
+                <input type="text" id="userLastName" name="userLastName" placeholder="Last Name" class="form-control" ng-model="register.userLastName" required>
                 <div ng-messages="form2.$submitted && form2.userLastName.$error" class="help-block">
                   <div ng-message="required">Last name is required</div>
                 </div>
@@ -40,7 +40,7 @@
             <div class="form-group" ng-class="{ 'has-error': form2.$submitted && form2.userMailId.$invalid }">
               <label class="col-sm-3 control-label" for="userMailId">Email</label>
               <div class="col-sm-8">
-                <input type="email" id="userMailId" name="userMailId" placeholder="Email ID"  class="form-control" ng-model="register.userMailId" required>
+                <input type="email" id="userMailId" name="userMailId" placeholder="Email ID" class="form-control" ng-model="register.userMailId" required>
                 <div ng-messages="form2.$submitted && form2.userMailId.$error" class="help-block">
                   <div ng-message="required">Email required</div>
                 </div>
@@ -49,25 +49,39 @@
             <div class="form-group" ng-class="{ 'has-error': form2.$submitted && form2.password.$invalid }">
               <label class="col-sm-3 control-label" for="password">Password</label>
               <div class="col-sm-8">
-                <input type="password" id="password" name="password" placeholder="Password"  class="form-control" ng-model="register.password" required>
+                <input type="password" id="password" name="password" placeholder="Password" class="form-control" ng-model="register.password" required>
                 <div ng-messages="form2.$submitted && form2.password.$error" class="help-block">
                   <div ng-message="required">Password required</div>
                 </div>
               </div>
             </div>
             <div class="form-group">
-              <label class="col-sm-3 control-label" for="password">Redmine API access key</label>
+              <label class="col-sm-3 control-label" for="password">Redmine API Access Key</label>
               <div class="col-sm-8">
-                <input type="text" id="apiKey" name="apiKey" placeholder="Redmine API access key"  class="form-control" ng-model="register.apiKey">
+                <input type="text" id="apiKey" name="apiKey" placeholder="Redmine API access key" class="form-control" ng-model="register.apiKey">
               </div>
             </div>
           </div>
           <div class="pull-right" style="margin-top: 5px;">
             <md-button type="submit" style="font-size: 15px;  background-color: rgb(90, 132, 187);" class="add-tab md-primary md-raised">Save </md-button>
-            <md-button type="reset"  class="md-raised"  style="font-size: 15px;" ng-click="form2.$setPristine();register ={}" >Clear </md-button>
+            <md-button type="reset" class="md-raised" style="font-size: 15px;" ng-click="form2.$setPristine();register ={}">Clear </md-button>
           </div>
-        </form>
-      </div>
+        </div>
+        <div class="col-md-5">
+          <div class="form-group" ng-class="{ 'has-error': form2.$submitted && form2.privilege.$invalid }">
+            <label class="col-sm-3 control-label" for="privilege">CAST Privileges</label>
+            <div class="col-sm-8">
+              <md-radio-group ng-model="register.role">
+                <md-radio-button class="md-primary" ng-model="register.role" ng-required="!register.privilege" name="privilege" class="form-control" value="Administrator"> Administrator </md-radio-button>
+                <md-radio-button class="md-primary" ng-model="register.role" ng-required="!register.privilege" name="privilege" class="form-control" value="User"> User </md-radio-button>
+              </md-radio-group>
+              <div ng-messages="form2.$submitted && form2.privilege.$error" class="help-block">
+                <div ng-message="required">Previleges required</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </form>
     </div>
   </md-whiteframe>
 </md-content>

@@ -169,6 +169,7 @@ public class WiptoolApplication extends Application<WiptoolConfiguration> {
 		login.setUserMailId(configuration.getAdminUserName());
 		login.setPassword(configuration.getAdminPassword());
 		login.setUserName(configuration.getAdminUserName());
+		login.setRole("Administrator");
 		
 		LoginResource sampleLoginResource = new LoginResource(authDAO);
 		sampleLoginResource.registerNewUser(login);

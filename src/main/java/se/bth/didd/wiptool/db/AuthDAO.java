@@ -13,10 +13,10 @@ import se.bth.didd.wiptool.api.Login;
 public interface AuthDAO {
 
 	@SqlUpdate("create table if not exists LOGINCREDENTIALS (userId serial primary key, userName varchar(30),"
-			+ " userFirstName varchar(30), apiKey text, userLastName varchar(30), userMailId varchar(30), password varchar(30))")
+			+ " userFirstName varchar(30), apiKey text, userLastName varchar(30), userMailId varchar(30), password varchar(30),  role varchar(30))")
 	void createLoginCredentialsTable();
 
-	@SqlUpdate("insert into LOGINCREDENTIALS ( userName, userFirstName, userLastName, userMailId, password, apiKey) values (:userName, :userFirstName, :userLastName, :userMailId, :password, :apiKey)")
+	@SqlUpdate("insert into LOGINCREDENTIALS ( userName, userFirstName, userLastName, userMailId, password, apiKey, role) values (:userName, :userFirstName, :userLastName, :userMailId, :password, :apiKey, :role)")
 	int insertIntoLoginCredentials(@BindBean Login login);
 
 	@SqlQuery("select exists (select 1 from LOGINCREDENTIALS where userMailId = :userMailId  or userName = :userName )")
@@ -24,5 +24,8 @@ public interface AuthDAO {
 
 	@SqlQuery("select * from LOGINCREDENTIALS where userMailId = :userMailId or userName = :userMailId")
 	List<Login> getUser(@Bind("userMailId") String userMailId);
+	
+	@SqlQuery("select * from LOGINCREDENTIALS where userId = :userId ")
+	List<Login> getUserById(@Bind("userId") Integer userId);
 
 }

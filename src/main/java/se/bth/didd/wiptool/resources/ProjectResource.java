@@ -262,6 +262,7 @@ public class ProjectResource {
 		return Response.ok(numberOfRoles).build();
 	}
 
+	@RolesAllowed({ UserRoles.ROLE_ONE})
 	@PUT
 	@Path("/newproject")
 	public Response newProject(@Auth User user, NewProject newproject) throws RedmineException, SQLException {

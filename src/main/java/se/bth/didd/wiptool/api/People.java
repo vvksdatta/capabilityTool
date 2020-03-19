@@ -16,12 +16,15 @@ public class People {
 	@JsonProperty
 	public String personName;
 	
+	@JsonProperty
+	public String role;
+	
 		
-	public People(Integer personId, String personName) {
+	public People(Integer personId, String personName, String role) {
 		super();
 		this.personId = personId;
 		this.personName = personName;
-	
+		this.role = role;
 	}
 
 	/*
@@ -45,6 +48,14 @@ public class People {
 
 	public void setPersonName(String personName) {
 		this.personName = personName;
+	}
+
+	public String getRole() {
+		return role;
+	}
+
+	public void setRole(String role) {
+		this.role = role;
 	}
 	
 }

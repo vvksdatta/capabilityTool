@@ -35,13 +35,18 @@ public class UserTemplate {
 	@ColumnName("apiKey")
 	public String apiKey;
 	
-	public UserTemplate(Integer userId, String userName, String userFirstName, String userLastName, String usermailId) {
+	@JsonProperty
+	@ColumnName("role")
+	public String role;
+	
+	public UserTemplate(Integer userId, String userName, String userFirstName, String userLastName, String usermailId, String role) {
 		super();
 		this.userId = userId;
 		this.userName = userName;
 		this.userFirstName = userFirstName;
 		this.userLastName = userLastName;
 		this.usermailId = usermailId;
+		this.role = role; 
 	}
 
 	/*
@@ -95,5 +100,13 @@ public class UserTemplate {
 	}
 	public void setApiKey(String apiKey) {
 		this.apiKey = apiKey;
+	}
+
+	public String getRole() {
+		return role;
+	}
+
+	public void setRole(String role) {
+		this.role = role;
 	}
 }
