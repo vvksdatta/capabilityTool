@@ -46,7 +46,7 @@ public interface PeopleDAO {
 	@SqlQuery("select * from PEOPLE where personId = :personId")
 	List<People> getPersonDetails(@Bind("personId") int personId);
 
-	@SqlQuery("select userId, userFirstName, userlastName, userMailId, userName, apiKey from LOGINCREDENTIALS")
+	@SqlQuery("select userId, userFirstName, userlastName, userMailId, userName, apiKey, role from LOGINCREDENTIALS")
 	List<UserTemplate> getUsersList();
 
 	@SqlQuery("select userId, userFirstName, userlastName, userMailId,  userName, apiKey, role from LOGINCREDENTIALS where userId = :userId")
