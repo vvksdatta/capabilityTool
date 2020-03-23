@@ -50,7 +50,7 @@ $(".nav-tabs li").eq(1).removeClass("active");
 $(".nav-tabs li").eq(2).addClass("active");
 $(".nav-tabs li").eq(0).removeClass("active");
 </script>
-<md-content style="overflow: unset;" >
+<md-content ng-hide="notAdministrator" style="overflow: unset;" >
   <md-whiteframe class="md-whiteframe-18dp"  layout layout-align="center center">
     <div class="col-md-12" >
       <div>

@@ -6,7 +6,7 @@
 <div class="row top-buffer">
 	<div id="page-wrapper">
 		<div id="page-viewport" ng-cloak>
-			<div id="sidebar" position:relative; ">
+			<div ng-hide="notAdministrator" id="sidebar" position:relative; ">
         <div id="sidebar-header ">
           <a href=" " class="toggle-sidebar "><h3>Management</h3></a>
           <span class="pull-right ">
@@ -40,7 +40,7 @@
         </div>
 				<ul class="nav nav-tabs " style="margin-bottom: 10px; ">
 					<li ng-class="getTabClass(1) " ng-click="setActiveTab(1) " ui-sref="manageUser.myDetails({userId: currentUserId}) " ui-sref-opts="{reload: false} "><a  data-toggle="tab " >My details</a></li>
-					<li ng-class="getTabClass(2) " ng-click="setActiveTab(2) " ui-sref="manageUser.createNewUser " ui-sref-opts="{reload: false} "><a   data-toggle="tab " >Create new user</a></li>
+					<li ng-class="getTabClass(2) " ng-click="setActiveTab(2) " ui-sref="manageUser.createNewUser" ui-sref-opts="{reload: false} "><a   data-toggle="tab " >Create new user</a></li>
 					<li ng-class="getTabClass(3) " ng-click="setActiveTab(3) " ui-sref="manageUser.manageUserAccounts({userId: currentUserId}) " ui-sref-opts="{reload: false} "><a   data-toggle="tab " >Manage user accounts</a></li>
 					<li ng-class="getTabClass(4) " ng-click="setActiveTab(4) " ui-sref="manageUser.manageOptions " ui-sref-opts="{reload: false} "><a   data-toggle="tab " >Options</a></li>
 				</ul>

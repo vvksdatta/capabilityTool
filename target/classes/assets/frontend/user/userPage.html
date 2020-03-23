@@ -74,7 +74,7 @@
 <md-content style="overflow: unset;">
   <md-whiteframe class="md-whiteframe-18dp" layout layout-align="center center">
     <div class="col-md-12" ng-init="readOnly = true">
-      <div class="col-md-7" id="extras">
+      <div ng-hide="hidePrivileges" class="col-md-7" id="extras">
         <form class="form-horizontal" name="form" ng-submit="form.$valid && updateUserDetails(userDetails)" novalidate>
           <fieldset>
             <div class="control-group">
@@ -116,6 +116,18 @@
                   </div>
                 </div>
               </div>
+              <div class="form-group" ng-class="{ 'has-error': form.$submitted && form.privilege.$invalid }">
+                <label class="col-sm-3 control-label" for="privilege">CAST Privileges</label>
+                <div class="col-sm-8">
+                  <md-radio-group ng-model="userDetails.role">
+                    <md-radio-button class="md-primary" ng-disabled="readOnly" ng-model="userDetails.role" ng-required="!register.privilege" name="privilege" class="form-control" value="Administrator"> Administrator </md-radio-button>
+                    <md-radio-button class="md-primary" ng-disabled="readOnly" ng-model="userDetails.role" ng-required="!register.privilege" name="privilege" class="form-control" value="User" > User </md-radio-button>
+                  </md-radio-group>
+                  <div ng-messages="form.$submitted && form.privilege.$error" class="help-block">
+                    <div ng-message="required">Previleges required</div>
+                  </div>
+                </div>
+              </div>
               <div ng-show="readOnly" class="form-group" ng-class="{ 'has-error': form.$submitted && form.apiKey.$invalid }">
                 <label class="col-sm-3 control-label" for="apiKey">Redmine API access key</label>
                 <div class="col-sm-8">
@@ -125,7 +137,8 @@
                   </div>
                 </div>
               </div>
-              <div ng-hide="readOnly" class="form-group" ng-class="{ 'has-error': form.$submitted && form.apiKey.$invalid }">
+              <div ng-if="userDetails.role == 'Administrator'">
+              <div ng-hide="readOnly"  class="form-group" ng-class="{ 'has-error': form.$submitted && form.apiKey.$invalid }">
                 <label class="col-sm-3 control-label" for="apiKey">Redmine API access key</label>
                 <div class="col-sm-8">
                   <input type="text" placeholder="Redmine API access key" id="apiKey" name="apiKey" ng-minlength="40" ng-maxlength="40" ng-readonly="readOnly" class="form-control" ng-model="userDetails.apiKey" required>
@@ -136,15 +149,61 @@
                   </div>
                 </div>
               </div>
-              <div class="form-group" ng-class="{ 'has-error': form.$submitted && form.privilege.$invalid }">
-                <label class="col-sm-3 control-label" for="privilege">CAST Privileges</label>
+              </div>
+              <div ng-if="userDetails.role == 'User'">
+                <div ng-init= apiCheck(userDetails.apiKey)>
+                </div>
+              </div>
+              <div>
+                <div class="pull-right" style="margin-top: 5px;">
+                  <md-button style="font-size: 15px; background-color: rgb(90, 132, 187);" ng-click="readOnly=false" ng-show="readOnly" class="add-tab md-primary md-raised"><i class="glyphicon glyphicon-edit"> </i> Edit </md-button>
+                  <md-button type="submit" style="font-size: 15px;  background-color: rgb(90, 132, 187);" ng-hide="readOnly" class="add-tab md-primary md-raised">Save </md-button>
+                  <md-button ng-hide="readOnly" class="md-raised" style="font-size: 15px; " ng-click="readOnly = true">Cancel </md-button>
+                </div>
+              </div>
+            </div>
+          </fieldset>
+        </form>
+      </div>
+      <div ng-show="hidePrivileges" class="col-md-7" id="extras">
+        <form class="form-horizontal" name="form2" ng-submit="form2.$valid && updateUserDetails(userDetails)" novalidate>
+          <fieldset>
+            <div class="control-group">
+              <!-- Form Name -->
+              <!-- Text input-->
+              <div class="form-group" ng-class="{ 'has-error': form2.$submitted && form2.userName.$invalid }">
+                <label class="col-sm-3 control-label" for="userName">User Name</label>
                 <div class="col-sm-8">
-                  <md-radio-group ng-model="userDetails.role">
-                    <md-radio-button class="md-primary" ng-disabled="readOnly" ng-model="userDetails.role" ng-required="!register.privilege" name="privilege" class="form-control" value="Administrator"> Administrator </md-radio-button>
-                    <md-radio-button class="md-primary" ng-disabled="readOnly" ng-model="userDetails.role" ng-required="!register.privilege" name="privilege" class="form-control" value="User"> User </md-radio-button>
-                  </md-radio-group>
-                  <div ng-messages="form.$submitted && form.privilege.$error" class="help-block">
-                    <div ng-message="required">Previleges required</div>
+                  <input type="text" placeholder="User Name" id="userName" name="userName" ng-readonly="readOnly" class="form-control" ng-model="userDetails.userName" required>
+                  <div ng-messages="form2.$submitted && form2.userName.$error" class="help-block">
+                    <div ng-message="required">User name is required</div>
+                  </div>
+                </div>
+              </div>
+              <div class="form-group" ng-class="{ 'has-error': form2.$submitted && form2.userFirstName.$invalid }">
+                <label class="col-sm-3 control-label" for="userFirstName">First Name</label>
+                <div class="col-sm-8">
+                  <input type="text" placeholder="First Name" id="userFirstName" name="userFirstName" ng-readonly="readOnly" class="form-control" ng-model="userDetails.userFirstName" required>
+                  <div ng-messages="form2.$submitted && form2.userFirstName.$error" class="help-block">
+                    <div ng-message="required">First name is required</div>
+                  </div>
+                </div>
+              </div>
+              <div class="form-group" ng-class="{ 'has-error': form2.$submitted && form2.userLastName.$invalid }">
+                <label class="col-sm-3 control-label" for="userLastName">Last Name</label>
+                <div class="col-sm-8">
+                  <input type="text" placeholder="Last Name" id="userLastName" name="userLastName" ng-readonly="readOnly" class="form-control" ng-model="userDetails.userLastName" required>
+                  <div ng-messages="form2.$submitted && form2.userLastName.$error" class="help-block">
+                    <div ng-message="required">Last name is required</div>
+                  </div>
+                </div>
+              </div>
+              <div class="form-group" ng-class="{ 'has-error': form2.$submitted && form2.usermailId.$invalid }">
+                <label class="col-sm-3 control-label" for="usermailId">Email ID</label>
+                <div class="col-sm-8">
+                  <input type="email" placeholder="Email ID" id="usermailId" name="usermailId" ng-readonly="readOnly" class="form-control" ng-model="userDetails.usermailId" required>
+                  <div ng-messages="form2.$submitted && form2.usermailId.$error" class="help-block">
+                    <div ng-message="required">Email ID is required</div>
                   </div>
                 </div>
               </div>
@@ -161,7 +220,7 @@
       </div>
       <div class="col-md-5">
         <md-button style="font-size: 15px;" ng-click="changePassword=true" ng-hide="readOnly" class="add-tab md-primary md-raised"><i class="glyphicon glyphicon-edit"> </i> Change Password </md-button>
-        <form class="form-horizontal" name="form2" ng-submit="form2.$valid && updateUserPassword(form2, userPasswordChange)" novalidate>
+        <form class="form-horizontal" name="form3" ng-submit="form3.$valid && updateUserPassword(form3, userPasswordChange)" novalidate>
           <fieldset>
             <div class="control-group">
               <div ng-show="changePassword" style="margin-top: 30px;" class="panel panel-default-table panel-table">
@@ -176,9 +235,9 @@
                           <label>Enter Current Password </label>
                         </td>
                         <td>
-                          <div class="form-group" ng-class="{ 'has-error': form2.$submitted && form2.currentPassword.$invalid }">
+                          <div class="form-group" ng-class="{ 'has-error': form3.$submitted && form3.currentPassword.$invalid }">
                             <input type="password" placeholder="Current password" id="currentPassword" name="currentPassword" ng-readonly="readOnly" class="form-control" ng-model="userPasswordChange.currentPassword" required>
-                            <div ng-messages="form2.$submitted && form2.currentPassword.$error" class="help-block">
+                            <div ng-messages="form3.$submitted && form3.currentPassword.$error" class="help-block">
                               <div ng-message="required">Current password is required</div>
                             </div>
                           </div>
@@ -189,9 +248,9 @@
                           <label>Enter new Password </label>
                         </td>
                         <td>
-                          <div class="form-group" ng-class="{ 'has-error': form2.$submitted && form2.newPassword.$invalid }">
+                          <div class="form-group" ng-class="{ 'has-error': form3.$submitted && form3.newPassword.$invalid }">
                             <input type="password" placeholder="New password" id="newPassword" name="newPassword" ng-readonly="readOnly" class="form-control" ng-model="userPasswordChange.newPassword" required>
-                            <div ng-messages="form2.$submitted && form2.newPassword.$error" class="help-block">
+                            <div ng-messages="form3.$submitted && form3.newPassword.$error" class="help-block">
                               <div ng-message="required">New password is required</div>
                             </div>
                           </div>
@@ -202,9 +261,9 @@
                           <label>Repeat new Password</label>
                         </td>
                         <td>
-                          <div class="form-group" ng-class="{ 'has-error': form2.$submitted && form2.newPasswordRepeat.$invalid }">
+                          <div class="form-group" ng-class="{ 'has-error': form3.$submitted && form3.newPasswordRepeat.$invalid }">
                             <input type="password" placeholder="Repeat new password" id="newPasswordRepeat" name="newPasswordRepeat" ng-readonly="readOnly" class="form-control" ng-model="userPasswordChange.newPasswordRepeat" required>
-                            <div ng-messages="form2.$submitted && form2.newPasswordRepeat.$error" class="help-block">
+                            <div ng-messages="form3.$submitted && form3.newPasswordRepeat.$error" class="help-block">
                               <div ng-message="required">New password is required</div>
                             </div>
                           </div>
@@ -213,7 +272,7 @@
                       <tr>
                         <td colspan="2" style="border-top: 1px solid #fff; text-align: center">
                           <md-button type="submit" style="font-size: 15px; background-color: rgb(90, 132, 187);" class="add-tab md-primary md-raised"> <i class="glyphicon glyphicon-floppy-disk"> </i> Update </md-button>
-                          <md-button type="reset" class="md-raised" style="font-size: 15px;" ng-click="form2.$setPristine();userPasswordChange ={}">Clear </md-button>
+                          <md-button type="reset" class="md-raised" style="font-size: 15px;" ng-click="form3.$setPristine();userPasswordChange ={}">Clear </md-button>
                         </td>
                       </tr>
                     </tbody>

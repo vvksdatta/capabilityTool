@@ -4,7 +4,7 @@
   $(".nav-tabs li").eq(2).removeClass("active");
   $(".nav-tabs li").eq(3).addClass("active");
 </script>
-<md-content style="overflow: unset;" >
+<md-content ng-hide="notAdministrator" style="overflow: unset;" >
   <md-whiteframe class="md-whiteframe-18dp"  layout layout-align="center center">
     <div class="col-md-8" style="align-self: normal; margin-top: 20px;" >
       <span>

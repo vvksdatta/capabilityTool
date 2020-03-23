@@ -252,7 +252,8 @@
       .state('manageUser.myDetails', {
         url: '/myDetails',
         params: {
-          userId: null
+          userId: null,
+          status: null
         },
         templateUrl: 'user/userPage.html',
         controller: 'userPageCtrl',
@@ -266,7 +267,7 @@
         controller: 'createNewUserCtrl',
         ncyBreadcrumb: {
           label: 'Create new user'
-        }
+        },
       })
       .state('manageUser.manageUserAccounts', {
         url: '/manageUsers',
@@ -739,15 +740,17 @@
       });
     };
     $scope.currentUserId = $localStorage.currentUser.userId;
+    $scope.currentUserRole = $localStorage.currentUser.role;
+      if(  $scope.currentUserRole != 'Administrator' ){
+      $scope.notAdministrator = true;
+      $scope.hidePrivileges = true;
+    }
+    if( $scope.currentUserRole == null ){
+    $scope.notAdministrator = true;
+      $scope.hidePrivileges = false;
+   }
     if ($scope.currentUserId != null) {
-      $http.get('/api/people/getUserName/' + $scope.currentUserId).then(function(response) {
-          $scope.newUserName = response.data.personName;
-        })
-        .catch(function(response, status) {
-          var optionalDelay = 800000;
-          var $string = "Error in fetching user name";
-          alertFactory.addAuto('danger', $string, optionalDelay);
-        })
+        $scope.newUserName = $localStorage.currentUser.userFirstName + " "+$localStorage.currentUser.userLastName;
     }
     var tabClasses;
 
@@ -761,8 +764,20 @@
       return "tab-pane " + tabClasses[tabNum];
     }
     $scope.setActiveTab = function(tabNum) {
-      initTabs();
+      //initTabs();
+      if(tabNum == '1'){
       tabClasses[tabNum] = "active";
+    }
+    if(tabNum != '1'){
+      if(  $scope.currentUserRole == 'Administrator'){
+            tabClasses[tabNum] = "active";
+      } else{
+            var $string = "Access restricted to authorized personnel!";
+            var optionalDelay = 800000;
+            alertFactory.addAuto('danger', $string, optionalDelay);
+          //$scope.notAdministrator = true;
+      }
+  }
     };
     initTabs();
   });
@@ -912,6 +927,14 @@
         }
       });
     };
+    var emptyPrivileges = $stateParams.status;
+    if (emptyPrivileges == "true") {
+      var optionalDelay = 800000;
+      var $string = "Note: Please update the privileges for user '" + $localStorage.currentUser.userFirstName + "'. Login agian for the changes to take effect. ";
+      alertFactory.addAuto('info', $string, optionalDelay);
+      alertFactory.addAuto('info', $string, optionalDelay);
+    }
+
     var optionalDelay = 800000;
     var $string = "Note : You will be logged out when you modify your account details. Please login using updated credentials. ";
     alertFactory.addAuto('info', $string, optionalDelay);
@@ -929,6 +952,13 @@
           var $string = "Error in fetching user details";
           alertFactory.addAuto('danger', $string, optionalDelay);
         });
+    }
+    $scope.apiCheck = function(apiKey){
+      if(apiKey == null){
+        $scope.userDetails.apiKey = 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx';
+        apiKey =      $scope.userDetails.apiKey;
+      }
+      return apiKey;
     }
     $scope.updateUserDetails = function(userDetails) {
       $http.put('/api/people/updateUserDetails/', userDetails).then(function(response) {
@@ -1290,6 +1320,7 @@
               $localStorage.currentUser = {
                 userFirstName: response.data.userFirstName,
                 userId: response.data.userId,
+                role: response.data.role,
                 token: response.data.token
               };
               // add jwt token to auth header for all requests made by the $http service
@@ -1330,8 +1361,20 @@
     if ($localStorage.currentUser) {
       $scope.userFirstName = $localStorage.currentUser.userFirstName;
       $scope.currentUserId = $localStorage.currentUser.userId;
+      $scope.currentUserRole =  $localStorage.currentUser.role;
+    }
+    $scope.management = function (){
+      if($scope.currentUserRole == "Administrator"){
+      $state.go("management.projects.projectsTable");
+    }else{
+      var optionalDelay = 800000;
+      var $string = "Access restricted to authorized personnel!";
+    alertFactory.addAuto('danger', $string, optionalDelay);
+    }
     }
     $scope.synchronize = function() {
+
+      if( $scope.currentUserRole == 'Administrator'){
       $scope.loading = true;
       $http.get('/api/redmine/' + $localStorage.currentUser.userId).then(function(response) {
           $scope.loading = false;
@@ -1353,8 +1396,14 @@
           alertFactory.addAuto('danger', $string, optionalDelay);
         });
     }
+    else{
+      var optionalDelay = 800000;
+      var $string = "Access restricted to authorized personnel!";
+    alertFactory.addAuto('danger', $string, optionalDelay);
+    }
+  }
   });
-  app.controller('LoginIndexController', function($base64, $state, $http, $q, $scope, dataService, alertFactory, $location, AuthenticationService, $rootScope) {
+  app.controller('LoginIndexController', function($base64, $localStorage, $log, $state, $http, $q, $scope, dataService, alertFactory, $location, AuthenticationService, $rootScope) {
     if ($rootScope.alerts.length != 0) {
       angular.forEach($rootScope.alerts, function(value, key) {
         var alert = {};
@@ -1380,7 +1429,21 @@
           var optionalDelay = 5000;
           var $string = "Login successful!";
           alertFactory.addAuto('success', $string, optionalDelay);
-          $location.path('/');
+          $http.get('/api/people/getUserDetailsbyId/' + $localStorage.currentUser.userId).then(function(response) {
+              if (response.data.role == null) {
+                var alert = {};
+                alert.status = "true";
+                $localStorage.currentUser.userLastName = response.data.userLastName;
+                $state.go("manageUser.myDetails", alert);
+              } else {
+                $state.go("home");
+              }
+            })
+            .catch(function(response, status) {
+              var optionalDelay = 800000;
+              var $string = "Error in fetching user details";
+              alertFactory.addAuto('danger', $string, optionalDelay);
+            });
         } else {
           vm.username = null;
           vm.password = null;
