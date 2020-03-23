@@ -69,7 +69,7 @@ public class ProjectResource {
 		this.redmineUrl = redmineUrl;
 	}
 
-	@RolesAllowed({ UserRoles.ROLE_ONE })
+	
 	@GET
 	@Path("/summary")
 
@@ -315,6 +315,7 @@ public class ProjectResource {
 		return Response.ok().entity(createNewProject).build();
 	}
 
+	@RolesAllowed({ UserRoles.ROLE_ONE })
 	@PUT
 	@Path("/setProjectParticipants/{projectId}/{userId}")
 	public Response setProjectParticipants(@Auth User user, List<RolesOfPeople> rolesOfPeople,
@@ -352,7 +353,8 @@ public class ProjectResource {
 		}
 		return Response.ok().build();
 	}
-
+	
+	@RolesAllowed({ UserRoles.ROLE_ONE })
 	@PUT
 	@Path("/updateProjectParticipants/{projectId}/{userId}")
 	public Response updateProjectParticipants(@Auth User user, List<RolesOfPeople> rolesOfPeople,
@@ -404,7 +406,8 @@ public class ProjectResource {
 		success.setSuccess("update successful");
 		return Response.ok(success).build();
 	}
-
+	
+	@RolesAllowed({ UserRoles.ROLE_ONE })
 	@PUT
 	@Path("/rolesOfPeopleInProject")
 	public Response rolesOfPeopleInProject(@Auth User user, Integer projectId) throws RedmineException {
@@ -424,7 +427,8 @@ public class ProjectResource {
 		}
 
 	}
-
+	
+	@RolesAllowed({ UserRoles.ROLE_ONE })
 	@PUT
 	@Path("/updateProject")
 	public Response newProject(@Auth User user, Projects updateProject) throws RedmineException {

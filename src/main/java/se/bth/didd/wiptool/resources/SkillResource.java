@@ -5,6 +5,8 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+
+import javax.annotation.security.RolesAllowed;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -16,6 +18,8 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
+
+import io.dropwizard.auth.Auth;
 import se.bth.didd.wiptool.api.People;
 import se.bth.didd.wiptool.api.PersonId;
 import se.bth.didd.wiptool.api.ProgrammingSkillValueOfPeople;
@@ -26,6 +30,8 @@ import se.bth.didd.wiptool.api.SkillNameValueUser;
 import se.bth.didd.wiptool.api.SkillTabsTemplate;
 import se.bth.didd.wiptool.api.SkillTimelineGraphs;
 import se.bth.didd.wiptool.api.SuccessMessage;
+import se.bth.didd.wiptool.auth.jwt.User;
+import se.bth.didd.wiptool.auth.jwt.UserRoles;
 import se.bth.didd.wiptool.db.SkillDAO;
 
 @Path("/skills")
@@ -151,7 +157,7 @@ public class SkillResource {
 		return Response.ok(programmingSkillValuesOfPeople).build();
 
 	}
-
+	
 	@PUT
 	@Path("/searchSkill")
 	public List<SkillTabsTemplate> searchSkill(String enteredSkill) {
@@ -180,10 +186,11 @@ public class SkillResource {
 
 		}
 	}
-
+	
+	@RolesAllowed({ UserRoles.ROLE_ONE })
 	@POST
 	@Path("/insertSkillsAssessment/{id}")
-	public Response insertSkillAssessment(List<SkillNameValueUser> skillList, @PathParam("id") int personId) {
+	public Response insertSkillAssessment(@Auth User user, List<SkillNameValueUser> skillList, @PathParam("id") int personId) {
 		Long timeStamp = Calendar.getInstance().getTimeInMillis();
 		for (SkillNameValueUser eachEnteredSkill : skillList) {
 
@@ -204,10 +211,11 @@ public class SkillResource {
 		success.setSuccess("success");
 		return Response.ok(success).build();
 	}
-
+	
+	@RolesAllowed({ UserRoles.ROLE_ONE })
 	@POST
 	@Path("/insertSkill")
-	public List<SkillTabsTemplate> insertSkill(String newSkill) {
+	public List<SkillTabsTemplate> insertSkill(@Auth User user, String newSkill) {
 		if (newSkill != "") {
 
 			try {
@@ -229,10 +237,11 @@ public class SkillResource {
 
 		return null;
 	}
-
+	
+	@RolesAllowed({ UserRoles.ROLE_ONE })
 	@POST
 	@Path("/editSkillDetails")
-	public Response updateSkill(Skill skill) {
+	public Response updateSkill(@Auth User user, Skill skill) {
 		try {
 			skillDAO.updateSkill(skill);
 		} catch (Exception e) {
@@ -242,10 +251,11 @@ public class SkillResource {
 		success.setSuccess("success");
 		return Response.ok(success).build();
 	}
-
+	
+	@RolesAllowed({ UserRoles.ROLE_ONE })
 	@DELETE
 	@Path("/deleteSkill/{id}")
-	public Response deleteSkill(@PathParam("id") Integer skillId) {
+	public Response deleteSkill(@Auth User user, @PathParam("id") Integer skillId) {
 		try {
 			skillDAO.deleteSkillfromAssessmentofSkills(skillId);
 			skillDAO.deleteSkill(skillId);

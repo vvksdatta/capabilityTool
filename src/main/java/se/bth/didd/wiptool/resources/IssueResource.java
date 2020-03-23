@@ -1,6 +1,8 @@
 package se.bth.didd.wiptool.resources;
 
 import java.util.List;
+
+import javax.annotation.security.RolesAllowed;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -15,12 +17,16 @@ import com.taskadapter.redmineapi.RedmineManager;
 import com.taskadapter.redmineapi.RedmineManagerFactory;
 import com.taskadapter.redmineapi.bean.Issue;
 import com.taskadapter.redmineapi.bean.IssueFactory;
+
+import io.dropwizard.auth.Auth;
 import se.bth.didd.wiptool.api.AllocatedIssue;
 import se.bth.didd.wiptool.api.ErrorMessage;
 import se.bth.didd.wiptool.api.IssueTemplate;
 import se.bth.didd.wiptool.api.IssueUpdateTemplate;
 import se.bth.didd.wiptool.api.SprintIdProjectIdIssuesAllocated;
 import se.bth.didd.wiptool.api.SuccessMessage;
+import se.bth.didd.wiptool.auth.jwt.User;
+import se.bth.didd.wiptool.auth.jwt.UserRoles;
 import se.bth.didd.wiptool.db.IssuesDAO;
 
 @Path("/issues")
@@ -49,10 +55,11 @@ public class IssueResource {
 			return Response.status(Status.BAD_REQUEST).entity(e).build();
 		}
 	}
-
+	
+	@RolesAllowed({ UserRoles.ROLE_ONE })
 	@POST
 	@Path("/updateAllocatedIssues")
-	public Response updateAllocatedIssues(SprintIdProjectIdIssuesAllocated issuesAllocated) {
+	public Response updateAllocatedIssues(@Auth User user, SprintIdProjectIdIssuesAllocated issuesAllocated) {
 		String apiKey;
 		try {
 			 apiKey = issueDAO.getApiKeyOfUser(issuesAllocated.getUserId()).get(0);

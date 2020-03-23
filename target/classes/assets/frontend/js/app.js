@@ -1430,10 +1430,10 @@
           var $string = "Login successful!";
           alertFactory.addAuto('success', $string, optionalDelay);
           $http.get('/api/people/getUserDetailsbyId/' + $localStorage.currentUser.userId).then(function(response) {
+              $localStorage.currentUser.userLastName = response.data.userLastName;
               if (response.data.role == null) {
                 var alert = {};
                 alert.status = "true";
-                $localStorage.currentUser.userLastName = response.data.userLastName;
                 $state.go("manageUser.myDetails", alert);
               } else {
                 $state.go("home");

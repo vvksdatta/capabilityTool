@@ -3,6 +3,8 @@ package se.bth.didd.wiptool.resources;
 import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
 import static org.jose4j.jws.AlgorithmIdentifiers.HMAC_SHA256;
 import java.util.List;
+
+import javax.annotation.security.RolesAllowed;
 import javax.ws.rs.GET;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
@@ -20,6 +22,7 @@ import se.bth.didd.wiptool.api.Login;
 import se.bth.didd.wiptool.api.People;
 import se.bth.didd.wiptool.api.SuccessMessage;
 import se.bth.didd.wiptool.auth.Secrets;
+import se.bth.didd.wiptool.auth.jwt.UserRoles;
 import se.bth.didd.wiptool.db.AuthDAO;
 import se.bth.didd.wiptool.resources.dto.LoginResponse;
 
@@ -71,6 +74,7 @@ public class LoginResource {
 		return Response.ok(newUser).build();
 	}
 */
+	@RolesAllowed({ UserRoles.ROLE_ONE })
 	@PUT
 	@Path("/register")
 	public Response registerNewUser(Login login) {

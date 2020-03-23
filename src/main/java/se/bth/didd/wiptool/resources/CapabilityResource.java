@@ -5,6 +5,8 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+
+import javax.annotation.security.RolesAllowed;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -15,6 +17,8 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
+
+import io.dropwizard.auth.Auth;
 import se.bth.didd.wiptool.api.Capability;
 import se.bth.didd.wiptool.api.CapabilityDetailsComparisonGraphs;
 import se.bth.didd.wiptool.api.CapabilityIdMeasure;
@@ -26,6 +30,8 @@ import se.bth.didd.wiptool.api.CapabilityDetailsforGraphs;
 import se.bth.didd.wiptool.api.People;
 import se.bth.didd.wiptool.api.PersonId;
 import se.bth.didd.wiptool.api.SuccessMessage;
+import se.bth.didd.wiptool.auth.jwt.User;
+import se.bth.didd.wiptool.auth.jwt.UserRoles;
 import se.bth.didd.wiptool.db.CapabilityDAO;
 
 @Path("/capabilities")
@@ -51,7 +57,8 @@ public class CapabilityResource {
 			return Response.status(Status.BAD_REQUEST).entity(e).build();
 		}
 	}
-
+	
+	
 	@GET
 	@Path("/getCapabilitiesOfPerson/{id}")
 	public List<CapabilityIdProficiency> getCapabilitiesOfPerson(@PathParam("id") Integer personId) {
@@ -105,10 +112,11 @@ public class CapabilityResource {
 			return null;
 		}
 	}
-
+	
+	@RolesAllowed({ UserRoles.ROLE_ONE })
 	@PUT
 	@Path("/getCapabilityValueOfPeople")
-	public Response getCapabilityValueOfPerson(CapabilityValueOfPeople capabilityOfPeople) {
+	public Response getCapabilityValueOfPerson(@Auth User user,CapabilityValueOfPeople capabilityOfPeople) {
 		List<CapabilityDetailsComparisonGraphs> capabilityValuesOfPeople = new ArrayList<CapabilityDetailsComparisonGraphs>();
 
 		for (PersonId eachPerson : capabilityOfPeople.getPeople()) {
@@ -154,10 +162,11 @@ public class CapabilityResource {
 		return Response.ok(capabilityValuesOfPeople).build();
 
 	}
-
+	
+	@RolesAllowed({ UserRoles.ROLE_ONE })
 	@POST
 	@Path("/insertCapabilities/{id}")
-	public Response insertCapabilities(List<CapabilityList> capabilityList, @PathParam("id") Integer personId) {
+	public Response insertCapabilities(@Auth User user, List<CapabilityList> capabilityList, @PathParam("id") Integer personId) {
 		Long timeStamp = Calendar.getInstance().getTimeInMillis();
 
 		for (CapabilityList capability : capabilityList) {
@@ -207,7 +216,8 @@ public class CapabilityResource {
 		success.setSuccess("updated");
 		return Response.ok(success).build();
 	}
-
+	
+	
 	@POST
 	@Path("/insertDefaultCapabilities")
 	public Response insertDefaultCapabilities() {

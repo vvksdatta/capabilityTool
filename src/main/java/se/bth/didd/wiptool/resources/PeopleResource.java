@@ -69,7 +69,6 @@ public class PeopleResource {
 		
 	}
 	
-	@RolesAllowed({ UserRoles.ROLE_ONE })
 	@GET
 	@Path("/getPersonName/{id}")
 	public Response getPerson(@Auth User user, @PathParam("id") Integer personId) throws SQLException {
@@ -129,7 +128,8 @@ public class PeopleResource {
 			return Response.status(Status.BAD_REQUEST).entity(e).build();
 		}
 	}
-
+	
+	@RolesAllowed({ UserRoles.ROLE_ONE })
 	@DELETE
 	@Path("/deleteUser/{userId}")
 
@@ -341,7 +341,8 @@ public class PeopleResource {
 			return personDetailsRoles;
 		}
 	}
-
+	
+	@RolesAllowed({ UserRoles.ROLE_ONE })
 	@PUT
 	@Path("/addPerson")
 	public Response addNewPerson(@Auth User user, NewPerson newPerson) throws RedmineException {
@@ -382,6 +383,7 @@ public class PeopleResource {
 		return Response.ok(addedPerson).build();
 	}
 
+	@RolesAllowed({ UserRoles.ROLE_ONE })
 	@PUT
 	@Path("/updateUserDetails")
 	public Response updateUserDetails(@Auth User curentUser, UserTemplate user) throws RedmineException {
@@ -400,7 +402,8 @@ public class PeopleResource {
 		}
 		return Response.status(Status.BAD_REQUEST).build();
 	}
-
+	
+	@RolesAllowed({ UserRoles.ROLE_ONE })
 	@PUT
 	@Path("/updateUserPassword")
 	public Response updateUserPassword(@Auth User currentUser, String encoded)
@@ -432,6 +435,7 @@ public class PeopleResource {
 
 	}
 
+	@RolesAllowed({ UserRoles.ROLE_ONE })
 	@PUT
 	@Path("/updatePerson")
 	public Response updatePerson(@Auth User user, NewPerson newPerson) throws RedmineException {

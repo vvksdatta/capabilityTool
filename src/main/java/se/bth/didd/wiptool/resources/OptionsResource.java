@@ -1,6 +1,8 @@
 package se.bth.didd.wiptool.resources;
 
 import java.util.List;
+
+import javax.annotation.security.RolesAllowed;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -10,8 +12,12 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 import com.taskadapter.redmineapi.RedmineException;
+
+import io.dropwizard.auth.Auth;
 import se.bth.didd.wiptool.api.OptionsTemplate;
 import se.bth.didd.wiptool.api.SuccessMessage;
+import se.bth.didd.wiptool.auth.jwt.User;
+import se.bth.didd.wiptool.auth.jwt.UserRoles;
 import se.bth.didd.wiptool.db.OptionsDAO;
 
 
@@ -52,10 +58,11 @@ public class OptionsResource {
 		}
 		return Response.status(Status.BAD_REQUEST).build();
 	}
-
+	
+	@RolesAllowed({ UserRoles.ROLE_ONE })
 	@POST
 	@Path("/updateOptions")
-	public Response updateOptions(OptionsTemplate updatedOptions) throws RedmineException {
+	public Response updateOptions(@Auth User user, OptionsTemplate updatedOptions) throws RedmineException {
 
 		try {
 			if (optionsDAO.ifOptionsAdded()) {
@@ -69,7 +76,8 @@ public class OptionsResource {
 
 		return Response.ok(updatedOptions).build();
 	}
-
+	
+	
 	@POST
 	@Path("/insertDefaultOptions")
 	public Response insertDefaultOptions() {

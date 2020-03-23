@@ -8,6 +8,8 @@ import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+
+import javax.annotation.security.RolesAllowed;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -25,6 +27,8 @@ import com.taskadapter.redmineapi.RedmineManager;
 import com.taskadapter.redmineapi.RedmineManagerFactory;
 import com.taskadapter.redmineapi.bean.Version;
 import com.taskadapter.redmineapi.bean.VersionFactory;
+
+import io.dropwizard.auth.Auth;
 import se.bth.didd.wiptool.api.SprintIdProjectId;
 import se.bth.didd.wiptool.api.NewSprint;
 import se.bth.didd.wiptool.api.People;
@@ -46,6 +50,8 @@ import se.bth.didd.wiptool.api.SprintIdProjectIdParticipants;
 import se.bth.didd.wiptool.api.SprintQuestionnaireTemplate;
 import se.bth.didd.wiptool.api.SprintSummary;
 import se.bth.didd.wiptool.api.SuccessMessage;
+import se.bth.didd.wiptool.auth.jwt.User;
+import se.bth.didd.wiptool.auth.jwt.UserRoles;
 import se.bth.didd.wiptool.db.SprintDAO;
 import se.bth.didd.wiptool.api.CompanyDrivenFactorsNames;
 import se.bth.didd.wiptool.api.ErrorMessage;
@@ -144,9 +150,10 @@ public class SprintResource {
 		return Response.ok(sprintToDisplay).build();
 	}
 
+	@RolesAllowed({ UserRoles.ROLE_ONE })
 	@PUT
 	@Path("/addNewSprint")
-	public Response addNewSprint(NewSprint newSprint) throws RedmineException, SQLException {
+	public Response addNewSprint(@Auth User user, NewSprint newSprint) throws RedmineException, SQLException {
 		String apiKey;
 		try {
 			 apiKey = sprintDAO.getApiKeyOfUser(newSprint.getUserId()).get(0);
@@ -219,9 +226,10 @@ public class SprintResource {
 		return Response.ok(newCreatedSprint).build();
 	}
 
+	@RolesAllowed({ UserRoles.ROLE_ONE })
 	@POST
 	@Path("/updateSprint")
-	public Response updateSprint(ExistingSprint existingSprint) throws RedmineException {
+	public Response updateSprint(@Auth User user, ExistingSprint existingSprint) throws RedmineException {
 		String apiKey;
 		try {
 			 apiKey = sprintDAO.getApiKeyOfUser(existingSprint.getUserId()).get(0);
@@ -466,9 +474,10 @@ public class SprintResource {
 		return sprintDAO.getAllDevelopmentEnv();
 	}
 
+	@RolesAllowed({ UserRoles.ROLE_ONE })
 	@PUT
 	@Path("/updateSprintParticipants")
-	public Response updateSprintParticipants(SprintIdProjectIdParticipants sprintdetails)
+	public Response updateSprintParticipants(@Auth User user, SprintIdProjectIdParticipants sprintdetails)
 			throws RedmineException, SQLException {
 
 		List<Integer> sprintParticipantsWhoContinue = new ArrayList<>();
@@ -528,9 +537,10 @@ public class SprintResource {
 		return Response.ok(success).build();
 	}
 
+	@RolesAllowed({ UserRoles.ROLE_ONE })
 	@POST
 	@Path("/insertDomain")
-	public Response insertDomain(String newDomain) {
+	public Response insertDomain(@Auth User user, String newDomain) {
 		if (newDomain != "") {
 
 			try {
@@ -550,9 +560,10 @@ public class SprintResource {
 		return null;
 	}
 
+	@RolesAllowed({ UserRoles.ROLE_ONE })
 	@POST
 	@Path("/insertAsset")
-	public Response insertAsset(String newAsset) {
+	public Response insertAsset(@Auth User user, String newAsset) {
 		if (newAsset != "") {
 
 			try {
@@ -571,9 +582,10 @@ public class SprintResource {
 		return null;
 	}
 
+	@RolesAllowed({ UserRoles.ROLE_ONE })
 	@POST
 	@Path("/insertCompanyDrivenFactors")
-	public Response insertCompanyDrivenFactors(SprintCompanyDrivenFactors companyDrivenFactors) {
+	public Response insertCompanyDrivenFactors(@Auth User user, SprintCompanyDrivenFactors companyDrivenFactors) {
 		if (companyDrivenFactors.getProjectId() != null) {
 			Long timeStamp = Calendar.getInstance().getTimeInMillis();
 			Date date = new Date(timeStamp);
@@ -650,9 +662,10 @@ public class SprintResource {
 
 	}
 
+	@RolesAllowed({ UserRoles.ROLE_ONE })
 	@POST
 	@Path("/insertEnvironment")
-	public Response insertDevelopmentEnvironment(String newDevelopmentEnvironment) {
+	public Response insertDevelopmentEnvironment(@Auth User user, String newDevelopmentEnvironment) {
 		if (newDevelopmentEnvironment != "") {
 
 			try {
@@ -671,9 +684,10 @@ public class SprintResource {
 		return null;
 	}
 
+	@RolesAllowed({ UserRoles.ROLE_ONE })
 	@POST
 	@Path("/insertRequirement")
-	public Response insertRequirement(String newRequirement) {
+	public Response insertRequirement(@Auth User user, String newRequirement) {
 		if (newRequirement != "") {
 
 			try {
@@ -689,9 +703,10 @@ public class SprintResource {
 		return Response.status(Status.BAD_REQUEST).entity("error").build();
 	}
 
+	@RolesAllowed({ UserRoles.ROLE_ONE })
 	@POST
 	@Path("/insertRequirementAndDescription")
-	public Response insertRequirement(SprintRequirement newRequirement) {
+	public Response insertRequirement(@Auth User user, SprintRequirement newRequirement) {
 		try {
 			sprintDAO.insertNewSprintRequirementAndDescription(newRequirement);
 
@@ -766,9 +781,10 @@ public class SprintResource {
 
 	}
 
+	@RolesAllowed({ UserRoles.ROLE_ONE })
 	@POST
 	@Path("/updateQuestionnaire")
-	public Response updateQuestionnaire(SprintQuestionnaireTemplate questionnaireList) {
+	public Response updateQuestionnaire(@Auth User user, SprintQuestionnaireTemplate questionnaireList) {
 
 		Long timeStamp = Calendar.getInstance().getTimeInMillis();
 		Date date = new Date(timeStamp);
@@ -800,9 +816,10 @@ public class SprintResource {
 		return Response.ok(sprintDetailsForResponse).build();
 	}
 
+	@RolesAllowed({ UserRoles.ROLE_ONE })
 	@POST
 	@Path("/updateRequirementsSelection")
-	public Response updateRequirementsSelection(List<SprintRequirementUpdate> requirementsList) {
+	public Response updateRequirementsSelection(@Auth User user, List<SprintRequirementUpdate> requirementsList) {
 		Long timeStamp = Calendar.getInstance().getTimeInMillis();
 		for (SprintRequirementUpdate eachenteredRequirement : requirementsList) {
 
@@ -856,9 +873,10 @@ public class SprintResource {
 
 	}
 
+	@RolesAllowed({ UserRoles.ROLE_ONE })
 	@PUT
 	@Path("/insertRequirementsSelection")
-	public Response insertRequirementsSelection(List<SprintRequirementNameValueDescriptionUser> requirementsList) {
+	public Response insertRequirementsSelection(@Auth User user, List<SprintRequirementNameValueDescriptionUser> requirementsList) {
 		Long timeStamp = Calendar.getInstance().getTimeInMillis();
 		for (SprintRequirementNameValueDescriptionUser eachenteredRequirement : requirementsList) {
 
@@ -927,9 +945,10 @@ public class SprintResource {
 		return Response.status(Status.BAD_REQUEST).entity("error").build();
 	}
 
+	@RolesAllowed({ UserRoles.ROLE_ONE })
 	@DELETE
 	@Path("/deleteSprintParticipants/{sprintId}/{projectId}")
-	public Response deleteSprintParticipants(@PathParam("sprintId") Integer sprintId,
+	public Response deleteSprintParticipants(@Auth User user, @PathParam("sprintId") Integer sprintId,
 			@PathParam("projectId") Integer projectId) throws RedmineException, SQLException {
 
 		try {
@@ -952,9 +971,10 @@ public class SprintResource {
 		return sprintDAO.findBySprintId(id);
 	}
 
+	@RolesAllowed({ UserRoles.ROLE_ONE })
 	@POST
 	@Path("/editEnvDetails")
-	public Response updateEnv(SprintDevelopmentEnvironment env) {
+	public Response updateEnv(@Auth User user, SprintDevelopmentEnvironment env) {
 		try {
 			sprintDAO.updateEnv(env);
 		} catch (Exception e) {
@@ -965,9 +985,10 @@ public class SprintResource {
 		return Response.ok(success).build();
 	}
 
+	@RolesAllowed({ UserRoles.ROLE_ONE })
 	@POST
 	@Path("/editAssetDetails")
-	public Response updateAsset(SprintAsset env) {
+	public Response updateAsset(@Auth User user, SprintAsset env) {
 		try {
 			sprintDAO.updateAsset(env);
 		} catch (Exception e) {
@@ -978,9 +999,10 @@ public class SprintResource {
 		return Response.ok(success).build();
 	}
 
+	@RolesAllowed({ UserRoles.ROLE_ONE })
 	@POST
 	@Path("/editDomainDetails")
-	public Response updateDomain(SprintDomain env) {
+	public Response updateDomain(@Auth User user, SprintDomain env) {
 		try {
 			sprintDAO.updateDomain(env);
 		} catch (Exception e) {
@@ -991,9 +1013,10 @@ public class SprintResource {
 		return Response.ok(success).build();
 	}
 
+	@RolesAllowed({ UserRoles.ROLE_ONE })
 	@POST
 	@Path("/editRequirementDetails")
-	public Response updateRequirement(SprintRequirement requirement) {
+	public Response updateRequirement(@Auth User user, SprintRequirement requirement) {
 		try {
 			sprintDAO.updateRequirement(requirement);
 		} catch (Exception e) {
@@ -1004,9 +1027,10 @@ public class SprintResource {
 		return Response.ok(success).build();
 	}
 
+	@RolesAllowed({ UserRoles.ROLE_ONE })
 	@DELETE
 	@Path("/deleteEnv/{id}")
-	public Response deleteEnv(@PathParam("id") Integer envId) {
+	public Response deleteEnv(@Auth User user, @PathParam("id") Integer envId) {
 		try {
 			sprintDAO.deleteEnvFromSprintDevDB(envId);
 			sprintDAO.deleteEnvironment(envId);
@@ -1023,9 +1047,10 @@ public class SprintResource {
 
 	}
 
+	@RolesAllowed({ UserRoles.ROLE_ONE })
 	@DELETE
 	@Path("/deleteAsset/{id}")
-	public Response deleteAsset(@PathParam("id") Integer assetId) {
+	public Response deleteAsset(@Auth User user, @PathParam("id") Integer assetId) {
 		try {
 			sprintDAO.deleteAssetFromAssetsInSprint(assetId);
 			sprintDAO.deleteAsset(assetId);
@@ -1042,9 +1067,10 @@ public class SprintResource {
 
 	}
 
+	@RolesAllowed({ UserRoles.ROLE_ONE })
 	@DELETE
 	@Path("/deleteDomain/{id}")
-	public Response deleteDomain(@PathParam("id") Integer domainId) {
+	public Response deleteDomain(@Auth User user, @PathParam("id") Integer domainId) {
 		try {
 			sprintDAO.deleteDomainFromDomainsInSprint(domainId);
 			sprintDAO.deleteDoamin(domainId);
@@ -1061,9 +1087,10 @@ public class SprintResource {
 
 	}
 
+	@RolesAllowed({ UserRoles.ROLE_ONE })
 	@DELETE
 	@Path("/deleteRequirement/{id}")
-	public Response deleteRequirement(@PathParam("id") Integer sprintRequirementId) {
+	public Response deleteRequirement(@Auth User user, @PathParam("id") Integer sprintRequirementId) {
 		try {
 			sprintDAO.deleteRequirementFromRequirementInSprint(sprintRequirementId);
 			sprintDAO.deleteRequirement(sprintRequirementId);

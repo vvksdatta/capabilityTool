@@ -121,7 +121,7 @@
                 <div class="col-sm-8">
                   <md-radio-group ng-model="userDetails.role">
                     <md-radio-button class="md-primary" ng-disabled="readOnly" ng-model="userDetails.role" ng-required="!register.privilege" name="privilege" class="form-control" value="Administrator"> Administrator </md-radio-button>
-                    <md-radio-button class="md-primary" ng-disabled="readOnly" ng-model="userDetails.role" ng-required="!register.privilege" name="privilege" class="form-control" value="User" > User </md-radio-button>
+                    <md-radio-button class="md-primary" ng-disabled="readOnly" ng-model="userDetails.role" ng-required="!register.privilege" name="privilege" class="form-control" value="User"> User </md-radio-button>
                   </md-radio-group>
                   <div ng-messages="form.$submitted && form.privilege.$error" class="help-block">
                     <div ng-message="required">Previleges required</div>
@@ -138,20 +138,20 @@
                 </div>
               </div>
               <div ng-if="userDetails.role == 'Administrator'">
-              <div ng-hide="readOnly"  class="form-group" ng-class="{ 'has-error': form.$submitted && form.apiKey.$invalid }">
-                <label class="col-sm-3 control-label" for="apiKey">Redmine API access key</label>
-                <div class="col-sm-8">
-                  <input type="text" placeholder="Redmine API access key" id="apiKey" name="apiKey" ng-minlength="40" ng-maxlength="40" ng-readonly="readOnly" class="form-control" ng-model="userDetails.apiKey" required>
-                  <div ng-messages="form.$submitted && form.apiKey.$error" class="help-block">
-                    <div ng-message="required">Redmine API access key is required</div>
-                    <div ng-message="minlength">API key must contain atleast 40 characters</div>
-                    <div ng-message="maxlength">API key must not exceed 40 characters</div>
+                <div ng-hide="readOnly" class="form-group" ng-class="{ 'has-error': form.$submitted && form.apiKey.$invalid }">
+                  <label class="col-sm-3 control-label" for="apiKey">Redmine API access key</label>
+                  <div class="col-sm-8">
+                    <input type="text" placeholder="Redmine API access key" id="apiKey" name="apiKey" ng-minlength="40" ng-maxlength="40" ng-readonly="readOnly" class="form-control" ng-model="userDetails.apiKey" required>
+                    <div ng-messages="form.$submitted && form.apiKey.$error" class="help-block">
+                      <div ng-message="required">Redmine API access key is required</div>
+                      <div ng-message="minlength">API key must contain atleast 40 characters</div>
+                      <div ng-message="maxlength">API key must not exceed 40 characters</div>
+                    </div>
                   </div>
                 </div>
               </div>
-              </div>
               <div ng-if="userDetails.role == 'User'">
-                <div ng-init= apiCheck(userDetails.apiKey)>
+                <div ng-init=a piCheck(userDetails.apiKey)>
                 </div>
               </div>
               <div>
