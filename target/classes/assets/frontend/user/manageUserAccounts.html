@@ -66,7 +66,7 @@ $(".nav-tabs li").eq(0).removeClass("active");
                   <th>First name</th>
                   <th>Last name</th>
                   <th>Email</th>
-                  <th>Role</th>
+                  <th>Privilege</th>
                   <th>Remove user</th>
                 </tr>
               </thead>
@@ -84,8 +84,11 @@ $(".nav-tabs li").eq(0).removeClass("active");
                   <td>
                     {{user.usermailId}}
                   </td>
-                  <td>
+                  <td ng-if="user.role !=null">
                     {{user.role}}
+                  </td>
+                  <td ng-if="user.role == null">
+                    -
                   </td>
                   <td>
                     <md-button ng-disabled="user.userId == currentUserId || user.userName == 'admin'" class="md-raised" ng-click="removeUser($event, user)" aria-label="Close">

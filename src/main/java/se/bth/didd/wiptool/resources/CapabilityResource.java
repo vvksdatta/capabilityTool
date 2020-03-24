@@ -29,6 +29,7 @@ import se.bth.didd.wiptool.api.CapabilityValueOfPeople;
 import se.bth.didd.wiptool.api.CapabilityDetailsforGraphs;
 import se.bth.didd.wiptool.api.People;
 import se.bth.didd.wiptool.api.PersonId;
+import se.bth.didd.wiptool.api.ProjectIdCapabilityIdProficiency;
 import se.bth.didd.wiptool.api.SuccessMessage;
 import se.bth.didd.wiptool.auth.jwt.User;
 import se.bth.didd.wiptool.auth.jwt.UserRoles;
@@ -64,6 +65,18 @@ public class CapabilityResource {
 	public List<CapabilityIdProficiency> getCapabilitiesOfPerson(@PathParam("id") Integer personId) {
 		try {
 			List<CapabilityIdProficiency> capabilitiesOfPerson = capabilityDAO.capabilitiesOfPerson(personId);
+			return capabilitiesOfPerson;
+
+		} catch (Exception e) {
+			return null;
+		}
+	}
+	
+	@GET
+	@Path("/getCapabilitiesOfPersoninProject/{projectId}/{personId}")
+	public List<ProjectIdCapabilityIdProficiency> getCapabilitiesOfPerson(@PathParam("projectId") Integer projectId, @PathParam("personId") Integer personId) {
+		try {
+			List<ProjectIdCapabilityIdProficiency> capabilitiesOfPerson = capabilityDAO.capabilitiesOfPersoninProject(projectId, personId);
 			return capabilitiesOfPerson;
 
 		} catch (Exception e) {
@@ -110,6 +123,19 @@ public class CapabilityResource {
 
 		} catch (Exception e) {
 			return null;
+		}
+	}
+	
+	@GET
+	@Path("/ifcapabilitiesInProjectAssessed/{id}")
+	public Response ifcapabilitiesInProjectAssessed(@PathParam("id") Integer projectId) {
+		try {
+			boolean capabilitiesAssessedInProject = capabilityDAO.ifcapabilitiesInProjectAssessed(projectId);
+			return Response.ok(capabilitiesAssessedInProject).build();
+
+		} catch (Exception e) {
+			System.out.println(e);
+			return Response.status(Status.BAD_REQUEST).entity(e).build();
 		}
 	}
 	
@@ -165,50 +191,50 @@ public class CapabilityResource {
 	
 	@RolesAllowed({ UserRoles.ROLE_ONE })
 	@POST
-	@Path("/insertCapabilities/{id}")
-	public Response insertCapabilities(@Auth User user, List<CapabilityList> capabilityList, @PathParam("id") Integer personId) {
+	@Path("/insertCapabilities/{projectId}/{personId}")
+	public Response insertCapabilities(@Auth User user, List<CapabilityList> capabilityList, @PathParam("projectId") Integer projectId, @PathParam("personId") Integer personId) {
 		Long timeStamp = Calendar.getInstance().getTimeInMillis();
 
 		for (CapabilityList capability : capabilityList) {
 
 			if (capability.getCommitment() != "") {
 				Timestamp timestamp = new Timestamp(timeStamp);
-				capabilityDAO.insertCapabilityAssessment(personId, 1, capability.getCommitment(),
+				capabilityDAO.insertCapabilityAssessment(projectId, personId, 1, capability.getCommitment(),
 						capability.getUpdatedBy(), timestamp);
 			}
 			if (capability.getDomainKnowledge() != "") {
 				Timestamp timestamp = new Timestamp(timeStamp);
-				capabilityDAO.insertCapabilityAssessment(personId, 2, capability.getDomainKnowledge(),
+				capabilityDAO.insertCapabilityAssessment(projectId, personId, 2, capability.getDomainKnowledge(),
 						capability.getUpdatedBy(), timestamp);
 			}
 			if (capability.getOwnInterest() != "") {
 				Timestamp timestamp = new Timestamp(timeStamp);
-				capabilityDAO.insertCapabilityAssessment(personId, 3, capability.getOwnInterest(),
+				capabilityDAO.insertCapabilityAssessment(projectId, personId, 3, capability.getOwnInterest(),
 						capability.getUpdatedBy(), timestamp);
 			}
 			if (capability.getPrevDelQuality() != "") {
 				Timestamp timestamp = new Timestamp(timeStamp);
-				capabilityDAO.insertCapabilityAssessment(personId, 4, capability.getPrevDelQuality(),
+				capabilityDAO.insertCapabilityAssessment(projectId, personId, 4, capability.getPrevDelQuality(),
 						capability.getUpdatedBy(), timestamp);
 			}
 			if (capability.getPrevProjectPerf() != "") {
 				Timestamp timestamp = new Timestamp(timeStamp);
-				capabilityDAO.insertCapabilityAssessment(personId, 5, capability.getPrevProjectPerf(),
+				capabilityDAO.insertCapabilityAssessment(projectId, personId, 5, capability.getPrevProjectPerf(),
 						capability.getUpdatedBy(), timestamp);
 			}
 			if (capability.getPrgmExperience() != "") {
 				Timestamp timestamp = new Timestamp(timeStamp);
-				capabilityDAO.insertCapabilityAssessment(personId, 6, capability.getPrgmExperience(),
+				capabilityDAO.insertCapabilityAssessment(projectId, personId, 6, capability.getPrgmExperience(),
 						capability.getUpdatedBy(), timestamp);
 			}
 			if (capability.getPrgmLanKnowledge() != "") {
 				Timestamp timestamp = new Timestamp(timeStamp);
-				capabilityDAO.insertCapabilityAssessment(personId, 7, capability.getPrgmLanKnowledge(),
+				capabilityDAO.insertCapabilityAssessment(projectId, personId, 7, capability.getPrgmLanKnowledge(),
 						capability.getUpdatedBy(), timestamp);
 			}
 			if (capability.getUndrSoftSec() != "") {
 				Timestamp timestamp = new Timestamp(timeStamp);
-				capabilityDAO.insertCapabilityAssessment(personId, 8, capability.getUndrSoftSec(),
+				capabilityDAO.insertCapabilityAssessment(projectId, personId, 8, capability.getUndrSoftSec(),
 						capability.getUpdatedBy(), timestamp);
 			}
 		}

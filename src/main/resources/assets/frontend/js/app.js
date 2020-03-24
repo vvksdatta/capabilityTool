@@ -519,6 +519,18 @@
           label: 'Edit project participants',
         }
       })
+      .state('management.projects.updateCapabilities', {
+        url: '/:projectId/updateCapabilities',
+        params: {
+          projectId: null,
+          projectName: null,
+        },
+        controller: 'updateCapabilities',
+        templateUrl: 'project/updateCapabilities.html',
+        ncyBreadcrumb: {
+          label: 'Update project participants\' capabilities',
+        }
+      })
       .state('management.sprints', {
         url: '/sprints',
         templateUrl: 'sprints/sprints.html',
@@ -741,16 +753,16 @@
     };
     $scope.currentUserId = $localStorage.currentUser.userId;
     $scope.currentUserRole = $localStorage.currentUser.role;
-      if(  $scope.currentUserRole != 'Administrator' ){
+    if ($scope.currentUserRole != 'Administrator') {
       $scope.notAdministrator = true;
       $scope.hidePrivileges = true;
     }
-    if( $scope.currentUserRole == null ){
-    $scope.notAdministrator = true;
+    if ($scope.currentUserRole == null) {
+      $scope.notAdministrator = true;
       $scope.hidePrivileges = false;
-   }
+    }
     if ($scope.currentUserId != null) {
-        $scope.newUserName = $localStorage.currentUser.userFirstName + " "+$localStorage.currentUser.userLastName;
+      $scope.newUserName = $localStorage.currentUser.userFirstName + " " + $localStorage.currentUser.userLastName;
     }
     var tabClasses;
 
@@ -765,19 +777,19 @@
     }
     $scope.setActiveTab = function(tabNum) {
       //initTabs();
-      if(tabNum == '1'){
-      tabClasses[tabNum] = "active";
-    }
-    if(tabNum != '1'){
-      if(  $scope.currentUserRole == 'Administrator'){
-            tabClasses[tabNum] = "active";
-      } else{
-            var $string = "Access restricted to authorized personnel!";
-            var optionalDelay = 800000;
-            alertFactory.addAuto('danger', $string, optionalDelay);
-          //$scope.notAdministrator = true;
+      if (tabNum == '1') {
+        tabClasses[tabNum] = "active";
       }
-  }
+      if (tabNum != '1') {
+        if ($scope.currentUserRole == 'Administrator') {
+          tabClasses[tabNum] = "active";
+        } else {
+          var $string = "Access restricted to authorized personnel!";
+          var optionalDelay = 800000;
+          alertFactory.addAuto('danger', $string, optionalDelay);
+          //$scope.notAdministrator = true;
+        }
+      }
     };
     initTabs();
   });
@@ -953,10 +965,10 @@
           alertFactory.addAuto('danger', $string, optionalDelay);
         });
     }
-    $scope.apiCheck = function(apiKey){
-      if(apiKey == null){
+    $scope.apiCheck = function(apiKey) {
+      if (apiKey == null) {
         $scope.userDetails.apiKey = 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx';
-        apiKey =      $scope.userDetails.apiKey;
+        apiKey = $scope.userDetails.apiKey;
       }
       return apiKey;
     }
@@ -1361,47 +1373,46 @@
     if ($localStorage.currentUser) {
       $scope.userFirstName = $localStorage.currentUser.userFirstName;
       $scope.currentUserId = $localStorage.currentUser.userId;
-      $scope.currentUserRole =  $localStorage.currentUser.role;
+      $scope.currentUserRole = $localStorage.currentUser.role;
     }
-    $scope.management = function (){
-      if($scope.currentUserRole == "Administrator"){
-      $state.go("management.projects.projectsTable");
-    }else{
-      var optionalDelay = 800000;
-      var $string = "Access restricted to authorized personnel!";
-    alertFactory.addAuto('danger', $string, optionalDelay);
-    }
+    $scope.management = function() {
+      if ($scope.currentUserRole == "Administrator") {
+        $state.go("management.projects.projectsTable");
+      } else {
+        var optionalDelay = 800000;
+        var $string = "Access restricted to authorized personnel!";
+        alertFactory.addAuto('danger', $string, optionalDelay);
+      }
     }
     $scope.synchronize = function() {
 
-      if( $scope.currentUserRole == 'Administrator'){
-      $scope.loading = true;
-      $http.get('/api/redmine/' + $localStorage.currentUser.userId).then(function(response) {
-          $scope.loading = false;
-          var syncTimeStamp = moment().format('MMM D, YYYY [at] h:mm A.');
-          var $string = "Hurray! Successfully synchronized with Redmine on " + syncTimeStamp;
-          var optionalDelay = 800000;
-          $state.reload();
-          alertFactory.addAuto('success', $string, optionalDelay);
-        })
-        .catch(function(response, status) {
-          $scope.loading = false;
-          if (response.data.message != null) {
+      if ($scope.currentUserRole == 'Administrator') {
+        $scope.loading = true;
+        $http.get('/api/redmine/' + $localStorage.currentUser.userId).then(function(response) {
+            $scope.loading = false;
+            var syncTimeStamp = moment().format('MMM D, YYYY [at] h:mm A.');
+            var $string = "Hurray! Successfully synchronized with Redmine on " + syncTimeStamp;
             var optionalDelay = 800000;
-            var $string = response.data.message;
-          } else {
-            var optionalDelay = 800000;
-            var $string = "Error in synchronizing with redmine";
-          }
-          alertFactory.addAuto('danger', $string, optionalDelay);
-        });
+            $state.reload();
+            alertFactory.addAuto('success', $string, optionalDelay);
+          })
+          .catch(function(response, status) {
+            $scope.loading = false;
+            if (response.data.message != null) {
+              var optionalDelay = 800000;
+              var $string = response.data.message;
+            } else {
+              var optionalDelay = 800000;
+              var $string = "Error in synchronizing with redmine";
+            }
+            alertFactory.addAuto('danger', $string, optionalDelay);
+          });
+      } else {
+        var optionalDelay = 800000;
+        var $string = "Access restricted to authorized personnel!";
+        alertFactory.addAuto('danger', $string, optionalDelay);
+      }
     }
-    else{
-      var optionalDelay = 800000;
-      var $string = "Access restricted to authorized personnel!";
-    alertFactory.addAuto('danger', $string, optionalDelay);
-    }
-  }
   });
   app.controller('LoginIndexController', function($base64, $localStorage, $log, $state, $http, $q, $scope, dataService, alertFactory, $location, AuthenticationService, $rootScope) {
     if ($rootScope.alerts.length != 0) {
@@ -8668,6 +8679,378 @@
       }
     };
   });
+  app.controller('updateCapabilities', function TodoCtrl($scope, $element, $log, $state, $stateParams, $filter, $location, $http, $base64, $q, dataService, alertFactory, $localStorage, $mdDialog, $rootScope, myScroll, $location, $anchorScroll) {
+    if ($rootScope.alerts.length != 0) {
+      angular.forEach($rootScope.alerts, function(value, key) {
+        var alert = {};
+        alert = $rootScope.alerts[key];
+        if (alert.type == 'info') {
+          $rootScope.alerts.splice(key, 1);
+        }
+      });
+    };
+    var currentProject = $stateParams;
+    $scope.currentSelectedPerson = {};
+    $scope.projectName = currentProject.projectName;
+    $http.get('/api/projects/participants/' + currentProject.projectId).then(function(response) {
+        var projectParticipants = response.data;
+        $scope.projectParticipants = projectParticipants;
+      })
+      .catch(function(response, status) {
+        //	$scope.loading = false;
+        var optionalDelay = 800000;
+        var $string = "Error in fetching project participants details";
+        alertFactory.addAuto('danger', $string, optionalDelay);
+      });
+    //$scope.userId2 = $stateParams.personId;
+    var tabClasses;
+
+    function initTabs() {
+      tabClasses = ["", "", "", ""];
+    }
+    $scope.getTabClass = function(tabNum) {
+      return tabClasses[tabNum];
+    };
+    $scope.getTabPaneClass = function(tabNum) {
+      return "tab-pane " + tabClasses[tabNum];
+    }
+    $scope.setActiveTab = function(tabNum) {
+      initTabs();
+      tabClasses[tabNum] = "active";
+    };
+    initTabs();
+    $scope.slider1 = {
+      options: {
+        hideLimitLabels: true,
+        showTicks: true,
+        showSelectionBar: true,
+        hidePointerLabels: true,
+        stepsArray: [{
+            value: 'Superficial',
+            legend: 'Superficial'
+          },
+          {
+            value: 'Satisfactory',
+            legend: 'Satisfactory'
+          },
+          {
+            value: 'Good',
+            legend: 'Good'
+          },
+          {
+            value: 'Excellent',
+            legend: 'Excellent'
+          },
+          {
+            value: 'Perfect',
+            legend: 'Perfect'
+          }
+        ]
+      }
+    };
+    $scope.slider2 = {
+      options: {
+        hideLimitLabels: true,
+        showTicks: true,
+        showSelectionBar: true,
+        hidePointerLabels: true,
+        stepsArray: [{
+            value: 'Superficial',
+            legend: 'Superficial'
+          },
+          {
+            value: 'Satisfactory',
+            legend: 'Satisfactory'
+          },
+          {
+            value: 'Good',
+            legend: 'Good'
+          },
+          {
+            value: 'Excellent',
+            legend: 'Excellent'
+          },
+          {
+            value: 'Perfect',
+            legend: 'Perfect'
+          }
+        ]
+      }
+    };
+    $scope.slider3 = {
+      options: {
+        hideLimitLabels: true,
+        showTicks: true,
+        showSelectionBar: true,
+        hidePointerLabels: true,
+        stepsArray: [{
+            value: 'Undefined',
+            legend: 'Undefined'
+          },
+          {
+            value: 'No match',
+            legend: 'No match'
+          },
+          {
+            value: 'Average match',
+            legend: 'Average match'
+          },
+          {
+            value: 'Good match',
+            legend: 'Good match'
+          },
+          {
+            value: 'Excellent match',
+            legend: 'Excellent match'
+          }
+        ]
+      }
+    };
+    $scope.slider4 = {
+      options: {
+        hideLimitLabels: true,
+        showTicks: true,
+        showSelectionBar: true,
+        hidePointerLabels: true,
+        stepsArray: [{
+            value: 'Undefined',
+            legend: 'Undefined'
+          },
+          {
+            value: 'Acceptable',
+            legend: 'Acceptable'
+          },
+          {
+            value: 'Good',
+            legend: 'Good'
+          },
+          {
+            value: 'Excellent',
+            legend: 'Excellent'
+          },
+          {
+            value: 'Outstanding',
+            legend: 'Outstanding'
+          }
+        ]
+      }
+    };
+    $scope.slider5 = {
+      options: {
+        hideLimitLabels: true,
+        showTicks: true,
+        showSelectionBar: true,
+        hidePointerLabels: true,
+        stepsArray: [{
+            value: 'Undefined',
+            legend: 'Undefined'
+          },
+          {
+            value: 'Acceptable',
+            legend: 'Acceptable'
+          },
+          {
+            value: 'Good',
+            legend: 'Good'
+          },
+          {
+            value: 'Excellent',
+            legend: 'Excellent'
+          },
+          {
+            value: 'Outstanding',
+            legend: 'Outstanding'
+          }
+        ]
+      }
+    };
+    $scope.slider6 = {
+      options: {
+        hideLimitLabels: true,
+        showTicks: true,
+        showSelectionBar: true,
+        hidePointerLabels: true,
+        stepsArray: [{
+            value: 'Undefined',
+            legend: 'Undefined'
+          },
+          {
+            value: 'Average',
+            legend: 'Average'
+          },
+          {
+            value: 'Good',
+            legend: 'Good'
+          },
+          {
+            value: 'High',
+            legend: 'High'
+          },
+          {
+            value: 'Very high',
+            legend: 'Very high'
+          }
+        ]
+      }
+    };
+    $scope.slider7 = {
+      options: {
+        hideLimitLabels: true,
+        showTicks: true,
+        showSelectionBar: true,
+        hidePointerLabels: true,
+        stepsArray: [{
+            value: 'Undefined',
+            legend: 'Undefined'
+          },
+          {
+            value: 'Acceptable',
+            legend: 'Acceptable'
+          },
+          {
+            value: 'Good',
+            legend: 'Good'
+          },
+          {
+            value: 'Excellent',
+            legend: 'Excellent'
+          },
+          {
+            value: 'Outstanding',
+            legend: 'Outstanding'
+          }
+        ]
+      }
+    };
+    $scope.slider8 = {
+      options: {
+        hideLimitLabels: true,
+        showTicks: true,
+        showSelectionBar: true,
+        hidePointerLabels: true,
+        stepsArray: [{
+            value: 'Undefined',
+            legend: 'Undefined'
+          },
+          {
+            value: 'Average',
+            legend: 'Average'
+          },
+          {
+            value: 'Good',
+            legend: 'Good'
+          },
+          {
+            value: 'High',
+            legend: 'High'
+          },
+          {
+            value: 'Very high',
+            legend: 'Very high'
+          }
+        ]
+      }
+    };
+    $http.get('/api/capabilities/ifcapabilitiesInProjectAssessed/' + currentProject.projectId).then(function(response) {
+        $scope.ifcapabilitiesInProjectAssessed = response.data;
+        if ($scope.ifcapabilitiesInProjectAssessed == false) {
+          var optionalDelay = 800000;
+          var $string = "Capabilities of members have not been assessed for " + $scope.projectName + " project";
+          alertFactory.addAuto('warning', $string, optionalDelay);
+        }
+      })
+      .catch(function(response, status) {
+        //	$scope.loading = false;
+        var optionalDelay = 800000;
+        var $string = "Error in fetching capabilities associated with project";
+        alertFactory.addAuto('danger', $string, optionalDelay);
+      });
+    $scope.updatePersonCapability = function(person) {
+      $scope.userId2 = person.personId;
+      $scope.currentSelectedPerson.personId = person.personId;
+      $scope.currentSelectedPerson.personName = person.personName;
+      //$scope.setActiveTab(2);
+      if ($scope.userId2 != '') {
+        $http.get('/api/capabilities/getCapabilitiesOfPersoninProject/' + currentProject.projectId + "/" + $scope.userId2).then(function(response) {
+          $scope.assessedCapabilities = response.data;
+        }).then(function() {
+          $scope.displayCapabilities = true;
+          if ($scope.assessedCapabilities.length != 0) {
+            for (var i = $scope.assessedCapabilities.length - 1; i >= 0; i--) {
+              if ($scope.assessedCapabilities[i].capabilityId == 1) {
+                $scope.slider1.value = $scope.assessedCapabilities[i].proficiency;
+              }
+              if ($scope.assessedCapabilities[i].capabilityId == 2) {
+                $scope.slider2.value = $scope.assessedCapabilities[i].proficiency;
+              }
+              if ($scope.assessedCapabilities[i].capabilityId == 3) {
+                $scope.slider3.value = $scope.assessedCapabilities[i].proficiency;
+              }
+              if ($scope.assessedCapabilities[i].capabilityId == 4) {
+                $scope.slider4.value = $scope.assessedCapabilities[i].proficiency;
+              }
+              if ($scope.assessedCapabilities[i].capabilityId == 5) {
+                $scope.slider5.value = $scope.assessedCapabilities[i].proficiency;
+              }
+              if ($scope.assessedCapabilities[i].capabilityId == 6) {
+                $scope.slider6.value = $scope.assessedCapabilities[i].proficiency;
+              }
+              if ($scope.assessedCapabilities[i].capabilityId == 7) {
+                $scope.slider7.value = $scope.assessedCapabilities[i].proficiency;
+              }
+              if ($scope.assessedCapabilities[i].capabilityId == 8) {
+                $scope.slider8.value = $scope.assessedCapabilities[i].proficiency;
+              }
+            }
+          } else {
+            $scope.clearCapabilities();
+          }
+
+        });
+      }
+    }
+    $scope.updateCapabilities = function(person) {
+      var newPerson = [];
+      $scope.person = {};
+      $scope.person.commitment = $scope.slider1.value;
+      $scope.person.domainKnowledge = $scope.slider2.value;
+      $scope.person.ownInterest = $scope.slider3.value;
+      $scope.person.prevDelQuality = $scope.slider4.value;
+      $scope.person.prevProjectPerf = $scope.slider5.value;
+      $scope.person.prgmExperience = $scope.slider6.value;
+      $scope.person.prgmLanKnowledge = $scope.slider7.value;
+      $scope.person.undrSoftSec = $scope.slider8.value;
+      $scope.person.updatedBy = $localStorage.currentUser.userFirstName;
+      newPerson.push($scope.person);
+      $scope.newPerson = newPerson;
+      $http.post('/api/capabilities/insertCapabilities/' + currentProject.projectId + "/" + person.personId, newPerson).then(function(response) {
+          var optionalDelay = 800000;
+          var $string = "Successfully updated the capability details of " + person.personName + " for " + $scope.projectName + " project";
+          alertFactory.addAuto('success', $string, optionalDelay);
+          // $state.go('management.people.addPerson.programmingSkills',currentPerson);
+          //  $state.go("management.projects.updateCapabilities", {
+          //    personId: $scope.userId2
+          //  }, {
+          //    reload: true
+          //  });
+        })
+        .catch(function(response, status) {
+          var optionalDelay = 800000;
+          var $string = "Error in updating capability details";
+          alertFactory.addAuto('danger', $string, optionalDelay);
+        })
+    };
+    $scope.clearCapabilities = function() {
+      $scope.slider1.value = "Superficial";
+      $scope.slider2.value = "Superficial";
+      $scope.slider3.value = "Undefined";
+      $scope.slider4.value = "Undefined";
+      $scope.slider5.value = "Undefined";
+      $scope.slider6.value = "Undefined";
+      $scope.slider7.value = "Undefined";
+      $scope.slider8.value = "Undefined";
+    };
+  });
   app.controller('editProjectParticipants', function TodoCtrl($scope, $element, $log, $state, $stateParams, $filter, $location, $http, $base64, $q, dataService, alertFactory, $localStorage, $mdDialog, $rootScope, myScroll, $location, $anchorScroll) {
     $scope.searchPeople = '';
     if ($rootScope.alerts.length != 0) {
@@ -8990,6 +9373,7 @@
     var editProject = null;
     var finalProject = null;
     var parentProjectsList = [];
+    var projectName = null;
     $scope.editAssociatedProject = false;
     $scope.formatProjects = function(projectsList, currentProject, indent) {
       for (var i = 0; i < currentProject.projectList.length; i++) {
@@ -9058,6 +9442,7 @@
       $http.get('/api/projects/' + currentProject.projectId).then(function(response) {
           editProject = response.data;
           finalProject = editProject;
+          projectName = response.data.projectName;
         })
         .catch(function(response, status) {
           var optionalDelay = 800000;
@@ -9245,6 +9630,10 @@
       $scope.editProjectParticipants = function() {
         $state.go('management.projects.editProjectParticipants', currentProject);
       };
+      $scope.updateCapabilities = function() {
+        currentProject.projectName = projectName;
+        $state.go("management.projects.updateCapabilities", currentProject);
+      }
       $scope.createNewSprint = function() {
         $state.go('management.sprints.addSprint.newSprint');
       };

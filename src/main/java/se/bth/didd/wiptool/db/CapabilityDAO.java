@@ -11,6 +11,7 @@ import se.bth.didd.wiptool.api.CapabilityIdMeasure;
 import se.bth.didd.wiptool.api.CapabilityIdProficiency;
 import se.bth.didd.wiptool.api.CapabilityTimelineGraphs;
 import se.bth.didd.wiptool.api.People;
+import se.bth.didd.wiptool.api.ProjectIdCapabilityIdProficiency;
 import se.bth.didd.wiptool.api.CapabilityDetailsforGraphs;
 
 public interface CapabilityDAO {
@@ -21,7 +22,7 @@ public interface CapabilityDAO {
 	@SqlUpdate("create table if not exists CAPABILITYMEASURES (capabilityId int REFERENCES CAPABILITYDB(capabilityId), measure varchar(30))")
 	void createCapabilityMeasuresTable();
 
-	@SqlUpdate("create table if not exists ASSESSMENTOFCAPABILITIES (personId int REFERENCES PEOPLE(personId), capabilityId int REFERENCES "
+	@SqlUpdate("create table if not exists ASSESSMENTOFCAPABILITIES (projectId int REFERENCES PROJECTS(projectId), personId int REFERENCES PEOPLE(personId), capabilityId int REFERENCES "
 			+ "CAPABILITYDB(capabilityId), proficiency varchar(30), updatedBy varchar(30), lastUpdate timestamp, status varchar(10))")
 	void createCapabilityAssessmentTable();
 
@@ -31,8 +32,8 @@ public interface CapabilityDAO {
 	@SqlUpdate("insert into CAPABILITYMEASURES (capabilityId, measure) values(:capabilityId,:measure)")
 	void insertDefuaultMeasuresCapabilities(@Bind("capabilityId") int capabilityId, @Bind("measure") String measure);
 
-	@SqlUpdate("insert into ASSESSMENTOFCAPABILITIES (personId,capabilityId, proficiency,updatedBy,lastUpdate, status) values(:personId, :capabilityId, :proficiency, :updatedBy, :lastUpdate, 'new')")
-	void insertCapabilityAssessment(@Bind("personId") int personId, @Bind("capabilityId") int capabilityId,
+	@SqlUpdate("insert into ASSESSMENTOFCAPABILITIES (projectId, personId,capabilityId, proficiency,updatedBy,lastUpdate, status) values(:projectId, :personId, :capabilityId, :proficiency, :updatedBy, :lastUpdate, 'new')")
+	void insertCapabilityAssessment(@Bind("projectId") int projectId, @Bind("personId") int personId, @Bind("capabilityId") int capabilityId,
 			@Bind("proficiency") String proficiency, @Bind("updatedBy") String updatedBy,
 			@Bind("lastUpdate") Timestamp timeStamp);
 
@@ -41,9 +42,15 @@ public interface CapabilityDAO {
 
 	@SqlQuery("select exists( select 1 from ASSESSMENTOFCAPABILITIES where  personId = :personId and capabilityId = :capabilityId)")
 	boolean ifcapabilityAssessed(@Bind("personId") int personId, @Bind("capabilityId") int capabilityId);
+	
+	@SqlQuery("select exists( select 1 from ASSESSMENTOFCAPABILITIES where  projectId = :projectId)")
+	boolean ifcapabilitiesInProjectAssessed(@Bind("projectId") int projectId);
 
 	@SqlQuery("select capabilityId,proficiency from assessmentofcapabilities where personid = :personId ORDER BY lastUpdate DESC LIMIT 8")
 	List<CapabilityIdProficiency> capabilitiesOfPerson(@Bind("personId") int personId);
+	
+	@SqlQuery("select projectId, capabilityId, proficiency from assessmentofcapabilities where personid = :personId and projectId = :projectId ORDER BY lastUpdate DESC LIMIT 8")
+	List<ProjectIdCapabilityIdProficiency> capabilitiesOfPersoninProject (@Bind("projectId") int projectId, @Bind("personId") int personId);
 
 	@SqlQuery("select TableB.capabilityName,PEOPLE.personName, TableB.proficiency, TableB.updatedBy, TableB.lastUpdate from PEOPLE RIGHT JOIN  (select capabilitydb.capabilityName,TableA.personId, TableA.proficiency, TableA.updatedBy, TableA.lastUpdate  from capabilitydb RIGHT JOIN ( select * from assessmentofcapabilities where personId = :personId and capabilityId = :capabilityId ORDER BY lastUpdate DESC LIMIT 1 ) As TableA ON capabilitydb.capabilityId = TableA.capabilityId ) As TableB ON TableB.personId = PEOPLE.personId")
 	List<CapabilityDetailsComparisonGraphs> specificCapabilityOfPerson(@Bind("personId") int personId,
