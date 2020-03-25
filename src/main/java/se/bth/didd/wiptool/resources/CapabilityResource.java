@@ -27,9 +27,12 @@ import se.bth.didd.wiptool.api.CapabilityList;
 import se.bth.didd.wiptool.api.CapabilityTimelineGraphs;
 import se.bth.didd.wiptool.api.CapabilityValueOfPeople;
 import se.bth.didd.wiptool.api.CapabilityDetailsforGraphs;
+import se.bth.didd.wiptool.api.CapabilityIdFiveOptions;
+import se.bth.didd.wiptool.api.CapabilityIdFiveOptionsProjectNames;
 import se.bth.didd.wiptool.api.People;
 import se.bth.didd.wiptool.api.PersonId;
 import se.bth.didd.wiptool.api.ProjectIdCapabilityIdProficiency;
+import se.bth.didd.wiptool.api.ProjectNameCapabilityFiveOptions;
 import se.bth.didd.wiptool.api.SuccessMessage;
 import se.bth.didd.wiptool.auth.jwt.User;
 import se.bth.didd.wiptool.auth.jwt.UserRoles;
@@ -58,8 +61,7 @@ public class CapabilityResource {
 			return Response.status(Status.BAD_REQUEST).entity(e).build();
 		}
 	}
-	
-	
+
 	@GET
 	@Path("/getCapabilitiesOfPerson/{id}")
 	public List<CapabilityIdProficiency> getCapabilitiesOfPerson(@PathParam("id") Integer personId) {
@@ -71,12 +73,14 @@ public class CapabilityResource {
 			return null;
 		}
 	}
-	
+
 	@GET
 	@Path("/getCapabilitiesOfPersoninProject/{projectId}/{personId}")
-	public List<ProjectIdCapabilityIdProficiency> getCapabilitiesOfPerson(@PathParam("projectId") Integer projectId, @PathParam("personId") Integer personId) {
+	public List<ProjectIdCapabilityIdProficiency> getCapabilitiesOfPerson(@PathParam("projectId") Integer projectId,
+			@PathParam("personId") Integer personId) {
 		try {
-			List<ProjectIdCapabilityIdProficiency> capabilitiesOfPerson = capabilityDAO.capabilitiesOfPersoninProject(projectId, personId);
+			List<ProjectIdCapabilityIdProficiency> capabilitiesOfPerson = capabilityDAO
+					.capabilitiesOfPersoninProject(projectId, personId);
 			return capabilitiesOfPerson;
 
 		} catch (Exception e) {
@@ -125,7 +129,232 @@ public class CapabilityResource {
 			return null;
 		}
 	}
-	
+
+	@GET
+	@Path("/getCapabilitiesSummaryOfPerson/{id}")
+	public Response getCapabilitiesSummaryOfPerson(@PathParam("id") Integer personId) {
+		List<CapabilityIdFiveOptions> capabilitiesAssessmentSummary = new ArrayList<>();
+		List<CapabilityIdFiveOptionsProjectNames> capabilitiesAssessmentSummaryWithProjects = new ArrayList<>();
+		try {
+			List<CapabilityIdFiveOptions> sampleSummaryList = capabilityDAO.summaryOfFirstTwoCapabilities(personId);
+			capabilitiesAssessmentSummary.addAll(sampleSummaryList);
+			sampleSummaryList = capabilityDAO.summaryOfThirdCapabilities(personId);
+			capabilitiesAssessmentSummary.addAll(sampleSummaryList);
+			sampleSummaryList = capabilityDAO.summaryOfThreeCapabilities(personId);
+			capabilitiesAssessmentSummary.addAll(sampleSummaryList);
+			sampleSummaryList = capabilityDAO.summaryOfLastTwoCapabilities(personId);
+			capabilitiesAssessmentSummary.addAll(sampleSummaryList);
+
+			for (CapabilityIdFiveOptions capability : capabilitiesAssessmentSummary) {
+
+				if (capability.getCapabilityId() == 1 || capability.getCapabilityId() == 2) {
+					try {
+						List<ProjectNameCapabilityFiveOptions> sampleProjectsList = capabilityDAO
+								.projectsFirstTwoCapabilities(personId, capability.getCapabilityId());
+						CapabilityIdFiveOptionsProjectNames sampleSummary = new CapabilityIdFiveOptionsProjectNames();
+						List<String> projectNamesOption1 = new ArrayList<>();
+						List<String> projectNamesOption2 = new ArrayList<>();
+						List<String> projectNamesOption3 = new ArrayList<>();
+						List<String> projectNamesOption4 = new ArrayList<>();
+						List<String> projectNamesOption5 = new ArrayList<>();
+						sampleSummary.setCapabilityId(capability.getCapabilityId());
+						sampleSummary.setOption1(capability.getOption1());
+						sampleSummary.setOption2(capability.getOption2());
+						sampleSummary.setOption3(capability.getOption3());
+						sampleSummary.setOption4(capability.getOption4());
+						sampleSummary.setOption5(capability.getOption5());
+						for (ProjectNameCapabilityFiveOptions projectName : sampleProjectsList) {
+							if (projectName.getCapabilityId() == capability.getCapabilityId()) {
+
+								if (Integer.compare(projectName.getOption1(), 0) > 0) {
+									projectNamesOption1.add(projectName.getProjectName());
+								}
+								if (Integer.compare(projectName.getOption2(), 0) > 0) {
+
+									projectNamesOption2.add(projectName.getProjectName());
+								}
+								if (Integer.compare(projectName.getOption3(), 0) > 0) {
+									projectNamesOption3.add(projectName.getProjectName());
+								}
+								if (Integer.compare(projectName.getOption4(), 0) > 0) {
+									projectNamesOption4.add(projectName.getProjectName());
+								}
+								if (Integer.compare(projectName.getOption5(), 0) > 0) {
+									projectNamesOption5.add(projectName.getProjectName());
+								}
+							}
+						}
+
+						sampleSummary.setOption1Projects(projectNamesOption1);
+						sampleSummary.setOption2Projects(projectNamesOption2);
+						sampleSummary.setOption3Projects(projectNamesOption3);
+						sampleSummary.setOption4Projects(projectNamesOption4);
+						sampleSummary.setOption5Projects(projectNamesOption5);
+						capabilitiesAssessmentSummaryWithProjects.add(sampleSummary);
+
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
+				}
+
+				if (capability.getCapabilityId() == 3) {
+					try {
+						List<ProjectNameCapabilityFiveOptions> sampleProjectsList = capabilityDAO
+								.projectsThirdCapabilities(personId, capability.getCapabilityId());
+						CapabilityIdFiveOptionsProjectNames sampleSummary = new CapabilityIdFiveOptionsProjectNames();
+						List<String> projectNamesOption1 = new ArrayList<>();
+						List<String> projectNamesOption2 = new ArrayList<>();
+						List<String> projectNamesOption3 = new ArrayList<>();
+						List<String> projectNamesOption4 = new ArrayList<>();
+						List<String> projectNamesOption5 = new ArrayList<>();
+						sampleSummary.setCapabilityId(capability.getCapabilityId());
+						sampleSummary.setOption1(capability.getOption1());
+						sampleSummary.setOption2(capability.getOption2());
+						sampleSummary.setOption3(capability.getOption3());
+						sampleSummary.setOption4(capability.getOption4());
+						sampleSummary.setOption5(capability.getOption5());
+						for (ProjectNameCapabilityFiveOptions projectName : sampleProjectsList) {
+							if (projectName.getCapabilityId() == capability.getCapabilityId()) {
+
+								if (Integer.compare(projectName.getOption1(), 0) > 0) {
+									projectNamesOption1.add(projectName.getProjectName());
+								}
+								if (Integer.compare(projectName.getOption2(), 0) > 0) {
+
+									projectNamesOption2.add(projectName.getProjectName());
+								}
+								if (Integer.compare(projectName.getOption3(), 0) > 0) {
+									projectNamesOption3.add(projectName.getProjectName());
+								}
+								if (Integer.compare(projectName.getOption4(), 0) > 0) {
+									projectNamesOption4.add(projectName.getProjectName());
+								}
+								if (Integer.compare(projectName.getOption5(), 0) > 0) {
+									projectNamesOption5.add(projectName.getProjectName());
+								}
+							}
+						}
+
+						sampleSummary.setOption1Projects(projectNamesOption1);
+						sampleSummary.setOption2Projects(projectNamesOption2);
+						sampleSummary.setOption3Projects(projectNamesOption3);
+						sampleSummary.setOption4Projects(projectNamesOption4);
+						sampleSummary.setOption5Projects(projectNamesOption5);
+						capabilitiesAssessmentSummaryWithProjects.add(sampleSummary);
+
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
+				}
+				if (capability.getCapabilityId() == 4 || capability.getCapabilityId() == 5
+						|| capability.getCapabilityId() == 7) {
+					try {
+						List<ProjectNameCapabilityFiveOptions> sampleProjectsList = capabilityDAO
+								.projectsThreeCapabilities(personId, capability.getCapabilityId());
+						CapabilityIdFiveOptionsProjectNames sampleSummary = new CapabilityIdFiveOptionsProjectNames();
+						List<String> projectNamesOption1 = new ArrayList<>();
+						List<String> projectNamesOption2 = new ArrayList<>();
+						List<String> projectNamesOption3 = new ArrayList<>();
+						List<String> projectNamesOption4 = new ArrayList<>();
+						List<String> projectNamesOption5 = new ArrayList<>();
+						sampleSummary.setCapabilityId(capability.getCapabilityId());
+						sampleSummary.setOption1(capability.getOption1());
+						sampleSummary.setOption2(capability.getOption2());
+						sampleSummary.setOption3(capability.getOption3());
+						sampleSummary.setOption4(capability.getOption4());
+						sampleSummary.setOption5(capability.getOption5());
+						for (ProjectNameCapabilityFiveOptions projectName : sampleProjectsList) {
+							if (projectName.getCapabilityId() == capability.getCapabilityId()) {
+
+								if (Integer.compare(projectName.getOption1(), 0) > 0) {
+									projectNamesOption1.add(projectName.getProjectName());
+								}
+								if (Integer.compare(projectName.getOption2(), 0) > 0) {
+
+									projectNamesOption2.add(projectName.getProjectName());
+								}
+								if (Integer.compare(projectName.getOption3(), 0) > 0) {
+									projectNamesOption3.add(projectName.getProjectName());
+								}
+								if (Integer.compare(projectName.getOption4(), 0) > 0) {
+									projectNamesOption4.add(projectName.getProjectName());
+								}
+								if (Integer.compare(projectName.getOption5(), 0) > 0) {
+									projectNamesOption5.add(projectName.getProjectName());
+								}
+							}
+						}
+
+						sampleSummary.setOption1Projects(projectNamesOption1);
+						sampleSummary.setOption2Projects(projectNamesOption2);
+						sampleSummary.setOption3Projects(projectNamesOption3);
+						sampleSummary.setOption4Projects(projectNamesOption4);
+						sampleSummary.setOption5Projects(projectNamesOption5);
+						capabilitiesAssessmentSummaryWithProjects.add(sampleSummary);
+
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
+				}
+				if (capability.getCapabilityId() == 6 || capability.getCapabilityId() == 8) {
+					try {
+						List<ProjectNameCapabilityFiveOptions> sampleProjectsList = capabilityDAO
+								.projectsLastTwoCapabilities(personId, capability.getCapabilityId());
+						CapabilityIdFiveOptionsProjectNames sampleSummary = new CapabilityIdFiveOptionsProjectNames();
+						List<String> projectNamesOption1 = new ArrayList<>();
+						List<String> projectNamesOption2 = new ArrayList<>();
+						List<String> projectNamesOption3 = new ArrayList<>();
+						List<String> projectNamesOption4 = new ArrayList<>();
+						List<String> projectNamesOption5 = new ArrayList<>();
+						sampleSummary.setCapabilityId(capability.getCapabilityId());
+						sampleSummary.setOption1(capability.getOption1());
+						sampleSummary.setOption2(capability.getOption2());
+						sampleSummary.setOption3(capability.getOption3());
+						sampleSummary.setOption4(capability.getOption4());
+						sampleSummary.setOption5(capability.getOption5());
+						for (ProjectNameCapabilityFiveOptions projectName : sampleProjectsList) {
+							if (projectName.getCapabilityId() == capability.getCapabilityId()) {
+
+								if (Integer.compare(projectName.getOption1(), 0) > 0) {
+									projectNamesOption1.add(projectName.getProjectName());
+								}
+								if (Integer.compare(projectName.getOption2(), 0) > 0) {
+
+									projectNamesOption2.add(projectName.getProjectName());
+								}
+								if (Integer.compare(projectName.getOption3(), 0) > 0) {
+									projectNamesOption3.add(projectName.getProjectName());
+								}
+								if (Integer.compare(projectName.getOption4(), 0) > 0) {
+									projectNamesOption4.add(projectName.getProjectName());
+								}
+								if (Integer.compare(projectName.getOption5(), 0) > 0) {
+									projectNamesOption5.add(projectName.getProjectName());
+								}
+							}
+						}
+
+						sampleSummary.setOption1Projects(projectNamesOption1);
+						sampleSummary.setOption2Projects(projectNamesOption2);
+						sampleSummary.setOption3Projects(projectNamesOption3);
+						sampleSummary.setOption4Projects(projectNamesOption4);
+						sampleSummary.setOption5Projects(projectNamesOption5);
+						capabilitiesAssessmentSummaryWithProjects.add(sampleSummary);
+
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
+				}
+			}
+
+			return Response.ok(capabilitiesAssessmentSummaryWithProjects).build();
+
+		} catch (Exception e) {
+			System.out.println(e);
+			return Response.status(Status.BAD_REQUEST).entity(e).build();
+		}
+	}
+
 	@GET
 	@Path("/ifcapabilitiesInProjectAssessed/{id}")
 	public Response ifcapabilitiesInProjectAssessed(@PathParam("id") Integer projectId) {
@@ -138,11 +367,11 @@ public class CapabilityResource {
 			return Response.status(Status.BAD_REQUEST).entity(e).build();
 		}
 	}
-	
+
 	@RolesAllowed({ UserRoles.ROLE_ONE })
 	@PUT
 	@Path("/getCapabilityValueOfPeople")
-	public Response getCapabilityValueOfPerson(@Auth User user,CapabilityValueOfPeople capabilityOfPeople) {
+	public Response getCapabilityValueOfPerson(@Auth User user, CapabilityValueOfPeople capabilityOfPeople) {
 		List<CapabilityDetailsComparisonGraphs> capabilityValuesOfPeople = new ArrayList<CapabilityDetailsComparisonGraphs>();
 
 		for (PersonId eachPerson : capabilityOfPeople.getPeople()) {
@@ -188,11 +417,12 @@ public class CapabilityResource {
 		return Response.ok(capabilityValuesOfPeople).build();
 
 	}
-	
+
 	@RolesAllowed({ UserRoles.ROLE_ONE })
 	@POST
 	@Path("/insertCapabilities/{projectId}/{personId}")
-	public Response insertCapabilities(@Auth User user, List<CapabilityList> capabilityList, @PathParam("projectId") Integer projectId, @PathParam("personId") Integer personId) {
+	public Response insertCapabilities(@Auth User user, List<CapabilityList> capabilityList,
+			@PathParam("projectId") Integer projectId, @PathParam("personId") Integer personId) {
 		Long timeStamp = Calendar.getInstance().getTimeInMillis();
 
 		for (CapabilityList capability : capabilityList) {
@@ -242,8 +472,7 @@ public class CapabilityResource {
 		success.setSuccess("updated");
 		return Response.ok(success).build();
 	}
-	
-	
+
 	@POST
 	@Path("/insertDefaultCapabilities")
 	public Response insertDefaultCapabilities() {

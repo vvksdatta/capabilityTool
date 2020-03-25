@@ -82,6 +82,18 @@ public class PeopleResource {
 	}
 	
 	@GET
+	@Path("/getProjectsCountPerson/{id}")
+	public Response getProjectsCountPerson(@Auth User user, @PathParam("id") Integer personId) throws SQLException {
+		try {
+			List<Integer> count = peopleDAO.getProjectsCountPerson(personId);
+			return Response.ok(count).build();
+		} catch (Exception e) {
+			System.out.println(e);
+			return Response.status(Status.BAD_REQUEST).entity(e).build();
+		}
+	}
+
+	@GET
 	@Path("/getUserName/{id}")
 	public Response getUser(@Auth User currentUser, @PathParam("id") Integer personId) throws SQLException {
 		List<UserTemplate> user = peopleDAO.getUserDetails(personId);

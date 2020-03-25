@@ -4,83 +4,876 @@
   $(".nav-tabs li").eq(2).removeClass("active");
 </script>
 <style>
+  .md-button.md-default-theme.md-fab,
+  .md-button.md-fab {
+    background-color: rgb(83, 92, 152);
+    color: rgb(255, 255, 255);
+  }
+
+  .md-button.md-fab:hover {
+    background-color: rgb(98, 108, 170) !important;
+    color: rgb(255, 255, 255);
+  }
+
+  .md-tooltip {
+    height: auto;
+    line-height: 20px;
+    font-size: 11px;
+  }
+
+  ul {
+    margin-left: 10px;
+  }
+
+  ol {
+    margin-left: 10px;
+  }
 </style>
 <md-content style="overflow: unset;margin-bottom: 50px;">
   <md-whiteframe class="md-whiteframe-18dp" layout layout-align="center center">
     <div class="container">
+
       <form class="form-horizontal" name="form">
         <fieldset>
           <div class="control-group">
             <div class="form-group">
               <label class="col-sm-2 control-label" style="padding-top: 20px;" for="textinput">Commitment</label>
-              <div class="col-sm-10">
-                <article>
-                  <rzslider rz-slider-model="slider1.value" rz-slider-options="slider1.options"></rzslider>
-                </article>
+              <div class="col-sm-10" style="padding-top: 10px;">
+                <table class="table table-hover" id="dev-table">
+                  <thead>
+                    <tr>
+                      <th>Superficial</th>
+                      <th>Satisfactory</th>
+                      <th>Good</th>
+                      <th>Excellent</th>
+                      <th>Perfect</th>
+                    </tr>
+                  </thead>
+                  <col width="20%" />
+                  <col width="20%" />
+                  <col width="20%" />
+                  <col width="20%" />
+                  <col width="20%" />
+                  <tbody>
+                    <tr ng-repeat="capability in assessedCapabilities">
+                      <td ng-if="capability.capabilityId == '1'">
+                        <span>
+                            <md-button class="md-fab">
+                        <md-tooltip md-direction="right">
+                          <p>Projects with this rating:</p>
+                          <ul ng-if="capability.option1Projects.length=='0'">
+                            <li > None </li>
+                          </ul>
+                          <ol>
+                            <li ng-repeat="project in  capability.option1Projects"> {{ project }} </li>
+                          </ol>
+                         </md-tooltip>
+                         {{capability.option1}}
+                            </md-button>
+                            </span>
+                      </td>
+                      <td ng-if="capability.capabilityId == '1'">
+                        <span>
+                            <md-button class="md-fab">
+                        <md-tooltip md-direction="right">
+                          <p>Projects with this rating:</p>
+                          <ul ng-if="capability.option2Projects.length=='0'">
+                            <li > None </li>
+                          </ul>
+                          <ol>
+                            <li ng-repeat="project in  capability.option2Projects"> {{ project }} </li>
+                          </ol>
+                         </md-tooltip>
+                         {{capability.option2}}
+                            </md-button>
+                            </span>
+                      </td>
+                      <td ng-if="capability.capabilityId == '1'">
+                        <span>
+                            <md-button class="md-fab">
+                        <md-tooltip md-direction="right">
+                          <p>Projects with this rating:</p>
+                          <ul ng-if="capability.option3Projects.length=='0'">
+                            <li > None </li>
+                          </ul>
+                          <ol>
+                            <li ng-repeat="project in  capability.option3Projects"> {{ project }} </li>
+                          </ol>
+                         </md-tooltip>
+                         {{capability.option3}}
+                            </md-button>
+                            </span>
+                      </td>
+                      <td ng-if="capability.capabilityId == '1'">
+                        <span>
+                            <md-button class="md-fab">
+                        <md-tooltip md-direction="right">
+                          <p>Projects with this rating:</p>
+                          <ul ng-if="capability.option4Projects.length=='0'">
+                            <li > None </li>
+                          </ul>
+                          <ol>
+                            <li  ng-repeat="project in  capability.option4Projects"> {{ project }} </li>
+                          </ol>
+                         </md-tooltip>
+                         {{capability.option4}}
+                            </md-button>
+                            </span>
+                      </td>
+                      <td ng-if="capability.capabilityId == '1'">
+                        <span>
+                            <md-button class="md-fab">
+                        <md-tooltip md-direction="right">
+                          <p>Projects with this rating:</p>
+                          <ul ng-if="capability.option5Projects.length=='0'">
+                            <li > None </li>
+                          </ul>
+                          <ol>
+                            <li  ng-repeat="project in  capability.option5Projects"> {{ project }} </li>
+                          </ol>
+                         </md-tooltip>
+                         {{capability.option5}}
+                            </md-button>
+                            </span>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
               </div>
             </div>
             <div class="form-group">
-              <label class="col-sm-2 control-label" style="padding-top: 20px;" for="textinput">Domain knowledge</label>
+              <label class="col-sm-2 control-label" for="textinput">Domain knowledge</label>
               <div class="col-sm-10">
-                <article>
-                  <rzslider rz-slider-model="slider2.value" rz-slider-options="slider2.options"></rzslider>
-                </article>
+                <table class="table table-hover" id="dev-table">
+                  <thead>
+                    <tr>
+                      <th>Superficial</th>
+                      <th>Satisfactory</th>
+                      <th>Good</th>
+                      <th>Excellent</th>
+                      <th>Perfect</th>
+                    </tr>
+                  </thead>
+                  <col width="20%" />
+                  <col width="20%" />
+                  <col width="20%" />
+                  <col width="20%" />
+                  <col width="20%" />
+                  <tbody>
+                    <tr ng-repeat="capability in assessedCapabilities">
+                      <td ng-if="capability.capabilityId == '2'">
+                        <span>
+                            <md-button class="md-fab">
+                        <md-tooltip md-direction="right">
+                          <p>Projects with this rating:</p>
+                          <ul ng-if="capability.option1Projects.length=='0'">
+                            <li > None </li>
+                          </ul>
+                          <ol>
+                            <li ng-repeat="project in  capability.option1Projects"> {{ project }} </li>
+                          </ol>
+                         </md-tooltip>
+                         {{capability.option1}}
+                            </md-button>
+                            </span>
+                      </td>
+                      <td ng-if="capability.capabilityId == '2'">
+                        <span>
+                            <md-button class="md-fab">
+                        <md-tooltip md-direction="right">
+                          <p>Projects with this rating:</p>
+                          <ul ng-if="capability.option2Projects.length=='0'">
+                            <li > None </li>
+                          </ul>
+                          <ol>
+                            <li ng-repeat="project in  capability.option2Projects"> {{ project }} </li>
+                          </ol>
+                         </md-tooltip>
+                         {{capability.option2}}
+                            </md-button>
+                            </span>
+                      </td>
+                      <td ng-if="capability.capabilityId == '2'">
+                        <span>
+                            <md-button class="md-fab">
+                        <md-tooltip md-direction="right">
+                          <p>Projects with this rating:</p>
+                          <ul ng-if="capability.option3Projects.length=='0'">
+                            <li > None </li>
+                          </ul>
+                          <ol>
+                            <li ng-repeat="project in  capability.option3Projects"> {{ project }} </li>
+                          </ol>
+                         </md-tooltip>
+                         {{capability.option3}}
+                            </md-button>
+                            </span>
+                      </td>
+                      <td ng-if="capability.capabilityId == '2'">
+                        <span>
+                            <md-button class="md-fab">
+                        <md-tooltip md-direction="right">
+                          <p>Projects with this rating:</p>
+                          <ul ng-if="capability.option4Projects.length=='0'">
+                            <li > None </li>
+                          </ul>
+                          <ol>
+                            <li  ng-repeat="project in  capability.option4Projects"> {{ project }} </li>
+                          </ol>
+                         </md-tooltip>
+                         {{capability.option4}}
+                            </md-button>
+                            </span>
+                      </td>
+                      <td ng-if="capability.capabilityId == '2'">
+                        <span>
+                            <md-button class="md-fab">
+                        <md-tooltip md-direction="right">
+                          <p>Projects with this rating:</p>
+                          <ul ng-if="capability.option5Projects.length=='0'">
+                            <li > None </li>
+                          </ul>
+                          <ol>
+                            <li  ng-repeat="project in  capability.option5Projects"> {{ project }} </li>
+                          </ol>
+                         </md-tooltip>
+                         {{capability.option5}}
+                            </md-button>
+                            </span>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
               </div>
             </div>
             <div class="form-group">
-              <label class="col-sm-2 control-label" style="padding-top: 10px;" for="textinput">Person's own interest</label>
+              <label class="col-sm-2 control-label" for="textinput">Person's own interest</label>
               <div class="col-sm-10">
-                <article>
-                  <rzslider rz-slider-model="slider3.value" rz-slider-options="slider3.options"></rzslider>
-                </article>
+                <table class="table table-hover" id="dev-table">
+                  <thead>
+                    <tr>
+                      <th>Undefined</th>
+                      <th>No match</th>
+                      <th>Average match</th>
+                      <th>Good match</th>
+                      <th>Excellent match</th>
+                    </tr>
+                  </thead>
+                  <col width="20%" />
+                  <col width="20%" />
+                  <col width="20%" />
+                  <col width="20%" />
+                  <col width="20%" />
+                  <tbody>
+                    <tr ng-repeat="capability in assessedCapabilities">
+                      <td ng-if="capability.capabilityId == '3'">
+                        <span>
+                            <md-button class="md-fab">
+                        <md-tooltip md-direction="right">
+                          <p>Projects with this rating:</p>
+                          <ul ng-if="capability.option1Projects.length=='0'">
+                            <li > None </li>
+                          </ul>
+                          <ol>
+                            <li ng-repeat="project in  capability.option1Projects"> {{ project }} </li>
+                          </ol>
+                         </md-tooltip>
+                         {{capability.option1}}
+                            </md-button>
+                            </span>
+                      </td>
+                      <td ng-if="capability.capabilityId == '3'">
+                        <span>
+                            <md-button class="md-fab">
+                        <md-tooltip md-direction="right">
+                          <p>Projects with this rating:</p>
+                          <ul ng-if="capability.option2Projects.length=='0'">
+                            <li > None </li>
+                          </ul>
+                          <ol>
+                            <li ng-repeat="project in  capability.option2Projects"> {{ project }} </li>
+                          </ol>
+                         </md-tooltip>
+                         {{capability.option2}}
+                            </md-button>
+                            </span>
+                      </td>
+                      <td ng-if="capability.capabilityId == '3'">
+                        <span>
+                            <md-button class="md-fab">
+                        <md-tooltip md-direction="right">
+                          <p>Projects with this rating:</p>
+                          <ul ng-if="capability.option3Projects.length=='0'">
+                            <li > None </li>
+                          </ul>
+                          <ol>
+                            <li ng-repeat="project in  capability.option3Projects"> {{ project }} </li>
+                          </ol>
+                         </md-tooltip>
+                         {{capability.option3}}
+                            </md-button>
+                            </span>
+                      </td>
+                      <td ng-if="capability.capabilityId == '3'">
+                        <span>
+                            <md-button class="md-fab">
+                        <md-tooltip md-direction="right">
+                          <p>Projects with this rating:</p>
+                          <ul ng-if="capability.option4Projects.length=='0'">
+                            <li > None </li>
+                          </ul>
+                          <ol>
+                            <li  ng-repeat="project in  capability.option4Projects"> {{ project }} </li>
+                          </ol>
+                         </md-tooltip>
+                         {{capability.option4}}
+                            </md-button>
+                            </span>
+                      </td>
+                      <td ng-if="capability.capabilityId == '3'">
+                        <span>
+                            <md-button class="md-fab">
+                        <md-tooltip md-direction="right">
+                          <p>Projects with this rating:</p>
+                          <ul ng-if="capability.option5Projects.length=='0'">
+                            <li > None </li>
+                          </ul>
+                          <ol>
+                            <li  ng-repeat="project in  capability.option5Projects"> {{ project }} </li>
+                          </ol>
+                         </md-tooltip>
+                         {{capability.option5}}
+                            </md-button>
+                            </span>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
               </div>
             </div>
             <div class="form-group">
-              <label class="col-sm-2 control-label" style="padding-top: 10px;" for="textinput">Previous deliverables' quality</label>
+              <label class="col-sm-2 control-label" for="textinput">Previous deliverables' quality</label>
               <div class="col-sm-10">
-                <article>
-                  <rzslider rz-slider-model="slider4.value" rz-slider-options="slider4.options"></rzslider>
-                </article>
+                <table class="table table-hover" id="dev-table">
+                  <thead>
+                    <tr>
+                      <th>Undefined</th>
+                      <th>Acceptable</th>
+                      <th>Good</th>
+                      <th>Excellent</th>
+                      <th>Outstanding</th>
+                    </tr>
+                  </thead>
+                  <col width="20%" />
+                  <col width="20%" />
+                  <col width="20%" />
+                  <col width="20%" />
+                  <col width="20%" />
+                  <tbody>
+                    <tr ng-repeat="capability in assessedCapabilities">
+                      <td ng-if="capability.capabilityId == '4'">
+                        <span>
+                            <md-button class="md-fab">
+                        <md-tooltip md-direction="right">
+                          <p>Projects with this rating:</p>
+                          <ul ng-if="capability.option1Projects.length=='0'">
+                            <li > None </li>
+                          </ul>
+                          <ol>
+                            <li ng-repeat="project in  capability.option1Projects"> {{ project }} </li>
+                          </ol>
+                         </md-tooltip>
+                         {{capability.option1}}
+                            </md-button>
+                            </span>
+                      </td>
+                      <td ng-if="capability.capabilityId == '4'">
+                        <span>
+                            <md-button class="md-fab">
+                        <md-tooltip md-direction="right">
+                          <p>Projects with this rating:</p>
+                          <ul ng-if="capability.option2Projects.length=='0'">
+                            <li > None </li>
+                          </ul>
+                          <ol>
+                            <li ng-repeat="project in  capability.option2Projects"> {{ project }} </li>
+                          </ol>
+                         </md-tooltip>
+                         {{capability.option2}}
+                            </md-button>
+                            </span>
+                      </td>
+                      <td ng-if="capability.capabilityId == '4'">
+                        <span>
+                            <md-button class="md-fab">
+                        <md-tooltip md-direction="right">
+                          <p>Projects with this rating:</p>
+                          <ul ng-if="capability.option3Projects.length=='0'">
+                            <li > None </li>
+                          </ul>
+                          <ol>
+                            <li ng-repeat="project in  capability.option3Projects"> {{ project }} </li>
+                          </ol>
+                         </md-tooltip>
+                         {{capability.option3}}
+                            </md-button>
+                            </span>
+                      </td>
+                      <td ng-if="capability.capabilityId == '4'">
+                        <span>
+                            <md-button class="md-fab">
+                        <md-tooltip md-direction="right">
+                          <p>Projects with this rating:</p>
+                          <ul ng-if="capability.option4Projects.length=='0'">
+                            <li > None </li>
+                          </ul>
+                          <ol>
+                            <li  ng-repeat="project in  capability.option4Projects"> {{ project }} </li>
+                          </ol>
+                         </md-tooltip>
+                         {{capability.option4}}
+                            </md-button>
+                            </span>
+                      </td>
+                      <td ng-if="capability.capabilityId == '4'">
+                        <span>
+                            <md-button class="md-fab">
+                        <md-tooltip md-direction="right">
+                          <p>Projects with this rating:</p>
+                          <ul ng-if="capability.option5Projects.length=='0'">
+                            <li > None </li>
+                          </ul>
+                          <ol>
+                            <li  ng-repeat="project in  capability.option5Projects"> {{ project }} </li>
+                          </ol>
+                         </md-tooltip>
+                         {{capability.option5}}
+                            </md-button>
+                            </span>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
               </div>
             </div>
             <div class="form-group">
-              <label class="col-sm-2 control-label" style="padding-top: 10px;" for="textinput">Previous projects performance</label>
+              <label class="col-sm-2 control-label" for="textinput">Previous projects performance</label>
               <div class="col-sm-10">
-                <article>
-                  <rzslider rz-slider-model="slider5.value" rz-slider-options="slider5.options"></rzslider>
-                </article>
+                <table class="table table-hover" id="dev-table">
+                  <thead>
+                    <tr>
+                      <th>Undefined</th>
+                      <th>Acceptable</th>
+                      <th>Good</th>
+                      <th>Excellent</th>
+                      <th>Outstanding</th>
+                    </tr>
+                  </thead>
+                  <col width="20%" />
+                  <col width="20%" />
+                  <col width="20%" />
+                  <col width="20%" />
+                  <col width="20%" />
+                  <tbody>
+                    <tr ng-repeat="capability in assessedCapabilities">
+                      <td ng-if="capability.capabilityId == '5'">
+                        <span>
+                            <md-button class="md-fab">
+                        <md-tooltip md-direction="right">
+                          <p>Projects with this rating:</p>
+                          <ul ng-if="capability.option1Projects.length=='0'">
+                            <li > None </li>
+                          </ul>
+                          <ol>
+                            <li ng-repeat="project in  capability.option1Projects"> {{ project }} </li>
+                          </ol>
+                         </md-tooltip>
+                         {{capability.option1}}
+                            </md-button>
+                            </span>
+                      </td>
+                      <td ng-if="capability.capabilityId == '5'">
+                        <span>
+                            <md-button class="md-fab">
+                        <md-tooltip md-direction="right">
+                          <p>Projects with this rating:</p>
+                          <ul ng-if="capability.option2Projects.length=='0'">
+                            <li > None </li>
+                          </ul>
+                          <ol>
+                            <li ng-repeat="project in  capability.option2Projects"> {{ project }} </li>
+                          </ol>
+                         </md-tooltip>
+                         {{capability.option2}}
+                            </md-button>
+                            </span>
+                      </td>
+                      <td ng-if="capability.capabilityId == '5'">
+                        <span>
+                            <md-button class="md-fab">
+                        <md-tooltip md-direction="right">
+                          <p>Projects with this rating:</p>
+                          <ul ng-if="capability.option3Projects.length=='0'">
+                            <li > None </li>
+                          </ul>
+                          <ol>
+                            <li ng-repeat="project in  capability.option3Projects"> {{ project }} </li>
+                          </ol>
+                         </md-tooltip>
+                         {{capability.option3}}
+                            </md-button>
+                            </span>
+                      </td>
+                      <td ng-if="capability.capabilityId == '5'">
+                        <span>
+                            <md-button class="md-fab">
+                        <md-tooltip md-direction="right">
+                          <p>Projects with this rating:</p>
+                          <ul ng-if="capability.option4Projects.length=='0'">
+                            <li > None </li>
+                          </ul>
+                          <ol>
+                            <li  ng-repeat="project in  capability.option4Projects"> {{ project }} </li>
+                          </ol>
+                         </md-tooltip>
+                         {{capability.option4}}
+                            </md-button>
+                            </span>
+                      </td>
+                      <td ng-if="capability.capabilityId == '5'">
+                        <span>
+                            <md-button class="md-fab">
+                        <md-tooltip md-direction="right">
+                          <p>Projects with this rating:</p>
+                          <ul ng-if="capability.option5Projects.length=='0'">
+                            <li > None </li>
+                          </ul>
+                          <ol>
+                            <li  ng-repeat="project in  capability.option5Projects"> {{ project }} </li>
+                          </ol>
+                         </md-tooltip>
+                         {{capability.option5}}
+                            </md-button>
+                            </span>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
               </div>
             </div>
             <div class="form-group">
-              <label class="col-sm-2 control-label" style="padding-top: 10px;" for="textinput">Programming experience</label>
+              <label class="col-sm-2 control-label" for="textinput">Programming experience</label>
               <div class="col-sm-10">
-                <article>
-                  <rzslider rz-slider-model="slider6.value" rz-slider-options="slider6.options"></rzslider>
-                </article>
+                <table class="table table-hover" id="dev-table">
+                  <thead>
+                    <tr>
+                      <th>Undefined</th>
+                      <th>Average</th>
+                      <th>Good</th>
+                      <th>High</th>
+                      <th>Very high</th>
+                    </tr>
+                  </thead>
+                  <col width="20%" />
+                  <col width="20%" />
+                  <col width="20%" />
+                  <col width="20%" />
+                  <col width="20%" />
+                  <tbody>
+                    <tr ng-repeat="capability in assessedCapabilities">
+                      <td ng-if="capability.capabilityId == '6'">
+                        <span>
+                            <md-button class="md-fab">
+                        <md-tooltip md-direction="right">
+                          <p>Projects with this rating:</p>
+                          <ul ng-if="capability.option1Projects.length=='0'">
+                            <li > None </li>
+                          </ul>
+                          <ol>
+                            <li ng-repeat="project in  capability.option1Projects"> {{ project }} </li>
+                          </ol>
+                         </md-tooltip>
+                         {{capability.option1}}
+                            </md-button>
+                            </span>
+                      </td>
+                      <td ng-if="capability.capabilityId == '6'">
+                        <span>
+                            <md-button class="md-fab">
+                        <md-tooltip md-direction="right">
+                          <p>Projects with this rating:</p>
+                          <ul ng-if="capability.option2Projects.length=='0'">
+                            <li > None </li>
+                          </ul>
+                          <ol>
+                            <li ng-repeat="project in  capability.option2Projects"> {{ project }} </li>
+                          </ol>
+                         </md-tooltip>
+                         {{capability.option2}}
+                            </md-button>
+                            </span>
+                      </td>
+                      <td ng-if="capability.capabilityId == '6'">
+                        <span>
+                            <md-button class="md-fab">
+                        <md-tooltip md-direction="right">
+                          <p>Projects with this rating:</p>
+                          <ul ng-if="capability.option3Projects.length=='0'">
+                            <li > None </li>
+                          </ul>
+                          <ol>
+                            <li ng-repeat="project in  capability.option3Projects"> {{ project }} </li>
+                          </ol>
+                         </md-tooltip>
+                         {{capability.option3}}
+                            </md-button>
+                            </span>
+                      </td>
+                      <td ng-if="capability.capabilityId == '6'">
+                        <span>
+                            <md-button class="md-fab">
+                        <md-tooltip md-direction="right">
+                          <p>Projects with this rating:</p>
+                          <ul ng-if="capability.option4Projects.length=='0'">
+                            <li > None </li>
+                          </ul>
+                          <ol>
+                            <li  ng-repeat="project in  capability.option4Projects"> {{ project }} </li>
+                          </ol>
+                         </md-tooltip>
+                         {{capability.option4}}
+                            </md-button>
+                            </span>
+                      </td>
+                      <td ng-if="capability.capabilityId == '6'">
+                        <span>
+                            <md-button class="md-fab">
+                        <md-tooltip md-direction="right">
+                          <p>Projects with this rating:</p>
+                          <ul ng-if="capability.option5Projects.length=='0'">
+                            <li > None </li>
+                          </ul>
+                          <ol>
+                            <li  ng-repeat="project in  capability.option5Projects"> {{ project }} </li>
+                          </ol>
+                         </md-tooltip>
+                         {{capability.option5}}
+                            </md-button>
+                            </span>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
               </div>
             </div>
             <div class="form-group">
-              <label class="col-sm-2 control-label" style="padding-top: 10px;" for="textinput">Programming language knowledge</label>
+              <label class="col-sm-2 control-label" for="textinput">Programming language knowledge</label>
               <div class="col-sm-10">
-                <article>
-                  <rzslider rz-slider-model="slider7.value" rz-slider-options="slider7.options"></rzslider>
-                </article>
+                <table class="table table-hover" id="dev-table">
+                  <thead>
+                    <tr>
+                      <th>Undefined</th>
+                      <th>Acceptable</th>
+                      <th>Good</th>
+                      <th>Excellent</th>
+                      <th>Outstanding</th>
+                    </tr>
+                  </thead>
+                  <col width="20%" />
+                  <col width="20%" />
+                  <col width="20%" />
+                  <col width="20%" />
+                  <col width="20%" />
+                  <tbody>
+                    <tr ng-repeat="capability in assessedCapabilities">
+                      <td ng-if="capability.capabilityId == '7'">
+                        <span>
+                            <md-button class="md-fab">
+                        <md-tooltip md-direction="right">
+                          <p>Projects with this rating:</p>
+                          <ul ng-if="capability.option1Projects.length=='0'">
+                            <li > None </li>
+                          </ul>
+                          <ol>
+                            <li ng-repeat="project in  capability.option1Projects"> {{ project }} </li>
+                          </ol>
+                         </md-tooltip>
+                         {{capability.option1}}
+                            </md-button>
+                            </span>
+                      </td>
+                      <td ng-if="capability.capabilityId == '7'">
+                        <span>
+                            <md-button class="md-fab">
+                        <md-tooltip md-direction="right">
+                          <p>Projects with this rating:</p>
+                          <ul ng-if="capability.option2Projects.length=='0'">
+                            <li > None </li>
+                          </ul>
+                          <ol>
+                            <li ng-repeat="project in  capability.option2Projects"> {{ project }} </li>
+                          </ol>
+                         </md-tooltip>
+                         {{capability.option2}}
+                            </md-button>
+                            </span>
+                      </td>
+                      <td ng-if="capability.capabilityId == '7'">
+                        <span>
+                            <md-button class="md-fab">
+                        <md-tooltip md-direction="right">
+                          <p>Projects with this rating:</p>
+                          <ul ng-if="capability.option3Projects.length=='0'">
+                            <li > None </li>
+                          </ul>
+                          <ol>
+                            <li ng-repeat="project in  capability.option3Projects"> {{ project }} </li>
+                          </ol>
+                         </md-tooltip>
+                         {{capability.option3}}
+                            </md-button>
+                            </span>
+                      </td>
+                      <td ng-if="capability.capabilityId == '7'">
+                        <span>
+                            <md-button class="md-fab">
+                        <md-tooltip md-direction="right">
+                          <p>Projects with this rating:</p>
+                          <ul ng-if="capability.option4Projects.length=='0'">
+                            <li > None </li>
+                          </ul>
+                          <ol>
+                            <li  ng-repeat="project in  capability.option4Projects"> {{ project }} </li>
+                          </ol>
+                         </md-tooltip>
+                         {{capability.option4}}
+                            </md-button>
+                            </span>
+                      </td>
+                      <td ng-if="capability.capabilityId == '7'">
+                        <span>
+                            <md-button class="md-fab">
+                        <md-tooltip md-direction="right">
+                          <p>Projects with this rating:</p>
+                          <ul ng-if="capability.option5Projects.length=='0'">
+                            <li > None </li>
+                          </ul>
+                          <ol>
+                            <li  ng-repeat="project in  capability.option5Projects"> {{ project }} </li>
+                          </ol>
+                         </md-tooltip>
+                         {{capability.option5}}
+                            </md-button>
+                            </span>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
               </div>
             </div>
             <div class="form-group">
-              <label class="col-sm-2 control-label" style="padding-top: 10px;" for="textinput">Understanding software security</label>
+              <label class="col-sm-2 control-label" for="textinput">Understanding software security</label>
               <div class="col-sm-10">
-                <article>
-                  <rzslider rz-slider-model="slider8.value" rz-slider-options="slider8.options"></rzslider>
-                </article>
-              </div>
-            </div>
-            <div class="form-group" style="padding-bottom: 20px;">
-              <div class="col-xs-6 col-md-3 col-md-push-4">
-                <div class="pull-center">
-                  <md-button class="add-tab md-primary md-raised" style="font-size: 15px; background-color: rgb(90, 132, 187);" type="submit" ng-click="updateCapabilities()">Next</md-button>
-                  <md-button type="reset" type="reset" style="font-size: 15px; " ng-click="clearCapabilities()">Cancel </md-button>
-                </div>
+                <table class="table table-hover" id="dev-table">
+                  <thead>
+                    <tr>
+                      <th>Undefined</th>
+                      <th>Average</th>
+                      <th>Good</th>
+                      <th>High</th>
+                      <th>Very high</th>
+                    </tr>
+                  </thead>
+                  <col width="20%" />
+                  <col width="20%" />
+                  <col width="20%" />
+                  <col width="20%" />
+                  <col width="20%" />
+                  <tbody>
+                    <tr ng-repeat="capability in assessedCapabilities">
+                      <td ng-if="capability.capabilityId == '8'">
+                        <span>
+                            <md-button class="md-fab">
+                        <md-tooltip md-direction="right">
+                          <p>Projects with this rating:</p>
+                          <ul ng-if="capability.option1Projects.length=='0'">
+                            <li > None </li>
+                          </ul>
+                          <ol>
+                            <li ng-repeat="project in  capability.option1Projects"> {{ project }} </li>
+                          </ol>
+                         </md-tooltip>
+                         {{capability.option1}}
+                            </md-button>
+                            </span>
+                      </td>
+                      <td ng-if="capability.capabilityId == '8'">
+                        <span>
+                            <md-button class="md-fab">
+                        <md-tooltip md-direction="right">
+                          <p>Projects with this rating:</p>
+                          <ul ng-if="capability.option2Projects.length=='0'">
+                            <li > None </li>
+                          </ul>
+                          <ol>
+                            <li ng-repeat="project in  capability.option2Projects"> {{ project }} </li>
+                          </ol>
+                         </md-tooltip>
+                         {{capability.option2}}
+                            </md-button>
+                            </span>
+                      </td>
+                      <td ng-if="capability.capabilityId == '8'">
+                        <span>
+                            <md-button class="md-fab">
+                        <md-tooltip md-direction="right">
+                          <p>Projects with this rating:</p>
+                          <ul ng-if="capability.option3Projects.length=='0'">
+                            <li > None </li>
+                          </ul>
+                          <ol>
+                            <li ng-repeat="project in  capability.option3Projects"> {{ project }} </li>
+                          </ol>
+                         </md-tooltip>
+                         {{capability.option3}}
+                            </md-button>
+                            </span>
+                      </td>
+                      <td ng-if="capability.capabilityId == '8'">
+                        <span>
+                            <md-button class="md-fab">
+                        <md-tooltip md-direction="right">
+                          <p>Projects with this rating:</p>
+                          <ul ng-if="capability.option4Projects.length=='0'">
+                            <li > None </li>
+                          </ul>
+                          <ol>
+                            <li  ng-repeat="project in  capability.option4Projects"> {{ project }} </li>
+                          </ol>
+                         </md-tooltip>
+                         {{capability.option4}}
+                            </md-button>
+                            </span>
+                      </td>
+                      <td ng-if="capability.capabilityId == '8'">
+                        <span>
+                            <md-button class="md-fab">
+                        <md-tooltip md-direction="right">
+                          <p>Projects with this rating:</p>
+                          <ul ng-if="capability.option5Projects.length=='0'">
+                            <li > None </li>
+                          </ul>
+                          <ol>
+                            <li  ng-repeat="project in  capability.option5Projects"> {{ project }} </li>
+                          </ol>
+                         </md-tooltip>
+                         {{capability.option5}}
+                            </md-button>
+                            </span>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
               </div>
             </div>
           </div>

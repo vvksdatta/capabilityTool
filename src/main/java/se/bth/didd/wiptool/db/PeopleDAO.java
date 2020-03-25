@@ -45,6 +45,9 @@ public interface PeopleDAO {
 
 	@SqlQuery("select * from PEOPLE where personId = :personId")
 	List<People> getPersonDetails(@Bind("personId") int personId);
+	
+	@SqlQuery("select count (*) as numb from (select distinct projectId from assessmentofcapabilities where personId = :personId and projectId is not null ) as TableA ")
+	List<Integer> getProjectsCountPerson(@Bind("personId") int personId);
 
 	@SqlQuery("select userId, userFirstName, userlastName, userMailId, userName, apiKey, role from LOGINCREDENTIALS")
 	List<UserTemplate> getUsersList();
