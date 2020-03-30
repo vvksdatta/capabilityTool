@@ -16,6 +16,7 @@ import se.bth.didd.wiptool.api.SprintAsset;
 import se.bth.didd.wiptool.api.SprintBriefSummary;
 import se.bth.didd.wiptool.api.SprintDevelopmentEnvironment;
 import se.bth.didd.wiptool.api.SprintDomain;
+import se.bth.didd.wiptool.api.SprintIdSprintName;
 import se.bth.didd.wiptool.api.SprintQuestionnaireTemplate;
 import se.bth.didd.wiptool.api.SprintRequirement;
 import se.bth.didd.wiptool.api.SprintRequirementNameLevel;
@@ -200,6 +201,9 @@ public interface SprintDAO {
 
 	@SqlQuery("select * from SPRINTS where projectId = :id")
 	Sprint findBySprintId(@Bind("id") int id);
+	
+	@SqlQuery("select sprintId, sprintName from SPRINTS where projectId = :projectId")
+	List<SprintIdSprintName> getAllSprintsInProject(@Bind("projectId") int projectId);
 
 	@SqlQuery("select * from SPRINTS where projectId = :projectId and sprintId = :sprintId")
 	List<Sprint> findByIds(@Bind("projectId") int projectId, @Bind("sprintId") int sprintId);

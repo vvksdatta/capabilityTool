@@ -1,0 +1,145 @@
+<script>
+  $(".nav-tabs li").eq(3).addClass("active");
+  $(".nav-tabs li").eq(0).removeClass("active").removeClass("disabledTab");
+  $(".nav-tabs li").eq(1).removeClass("active").removeClass("disabledTab");
+  $(".nav-tabs li").eq(4).removeClass("active").removeClass("disabledTab");
+  $(".nav-tabs li").eq(2).removeClass("active").removeClass("disabledTab");
+</script>
+<style>
+  md-tabs-wrapper md-next-button {
+    right: 100px;
+    z-index: 500;
+  }
+
+  textarea[readonly=true],
+  textarea[readonly] {
+    background-color: #eee;
+    cursor: not-allowed;
+  }
+
+  md-tabs:not(.md-no-tab-content):not(.md-dynamic-height) {
+    min-height: 400px;
+  }
+
+  .md-button.md-default-theme.md-primary.md-cancel-button {
+    background: whitesmoke;
+    color: rgb(63, 81, 181);
+  }
+
+  .md-button.md-default-theme.md-primary.md-confirm-button {
+    background: whitesmoke;
+    color: rgb(63, 81, 181);
+  }
+
+  .md-tab {
+    font-size: 16px;
+  }
+
+  md-tab-data {
+    opacity: 1;
+    z-index: 100;
+    display: inline-block;
+    width: 130px;
+    float: right;
+    position: relative;
+  }
+
+  md-autocomplete input:not(.md-input) {
+    font-size: 17px;
+  }
+
+  .md-autocomplete-suggestions li {
+    font-size: 17px;
+  }
+
+  md-tabs.md-default-theme md-ink-bar,
+  md-tabs md-ink-bar {
+    background: rgb(90, 132, 187);
+    color: rgba(0, 0, 0, 0.87);
+  }
+
+  md-tabs.md-default-theme .md-tab.md-active,
+  md-tabs .md-tab.md-active,
+  md-tabs.md-default-theme .md-tab.md-active md-icon,
+  md-tabs .md-tab.md-active md-icon,
+  md-tabs.md-default-theme .md-tab.md-focused,
+  md-tabs .md-tab.md-focused,
+  md-tabs.md-default-theme .md-tab.md-focused md-icon,
+  md-tabs .md-tab.md-focused md-icon {
+    color: #333;
+    .superclick {
+      right: 0;
+      position: absolute;
+      z-index: 100;
+    }
+    md-tabs-canvas.md-paginated {
+      margin: 0px 30px;
+    }
+</style>
+<md-content style="overflow: unset; font-size: 17px;margin-bottom: 50px;">
+  <md-whiteframe class="md-whiteframe-18dp" layout layout-align="center center">
+    <div class="container ">
+      <div class="sample" layout="column" ng-cloak>
+
+        <md-content>
+          <md-tabs md-selected="selectedIndex" md-border-bottom md-autoselect>
+            <md-tab ng-repeat="tab in tabs" label="{{tab.title}}">
+              <div class="col-xs-3 col-md-3 col-md-push-9" style="margin-bottom: 20px;margin-top: 20px;">
+                <md-button class="md-primary md-raised" style=" font-size: 15px;background-color: rgb(90, 132, 187); margin-bottom:20px; " ng-click="removeTab(tab)">
+                  Remove issue
+                </md-button>
+              </div>
+              <div class="col-xs-5" style=" margin-bottom:20px;     margin-top: 20px;">
+                <div class="demo-tab tab{{$index%4}}" style="text-align: left;">
+                  <div class="form-group">
+                    <div class="form-group" ng-class="{ 'has-error': form.$submitted && form.issueSubject.$invalid }">
+                      <label class="col-sm-3 control-label" for="sprintName">Subject</label>
+                      <div class="col-sm-8">
+                        <input type="text" placeholder="Issue subject" id="issueSubject" name="issueSubject" class="form-control" ng-model="tab.issueSubject" required>
+                        <div ng-messages="form.$submitted && form.issueSubject.$error" class="help-block">
+                          <div ng-message="required">Subject is required</div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="form-group" ng-class="{ 'has-error': form.$submitted && form.issueDescription.$invalid }">
+                      <label class="col-sm-3 control-label" for="sprintName">Description</label>
+                      <div class="col-sm-8">
+                        <textarea placeholder="Issue description" id="issueDescription" name="issueDescription" class="form-control" ng-model="tab.issueDescription" required> </textarea>
+                        <div ng-messages="form.$submitted && form.issueDescription.$error" class="help-block">
+                          <div ng-message="required">Description is required</div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <label class="col-sm-3 control-label" for="sprintName">Category</label>
+                      <div class="col-sm-8">
+                        <input type="text" list="categoriesList" style="font-size: 16px;min-width: 80px;" placeholder="Select a category" id="categoryId" name="categoryId" class="form-control" ng-model="tab.categoryName" ng-change="issueCategory(tab,tab.categoryName)">
+                        <datalist id="categoriesList">
+                        <option  style="font-size: 16px; " ng-repeat="category in categoriesList"   value= "{{category.categoryName}}">
+                      </datalist>
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <label class="col-sm-3 control-label" for="sprintName">Sprint</label>
+                      <div class="col-sm-8">
+                        <input type="text" list="sprintsList" style="font-size: 16px;min-width: 80px;" placeholder="Select a sprint" id="sprintId" name="sprintId" class="form-control" ng-model="tab.sprintName" ng-change="issueSprint(tab,tab.sprintName)">
+                        <datalist id="sprintsList">
+                          <option  style="font-size: 16px; " ng-repeat="sprint in sprintsList"   value= "{{sprint.sprintName}}">
+                        </datalist>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </md-tab>
+            <md-button style="right: -10;z-index: auto;" ng-click="addTab()"> + Add </md-button>
+          </md-tabs>
+        </md-content>
+      </div>
+      <div class="col-xs-3 col-md-6 col-md-push-4">
+        <md-button type=s ubmit class="md-primary md-raised" style=" font-size: 15px;background-color: rgb(90, 132, 187);" ng-click="saveIssues(tabs)"> Save all issues</md-button>
+        <md-button type="reset" class="md-raised" style="font-size: 15px; " ng-if="tabs[0].title != 'Instructions'" ng-click="removeTabs($event)">Cancel </md-button>
+      </div>
+    </div>
+  </md-whiteframe>
+</md-content>

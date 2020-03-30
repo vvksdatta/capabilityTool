@@ -29,11 +29,14 @@ import com.google.gson.Gson;
 import com.taskadapter.redmineapi.RedmineException;
 import com.taskadapter.redmineapi.RedmineManager;
 import com.taskadapter.redmineapi.RedmineManagerFactory;
+import com.taskadapter.redmineapi.bean.IssueCategory;
 import com.taskadapter.redmineapi.bean.Membership;
 import com.taskadapter.redmineapi.bean.Project;
 import com.taskadapter.redmineapi.bean.Role;
 import com.taskadapter.redmineapi.bean.User;
 import com.taskadapter.redmineapi.bean.Version;
+
+import se.bth.didd.wiptool.api.IssueCategoryIdName;
 import se.bth.didd.wiptool.api.IssueTemplate;
 import se.bth.didd.wiptool.api.IssueUpdateTemplate;
 import se.bth.didd.wiptool.api.IssuesTemplateForRedmineAPI;
@@ -1349,6 +1352,38 @@ public class Redmine {
 			System.out.println(e);
 			return Response.status(Status.BAD_REQUEST).entity(e).build();
 		}
+	}
+	
+	
+	@GET
+	@Path("/getSprintCategories/{userId}/{projectId}")
+	public Response getSprintCategories(@PathParam("userId") Integer userId, @PathParam("projectId") Integer projectId)
+			throws RedmineException, IOException, JSONException {
+		String apiKey;
+		try {
+			apiKey = redmineDAO.getApiKeyOfUser(userId).get(0);
+		} catch (Exception e1) {
+			System.out.println(e1);
+			return Response.status(Status.BAD_REQUEST).entity(e1).build();
+		}
+		RedmineManager redmineManager = RedmineManagerFactory.createWithApiKey(redmineUrl, apiKey);
+		//redmineManager.setObjectsPerPage(100);
+		List<IssueCategory> categories = new ArrayList<>();
+		List<IssueCategoryIdName> categoryDetails = new ArrayList<>();
+		try {
+			categories = redmineManager.getIssueManager().getCategories(projectId);
+			for (IssueCategory eachCategory : categories){
+				IssueCategoryIdName sampleCategory = new IssueCategoryIdName();
+				sampleCategory.setCategoryId(eachCategory.getId());
+				sampleCategory.setCategoryName(eachCategory.getName());
+				categoryDetails.add(sampleCategory);
+			}
+			
+		} catch (Exception e1) {
+			System.out.println(e1);
+			return Response.status(Status.BAD_REQUEST).entity(e1).build();
+		}
+		return Response.ok(categoryDetails).build();
 	}
 	
 	public static float round(float number, int decimalPlace) {

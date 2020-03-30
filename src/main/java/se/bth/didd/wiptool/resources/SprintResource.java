@@ -47,6 +47,7 @@ import se.bth.didd.wiptool.api.SprintCompanyDrivenFactors;
 import se.bth.didd.wiptool.api.SprintDevelopmentEnvironment;
 import se.bth.didd.wiptool.api.SprintDomain;
 import se.bth.didd.wiptool.api.SprintIdProjectIdParticipants;
+import se.bth.didd.wiptool.api.SprintIdSprintName;
 import se.bth.didd.wiptool.api.SprintQuestionnaireTemplate;
 import se.bth.didd.wiptool.api.SprintSummary;
 import se.bth.didd.wiptool.api.SuccessMessage;
@@ -111,6 +112,18 @@ public class SprintResource {
 	}
 
 	@GET
+	@Path("/getAllSprints/{projectId}")
+	public Response getAllSprints(@Auth User user, @PathParam("projectId") int projectId) {
+		try {
+			List<SprintIdSprintName> sprints = sprintDAO.getAllSprintsInProject(projectId);
+			return Response.ok(sprints).build();
+		} catch (Exception e) {
+			System.out.println(e);
+			return Response.status(Status.BAD_REQUEST).entity(e).build();
+		}
+	}
+
+	@GET
 	@Path("/existingSprintDetails/{sprintId}/{projectId}")
 	public Response existingSprintDetails(@PathParam("sprintId") Integer sprintId,
 			@PathParam("projectId") Integer projectId) {
@@ -156,7 +169,7 @@ public class SprintResource {
 	public Response addNewSprint(@Auth User user, NewSprint newSprint) throws RedmineException, SQLException {
 		String apiKey;
 		try {
-			 apiKey = sprintDAO.getApiKeyOfUser(newSprint.getUserId()).get(0);
+			apiKey = sprintDAO.getApiKeyOfUser(newSprint.getUserId()).get(0);
 		} catch (Exception e1) {
 			System.out.println(e1);
 			return Response.status(Status.BAD_REQUEST).entity(e1).build();
@@ -192,7 +205,8 @@ public class SprintResource {
 			}
 
 			try {
-				sprintDAO.insertSharedSprints(newCreatedSprint.getSprintId(), newSprint.getProjectId(), newSprint.getProjectId());
+				sprintDAO.insertSharedSprints(newCreatedSprint.getSprintId(), newSprint.getProjectId(),
+						newSprint.getProjectId());
 			} catch (Exception e) {
 				System.out.println(e);
 				return Response.status(Status.BAD_REQUEST).entity(e).build();
@@ -232,7 +246,7 @@ public class SprintResource {
 	public Response updateSprint(@Auth User user, ExistingSprint existingSprint) throws RedmineException {
 		String apiKey;
 		try {
-			 apiKey = sprintDAO.getApiKeyOfUser(existingSprint.getUserId()).get(0);
+			apiKey = sprintDAO.getApiKeyOfUser(existingSprint.getUserId()).get(0);
 		} catch (Exception e1) {
 			System.out.println(e1);
 			return Response.status(Status.BAD_REQUEST).entity(e1).build();
@@ -330,9 +344,9 @@ public class SprintResource {
 		try {
 			List<RolesOfPeopleSprint> rolesOfPeople = sprintDAO.getSprintParticipants(projectId, sprintId);
 			Collections.sort(rolesOfPeople, new Comparator<RolesOfPeopleSprint>() {
-			    public int compare(RolesOfPeopleSprint v1, RolesOfPeopleSprint v2) {
-			        return v1.getPersonName().compareTo(v2.getPersonName());
-			    }
+				public int compare(RolesOfPeopleSprint v1, RolesOfPeopleSprint v2) {
+					return v1.getPersonName().compareTo(v2.getPersonName());
+				}
 			});
 			return Response.ok(rolesOfPeople).build();
 		} catch (Exception e) {
@@ -876,7 +890,8 @@ public class SprintResource {
 	@RolesAllowed({ UserRoles.ROLE_ONE })
 	@PUT
 	@Path("/insertRequirementsSelection")
-	public Response insertRequirementsSelection(@Auth User user, List<SprintRequirementNameValueDescriptionUser> requirementsList) {
+	public Response insertRequirementsSelection(@Auth User user,
+			List<SprintRequirementNameValueDescriptionUser> requirementsList) {
 		Long timeStamp = Calendar.getInstance().getTimeInMillis();
 		for (SprintRequirementNameValueDescriptionUser eachenteredRequirement : requirementsList) {
 
@@ -899,7 +914,7 @@ public class SprintResource {
 				}
 
 				try {
-					
+
 					if (eachenteredRequirement.getSprintRequirementDescription() != null) {
 						System.out.println(eachenteredRequirement);
 						sprintDAO.updateSprintRequirementDescription(

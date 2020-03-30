@@ -6,6 +6,7 @@ import javax.annotation.security.RolesAllowed;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
@@ -16,12 +17,18 @@ import com.taskadapter.redmineapi.RedmineException;
 import com.taskadapter.redmineapi.RedmineManager;
 import com.taskadapter.redmineapi.RedmineManagerFactory;
 import com.taskadapter.redmineapi.bean.Issue;
+import com.taskadapter.redmineapi.bean.IssueCategory;
+import com.taskadapter.redmineapi.bean.IssueCategoryFactory;
 import com.taskadapter.redmineapi.bean.IssueFactory;
-
+import com.taskadapter.redmineapi.bean.Tracker;
+import com.taskadapter.redmineapi.bean.TrackerFactory;
+import com.taskadapter.redmineapi.bean.Version;
+import com.taskadapter.redmineapi.bean.VersionFactory;
 import io.dropwizard.auth.Auth;
 import se.bth.didd.wiptool.api.AllocatedIssue;
 import se.bth.didd.wiptool.api.ErrorMessage;
 import se.bth.didd.wiptool.api.IssueTemplate;
+import se.bth.didd.wiptool.api.IssueTemplateLimitedFields;
 import se.bth.didd.wiptool.api.IssueUpdateTemplate;
 import se.bth.didd.wiptool.api.SprintIdProjectIdIssuesAllocated;
 import se.bth.didd.wiptool.api.SuccessMessage;
@@ -55,14 +62,53 @@ public class IssueResource {
 			return Response.status(Status.BAD_REQUEST).entity(e).build();
 		}
 	}
-	
+
+	@RolesAllowed({ UserRoles.ROLE_ONE })
+	@PUT
+	@Path("/addNewIssues/{userId}/{projectId}")
+	public Response updateAllocatedIssues(@Auth User user, @PathParam("userId") int userId,
+			@PathParam("projectId") int projectId, List<IssueTemplateLimitedFields> newIssues) {
+		String apiKey;
+		try {
+			apiKey = issueDAO.getApiKeyOfUser(userId).get(0);
+		} catch (Exception e1) {
+			System.out.println(e1);
+			return Response.status(Status.BAD_REQUEST).entity(e1).build();
+		}
+		RedmineManager redmineManager = RedmineManagerFactory.createWithApiKey(redmineUrl, apiKey);
+		for (IssueTemplateLimitedFields eachNewIssue : newIssues) {
+			Issue newIssuesToRedmine = new Issue();
+			newIssuesToRedmine.setSubject(eachNewIssue.getIssueName());
+			newIssuesToRedmine.setDescription(eachNewIssue.getIssueDescription());
+			IssueCategory category = IssueCategoryFactory.create(eachNewIssue.categoryId);
+			newIssuesToRedmine.setCategory(category);
+			newIssuesToRedmine.setStatusId(1);
+			newIssuesToRedmine.setPriorityId(2);
+			Tracker tracker = TrackerFactory.create(2);
+			newIssuesToRedmine.setTracker(tracker);
+			newIssuesToRedmine.setProjectId(projectId);
+			Version targetVersion = VersionFactory.create(eachNewIssue.getSprintId());
+			newIssuesToRedmine.setTargetVersion(targetVersion);
+			try {
+				redmineManager.getIssueManager().createIssue(newIssuesToRedmine);
+			} catch (RedmineException e) {
+				e.printStackTrace();
+				System.out.println(e);
+			}
+		}
+
+		SuccessMessage success = new SuccessMessage();
+		success.setSuccess("insert successful");
+		return Response.ok(success).build();
+	}
+
 	@RolesAllowed({ UserRoles.ROLE_ONE })
 	@POST
 	@Path("/updateAllocatedIssues")
 	public Response updateAllocatedIssues(@Auth User user, SprintIdProjectIdIssuesAllocated issuesAllocated) {
 		String apiKey;
 		try {
-			 apiKey = issueDAO.getApiKeyOfUser(issuesAllocated.getUserId()).get(0);
+			apiKey = issueDAO.getApiKeyOfUser(issuesAllocated.getUserId()).get(0);
 		} catch (Exception e1) {
 			System.out.println(e1);
 			return Response.status(Status.BAD_REQUEST).entity(e1).build();

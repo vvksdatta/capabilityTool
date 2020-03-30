@@ -586,6 +586,18 @@
           label: 'Sprint requirements'
         }
       })
+      .state('management.sprints.addSprint.addIssues', {
+        url: '/addIssues/:sprintId/:projectId',
+        params: {
+          projectId: null,
+          sprintId: null,
+        },
+        templateUrl: 'sprints/addIssues.html',
+        controller: 'sprintIssuessCtrl',
+        ncyBreadcrumb: {
+          label: 'Sprint issues'
+        }
+      })
       .state('management.sprints.addSprint.sprintRoles', {
         url: '/addSprintRoles/:sprintId/:projectId',
         params: {
@@ -6292,6 +6304,139 @@
         //$scope.sprintId = sprint.sprintId;
       })
   });
+
+  app.controller('sprintIssuessCtrl', function($scope, $state, $timeout, sprintNav, $http, $q, dataService, alertFactory, $localStorage, $stateParams, $log, $window, $mdDialog, GetSprintRequirementsService, $rootScope) {
+    if ($rootScope.alerts.length != 0) {
+      angular.forEach($rootScope.alerts, function(value, key) {
+        var alert = {};
+        alert = $rootScope.alerts[key];
+        if (alert.type == 'info') {
+          $rootScope.alerts.splice(key, 1);
+        }
+      });
+    };
+    sprintNav.setSprintNav($stateParams.projectId, $stateParams.sprintId);
+    var tabClasses;
+
+    function initTabs() {
+      tabClasses = ["", "", "", "", ""];
+    }
+    $scope.getTabClass = function(tabNum) {
+      return tabClasses[tabNum];
+    };
+    $scope.getTabPaneClass = function(tabNum) {
+      return "tab-pane " + tabClasses[tabNum];
+    }
+    $scope.setActiveTab = function(tabNum) {
+      initTabs();
+      tabClasses[tabNum] = "active";
+    };
+    $scope.addTab = function() {
+      var total = ($scope.tabs.length + 1);
+      $scope.tabs.push({
+        title: 'Issue ' + total
+      });
+    }
+    initTabs();
+    var tabs = [{
+        title: 'Issue 1',
+      }],
+      selected = null,
+      previous = null;
+    $scope.tabs = tabs;
+    $scope.selectedIndex = 1;
+    $scope.removeTab = function(tab) {
+      var index = tabs.indexOf(tab);
+      $scope.tabs.splice(index, 1);
+    };
+    $scope.removeTabs = function(ev) {
+      var confirm = $mdDialog.confirm()
+        .title("Would you like to clear all the requirements? ")
+        .textContent('This will only clear all the tabs selected on this page.')
+        .ariaLabel('')
+        .targetEvent(ev)
+        .ok('Proceed!')
+        .cancel('Cancel');
+      $mdDialog.show(confirm).then(function() {
+        for (var i = $scope.tabs.length; i >= 0; i--) {
+          $scope.removeTab($scope.tabs[i]);
+        }
+      });
+    };
+    $scope.saveIssues = function(tabs) {
+      var issuesEntered = [];
+      angular.forEach(tabs, function(value, key) {
+        var issues = {};
+
+        issues.sprintId = value.sprintId;
+        issues.issueName = value.issueSubject;
+        issues.issueDescription = value.issueDescription;
+        issues.categoryId = value.categoryId;
+        issuesEntered.push(issues);
+        console.log(issues.toString());
+      });
+      $scope.issues = issuesEntered;
+      $http.put('/api/issues/addNewIssues/' + $localStorage.currentUser.userId + "/" + $stateParams.projectId, $scope.issues).then(function(response) {
+          var optionalDelay = 800000;
+          var $string = "Successfully saved all the issues!";
+          $state.go("management.sprints.addSprint.sprintRoles", {
+            projectId: $stateParams.projectId,
+            sprintId: $stateParams.sprintId
+          });
+          //$state.go("management.sprints.addSprint.sprintRoles", response.data);
+          alertFactory.addAuto('success', $string, optionalDelay);
+        })
+        .catch(function(response, status) {
+          //	$scope.loading = false;
+          var optionalDelay = 800000;
+          var $string = "Error in adding issues to the sprint";
+          alertFactory.addAuto('danger', $string, optionalDelay);
+        });
+    }
+    $scope.issueCategory = function(tab, categoryName) {
+      tab.categoryId = null;
+      if (tab.categoryId != null && angular.isNumber(tab.categoryId)) {
+        tab.categoryId = null;
+      }
+      angular.forEach($scope.categoriesList, function(value, key) {
+        if (categoryName == value.categoryName) {
+          tab.categoryId = value.categoryId;
+        }
+      });
+    };
+    $scope.issueSprint = function(tab, sprintName) {
+      tab.sprintId = null;
+      if (tab.sprintId != null && angular.isNumber(tab.sprintId)) {
+        tab.sprintId = null;
+      }
+      angular.forEach($scope.sprintsList, function(value, key) {
+        if (sprintName == value.sprintName) {
+          tab.sprintId = value.sprintId;
+        }
+      });
+    };
+    $http.get('/api/sprints/getAllSprints/' + $stateParams.projectId).then(function(response) {
+        $scope.sprintsList = response.data;
+      })
+      .catch(function(response, status) {
+        //	$scope.loading = false;
+        var optionalDelay = 800000;
+        var $string = "Error in fetching list of sprints";
+        alertFactory.addAuto('danger', $string, optionalDelay);
+      });
+    $http.get('/api/redmine/getSprintCategories/' + $localStorage.currentUser.userId + "/" + $stateParams.projectId).then(function(response) {
+        $scope.categoriesList = response.data;
+      })
+      .catch(function(response, status) {
+        //	$scope.loading = false;
+        var optionalDelay = 800000;
+        var $string = "Error in fetching list of sprint categories";
+        alertFactory.addAuto('danger', $string, optionalDelay);
+      });
+    var sprint = sprintNav.getSprintNav();
+    $scope.projectId = sprint.projectId;
+    $scope.sprintId = sprint.sprintId;
+  });
   app.controller('sprintRequirementsCtrl', function($scope, $state, $timeout, sprintNav, $http, $q, dataService, alertFactory, $localStorage, $stateParams, $log, $window, $mdDialog, GetSprintRequirementsService, $rootScope) {
     if ($rootScope.alerts.length != 0) {
       angular.forEach($rootScope.alerts, function(value, key) {
@@ -6308,7 +6453,7 @@
     var tabClasses;
 
     function initTabs() {
-      tabClasses = ["", "", "", ""];
+      tabClasses = ["", "", "", "", ""];
     }
     $scope.getTabClass = function(tabNum) {
       return tabClasses[tabNum];
@@ -6436,7 +6581,8 @@
       $http.put('/api/sprints/insertRequirementsSelection', $scope.requirements).then(function(response) {
           var optionalDelay = 800000;
           var $string = "Sprint requirements saved!";
-          $state.go("management.sprints.addSprint.sprintRoles", response.data);
+          $state.go("management.sprints.addSprint.addIssues", response.data);
+          //$state.go("management.sprints.addSprint.sprintRoles", response.data);
           alertFactory.addAuto('success', $string, optionalDelay);
         })
         .catch(function(response, status) {
@@ -6678,7 +6824,7 @@
     var tabClasses;
 
     function initTabs() {
-      tabClasses = ["", "", "", ""];
+      tabClasses = ["", "", "", "", ""];
     }
     $scope.getTabClass = function(tabNum) {
       return tabClasses[tabNum];
@@ -7257,7 +7403,7 @@
     var tabClasses;
 
     function initTabs() {
-      tabClasses = ["", "", "", ""];
+      tabClasses = ["", "", "", "", ""];
     }
     $scope.getTabClass = function(tabNum) {
       return tabClasses[tabNum];
@@ -8016,14 +8162,14 @@
     //$scope.setActiveTab(2);
     if ($scope.userId2 != '') {
       $http.get('/api/capabilities/getCapabilitiesSummaryOfPerson/' + $scope.userId2).then(function(response) {
-        $scope.assessedCapabilities = response.data;
-      })
-      .catch(function(response, status) {
-        var optionalDelay = 800000;
-        var $string = "Error in fetching capability details";
-        alertFactory.addAuto('danger', $string, optionalDelay);
-      })
-      }
+          $scope.assessedCapabilities = response.data;
+        })
+        .catch(function(response, status) {
+          var optionalDelay = 800000;
+          var $string = "Error in fetching capability details";
+          alertFactory.addAuto('danger', $string, optionalDelay);
+        })
+    }
   });
   app.controller('editProgrammingskills', function($scope, $state, $location, $http, alertFactory, $q, dataService, $localStorage, $stateParams, $log, $timeout, GetProgrammingSkillsService, $mdDialog, $rootScope) {
     if ($rootScope.alerts.length != 0) {
@@ -8234,14 +8380,14 @@
           var $string = "Error in updating capability details";
           alertFactory.addAuto('danger', $string, optionalDelay);
         })
-        $http.get('/api/people/getProjectsCountPerson/' + $scope.userId).then(function(response) {
-            $scope.totalProjects = response.data[0];
-          })
-          .catch(function(response, status) {
-            var optionalDelay = 800000;
-            var $string = "Error in fetcing number of projects where capablities were assessed";
-            alertFactory.addAuto('danger', $string, optionalDelay);
-          })
+      $http.get('/api/people/getProjectsCountPerson/' + $scope.userId).then(function(response) {
+          $scope.totalProjects = response.data[0];
+        })
+        .catch(function(response, status) {
+          var optionalDelay = 800000;
+          var $string = "Error in fetcing number of projects where capablities were assessed";
+          alertFactory.addAuto('danger', $string, optionalDelay);
+        })
     }
     $scope.sl = {
       options: {
