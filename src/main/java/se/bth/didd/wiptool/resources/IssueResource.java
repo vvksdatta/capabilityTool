@@ -78,6 +78,7 @@ public class IssueResource {
 		RedmineManager redmineManager = RedmineManagerFactory.createWithApiKey(redmineUrl, apiKey);
 		for (IssueTemplateLimitedFields eachNewIssue : newIssues) {
 			Issue newIssuesToRedmine = new Issue();
+			Issue newIssueCreatedOnRedmine = new Issue();
 			newIssuesToRedmine.setSubject(eachNewIssue.getIssueName());
 			newIssuesToRedmine.setDescription(eachNewIssue.getIssueDescription());
 			IssueCategory category = IssueCategoryFactory.create(eachNewIssue.categoryId);
@@ -90,7 +91,21 @@ public class IssueResource {
 			Version targetVersion = VersionFactory.create(eachNewIssue.getSprintId());
 			newIssuesToRedmine.setTargetVersion(targetVersion);
 			try {
-				redmineManager.getIssueManager().createIssue(newIssuesToRedmine);
+				newIssueCreatedOnRedmine =	redmineManager.getIssueManager().createIssue(newIssuesToRedmine);
+				IssueTemplate newIssue = new IssueTemplate();
+				newIssue.setProjectId(newIssueCreatedOnRedmine.getProjectId());
+				newIssue.setIssueId(newIssueCreatedOnRedmine.getId());
+				newIssue.setIssueName(newIssueCreatedOnRedmine.getSubject());
+				newIssue.setIssueDescription(newIssueCreatedOnRedmine.getDescription());
+				newIssue.setIssueCategory(newIssueCreatedOnRedmine.getCategory().getName());
+				newIssue.setIssueLastUpdate(newIssueCreatedOnRedmine.getUpdatedOn());
+				newIssue.setRedmineLastUpdate(newIssueCreatedOnRedmine.getUpdatedOn());
+				newIssue.setIssuePriority(newIssueCreatedOnRedmine.getPriorityText());
+				newIssue.setIssueStartDate(newIssueCreatedOnRedmine.getStartDate());
+				newIssue.setIssueDone(newIssueCreatedOnRedmine.getDoneRatio());
+				newIssue.setPersonId(newIssueCreatedOnRedmine.getAssigneeId());
+				issueDAO.insertIntoIssuesTable(newIssue);
+				issueDAO.insertIntoSprintComprisingIssuesTable(projectId, eachNewIssue.getSprintId(), newIssueCreatedOnRedmine.getId());
 			} catch (RedmineException e) {
 				e.printStackTrace();
 				System.out.println(e);
