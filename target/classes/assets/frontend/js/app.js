@@ -6332,10 +6332,25 @@
       tabClasses[tabNum] = "active";
     };
     $scope.addTab = function() {
+      var sprintId = null;
+      var sprintName = null;
+      var backlogExists = false;
       var total = ($scope.tabs.length + 1);
-      $scope.tabs.push({
-        title: 'Issue ' + total
+      angular.forEach($scope.sprintsList, function(value, key) {
+        if (value.sprintName == "backlog" || value.sprintName == "Backlog") {
+          $scope.tabs.push({
+            title: 'Issue ' + total,
+            sprintName: value.sprintName,
+            sprintId: value.sprintId,
+          });
+          backlogExists = true;
+        }
       });
+      if (backlogExists == false) {
+        $scope.tabs.push({
+          title: 'Issue ' + total
+        });
+      }
     }
     initTabs();
     var tabs = [{
@@ -6417,6 +6432,13 @@
     };
     $http.get('/api/sprints/getAllSprints/' + $stateParams.projectId).then(function(response) {
         $scope.sprintsList = response.data;
+      }).then(function() {
+        angular.forEach($scope.sprintsList, function(value, key) {
+          if (value.sprintName == "backlog" || value.sprintName == "Backlog") {
+            $scope.tabs[0].sprintName = value.sprintName;
+            $scope.tabs[0].sprintId = value.sprintId;
+          }
+        });
       })
       .catch(function(response, status) {
         //	$scope.loading = false;
