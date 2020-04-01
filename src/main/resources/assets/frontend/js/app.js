@@ -5791,11 +5791,19 @@
     $scope.projectId = $stateParams.projectId;
     $scope.sprintId = $stateParams.sprintId;
     $scope.drop = [];
+    $scope.drop2 = [];
     $scope.list2 = [];
+    $scope.list3 = [];
     $scope.selectedSecurityLevel = [];
+    $scope.selectedSecurityLevel2 = [];
     $scope.issueDetails = [];
+    $scope.issueDetails2 = [];
     $scope.selectedSecurityRisk = [];
+    $scope.selectedSecurityRisk2 = [];
     $scope.removeSelected = {};
+    $scope.removeSelected2 = {};
+    $scope.otherIssues = [];
+    $scope.fetchedOtherIssues = false;
     var initialList = [];
     var optionalDelay = 800000;
     var $string = "Note : Assigning an issue to a person will update the details on Redmine";
@@ -5858,6 +5866,7 @@
             }
             //$scope.list2[key].length = value;
           });
+        }).then(function() {
           $scope.showDetails = function(issueId) {
             angular.forEach($scope.specialIssues, function(value, key) {
               if (value.issueId != issueId && $scope.issueDetails[value.issueId] == true) {
@@ -5865,6 +5874,14 @@
               }
             });
             $scope.issueDetails[issueId] = !$scope.issueDetails[issueId];
+          }
+          $scope.showDetails2 = function(issueId) {
+            angular.forEach($scope.otherIssues, function(value, key) {
+              if (value.issueId != issueId && $scope.issueDetails2[value.issueId] == true) {
+                $scope.issueDetails2[value.issueId] = false;
+              }
+            });
+            $scope.issueDetails2[issueId] = !$scope.issueDetails2[issueId];
           }
           $scope.showRemove = false;
           $scope.removePeopleToIssues = function(ev) {
@@ -5931,6 +5948,82 @@
               $scope.removeSelected = remove;
             });
           };
+          $scope.showRemove2 = false;
+          $scope.removePeopleToIssues2 = function(ev) {
+            var count = 0;
+            angular.forEach($scope.otherIssues, function(value, key) {
+              if ($scope.removeSelected2[value.issueId] == true) {
+                count = count + 1;
+              }
+            });
+            if (count == 0) {
+              var optionalDelay = 800000;
+              var $string = "Select atleast one assignee";
+              alertFactory.addAuto('warning', $string, optionalDelay);
+              return null;
+            }
+            var clearSelected = $scope.list3;
+            var remove = $scope.removeSelected2;
+            var splicelist = [];
+            var confirm = $mdDialog.confirm()
+              .title('Would you like to remove the people allocated to issues?')
+              .textContent('Add another person to replace existing assignee on Redmine')
+              .ariaLabel('')
+              .targetEvent(ev)
+              .ok('Proceed!')
+              .cancel('Cancel');
+            $mdDialog.show(confirm).then(function() {
+              angular.forEach($scope.otherIssues, function(value, key) {
+                splicelist[value.issueId] = [];
+                if ($scope.list3[value.issueId]) {
+                  var list3 = $scope.list3[value.issueId];
+                  angular.forEach(list3, function(value3, key3) {
+                    //$log.debug('Hello ' +value3.personName+ '!');
+                    if (list3[key3].personId && $scope.removeSelected2[list3[key3].issueId] == true) {
+                      if ($scope.drop2[list3[key3].issueId] == false) {
+                        $scope.drop2[list3[key3].issueId] = true;
+                      }
+                      var tmp = {};
+                      tmp.personId = list3[key3].personId;
+                      tmp.personName = list3[key3].personName;
+                      splicelist[value.issueId].push(tmp);
+                      remove[value.issueId] = false;
+                    }
+                  });
+                }
+              });
+              $scope.countSelected2 = 0;
+              angular.forEach($scope.otherIssues, function(value, key) {
+                angular.forEach(splicelist[value.issueId], function(value2, key2) {
+                  angular.forEach($scope.list3[value.issueId], function(value3, key3) {
+                    if (value2.personId == value3.personId && value2.personName == value3.personName) {
+                      //$log.debug('Hello ' +key3+ '!');
+                      clearSelected[value.issueId].splice(key3, 1);
+                      //$scope.selectedSecurityLevel[value.issueId]=null;
+                      //$scope.selectedSecurityRisk[value.issueId] =null;
+                    }
+                  })
+                })
+                $scope.countSelected2 = $scope.countSelected2 + clearSelected[value.issueId].length;
+              });
+              if ($scope.countSelected2 == 0) {
+                $scope.showRemove2 = false;
+              }
+              $scope.list3 = clearSelected;
+              $scope.removeSelected2 = remove;
+            });
+          };
+          $scope.toggleDisplayOfIssues = function(toggleDisplay) {
+            if (toggleDisplay == true) {
+
+              if ($scope.otherIssues.length == 0) {
+
+                $scope.fetchedOtherIssues = true;
+              } else {
+
+              }
+            }
+          };
           $scope.savePeopleToIssues = function() {
             var listOfIssuesAllocated = [];
             angular.forEach($scope.specialIssues, function(value, key) {
@@ -5946,6 +6039,26 @@
                       tmp.issueId = list3[key3].issueId;
                       tmp.securityLevel = $scope.selectedSecurityLevel[value.issueId];
                       tmp.securityRiskAnalysis = $scope.selectedSecurityRisk[value.issueId];
+                      //tmp.roleName = list3[key3].roleName;
+                      listOfIssuesAllocated.push(tmp);
+                    }
+                  }
+                });
+              }
+            });
+            angular.forEach($scope.otherIssues, function(value, key) {
+              if ($scope.list3[value.issueId]) {
+                var list3 = $scope.list3[value.issueId];
+                //$log.debug('Hello ' +list3.length+ '!');
+                angular.forEach(list3, function(value3, key3) {
+                  if (list3[key3].personId) {
+                    if (list3[key3].personId && list3[key3].issueId) {
+                      //clearSelected[key].splice(key3,1);
+                      var tmp = {};
+                      tmp.personId = list3[key3].personId;
+                      tmp.issueId = list3[key3].issueId;
+                      tmp.securityLevel = $scope.selectedSecurityLevel2[value.issueId];
+                      tmp.securityRiskAnalysis = $scope.selectedSecurityRisk2[value.issueId];
                       //tmp.roleName = list3[key3].roleName;
                       listOfIssuesAllocated.push(tmp);
                     }
@@ -5972,6 +6085,44 @@
           };
         })
       }).then(function() {
+        $http.get('api/issues/getOtherIssuesInSprint/' + $scope.sprintId + "/" + $scope.projectId).then(function(response) {
+          $scope.otherIssues = response.data;
+        }).then(function() {
+          angular.forEach($scope.otherIssues, function(value, key) {
+            $scope.list3[value.issueId] = [];
+            $scope.selectedSecurityLevel2[value.issueId] = value.securityLevel;
+            $scope.selectedSecurityRisk2[value.issueId] = value.securityRiskAnalysis;
+            $scope.issueDetails2[value.issueId] = false;
+            $scope.drop2[value.issueId] = true;
+            angular.forEach($scope.peopleList, function(value2, key2) {
+              if (value2.personId == value.personId) {
+                var assignedIssue = {};
+                assignedIssue.personId = value2.personId;
+                assignedIssue.personName = value2.personName;
+                assignedIssue.roleName = value2.roleName;
+                assignedIssue.issueId = value.issueId;
+                $scope.list3[value.issueId].push(assignedIssue);
+                if ($scope.drop2[value.issueId] == true) {
+                  $scope.drop2[value.issueId] = false;
+                }
+              }
+            });
+            value.issueStartDate = $filter('date')(value.issueStartDate, 'yyyy/MM/dd');
+            value.issueDueDate = $filter('date')(value.issueDueDate, 'yyyy/MM/dd');
+            if (value.issueEstimatedTime == null) {
+              value.issueEstimatedTime = '--';
+            }
+            if (value.issueDueDate == null) {
+              value.issueDueDate = '--';
+            }
+            if (value.issueDescription == "") {
+              value.issueDescription = '--';
+            }
+            //$scope.list2[key].length = value;
+          });
+        });
+      })
+      .then(function() {
         $scope.limitEntry = function(length, id, person) {
           $scope.showRemove = true;
           person.issueId = id;
@@ -6006,6 +6157,43 @@
           });
           if ((length + 1) > 1) {
             $scope.drop[id] = false;
+          }
+          $scope.peopleList = initialList;
+        };
+        $scope.limitEntry2 = function(length, id, person) {
+          $scope.showRemove2 = true;
+          person.issueId = id;
+          angular.forEach(initialList, function(value, key) {
+            if (value.personId == person.personId && value.personName == person.personName) {
+              initialList.splice(key, 1);
+            }
+          });
+          var initialListIds = [];
+          angular.forEach(initialList, function(value, key) {
+            initialListIds.push(value.personId);
+          });
+          $scope.peopleList = [];
+          var list3 = $scope.list3[id];
+          angular.forEach(list3, function(value3, key3) {
+            if (list3[key3].issueId == id && initialList.length != 0) {
+              if (initialListIds.indexOf(list3[key3].personId) == -1) {
+                var tmp = {};
+                tmp.personId = list3[key3].personId;
+                tmp.personName = list3[key3].personName;
+                tmp.roleName = list3[key3].roleName;
+                initialList.push(tmp);
+              }
+            }
+            if (initialList.length == 0) {
+              var tmp = {};
+              tmp.personId = list3[key3].personId;
+              tmp.personName = list3[key3].personName;
+              tmp.roleName = list3[key3].roleName;
+              initialList.push(tmp);
+            }
+          });
+          if ((length + 1) > 1) {
+            $scope.drop2[id] = false;
           }
           $scope.peopleList = initialList;
         };

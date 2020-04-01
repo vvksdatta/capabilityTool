@@ -75,13 +75,13 @@
   $(".nav-tabs li").eq(4).removeClass("active");
   $(".nav-tabs li").eq(6).removeClass("active");
 </script>
-<div class='parent' ng-if="specialIssues.length !=0">
+<div class='parent' ng-if="specialIssues.length!=0 || otherIssues.length!=0">
   <h2></h2>
   <label></label>
   <div class="col-md-3">
     <div class="list-group" style="min-height: 110px; border: 1px solid #17151566; border-style: solid; padding-bottom: 1px;border-radius: 3px;">
-      <div style="    color: #333; background-color: #d2d2d2; border-color: #d2d2d2;margin-top: 0; margin-bottom: 10px; border-bottom: 1px solid transparent; border-top-right-radius: 3px; border-top-left-radius: 3px; padding: 10px;" class="list-group-item">
-        <strong>People</strong>
+      <div style="color: #333; background-color: #d2d2d2; border-color: #d2d2d2;margin-top: 0; margin-bottom: 10px; border-bottom: 1px solid transparent; border-top-right-radius: 3px; border-top-left-radius: 3px; padding: 10px;" class="list-group-item">
+        <strong>People </strong>
       </div>
       <div style="max-height:60vh;overflow-x:hidden;overflow-y:auto;">
         <div ng-cloak class="" class="btn btn-block btn-droppable list-group-item" data-drop="true" data-jqyoui-options="{accept:'.btn-draggable:not([ng-model=peopleList])'}">
@@ -115,10 +115,28 @@
   </div>
   <div class="col-md-8">
     <div class="list-group" style="min-height: 110px; border: 1px solid #17151566; border-style: solid; padding-bottom: 1px;border-radius: 3px;">
-      <div style=" color: #333; background-color: #d2d2d2; border-color: #d2d2d2;margin-top: 0; margin-bottom: 10px; border-bottom: 1px solid transparent; border-top-right-radius: 3px; border-top-left-radius: 3px; padding: 10px;" class="list-group-item">
-        <strong>Issues</strong>
+      <div style="color: #333; background-color: #d2d2d2; border-color: #d2d2d2;margin-top: 0; margin-bottom: 10px; border-bottom: 1px solid transparent; border-top-right-radius: 3px; border-top-left-radius: 3px; padding: 10px;" class="list-group-item">
+        <table style="width: 100%">
+          <thead>
+          </thead>
+            <col width="50%" />
+            <col width="50%" />
+            <tbody>
+              <tr>
+                <td ng-if="!toggleDisplay"><strong>Categorized issues</strong></td>
+                <td ng-if="toggleDisplay"><strong>All issues</strong></td>
+                <td style="text-align: right;">
+                  <div style="display: inline-flex;">
+                    <p style="margin-top: 5px;"> <strong>Display:</strong> Categorized issues </p>
+                    <md-switch style="margin-top: 0;margin-bottom: 0; margin-left: 8px; margin-right: 8px;" class="md-primary" md-no-ink aria-label="Switch No Ink" ng-model="toggleDisplay" ng-change="toggleDisplayOfIssues(toggleDisplay)"></md-switch>
+                    <p style="margin-top: 5px;"> Other issues</p>
+                  </div>
+              </td>
+              </tr>
+            </tbody>
+        </table>
       </div>
-      <div class="list-group-item" style="display: inline-flex; width: 100%; text-align: left; padding: 5px 10px;">
+      <div ng-if="specialIssues.length!=0 && !toggleDisplay" class="list-group-item" style="display: inline-flex; width: 100%; text-align: left; padding: 5px 10px;">
         <div style="margin-left: 15px; width: 30vw; text-align: left">
           <strong>Assignee</strong>
         </div>
@@ -134,7 +152,14 @@
         <div style="margin-left: 15px; width: 10vw; text-align: left">
         </div>
       </div>
-      <div style="max-height:60vh;overflow-x:hidden;overflow-y:auto;">
+      <div ng-if="specialIssues.length ==0">
+        <div style="margin-top: 15px;" class="alert alert-info alert-dismissible" role="alert">
+          <strong>Heads up!</strong> No categorized issues found for this sprint! You can allocate people to issues only after associating issues with this sprint.
+          <button type="button" style="position: static;" class="close" data-dismiss="alert" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+        </div>
+      </div>
+      <div ng-if="specialIssues.length!=0 && !toggleDisplay"  style="max-height:60vh;overflow-x:hidden;overflow-y:auto;">
         <div ng-repeat="issue in specialIssues">
           <div class="list-group-item" style="display: inline-flex; width: 100%; text-align: left; padding: 5px 10px;">
             <div style="margin-left: 15px; width: 30vw; text-align: left">
@@ -219,8 +244,118 @@
               </div>
             </div>
           </div>
+          </div>
+          </div>
+          <div ng-if="otherIssues.length!=0 && toggleDisplay" class="list-group-item" style="display: inline-flex; width: 100%; text-align: left; padding: 5px 10px;">
+            <div style="margin-left: 15px; width: 30vw; text-align: left">
+              <strong>Assignee   length is {{otherIssues.length}}</strong>
+            </div>
+            <div style="margin-left: 15px; width: 17vw; text-align: left">
+              <strong>Security level</strong>
+            </div>
+            <div style="margin-left: 15px; width: 23vw; text-align: left">
+              <strong>Security risk analysis</strong>
+            </div>
+            <div style="margin-left: 15px; width: 20vw; text-align: left">
+              <span><ul><strong>Critical Issues</strong></ul></span>
+            </div>
+            <div style="margin-left: 15px; width: 10vw; text-align: left">
+            </div>
+          </div>
+          <div ng-if="otherIssues.length ==0  ">
+            <div style="margin-top: 15px; " class="alert alert-info alert-dismissible" role="alert">
+              <strong>Heads up!</strong> No other issues found for this sprint!
+              <button type="button" style="position: static;" class="close" data-dismiss="alert" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+            </div>
+          </div>
+          <div ng-if=" otherIssues.length!=0 && toggleDisplay"  style="max-height:60vh;overflow-x:hidden;overflow-y:auto;">
+            <div ng-repeat="issue in otherIssues">
+              <div class="list-group-item" style="display: inline-flex; width: 100%; text-align: left; padding: 5px 10px;">
+                <div style="margin-left: 15px; width: 30vw; text-align: left">
+                  <div class="thumbnail" style="border: 5px dotted #5d5c5c; color: #333;margin-bottom: 10px;border-radius: 3px;" data-drop="drop[issue.issueId]" ng-model='list3[issue.issueId]' jqyoui-droppable>
+                    <div ng-if="drop[issue.issueId]" style="text-align: center;  min-height: 120px;"> Add Person </div>
+                    <div ng-repeat="item in list3[issue.issueId]">
+                      <md-checkbox type="checkbox" style="margin-bottom: 10px;width: 100%;display: block;" class="md-primary" ng-model="removeSelected[item.issueId]">
+                        <md-tooltip md-direction="left">Remove {{item.personName}}</md-tooltip>
+                        <div class="list-group  btn-info btn-draggable" style="color: #333;cursor: pointer;" data-drag="{{true}}" data-jqyoui-options="{revert: 'invalid',helper:'clone',appendTo:'parent',containment:'document',scroll:'false',onDrop: limitEntry(list3[issue.issueId].length,issue.issueId,item)}"
+                          jqyoui-draggable="{index: {{$index}},placeholder:true,animate:false}">
+                          <div style="display: flex; border: 1px solid; border-radius: 8px;"><span style=" text-align: left;">
+                          <span ng-model="letterLimit"  class="avatar" style="background-color: #29516D; width: 28px; height: 26px; font-size: 12px; padding-top: 5px; margin-right: 3px">{{ item.personName | limitTo:2 | uppercase }}</span>{{item.personName
+                            | capitalize }}
+                            </span>
+                          </div>
+                        </div>
+                      </md-checkbox>
+                    </div>
+                  </div>
+                </div>
+                <div style="margin-left: 15px; width: 17vw; text-align: left">
+                  <md-tooltip md-direction="top"> Select security level for the issue {{issue.issueName}} </md-tooltip>
+                  <select style="font-size: 17px;margin-top: 10px;min-width: 90%;" ng-model="selectedSecurityLevel[issue.issueId]">
+                <option   style="font-size: 17px;" value="Very low"> Very low </option>
+                <option   style="font-size: 17px;" value="Low"> Low </option>
+                <option   style="font-size: 17px;" value="Medium"> Medium </option>
+                <option   style="font-size: 17px;" value="High"> High </option>
+                <option   style="font-size: 17px;" value="Very high"> Very high </option>
+              </select>
+                </div>
+                <div style="margin-left: 15px; width: 23vw; text-align: left">
+                  <md-tooltip md-direction="top"> Select relevance of security risk analysis for the issue {{issue.issueName}} </md-tooltip>
+                  <select style="font-size: 17px; margin-top: 10px;min-width: 90%;" ng-model="selectedSecurityRisk[issue.issueId]">
+                <option   style="font-size: 17px;" value="Very low"> Very low </option>
+                <option   style="font-size: 17px;" value="Low"> Low </option>
+                <option   style="font-size: 17px;" value="Medium"> Medium </option>
+                <option   style="font-size: 17px;" value="High"> High </option>
+                <option   style="font-size: 17px;" value="Very high"> Very high </option>
+              </select>
+                </div>
+                <div style="margin-left: 15px;margin-top: 10px; width: 20vw; text-align: left;display: inline-block;">
+                  <a ng-click="openIssueOnRedmine(issue.issueId)">
+                <i class="glyphicon glyphicon-modal-window"></i>
+                <span >{{issue.issueName | capitalize}}</span> <md-tooltip  md-direction="top">Click to view the issue on Redmine </md-tooltip>
+              </a>
+                </div>
+                <div style="margin-left: 15px;margin-top: 10px; width: 10vw; text-align: left;display: inline-block;">
+                  <button type="button" style="font-size: 10px;" class="btn btn-default" ng-click="showDetails(issue.issueId)">
+                <i ng-hide="issueDetails[issue.issueId]" class="fa fa-caret-down" ></i>
+                <i ng-show="issueDetails[issue.issueId]" class="fa fa-caret-up" ></i>
+                <md-tooltip md-direction="top"> View details of the issue {{issue.issueName}} </md-tooltip>
+              </button>
+                </div>
+              </div>
+              <div ng-if="issueDetails[issue.issueId]" class="list-group-item" style="display: inline-flex; width: 100%; text-align: left; padding: 5px 10px;background-color: darkgrey;">
+                <div class="panel panel-default-table panel-table" style="margin-bottom: 0px;width:100%;">
+                  <div class="panel-heading" style="margin-bottom:0px;padding: 2px 15px;">
+                    <h3 class="panel-title"><strong>Issue Details </strong></h3>
+                  </div>
+                  <div class="panel-body" style="overflow-y: auto;">
+                    <table class="table table-hover">
+                      <tr>
+                        <td>
+                          <strong>Issue name:</strong> {{issue.issueName}}
+                        </td>
+                        <td>
+                          <strong>Estimated time:</strong> {{issue.issueEstimatedTime}} Hours
+                        </td>
+                      </tr>
+                      <tr>
+                        <td colspan="2"><strong>Issue description:</strong> {{issue.issueDescription}} </td>
+                      </tr>
+                      <tr>
+                        <td><strong>Issue category:</strong> {{issue.issueCategory}} </td>
+                        <td> <strong>Issue priority:</strong> {{issue.issuePriority}}</td>
+                      </tr>
+                      <tr>
+                        <td><strong>Start date:</strong> {{issue.issueStartDate}}</td>
+                        <td><strong>Due date:</strong> {{issue.issueDueDate}}</td>
+                      </tr>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
         </div>
-      </div>
     </div>
   </div>
   <div class="col-md-3 selectedPeople">
@@ -230,10 +365,5 @@
       <md-button type="reset" style="font-size: 15px;" ng-if="showRemove" class="add-tab md-raised" ng-click="removePeopleToIssues($event)"> Remove </md-button>
       <md-button type="submit" style=" font-size: 15px; background-color: rgb(90, 132, 187);" ng-if="showRemove" class="add-tab md-primary md-raised" ng-click="savePeopleToIssues()"> Save </md-button>
     </div>
-  </div>
-</div>
-<div ng-if="specialIssues.length ==0">
-  <div style="margin-top: 15px;" class="alert alert-info" role="alert">
-    <strong>Heads up!</strong> No special issues found for this sprint! You can allocate people to issues only after associating issues with this sprint.
   </div>
 </div>

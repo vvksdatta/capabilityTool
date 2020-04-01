@@ -25,6 +25,10 @@ public interface IssuesDAO {
 			+ " ISSUES.issueCategory !='null'")
 	List<IssueTemplate> getSpecialIssuesInSprint(@Bind("sprintId") int sprintId, @Bind("projectId") int projectId);
 
+	@SqlQuery("select * from ISSUES RIGHT JOIN (select issueId from sprintcomprisingissues where sprintId=:sprintId and projectid =:projectId) AS TableA ON TableA.issueId = ISSUES.issueId where"
+			+ " ISSUES.issueCategory is null")
+	List<IssueTemplate> getOtherIssuesInSprint(@Bind("sprintId") int sprintId, @Bind("projectId") int projectId);
+
 	@SqlUpdate("delete from SPRINTS where projectId = :projectId and sprintId = :sprintId")
 	void deleteById(@Bind("projectId") int projectId, @Bind("sprintId") int sprintId);
 

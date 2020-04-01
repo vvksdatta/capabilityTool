@@ -63,6 +63,19 @@ public class IssueResource {
 		}
 	}
 
+	@GET
+	@Path("/getOtherIssuesInSprint/{sprintId}/{projectId}")
+	public Response getOtherIssuesInSprint(@PathParam("sprintId") Integer sprintId,
+			@PathParam("projectId") Integer projectId) {
+
+		try {
+			List<IssueTemplate> otherIssuesInSprint = issueDAO.getOtherIssuesInSprint(sprintId, projectId);
+			return Response.ok(otherIssuesInSprint).build();
+		} catch (Exception e) {
+			System.out.println(e);
+			return Response.status(Status.BAD_REQUEST).entity(e).build();
+		}
+	}
 	@RolesAllowed({ UserRoles.ROLE_ONE })
 	@PUT
 	@Path("/addNewIssues/{userId}/{projectId}")
@@ -97,7 +110,9 @@ public class IssueResource {
 				newIssue.setIssueId(newIssueCreatedOnRedmine.getId());
 				newIssue.setIssueName(newIssueCreatedOnRedmine.getSubject());
 				newIssue.setIssueDescription(newIssueCreatedOnRedmine.getDescription());
-				newIssue.setIssueCategory(newIssueCreatedOnRedmine.getCategory().getName());
+				if(newIssueCreatedOnRedmine.getCategory() != null) {
+					newIssue.setIssueCategory(newIssueCreatedOnRedmine.getCategory().getName());
+				}
 				newIssue.setIssueLastUpdate(newIssueCreatedOnRedmine.getUpdatedOn());
 				newIssue.setRedmineLastUpdate(newIssueCreatedOnRedmine.getUpdatedOn());
 				newIssue.setIssuePriority(newIssueCreatedOnRedmine.getPriorityText());
