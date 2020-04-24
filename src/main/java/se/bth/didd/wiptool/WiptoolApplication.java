@@ -172,7 +172,7 @@ public class WiptoolApplication extends Application<WiptoolConfiguration> {
 		login.setRole("Administrator");
 		
 		LoginResource sampleLoginResource = new LoginResource(authDAO);
-		sampleLoginResource.registerNewUser(login);
+		sampleLoginResource.registerNewDefaultUser(login);
 		
 	}
 	private void registerAuthFilters(Environment environment) {

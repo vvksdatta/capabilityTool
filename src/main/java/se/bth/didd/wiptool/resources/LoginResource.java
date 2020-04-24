@@ -22,6 +22,7 @@ import se.bth.didd.wiptool.api.Login;
 import se.bth.didd.wiptool.api.People;
 import se.bth.didd.wiptool.api.SuccessMessage;
 import se.bth.didd.wiptool.auth.Secrets;
+import se.bth.didd.wiptool.auth.jwt.User;
 import se.bth.didd.wiptool.auth.jwt.UserRoles;
 import se.bth.didd.wiptool.db.AuthDAO;
 import se.bth.didd.wiptool.resources.dto.LoginResponse;
@@ -77,7 +78,22 @@ public class LoginResource {
 	@RolesAllowed({ UserRoles.ROLE_ONE })
 	@PUT
 	@Path("/register")
-	public Response registerNewUser(Login login) {
+	public Response registerNewUser(@Auth User user, Login login) {
+
+		if (authDAO.ifCredentialsExists(login.getUserMailId(), login.getUserName().toLowerCase()) != true) {
+			authDAO.insertIntoLoginCredentials(login);
+			SuccessMessage success = new SuccessMessage();
+			success.setSuccess("Successfully created new user " + login.getUserName());
+			return Response.ok(success).build();
+
+		}
+
+		else {
+			return Response.status(Status.BAD_REQUEST).entity("Email or user name already registered!").build();
+		}
+	}
+	
+	public Response registerNewDefaultUser(Login login) {
 
 		if (authDAO.ifCredentialsExists(login.getUserMailId(), login.getUserName().toLowerCase()) != true) {
 			authDAO.insertIntoLoginCredentials(login);

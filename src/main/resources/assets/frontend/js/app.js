@@ -6521,6 +6521,9 @@
     function initTabs() {
       tabClasses = ["", "", "", "", "", "", ""];
     }
+    var optionalDelay = 800000;
+    var $string = "Note: The information entered on this page will be used to create new issues on Redmine";
+    alertFactory.addAuto('info', $string, optionalDelay);
     $scope.getTabClass = function(tabNum) {
       return tabClasses[tabNum];
     };
