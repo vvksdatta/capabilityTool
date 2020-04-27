@@ -894,14 +894,54 @@
       });
     };
     $scope.currentUserId = $localStorage.currentUser.userId;
+    $scope.usersPrivileges = [];
     $http.get('/api/people/getUsersList').then(function(response) {
         $scope.usersList = response.data;
+        angular.forEach($scope.usersList, function(value, key) {
+          if(value.role == 'Administrator'){
+              $scope.usersPrivileges[value.userId] = true;
+          }
+          else if(value.role == 'User'){
+              $scope.usersPrivileges[value.userId] = false;
+          }
+        });
       })
       .catch(function(response, status) {
         var optionalDelay = 800000;
         var $string = "Error in fetching list of users";
         alertFactory.addAuto('danger', $string, optionalDelay);
       });
+      $scope.toggleRoles = function(ev, user) {
+        var newRole = null;
+        if(  $scope.usersPrivileges[user.userId] == true){
+          newRole = "Administrator";
+        }else if($scope.usersPrivileges[user.userId] == false){
+          newRole = "User";
+        }
+          var confirm = $mdDialog.confirm()
+            .title('Would you like to save the new privileges of ' + user.userFirstName + '?')
+            .textContent('This will change ' + user.userFirstName + '\'s privileges on CAST to '+newRole)
+            .ariaLabel('')
+            .targetEvent(ev)
+            .ok('Save')
+            .cancel('Cancel');
+          $mdDialog.show(confirm).then(function() {
+            $http.put('/api/people/updateUserRole/', user.userId).then(function(response) {
+                var optionalDelay = 800000;
+                var $string = "Successfully updated the privileges of " + user.userFirstName+' to '+newRole;
+                //$state.go('home');
+                alertFactory.addAuto('success', $string, optionalDelay);
+              })
+              .catch(function(response, status) {
+                var optionalDelay = 800000;
+                var $string = "Error in modifying user privileges";
+                alertFactory.addAuto('danger', $string, optionalDelay);
+              });
+          }, function () {
+                    $scope.usersPrivileges[user.userId] = !$scope.usersPrivileges[user.userId];
+                  });
+
+      };
     $scope.removeUser = function(ev, user) {
       var confirm = $mdDialog.confirm()
         .title('Would you like to remove the user ' + user.userFirstName + '?')
@@ -983,6 +1023,9 @@
     if (currentUserId != null) {
       $http.get('/api/people/getUserDetailsbyId/' + currentUserId).then(function(response) {
           $scope.userDetails = response.data;
+          if (  $scope.userDetails.apiKey == 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx') {
+            $scope.userDetails.apiKey = null ;
+          }
         })
         .catch(function(response, status) {
           var optionalDelay = 800000;

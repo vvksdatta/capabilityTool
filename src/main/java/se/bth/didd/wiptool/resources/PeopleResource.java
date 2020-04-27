@@ -62,13 +62,13 @@ public class PeopleResource {
 	public PeopleResource(PeopleDAO peopleDAO, String redmineUrl) {
 		this.redmineUrl = redmineUrl;
 		this.peopleDAO = peopleDAO;
-		
+
 	}
 
 	public PeopleResource() {
-		
+
 	}
-	
+
 	@GET
 	@Path("/getPersonName/{id}")
 	public Response getPerson(@Auth User user, @PathParam("id") Integer personId) throws SQLException {
@@ -80,7 +80,7 @@ public class PeopleResource {
 		}
 		return Response.ok(personDetails).build();
 	}
-	
+
 	@GET
 	@Path("/getProjectsCountPerson/{id}")
 	public Response getProjectsCountPerson(@Auth User user, @PathParam("id") Integer personId) throws SQLException {
@@ -140,7 +140,7 @@ public class PeopleResource {
 			return Response.status(Status.BAD_REQUEST).entity(e).build();
 		}
 	}
-	
+
 	@RolesAllowed({ UserRoles.ROLE_ONE })
 	@DELETE
 	@Path("/deleteUser/{userId}")
@@ -311,11 +311,11 @@ public class PeopleResource {
 			newPerson.setProjects(null);
 			peopleSummary.add(newPerson);
 		}
-		
+
 		Collections.sort(peopleSummary, new Comparator<PeopleSummary>() {
-		    public int compare(PeopleSummary v1, PeopleSummary v2) {
-		        return v1.getPersonName().compareTo(v2.getPersonName());
-		    }
+			public int compare(PeopleSummary v1, PeopleSummary v2) {
+				return v1.getPersonName().compareTo(v2.getPersonName());
+			}
 		});
 		return peopleSummary;
 	}
@@ -353,14 +353,14 @@ public class PeopleResource {
 			return personDetailsRoles;
 		}
 	}
-	
+
 	@RolesAllowed({ UserRoles.ROLE_ONE })
 	@PUT
 	@Path("/addPerson")
 	public Response addNewPerson(@Auth User user, NewPerson newPerson) throws RedmineException {
 		String apiKey;
 		try {
-			 apiKey = peopleDAO.getApiKeyOfUser(newPerson.getUserId()).get(0);
+			apiKey = peopleDAO.getApiKeyOfUser(newPerson.getUserId()).get(0);
 		} catch (Exception e1) {
 			System.out.println(e1);
 			return Response.status(Status.BAD_REQUEST).entity(e1).build();
@@ -402,7 +402,7 @@ public class PeopleResource {
 		if (peopleDAO.ifUserExists(user.getUserId()) == true) {
 
 			try {
-				peopleDAO.UpdateUserDetails(user);
+				peopleDAO.updateUserDetails(user);
 				SuccessMessage success = new SuccessMessage();
 				success.setSuccess("update successful");
 				return Response.ok(success).build();
@@ -414,7 +414,46 @@ public class PeopleResource {
 		}
 		return Response.status(Status.BAD_REQUEST).build();
 	}
-	
+
+	@RolesAllowed({ UserRoles.ROLE_ONE })
+	@PUT
+	@Path("/updateUserRole")
+	public Response updateUserRole(@Auth User curentUser, Integer userId) throws RedmineException {
+		List<String> roleOfPerson;
+		try {
+			roleOfPerson = peopleDAO.getUserPrivilege(userId);
+			for (String role : roleOfPerson) {
+				if (role.equals("Administrator")) {
+					try {
+						peopleDAO.updateUserRole(userId, "User");
+						SuccessMessage success = new SuccessMessage();
+						success.setSuccess("update successful");
+						return Response.ok(success).build();
+					} catch (Exception e) {
+						System.out.println(e);
+						return Response.status(Status.BAD_REQUEST).entity(e).build();
+					}
+
+				} else if (role.equals("User")) {
+					try {
+						peopleDAO.updateUserRole(userId, "Administrator");
+						SuccessMessage success = new SuccessMessage();
+						success.setSuccess("update successful");
+						return Response.ok(success).build();
+					} catch (Exception e) {
+						System.out.println(e);
+						return Response.status(Status.BAD_REQUEST).entity(e).build();
+					}
+
+				}
+			}
+		} catch (Exception e1) {
+			System.out.println(e1);
+			return Response.status(Status.BAD_REQUEST).entity(e1).build();
+		}
+		return Response.status(Status.BAD_REQUEST).build();
+	}
+
 	@RolesAllowed({ UserRoles.ROLE_ONE })
 	@PUT
 	@Path("/updateUserPassword")
@@ -453,7 +492,7 @@ public class PeopleResource {
 	public Response updatePerson(@Auth User user, NewPerson newPerson) throws RedmineException {
 		String apiKey;
 		try {
-			 apiKey = peopleDAO.getApiKeyOfUser(newPerson.getUserId()).get(0);
+			apiKey = peopleDAO.getApiKeyOfUser(newPerson.getUserId()).get(0);
 		} catch (Exception e1) {
 			System.out.println(e1);
 			return Response.status(Status.BAD_REQUEST).entity(e1).build();

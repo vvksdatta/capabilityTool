@@ -52,6 +52,9 @@ public interface PeopleDAO {
 	@SqlQuery("select userId, userFirstName, userlastName, userMailId, userName, apiKey, role from LOGINCREDENTIALS")
 	List<UserTemplate> getUsersList();
 
+	@SqlQuery("select role from LOGINCREDENTIALS where userId = :userId")
+	List<String> getUserPrivilege(@Bind("userId") int userId);
+
 	@SqlQuery("select userId, userFirstName, userlastName, userMailId,  userName, apiKey, role from LOGINCREDENTIALS where userId = :userId")
 	List<UserTemplate> getUserDetails(@Bind("userId") int userId);
 
@@ -59,7 +62,10 @@ public interface PeopleDAO {
 	List<String> getApiKeyOfUser(@Bind("userId") int userId);
 
 	@SqlUpdate("Update LOGINCREDENTIALS set  userFirstName = :userFirstName, userLastName = :userLastName, usermailId = :usermailId,  userName = :userName, apiKey = :apiKey, role = :role  where userId = :userId")
-	void UpdateUserDetails(@BindBean UserTemplate user);
+	void updateUserDetails(@BindBean UserTemplate user);
+
+	@SqlUpdate("Update LOGINCREDENTIALS set  role = :role  where userId = :userId")
+	void updateUserRole(@Bind("userId") int userId, @Bind("role") String role);
 
 	@SqlUpdate("Update LOGINCREDENTIALS set  userName = :userName, password = :newPassword where userId = :userId")
 	void updateUserPassword(@BindBean UserPasswordChange user);
