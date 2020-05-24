@@ -19,6 +19,7 @@ import io.dropwizard.auth.Auth;
 import io.dropwizard.auth.PrincipalImpl;
 import io.dropwizard.jersey.caching.CacheControl;
 import se.bth.didd.wiptool.api.Login;
+import se.bth.didd.wiptool.api.LoginFullName;
 import se.bth.didd.wiptool.api.People;
 import se.bth.didd.wiptool.api.SuccessMessage;
 import se.bth.didd.wiptool.auth.Secrets;
@@ -78,7 +79,7 @@ public class LoginResource {
 	@RolesAllowed({ UserRoles.ROLE_ONE })
 	@PUT
 	@Path("/register")
-	public Response registerNewUser(@Auth User user, Login login) {
+	public Response registerNewUser(@Auth User user, LoginFullName login) {
 
 		if (authDAO.ifCredentialsExists(login.getUserMailId(), login.getUserName().toLowerCase()) != true) {
 			authDAO.insertIntoLoginCredentials(login);

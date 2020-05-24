@@ -31,6 +31,7 @@ import se.bth.didd.wiptool.api.ExistingPerson;
 import se.bth.didd.wiptool.api.NewPerson;
 import se.bth.didd.wiptool.api.People;
 import se.bth.didd.wiptool.api.PeopleSummary;
+import se.bth.didd.wiptool.api.PersonIdNameEmail;
 import se.bth.didd.wiptool.api.ProjectNameSprints;
 import se.bth.didd.wiptool.api.SprintNameIssues;
 import se.bth.didd.wiptool.api.SuccessMessage;
@@ -105,6 +106,56 @@ public class PeopleResource {
 		return Response.ok(personDetails).build();
 	}
 
+	@RolesAllowed({ UserRoles.ROLE_ONE })
+	@GET
+	@Path("/getUsersListRedmine/{userId}")
+	public Response getUsersListRedmine(@Auth User currentUser, @PathParam("userId") Integer userId)
+			throws SQLException {
+		String apiKey;
+		try {
+			apiKey = peopleDAO.getApiKeyOfUser(userId).get(0);
+
+		} catch (Exception e1) {
+			System.out.println(e1);
+			return Response.status(Status.BAD_REQUEST).entity(e1).build();
+		}
+		RedmineManager redmineManager = RedmineManagerFactory.createWithApiKey(redmineUrl, apiKey);
+		List<com.taskadapter.redmineapi.bean.User> usersList = null;
+		List<PersonIdNameEmail> usersListFiltered = new ArrayList<>();
+		List<PersonIdNameEmail> listOfRedmineUsers = new ArrayList<>();
+		List<UserTemplate> existingUsersCast = peopleDAO.getUsersList();
+		try {
+			usersList = redmineManager.getUserManager().getUsers();
+		} catch (RedmineException e) {
+			System.out.println(e);
+			return Response.status(Status.BAD_REQUEST).entity(e).build();
+		}
+
+		for (com.taskadapter.redmineapi.bean.User person : usersList) {
+			PersonIdNameEmail redmineUser = new PersonIdNameEmail();
+			redmineUser.setPersonId(person.getId());
+			redmineUser.setFirstName(person.getFirstName());
+			redmineUser.setLastName(person.getLastName());
+			redmineUser.setFullName(person.getFullName());
+			redmineUser.setEmailID(person.getMail());
+			listOfRedmineUsers.add(redmineUser);
+		}
+
+		for (PersonIdNameEmail person : listOfRedmineUsers) {
+			for (UserTemplate eachUser : existingUsersCast) {
+				if ((eachUser.getUserFirstName().equals(person.getFirstName())
+						&& eachUser.getUserLastName().equals(person.getLastName())
+						&& eachUser.getUsermailId().equals(person.getEmailID()))) {
+					usersListFiltered.add(person);
+				}
+			}
+		}
+		for (PersonIdNameEmail index : usersListFiltered) {
+			listOfRedmineUsers.remove(index);
+		}
+		return Response.ok(listOfRedmineUsers).build();
+	}
+
 	@GET
 	@Path("/getUserDetailsbyId/{id}")
 	public Response getUserDetailsbyId(@Auth User currentUser, @PathParam("id") Integer userId) throws SQLException {
@@ -128,12 +179,12 @@ public class PeopleResource {
 		}
 	}
 
+	@RolesAllowed({ UserRoles.ROLE_ONE })
 	@GET
 	@Path("/getUsersList")
-
 	public Response getUsersList(@Auth User user) {
 		try {
-			List<UserTemplate> users = peopleDAO.getUsersList();
+			List<UserTemplate> users = peopleDAO.getCASTUsersList();
 			return Response.ok(users).build();
 		} catch (Exception e) {
 			System.out.println(e);
@@ -454,7 +505,7 @@ public class PeopleResource {
 		return Response.status(Status.BAD_REQUEST).build();
 	}
 
-	@RolesAllowed({ UserRoles.ROLE_ONE })
+	@RolesAllowed({ UserRoles.ROLE_ONE, UserRoles.ROLE_TWO })
 	@PUT
 	@Path("/updateUserPassword")
 	public Response updateUserPassword(@Auth User currentUser, String encoded)

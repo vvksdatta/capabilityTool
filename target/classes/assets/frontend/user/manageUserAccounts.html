@@ -67,7 +67,7 @@ $(".nav-tabs li").eq(3).removeClass("active");
                   <th>First name</th>
                   <th>Last name</th>
                   <th>Email</th>
-                  <th>CAST Privileges</th>
+                  <th>CAST privileges</th>
                   <th>Remove user</th>
                 </tr>
               </thead>
@@ -88,7 +88,7 @@ $(".nav-tabs li").eq(3).removeClass("active");
                   <td ng-if="user.role !=null">
                     <div style="display: inline-flex;">
                       <p style="margin-top: 5px;">
-                        <md-tooltip md-direction="left">Toggle to change user role</md-tooltip> User </p>
+                        <md-tooltip md-direction="left">Toggle to change privileges</md-tooltip> User </p>
                       <md-switch ng-disabled="user.userId == currentUserId || user.userName == 'admin'" style="margin-top: 0;margin-bottom: 0; margin-left: 8px; margin-right: 8px;" class="md-primary" md-no-ink aria-label="Switch No Ink" ng-model="usersPrivileges[user.userId]" ng-change="toggleRoles($event, user)"></md-switch>
                       <p style="margin-top: 5px;"> Administrator</p>
                     </div>

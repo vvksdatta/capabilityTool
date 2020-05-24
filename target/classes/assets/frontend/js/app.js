@@ -928,7 +928,7 @@
           $mdDialog.show(confirm).then(function() {
             $http.put('/api/people/updateUserRole/', user.userId).then(function(response) {
                 var optionalDelay = 800000;
-                var $string = "Successfully updated the privileges of " + user.userFirstName;
+                var $string = "Successfully updated the privileges of " + user.userFirstName+' to '+newRole;
                 //$state.go('home');
                 alertFactory.addAuto('success', $string, optionalDelay);
               })
@@ -970,13 +970,36 @@
       });
     };
   });
-  app.controller('createNewUserCtrl', function($base64, $state, $http, $q, $scope, dataService, alertFactory, $location, $rootScope) {
+  app.controller('createNewUserCtrl', function($base64, $state, $http, $q, $log, $localStorage, $scope, dataService, alertFactory, $location, $rootScope) {
     if ($rootScope.alerts.length != 0) {
       angular.forEach($rootScope.alerts, function(value, key) {
         var alert = {};
         alert = $rootScope.alerts[key];
         if (alert.type == 'info') {
           $rootScope.alerts.splice(key, 1);
+        }
+      });
+    };
+    var optionalDelay = 800000;
+    var $string = "Note: This page is for creating a new user on CAST. The drop-down list here presents the names of Redmine users who don't have a profile on CAST.";
+    alertFactory.addAuto('info', $string, optionalDelay);
+
+    $http.get('/api/people/getUsersListRedmine/'+$localStorage.currentUser.userId).then(function(response) {
+        $scope.peopleList = response.data;
+      })
+      .catch(function(response, status) {
+        var optionalDelay = 800000;
+        var $string = "Error in fetching list of users from Redmine";
+        alertFactory.addAuto('danger', $string, optionalDelay);
+      });
+    $scope.selectPerson = function(userDetails, personName) {
+      angular.forEach($scope.peopleList, function(value, key) {
+        if (personName == value.fullName) {
+          userDetails.userFirstName = value.firstName;
+          userDetails.userLastName = value.lastName;
+          userDetails.userFullName = value.fullName;
+          userDetails.userMailId = value.emailID;
+          $log.debug("the userfirstName is "+ userDetails.userFirstName+" and the userLastName is "+ userDetails.userLastName + " and mail is "+ userDetails.userMailId);
         }
       });
     };
@@ -1011,7 +1034,6 @@
       alertFactory.addAuto('info', $string, optionalDelay);
       alertFactory.addAuto('info', $string, optionalDelay);
     }
-
     var optionalDelay = 800000;
     var $string = "Note : You will be logged out when you modify your account details. Please login using updated credentials. ";
     alertFactory.addAuto('info', $string, optionalDelay);

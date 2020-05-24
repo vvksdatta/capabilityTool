@@ -51,6 +51,9 @@ public interface PeopleDAO {
 
 	@SqlQuery("select userId, userFirstName, userlastName, userMailId, userName, apiKey, role from LOGINCREDENTIALS")
 	List<UserTemplate> getUsersList();
+	
+	@SqlQuery("select userId, userFirstName, userlastName, userMailId, userName, role from LOGINCREDENTIALS")
+	List<UserTemplate> getCASTUsersList();
 
 	@SqlQuery("select role from LOGINCREDENTIALS where userId = :userId")
 	List<String> getUserPrivilege(@Bind("userId") int userId);
