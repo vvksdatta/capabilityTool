@@ -81,6 +81,19 @@ public class PeopleResource {
 		}
 		return Response.ok(personDetails).build();
 	}
+	
+	@GET
+	@Path("/getPersonByUserId/{id}")
+	public Response getPersonByName(@Auth User user, @PathParam("id") Integer personId) throws SQLException {
+		List<People> person = peopleDAO.getPersonByUserId(personId);
+		People personDetails = new People();
+		for (People singlePerson : person) {
+			personDetails.setPersonName(singlePerson.getPersonName());
+			personDetails.setPersonId(singlePerson.getPersonId());
+		}
+		return Response.ok(personDetails).build();
+	}
+
 
 	@GET
 	@Path("/getProjectsCountPerson/{id}")

@@ -24,7 +24,7 @@ public interface PeopleDAO {
 
 	@SqlUpdate("update PEOPLE set personName = :personName, firstName = :firstName, lastName = :lastName, emailId = :emailId where personId= :personId")
 	void updatePerson(@Bind("personId") int personId, @Bind("personName") String personName,
-			@Bind("firstName") String firstName, @Bind("lastName") String lastName, @Bind("emailId") String emailId );
+			@Bind("firstName") String firstName, @Bind("lastName") String lastName, @Bind("emailId") String emailId);
 
 	@SqlUpdate("insert into RolesOfPeople (personId ,roleId, status) values (:personId, :roleId, 'new' )")
 	void insertIntoRolesOfPeopleTable(@Bind("personId") int personId, @Bind("roleId") int roleId);
@@ -36,6 +36,13 @@ public interface PeopleDAO {
 	boolean ifCurrentPasswordExists(@Bind("userId") Integer userId, @Bind("userName") String userName,
 			@Bind("password") String password);
 
+	@SqlQuery("select * from PEOPLE where personName = :personName and firstName = :firstName  and lastName = :lastName ")
+	List<People> getPersonByName(@Bind("personName") String personName, @Bind("firstName") String firstName,
+			@Bind("lastName") String lastName);
+
+	@SqlQuery("select * from people RIGHT JOIN (select userFirstName, userLastName from logincredentials where userId = :userId) AS TableA ON TableA.userFirstName = people.firstName and TableA.userLastName = people.lastName")
+	List<People> getPersonByUserId(@Bind("userId") Integer userId);
+
 	@SqlQuery("select * from PEOPLE")
 	List<People> getAll();
 
@@ -45,13 +52,13 @@ public interface PeopleDAO {
 
 	@SqlQuery("select * from PEOPLE where personId = :personId")
 	List<People> getPersonDetails(@Bind("personId") int personId);
-	
+
 	@SqlQuery("select count (*) as numb from (select distinct projectId from assessmentofcapabilities where personId = :personId and projectId is not null ) as TableA ")
 	List<Integer> getProjectsCountPerson(@Bind("personId") int personId);
 
 	@SqlQuery("select userId, userFirstName, userlastName, userMailId, userName, apiKey, role from LOGINCREDENTIALS")
 	List<UserTemplate> getUsersList();
-	
+
 	@SqlQuery("select userId, userFirstName, userlastName, userMailId, userName, role from LOGINCREDENTIALS")
 	List<UserTemplate> getCASTUsersList();
 

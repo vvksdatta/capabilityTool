@@ -320,6 +320,14 @@
           label: 'People'
         }
       })
+      .state('summaries.capabilities', {
+        url: '/capabilities',
+        templateUrl: 'summaries/summaries.capabilities.html',
+        controller: 'capabilitySummaryCtrl',
+        ncyBreadcrumb: {
+          label: 'Capabilities'
+        }
+      })
       .state('management', {
         url: '/management',
         templateUrl: 'management/management.html',
@@ -1689,6 +1697,44 @@
       var $string = "Error in fetching summary of projects";
       alertFactory.addAuto('danger', $string, optionalDelay);
     });
+  });
+  app.controller('capabilitySummaryCtrl', function($scope, $state, $location, $http, alertFactory, $base64, $stateParams, $q, dataService, alertFactory, $localStorage, $rootScope) {
+    if ($rootScope.alerts.length != 0) {
+      angular.forEach($rootScope.alerts, function(value, key) {
+        var alert = {};
+        alert = $rootScope.alerts[key];
+        if (alert.type == 'info') {
+          $rootScope.alerts.splice(key, 1);
+        }
+      });
+    };
+    $scope.userId = $localStorage.currentUser.userId;
+    if ($scope.userId != '') {
+      $http.get('/api/capabilities/getCapabilitiesSummaryOfPerson/' + $scope.userId).then(function(response) {
+          $scope.assessedCapabilities = response.data;
+        })
+        .catch(function(response, status) {
+          var optionalDelay = 800000;
+          var $string = "Error in fetching capability details";
+          alertFactory.addAuto('danger', $string, optionalDelay);
+        });
+      $http.get('/api/people/getPersonName/' + $scope.userId).then(function(response) {
+          $scope.newUserName = response.data.personName;
+        })
+        .catch(function(response, status) {
+          var optionalDelay = 800000;
+          var $string = "Error in fetching person details";
+          alertFactory.addAuto('danger', $string, optionalDelay);
+        });
+      $http.get('/api/people/getProjectsCountPerson/' + $scope.userId).then(function(response) {
+          $scope.totalProjects = response.data[0];
+        })
+        .catch(function(response, status) {
+          var optionalDelay = 800000;
+          var $string = "Error in fetcing number of projects where capablities were assessed";
+          alertFactory.addAuto('danger', $string, optionalDelay);
+        })
+    }
   });
   app.controller('peopleSummaryCtrl', function($scope, $state, $location, $http, alertFactory, $base64, $q, dataService, alertFactory, $localStorage, $rootScope) {
     if ($rootScope.alerts.length != 0) {
@@ -8283,7 +8329,7 @@
         })
         .catch(function(response, status) {
           var optionalDelay = 800000;
-          var $string = "Error in updating capability details";
+          var $string = "Error in fetching person details";
           alertFactory.addAuto('danger', $string, optionalDelay);
         })
     }

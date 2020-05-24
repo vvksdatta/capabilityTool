@@ -130,9 +130,10 @@ public class CapabilityResource {
 		}
 	}
 
+	@RolesAllowed({ UserRoles.ROLE_ONE, UserRoles.ROLE_TWO  })
 	@GET
 	@Path("/getCapabilitiesSummaryOfPerson/{id}")
-	public Response getCapabilitiesSummaryOfPerson(@PathParam("id") Integer personId) {
+	public Response getCapabilitiesSummaryOfPerson(@Auth User user, @PathParam("id") Integer personId) {
 		List<CapabilityIdFiveOptions> capabilitiesAssessmentSummary = new ArrayList<>();
 		List<CapabilityIdFiveOptionsProjectNames> capabilitiesAssessmentSummaryWithProjects = new ArrayList<>();
 		try {
