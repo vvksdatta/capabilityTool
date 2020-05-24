@@ -898,11 +898,10 @@
     $http.get('/api/people/getUsersList').then(function(response) {
         $scope.usersList = response.data;
         angular.forEach($scope.usersList, function(value, key) {
-          if(value.role == 'Administrator'){
-              $scope.usersPrivileges[value.userId] = true;
-          }
-          else if(value.role == 'User'){
-              $scope.usersPrivileges[value.userId] = false;
+          if (value.role == 'Administrator') {
+            $scope.usersPrivileges[value.userId] = true;
+          } else if (value.role == 'User') {
+            $scope.usersPrivileges[value.userId] = false;
           }
         });
       })
@@ -911,37 +910,37 @@
         var $string = "Error in fetching list of users";
         alertFactory.addAuto('danger', $string, optionalDelay);
       });
-      $scope.toggleRoles = function(ev, user) {
-        var newRole = null;
-        if(  $scope.usersPrivileges[user.userId] == true){
-          newRole = "Administrator";
-        }else if($scope.usersPrivileges[user.userId] == false){
-          newRole = "User";
-        }
-          var confirm = $mdDialog.confirm()
-            .title('Would you like to save the new privileges of ' + user.userFirstName + '?')
-            .textContent('This will change ' + user.userFirstName + '\'s privileges on CAST to '+newRole)
-            .ariaLabel('')
-            .targetEvent(ev)
-            .ok('Save')
-            .cancel('Cancel');
-          $mdDialog.show(confirm).then(function() {
-            $http.put('/api/people/updateUserRole/', user.userId).then(function(response) {
-                var optionalDelay = 800000;
-                var $string = "Successfully updated the privileges of " + user.userFirstName+' to '+newRole;
-                //$state.go('home');
-                alertFactory.addAuto('success', $string, optionalDelay);
-              })
-              .catch(function(response, status) {
-                var optionalDelay = 800000;
-                var $string = "Error in modifying user privileges";
-                alertFactory.addAuto('danger', $string, optionalDelay);
-              });
-          }, function () {
-                    $scope.usersPrivileges[user.userId] = !$scope.usersPrivileges[user.userId];
-                  });
+    $scope.toggleRoles = function(ev, user) {
+      var newRole = null;
+      if ($scope.usersPrivileges[user.userId] == true) {
+        newRole = "Administrator";
+      } else if ($scope.usersPrivileges[user.userId] == false) {
+        newRole = "User";
+      }
+      var confirm = $mdDialog.confirm()
+        .title('Would you like to save the new privileges of ' + user.userFirstName + '?')
+        .textContent('This will change ' + user.userFirstName + '\'s privileges on CAST to ' + newRole)
+        .ariaLabel('')
+        .targetEvent(ev)
+        .ok('Save')
+        .cancel('Cancel');
+      $mdDialog.show(confirm).then(function() {
+        $http.put('/api/people/updateUserRole/', user.userId).then(function(response) {
+            var optionalDelay = 800000;
+            var $string = "Successfully updated the privileges of " + user.userFirstName + ' to ' + newRole;
+            //$state.go('home');
+            alertFactory.addAuto('success', $string, optionalDelay);
+          })
+          .catch(function(response, status) {
+            var optionalDelay = 800000;
+            var $string = "Error in modifying user privileges";
+            alertFactory.addAuto('danger', $string, optionalDelay);
+          });
+      }, function() {
+        $scope.usersPrivileges[user.userId] = !$scope.usersPrivileges[user.userId];
+      });
 
-      };
+    };
     $scope.removeUser = function(ev, user) {
       var confirm = $mdDialog.confirm()
         .title('Would you like to remove the user ' + user.userFirstName + '?')
@@ -984,7 +983,7 @@
     var $string = "Note: This page is for creating a new user on CAST. The drop-down list here presents the names of Redmine users who don't have a profile on CAST.";
     alertFactory.addAuto('info', $string, optionalDelay);
 
-    $http.get('/api/people/getUsersListRedmine/'+$localStorage.currentUser.userId).then(function(response) {
+    $http.get('/api/people/getUsersListRedmine/' + $localStorage.currentUser.userId).then(function(response) {
         $scope.peopleList = response.data;
       })
       .catch(function(response, status) {
@@ -999,7 +998,6 @@
           userDetails.userLastName = value.lastName;
           userDetails.userFullName = value.fullName;
           userDetails.userMailId = value.emailID;
-          $log.debug("the userfirstName is "+ userDetails.userFirstName+" and the userLastName is "+ userDetails.userLastName + " and mail is "+ userDetails.userMailId);
         }
       });
     };
@@ -1045,8 +1043,8 @@
     if (currentUserId != null) {
       $http.get('/api/people/getUserDetailsbyId/' + currentUserId).then(function(response) {
           $scope.userDetails = response.data;
-          if (  $scope.userDetails.apiKey == 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx') {
-            $scope.userDetails.apiKey = null ;
+          if ($scope.userDetails.apiKey == 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx') {
+            $scope.userDetails.apiKey = null;
           }
         })
         .catch(function(response, status) {
@@ -6580,6 +6578,11 @@
         }
       });
     };
+    $scope.selectedCategoryName = null;
+    $scope.selectedSprintName = null;
+    $scope.selectedCategoryId = null;
+    $scope.selectedSprintId = null;
+    $scope.forgetBacklog = false;
     sprintNav.setSprintNav($stateParams.projectId, $stateParams.sprintId);
     var tabClasses;
 
@@ -6604,16 +6607,41 @@
       var sprintName = null;
       var backlogExists = false;
       var total = ($scope.tabs.length + 1);
-      angular.forEach($scope.sprintsList, function(value, key) {
-        if (value.sprintName == "backlog" || value.sprintName == "Backlog") {
-          $scope.tabs.push({
-            title: 'Issue ' + total,
-            sprintName: value.sprintName,
-            sprintId: value.sprintId,
-          });
-          backlogExists = true;
-        }
-      });
+      if ($scope.selectedSprintId == null && $scope.selectedCategoryId == null && !$scope.forgetBacklog) {
+        angular.forEach($scope.sprintsList, function(value, key) {
+          if (value.sprintName == "backlog" || value.sprintName == "Backlog") {
+            $scope.tabs.push({
+              title: 'Issue ' + total,
+              sprintName: value.sprintName,
+              sprintId: value.sprintId,
+            });
+            backlogExists = true;
+          }
+        });
+      } else if ($scope.selectedSprintId != null && $scope.selectedCategoryId == null) {
+        $scope.tabs.push({
+          title: 'Issue ' + total,
+          sprintName: $scope.selectedSprintName,
+          sprintId: $scope.selectedSprintId,
+        });
+        backlogExists = true;
+      } else if ($scope.selectedSprintId == null && $scope.selectedCategoryId != null) {
+        $scope.tabs.push({
+          title: 'Issue ' + total,
+          categoryName: $scope.selectedCategoryName,
+          categoryId: $scope.selectedCategoryId,
+        });
+        backlogExists = true;
+      } else if ($scope.selectedSprintId != null && $scope.selectedCategoryId != null) {
+        $scope.tabs.push({
+          title: 'Issue ' + total,
+          sprintName: $scope.selectedSprintName,
+          sprintId: $scope.selectedSprintId,
+          categoryName: $scope.selectedCategoryName,
+          categoryId: $scope.selectedCategoryId,
+        });
+        backlogExists = true;
+      }
       if (backlogExists == false) {
         $scope.tabs.push({
           title: 'Issue ' + total
@@ -6682,8 +6710,15 @@
       angular.forEach($scope.categoriesList, function(value, key) {
         if (categoryName == value.categoryName) {
           tab.categoryId = value.categoryId;
+          $scope.selectedCategoryName = value.categoryName;
+          $scope.selectedCategoryId = value.categoryId;
         }
       });
+      if (categoryName == '') {
+        $scope.selectedCategoryName = null;
+        $scope.selectedCategoryId = null;
+        //$scope.forgetBacklog = true;
+      }
     };
     $scope.issueSprint = function(tab, sprintName) {
       tab.sprintId = null;
@@ -6693,8 +6728,15 @@
       angular.forEach($scope.sprintsList, function(value, key) {
         if (sprintName == value.sprintName) {
           tab.sprintId = value.sprintId;
+          $scope.selectedSprintName = value.sprintName;
+          $scope.selectedSprintId = value.sprintId;
         }
       });
+      if (sprintName == '') {
+        $scope.selectedSprintName = null;
+        $scope.selectedSprintId = null;
+        $scope.forgetBacklog = true;
+      }
     };
     $http.get('/api/sprints/getAllSprints/' + $stateParams.projectId).then(function(response) {
         $scope.sprintsList = response.data;

@@ -5,7 +5,7 @@ import com.github.rkmk.annotations.ColumnName;
 import com.github.rkmk.annotations.PrimaryKey;
 
 /**
- *Template for retrieving the details of a user.
+ * Template for retrieving the details of a user.
  */
 
 public class Login {
@@ -18,11 +18,11 @@ public class Login {
 	@JsonProperty
 	@ColumnName("userName")
 	public String userName;
-	
+
 	@JsonProperty
 	@ColumnName("userFirstName")
 	public String userFirstName;
-	
+
 	@JsonProperty
 	@ColumnName("userLastName")
 	public String userLastName;
@@ -34,16 +34,15 @@ public class Login {
 	@JsonProperty
 	@ColumnName("password")
 	public String password;
-	
+
 	@JsonProperty
 	@ColumnName("apiKey")
 	public String apiKey;
-	
+
 	@JsonProperty
 	@ColumnName("role")
 	public String role;
 
-	
 	public Login(Integer userId, String userName, String userFirstName, String userLastName, String userMailId,
 			String password, String role) {
 		this.userId = userId;
@@ -54,8 +53,9 @@ public class Login {
 		this.password = password;
 		this.role = role;
 	}
-	public Login(String userName, String userFirstName, String userLastName, String userMailId,
-			String password, String role) {
+
+	public Login(String userName, String userFirstName, String userLastName, String userMailId, String password,
+			String role) {
 		this.userName = userName;
 		this.userFirstName = userFirstName;
 		this.userLastName = userLastName;
@@ -63,6 +63,7 @@ public class Login {
 		this.password = password;
 		this.role = role;
 	}
+
 	public Login() {
 
 	}
@@ -90,13 +91,15 @@ public class Login {
 	public String getUserLastName() {
 		return userLastName;
 	}
-	
+
 	public String getApiKey() {
 		return apiKey;
 	}
+
 	public void setApiKey(String apiKey) {
 		this.apiKey = apiKey;
 	}
+
 	public void setUserFirstName(String userFirstName) {
 		this.userFirstName = userFirstName;
 	}
@@ -120,11 +123,13 @@ public class Login {
 	public void setPassword(String password) {
 		this.password = password;
 	}
+
 	public String getRole() {
 		return role;
 	}
+
 	public void setRole(String role) {
 		this.role = role;
 	}
-	
+
 }

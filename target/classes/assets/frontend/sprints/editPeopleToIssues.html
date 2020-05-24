@@ -129,13 +129,13 @@
           <tbody>
             <tr>
               <td ng-if="!toggleDisplay"><strong>Categorized issues</strong></td>
-              <td ng-if="toggleDisplay"><strong>Other issues</strong></td>
+              <td ng-if="toggleDisplay"><strong>Uncategorized issues</strong></td>
               <td style="text-align: right;">
                 <div style="display: inline-flex;">
                   <p style="margin-top: 5px;">
                     <md-tooltip md-direction="left">Toggle to filter issues</md-tooltip> <strong>Display:</strong> Categorized issues </p>
                   <md-switch style="margin-top: 0;margin-bottom: 0; margin-left: 8px; margin-right: 8px;" class="md-primary" md-no-ink aria-label="Switch No Ink" ng-model="toggleDisplay" ng-change="toggleDisplayOfIssues(toggleDisplay)"></md-switch>
-                  <p style="margin-top: 5px;"> Other issues</p>
+                  <p style="margin-top: 5px;"> Uncategorized issues</p>
                 </div>
               </td>
             </tr>

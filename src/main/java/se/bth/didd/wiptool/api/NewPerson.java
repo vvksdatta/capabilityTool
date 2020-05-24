@@ -8,36 +8,37 @@ import com.github.rkmk.annotations.OneToMany;
 import com.github.rkmk.annotations.PrimaryKey;
 
 /**
- * ProjectMembers entity that holds personID and personName. This has a relation with projectSummaries and project entity. 
- * */
+ * ProjectMembers entity that holds personID and personName. This has a relation
+ * with projectSummaries and project entity.
+ */
 
 public class NewPerson {
-	
+
 	@JsonProperty
 	@PrimaryKey
 	@ColumnName("personId")
 	public Integer personId;
-	
+
 	@JsonProperty
 	@ColumnName("firstName")
 	public String firstName;
-	
+
 	@JsonProperty
 	@ColumnName("lastName")
 	public String lastName;
-	
+
 	@JsonProperty
 	@ColumnName("emailId")
 	public String emailID;
-	
+
 	@JsonProperty
 	@OneToMany("roles")
 	public List<Roles> roles;
-	
+
 	@JsonProperty
 	@ColumnName("userId")
 	public Integer userId;
-	
+
 	public NewPerson(Integer personId, String firstName, String lastName, String emailID, List<Roles> roles) {
 		this.personId = personId;
 		this.firstName = firstName;
@@ -100,5 +101,5 @@ public class NewPerson {
 	public void setUserId(Integer userId) {
 		this.userId = userId;
 	}
-	
+
 }

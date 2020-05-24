@@ -2,19 +2,17 @@ package se.bth.didd.wiptool.api;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.github.rkmk.annotations.ColumnName;
-import com.github.rkmk.annotations.PrimaryKey;
 
 /**
- *Template for retrieving the details of a user.
+ * Template for retrieving the details of a user.
  */
 
 public class LoginFullName extends Login {
 
-		
 	@JsonProperty
 	@ColumnName("userFullName")
 	public String userFullName;
-	
+
 	public LoginFullName(Integer userId, String userName, String userFirstName, String userLastName, String userMailId,
 			String password, String role, String userFullName) {
 		super(userId, userName, userFirstName, userLastName, userMailId, password, role);
@@ -32,5 +30,5 @@ public class LoginFullName extends Login {
 	public void setUserFullName(String userFullName) {
 		this.userFullName = userFullName;
 	}
-	
+
 }

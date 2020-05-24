@@ -4,22 +4,21 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.github.rkmk.annotations.PrimaryKey;
 
 /**
- *Template to fetch names of different persons who are enrolled on Redmine.
+ * Template to fetch names of different persons who are enrolled on Redmine.
  */
 
 public class People {
-	
+
 	@JsonProperty
 	@PrimaryKey
 	public Integer personId;
-	
+
 	@JsonProperty
 	public String personName;
-	
+
 	@JsonProperty
 	public String role;
-	
-		
+
 	public People(Integer personId, String personName, String role) {
 		super();
 		this.personId = personId;
@@ -33,7 +32,7 @@ public class People {
 	 */
 	public People() {
 	}
-	
+
 	public Integer getPersonId() {
 		return personId;
 	}
@@ -41,7 +40,7 @@ public class People {
 	public String getPersonName() {
 		return personName;
 	}
-	
+
 	public void setPersonId(Integer personId) {
 		this.personId = personId;
 	}
@@ -57,5 +56,5 @@ public class People {
 	public void setRole(String role) {
 		this.role = role;
 	}
-	
+
 }

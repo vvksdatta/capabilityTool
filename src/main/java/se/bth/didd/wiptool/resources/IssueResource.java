@@ -76,10 +76,11 @@ public class IssueResource {
 			return Response.status(Status.BAD_REQUEST).entity(e).build();
 		}
 	}
+
 	@RolesAllowed({ UserRoles.ROLE_ONE })
 	@PUT
 	@Path("/addNewIssues/{userId}/{projectId}")
-	public Response updateAllocatedIssues(@Auth User user, @PathParam("userId") int userId,
+	public Response addNewIssues(@Auth User user, @PathParam("userId") int userId,
 			@PathParam("projectId") int projectId, List<IssueTemplateLimitedFields> newIssues) {
 		String apiKey;
 		try {
@@ -94,23 +95,27 @@ public class IssueResource {
 			Issue newIssueCreatedOnRedmine = new Issue();
 			newIssuesToRedmine.setSubject(eachNewIssue.getIssueName());
 			newIssuesToRedmine.setDescription(eachNewIssue.getIssueDescription());
-			IssueCategory category = IssueCategoryFactory.create(eachNewIssue.categoryId);
-			newIssuesToRedmine.setCategory(category);
+			if (eachNewIssue.getCategoryId() != null) {
+				IssueCategory category = IssueCategoryFactory.create(eachNewIssue.categoryId);
+				newIssuesToRedmine.setCategory(category);
+			}
 			newIssuesToRedmine.setStatusId(1);
 			newIssuesToRedmine.setPriorityId(2);
 			Tracker tracker = TrackerFactory.create(2);
 			newIssuesToRedmine.setTracker(tracker);
 			newIssuesToRedmine.setProjectId(projectId);
-			Version targetVersion = VersionFactory.create(eachNewIssue.getSprintId());
-			newIssuesToRedmine.setTargetVersion(targetVersion);
+			if (eachNewIssue.getSprintId() != null) {
+				Version targetVersion = VersionFactory.create(eachNewIssue.getSprintId());
+				newIssuesToRedmine.setTargetVersion(targetVersion);
+			}
 			try {
-				newIssueCreatedOnRedmine =	redmineManager.getIssueManager().createIssue(newIssuesToRedmine);
+				newIssueCreatedOnRedmine = redmineManager.getIssueManager().createIssue(newIssuesToRedmine);
 				IssueTemplate newIssue = new IssueTemplate();
 				newIssue.setProjectId(newIssueCreatedOnRedmine.getProjectId());
 				newIssue.setIssueId(newIssueCreatedOnRedmine.getId());
 				newIssue.setIssueName(newIssueCreatedOnRedmine.getSubject());
 				newIssue.setIssueDescription(newIssueCreatedOnRedmine.getDescription());
-				if(newIssueCreatedOnRedmine.getCategory() != null) {
+				if (newIssueCreatedOnRedmine.getCategory() != null) {
 					newIssue.setIssueCategory(newIssueCreatedOnRedmine.getCategory().getName());
 				}
 				newIssue.setIssueLastUpdate(newIssueCreatedOnRedmine.getUpdatedOn());
@@ -120,7 +125,10 @@ public class IssueResource {
 				newIssue.setIssueDone(newIssueCreatedOnRedmine.getDoneRatio());
 				newIssue.setPersonId(newIssueCreatedOnRedmine.getAssigneeId());
 				issueDAO.insertIntoIssuesTable(newIssue);
-				issueDAO.insertIntoSprintComprisingIssuesTable(projectId, eachNewIssue.getSprintId(), newIssueCreatedOnRedmine.getId());
+				if (eachNewIssue.getSprintId() != null) {
+					issueDAO.insertIntoSprintComprisingIssuesTable(projectId, eachNewIssue.getSprintId(),
+							newIssueCreatedOnRedmine.getId());
+				}
 			} catch (RedmineException e) {
 				e.printStackTrace();
 				System.out.println(e);

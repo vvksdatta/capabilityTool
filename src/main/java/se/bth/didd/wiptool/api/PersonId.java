@@ -5,16 +5,16 @@ import com.github.rkmk.annotations.ColumnName;
 import com.github.rkmk.annotations.PrimaryKey;
 
 /**
- *Template useful retrieving list of people.
+ * Template useful retrieving list of people.
  */
 
 public class PersonId {
-	
+
 	@JsonProperty
 	@PrimaryKey
 	@ColumnName("personId")
 	public Integer personId;
-	
+
 	public PersonId(Integer personId) {
 		super();
 		this.personId = personId;

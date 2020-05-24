@@ -34,19 +34,20 @@ public class UserTemplate {
 	@JsonProperty
 	@ColumnName("apiKey")
 	public String apiKey;
-	
+
 	@JsonProperty
 	@ColumnName("role")
 	public String role;
-	
-	public UserTemplate(Integer userId, String userName, String userFirstName, String userLastName, String usermailId, String role) {
+
+	public UserTemplate(Integer userId, String userName, String userFirstName, String userLastName, String usermailId,
+			String role) {
 		super();
 		this.userId = userId;
 		this.userName = userName;
 		this.userFirstName = userFirstName;
 		this.userLastName = userLastName;
 		this.usermailId = usermailId;
-		this.role = role; 
+		this.role = role;
 	}
 
 	/*
@@ -95,9 +96,11 @@ public class UserTemplate {
 	public void setUsermailId(String usermailId) {
 		this.usermailId = usermailId;
 	}
+
 	public String getApiKey() {
 		return apiKey;
 	}
+
 	public void setApiKey(String apiKey) {
 		this.apiKey = apiKey;
 	}

@@ -4,27 +4,27 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.github.rkmk.annotations.ColumnName;
 
 /**
- *Template useful retrieving list of people.
+ * Template useful retrieving list of people.
  */
 
 public class PersonIdNameEmail extends PersonId {
-	
+
 	@JsonProperty
 	@ColumnName("firstName")
 	public String firstName;
-	
+
 	@JsonProperty
 	@ColumnName("lastName")
 	public String lastName;
-	
+
 	@JsonProperty
 	@ColumnName("fullName")
 	public String fullName;
-	
+
 	@JsonProperty
 	@ColumnName("emailId")
 	public String emailID;
-	
+
 	public PersonIdNameEmail(Integer personId, String firstName, String lastName, String fullName, String emailID) {
 		super(personId);
 		this.firstName = firstName;
@@ -34,9 +34,9 @@ public class PersonIdNameEmail extends PersonId {
 	}
 
 	public PersonIdNameEmail() {
-		
+
 	}
-	
+
 	public String getFirstName() {
 		return firstName;
 	}
@@ -69,7 +69,6 @@ public class PersonIdNameEmail extends PersonId {
 		this.fullName = fullName;
 	}
 
-	
 	/*
 	 * default constructor is required for FoldingListContainerFactory
 	 * (jdbi-folder)

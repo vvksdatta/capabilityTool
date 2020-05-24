@@ -56,26 +56,26 @@ public class LoginResource {
 
 		}
 
-		return Response.ok(new LoginResponse(buildToken(user, newUser.getRole() ).getCompactSerialization(), newUser.getPersonName(),
-				newUser.getPersonId(), newUser.getRole() )).build();
+		return Response.ok(new LoginResponse(buildToken(user, newUser.getRole()).getCompactSerialization(),
+				newUser.getPersonName(), newUser.getPersonId(), newUser.getRole())).build();
 	}
-	
-	/*@GET
-	@Path("/updatedUserDetails/{id}")
-	
-	public Response updatedUserDetails(@Auth User user, @PathParam("id") Integer userId) throws JoseException {
-		People newUser = new People();
-		List<Login> person = authDAO.getUserById(userId);
-		for (Login client : person) {
-			newUser.setPersonId(client.getUserId());
-			newUser.setPersonName(client.getUserFirstName());
-			newUser.setRole(client.getRole());
 
-		}
-
-		return Response.ok(newUser).build();
-	}
-*/
+	/*
+	 * @GET
+	 * 
+	 * @Path("/updatedUserDetails/{id}")
+	 * 
+	 * public Response updatedUserDetails(@Auth User user, @PathParam("id")
+	 * Integer userId) throws JoseException { People newUser = new People();
+	 * List<Login> person = authDAO.getUserById(userId); for (Login client :
+	 * person) { newUser.setPersonId(client.getUserId());
+	 * newUser.setPersonName(client.getUserFirstName());
+	 * newUser.setRole(client.getRole());
+	 * 
+	 * }
+	 * 
+	 * return Response.ok(newUser).build(); }
+	 */
 	@RolesAllowed({ UserRoles.ROLE_ONE })
 	@PUT
 	@Path("/register")
@@ -93,7 +93,7 @@ public class LoginResource {
 			return Response.status(Status.BAD_REQUEST).entity("Email or user name already registered!").build();
 		}
 	}
-	
+
 	public Response registerNewDefaultUser(Login login) {
 
 		if (authDAO.ifCredentialsExists(login.getUserMailId(), login.getUserName().toLowerCase()) != true) {
