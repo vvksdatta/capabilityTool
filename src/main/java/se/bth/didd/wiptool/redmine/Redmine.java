@@ -1177,6 +1177,20 @@ public class Redmine {
 		redmineDAO.deleteNonExistingPeopleFromProjectParticipationTable(generatedRandomString);
 		redmineDAO.deleteNonExistingPeopleFromSprintParticipationTable(generatedRandomString);
 		redmineDAO.deleteNonExistingPeopleFromProjectsTable();
+
+		/*
+		 * check if people to be deleted are assigned any issues. If so, remove
+		 * the assignee information from the issue and proceed with deletingthe
+		 * person on people table
+		 */
+		List<Integer> setOfNonExistingPeople = redmineDAO.getIdOfNonExistingPeople(generatedRandomString);
+		if (setOfNonExistingPeople.size() != 0) {
+			for (Integer eachNonExistingPerson : setOfNonExistingPeople) {
+				if (redmineDAO.ifIssuesAllocatedToNonExisitingPerson(eachNonExistingPerson)) {
+					redmineDAO.unAssignAllocatedIssues(eachNonExistingPerson);
+				}
+			}
+		}
 		redmineDAO.deletePeopleWhoNoLongerExist(generatedRandomString);
 		redmineDAO.resetProjectLeaderIdentifier();
 

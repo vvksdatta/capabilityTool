@@ -59,6 +59,9 @@ public interface RedmineDAO {
 	@SqlUpdate("update ISSUES set  personId = :personId, issueDone = :issueDone, redmineLastUpdate = :redmineLastUpdate, issueLastUpdate = :issueLastUpdate"
 			+ " where projectId = :projectId and issueId = :issueId")
 	void updateIssuesTable(@BindBean IssueUpdateTemplate issue);
+	
+	@SqlUpdate("update ISSUES set  personId = null where personId = :personId")
+	void unAssignAllocatedIssues (@Bind("personId") int personId);
 
 	@SqlUpdate("update SPRINTS set sprintProgress = :sprintProgress where projectId = :projectId and sprintId = :sprintId")
 	void updateSprintProgress(@Bind("projectId") int projectId, @Bind("sprintId") int sprintId,
@@ -212,6 +215,9 @@ public interface RedmineDAO {
 
 	@SqlQuery("select apiKey from LOGINCREDENTIALS where userId = :userId")
 	List<String> getApiKeyOfUser(@Bind("userId") int userId);
+	
+	@SqlQuery("select personId from people where redminePersonIdentifier != :currentStatusIdentifier")
+	List<Integer> getIdOfNonExistingPeople(@Bind("currentStatusIdentifier") String currentStatusIdentifier);
 
 	@SqlQuery("select exists (select 1 from SPRINTS where projectId= :projectId and sprintId = :sprintId and sprintRedmineUpdate = :sprintRedmineUpdate)")
 	boolean ifSprintDetailsUnModified(@Bind("projectId") int projectId, @Bind("sprintId") int sprintId,
@@ -269,6 +275,9 @@ public interface RedmineDAO {
 
 	@SqlQuery("select exists( select 1 from ISSUES where projectId = :projectId and issueId = :issueId)")
 	boolean ifIssueExistsInProject(@Bind("projectId") int projectId, @Bind("issueId") int issueId);
+	
+	@SqlQuery("select exists( select 1 from ISSUES where personId = :personId)")
+	boolean ifIssuesAllocatedToNonExisitingPerson(@Bind("personId") int personId); 
 
 	@SqlQuery("select exists( select 1 from ISSUES where projectId = :projectId and issueId = :issueId and redmineLastUpdate = :redmineLastUpdate)")
 	boolean ifIssueUnModified(@Bind("projectId") int projectId, @Bind("issueId") int issueId,

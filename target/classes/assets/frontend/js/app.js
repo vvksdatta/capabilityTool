@@ -1708,32 +1708,37 @@
         }
       });
     };
+    var personId = null;
     $scope.userId = $localStorage.currentUser.userId;
     if ($scope.userId != '') {
-      $http.get('/api/capabilities/getCapabilitiesSummaryOfPerson/' + $scope.userId).then(function(response) {
-          $scope.assessedCapabilities = response.data;
-        })
-        .catch(function(response, status) {
-          var optionalDelay = 800000;
-          var $string = "Error in fetching capability details";
-          alertFactory.addAuto('danger', $string, optionalDelay);
-        });
-      $http.get('/api/people/getPersonName/' + $scope.userId).then(function(response) {
+      $http.get('/api/people/getPersonByUserId/' + $scope.userId).then(function(response) {
           $scope.newUserName = response.data.personName;
+          personId = response.data.personId;
+        }).then(function() {
+          if (personId != null) {
+            $http.get('/api/capabilities/getCapabilitiesSummaryOfPerson/' + personId).then(function(response) {
+                $scope.assessedCapabilities = response.data;
+              })
+              .catch(function(response, status) {
+                var optionalDelay = 800000;
+                var $string = "Error in fetching capability details";
+                alertFactory.addAuto('danger', $string, optionalDelay);
+              });
+            $http.get('/api/people/getProjectsCountPerson/' + personId).then(function(response) {
+                $scope.totalProjects = response.data[0];
+              })
+              .catch(function(response, status) {
+                var optionalDelay = 800000;
+                var $string = "Error in fetcing number of projects where capablities were assessed";
+                alertFactory.addAuto('danger', $string, optionalDelay);
+              })
+          }
         })
         .catch(function(response, status) {
           var optionalDelay = 800000;
           var $string = "Error in fetching person details";
           alertFactory.addAuto('danger', $string, optionalDelay);
         });
-      $http.get('/api/people/getProjectsCountPerson/' + $scope.userId).then(function(response) {
-          $scope.totalProjects = response.data[0];
-        })
-        .catch(function(response, status) {
-          var optionalDelay = 800000;
-          var $string = "Error in fetcing number of projects where capablities were assessed";
-          alertFactory.addAuto('danger', $string, optionalDelay);
-        })
     }
   });
   app.controller('peopleSummaryCtrl', function($scope, $state, $location, $http, alertFactory, $base64, $q, dataService, alertFactory, $localStorage, $rootScope) {
@@ -8695,6 +8700,14 @@
         .catch(function(response, status) {
           var optionalDelay = 800000;
           var $string = "Error in fetching capability details";
+          alertFactory.addAuto('danger', $string, optionalDelay);
+        });
+      $http.get('/api/people/getProjectsCountPerson/' + $scope.userId2).then(function(response) {
+          $scope.totalProjects = response.data[0];
+        })
+        .catch(function(response, status) {
+          var optionalDelay = 800000;
+          var $string = "Error in fetcing number of projects where capablities were assessed";
           alertFactory.addAuto('danger', $string, optionalDelay);
         })
     }
