@@ -20,7 +20,7 @@ database:
   password: wip
 
   # JDBC URL with newly created database
-  url: jdbc:postgresql://localhost:5432/march
+  url: jdbc:postgresql://localhost:5432/june
   
 # Tool admin account username (can be changed after login)
 adminUserName: admin
@@ -32,7 +32,7 @@ adminPassword: admin
 redmineUrl: http://localhost/redmine/
   
 # IssueID below which synchronization can be ignored
-issueIdCutOff: 60
+issueIdCutOff: 1
 
 # ProjectId below which synchronization can be ignored
-projectIdCutOff: 150
+projectIdCutOff: 1

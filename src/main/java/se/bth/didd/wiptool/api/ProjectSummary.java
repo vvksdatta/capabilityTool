@@ -1,7 +1,6 @@
 package se.bth.didd.wiptool.api;
 
 import java.util.ArrayList;
-import se.bth.didd.wiptool.api.Participants;
 import java.util.List;
 import javax.validation.constraints.NotNull;
 import com.fasterxml.jackson.annotation.JsonProperty;

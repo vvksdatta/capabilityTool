@@ -1,3 +1,4 @@
+C:\Users\dvi\Documents\GitHub\capabilityTool\src\main\java\se\bth\didd\wiptool\api\CapabilityIdFiveOptionsProjectNames.java
 C:\Users\dvi\Documents\GitHub\capabilityTool\src\main\java\se\bth\didd\wiptool\api\PersonId.java
 C:\Users\dvi\Documents\GitHub\capabilityTool\src\main\java\se\bth\didd\wiptool\api\SkillNameValueUser.java
 C:\Users\dvi\Documents\GitHub\capabilityTool\src\main\java\se\bth\didd\wiptool\db\PeopleDAO.java
@@ -9,7 +10,9 @@ C:\Users\dvi\Documents\GitHub\capabilityTool\src\main\java\se\bth\didd\wiptool\a
 C:\Users\dvi\Documents\GitHub\capabilityTool\src\main\java\se\bth\didd\wiptool\api\ProjectSummary.java
 C:\Users\dvi\Documents\GitHub\capabilityTool\src\main\java\se\bth\didd\wiptool\resources\dto\LoginResponse.java
 C:\Users\dvi\Documents\GitHub\capabilityTool\src\main\java\se\bth\didd\wiptool\db\AuthDAO.java
+C:\Users\dvi\Documents\GitHub\capabilityTool\src\main\java\se\bth\didd\wiptool\api\IssueCategoryIdName.java
 C:\Users\dvi\Documents\GitHub\capabilityTool\src\main\java\se\bth\didd\wiptool\api\People.java
+C:\Users\dvi\Documents\GitHub\capabilityTool\src\main\java\se\bth\didd\wiptool\api\SharedSprint.java
 C:\Users\dvi\Documents\GitHub\capabilityTool\src\main\java\se\bth\didd\wiptool\api\SprintAllDomainsAssets.java
 C:\Users\dvi\Documents\GitHub\capabilityTool\src\main\java\se\bth\didd\wiptool\api\SprintNameIssues.java
 C:\Users\dvi\Documents\GitHub\capabilityTool\src\main\java\se\bth\didd\wiptool\api\ProjectIdName.java
@@ -28,6 +31,7 @@ C:\Users\dvi\Documents\GitHub\capabilityTool\src\main\java\se\bth\didd\wiptool\a
 C:\Users\dvi\Documents\GitHub\capabilityTool\src\main\java\se\bth\didd\wiptool\api\SprintBriefSummary.java
 C:\Users\dvi\Documents\GitHub\capabilityTool\src\main\java\se\bth\didd\wiptool\auth\jwt\User.java
 C:\Users\dvi\Documents\GitHub\capabilityTool\src\main\java\se\bth\didd\wiptool\api\SkillDetailsforGraphs.java
+C:\Users\dvi\Documents\GitHub\capabilityTool\src\main\java\se\bth\didd\wiptool\api\SprintIdSprintName.java
 C:\Users\dvi\Documents\GitHub\capabilityTool\src\main\java\se\bth\didd\wiptool\api\SprintRequirementNameLevel.java
 C:\Users\dvi\Documents\GitHub\capabilityTool\src\main\java\se\bth\didd\wiptool\api\SprintQuestionnaireTemplate.java
 C:\Users\dvi\Documents\GitHub\capabilityTool\src\main\java\se\bth\didd\wiptool\api\Login.java
@@ -36,6 +40,7 @@ C:\Users\dvi\Documents\GitHub\capabilityTool\src\main\java\se\bth\didd\wiptool\a
 C:\Users\dvi\Documents\GitHub\capabilityTool\src\main\java\se\bth\didd\wiptool\api\ExistingPerson.java
 C:\Users\dvi\Documents\GitHub\capabilityTool\src\main\java\se\bth\didd\wiptool\db\OptionsDAO.java
 C:\Users\dvi\Documents\GitHub\capabilityTool\src\main\java\se\bth\didd\wiptool\api\CapabilityIdProficiency.java
+C:\Users\dvi\Documents\GitHub\capabilityTool\src\main\java\se\bth\didd\wiptool\api\CapabilityIdFiveOptions.java
 C:\Users\dvi\Documents\GitHub\capabilityTool\src\main\java\se\bth\didd\wiptool\resources\LoginResource.java
 C:\Users\dvi\Documents\GitHub\capabilityTool\src\main\java\se\bth\didd\wiptool\db\SprintDAO.java
 C:\Users\dvi\Documents\GitHub\capabilityTool\src\main\java\se\bth\didd\wiptool\api\SelectedSprintRequirement.java
@@ -43,6 +48,7 @@ C:\Users\dvi\Documents\GitHub\capabilityTool\src\main\java\se\bth\didd\wiptool\a
 C:\Users\dvi\Documents\GitHub\capabilityTool\src\main\java\se\bth\didd\wiptool\auth\basic\BasicAuthenticator.java
 C:\Users\dvi\Documents\GitHub\capabilityTool\src\main\java\se\bth\didd\wiptool\api\IssueUpdateTemplate.java
 C:\Users\dvi\Documents\GitHub\capabilityTool\src\main\java\se\bth\didd\wiptool\api\SprintComprisingIssues.java
+C:\Users\dvi\Documents\GitHub\capabilityTool\src\main\java\se\bth\didd\wiptool\api\Status.java
 C:\Users\dvi\Documents\GitHub\capabilityTool\src\main\java\se\bth\didd\wiptool\resources\CapabilityResource.java
 C:\Users\dvi\Documents\GitHub\capabilityTool\src\main\java\se\bth\didd\wiptool\api\CapabilityDetailsComparisonGraphs.java
 C:\Users\dvi\Documents\GitHub\capabilityTool\src\main\java\se\bth\didd\wiptool\api\Projects.java
@@ -50,6 +56,8 @@ C:\Users\dvi\Documents\GitHub\capabilityTool\src\main\java\se\bth\didd\wiptool\a
 C:\Users\dvi\Documents\GitHub\capabilityTool\src\main\java\se\bth\didd\wiptool\db\IssuesDAO.java
 C:\Users\dvi\Documents\GitHub\capabilityTool\src\main\java\se\bth\didd\wiptool\api\UserPasswordChange.java
 C:\Users\dvi\Documents\GitHub\capabilityTool\src\main\java\se\bth\didd\wiptool\api\RolesOfPeopleSprint.java
+C:\Users\dvi\Documents\GitHub\capabilityTool\src\main\java\se\bth\didd\wiptool\api\ProjectNameCapabilityFiveOptions.java
+C:\Users\dvi\Documents\GitHub\capabilityTool\src\main\java\se\bth\didd\wiptool\api\LoginFullName.java
 C:\Users\dvi\Documents\GitHub\capabilityTool\src\main\java\se\bth\didd\wiptool\api\ProgrammingSkillValueOfPeople.java
 C:\Users\dvi\Documents\GitHub\capabilityTool\src\main\java\se\bth\didd\wiptool\api\Capability.java
 C:\Users\dvi\Documents\GitHub\capabilityTool\src\main\java\se\bth\didd\wiptool\api\CapabilityIdMeasure.java
@@ -85,14 +93,18 @@ C:\Users\dvi\Documents\GitHub\capabilityTool\src\main\java\se\bth\didd\wiptool\a
 C:\Users\dvi\Documents\GitHub\capabilityTool\src\main\java\se\bth\didd\wiptool\auth\jwt\JwtAuthenticator.java
 C:\Users\dvi\Documents\GitHub\capabilityTool\src\main\java\se\bth\didd\wiptool\WiptoolApplication.java
 C:\Users\dvi\Documents\GitHub\capabilityTool\src\main\java\se\bth\didd\wiptool\api\ProjectNameSprints.java
+C:\Users\dvi\Documents\GitHub\capabilityTool\src\main\java\se\bth\didd\wiptool\api\ProjectIdCapabilityIdProficiency.java
+C:\Users\dvi\Documents\GitHub\capabilityTool\src\main\java\se\bth\didd\wiptool\api\PersonIdNameEmail.java
 C:\Users\dvi\Documents\GitHub\capabilityTool\src\main\java\se\bth\didd\wiptool\db\CapabilityDAO.java
 C:\Users\dvi\Documents\GitHub\capabilityTool\src\main\java\se\bth\didd\wiptool\api\AllocatedIssue.java
 C:\Users\dvi\Documents\GitHub\capabilityTool\src\main\java\se\bth\didd\wiptool\api\ErrorMessage.java
 C:\Users\dvi\Documents\GitHub\capabilityTool\src\main\java\se\bth\didd\wiptool\api\PeopleSummary.java
 C:\Users\dvi\Documents\GitHub\capabilityTool\src\main\java\se\bth\didd\wiptool\api\SprintAsset.java
+C:\Users\dvi\Documents\GitHub\capabilityTool\src\main\java\se\bth\didd\wiptool\api\IssuesTemplateForRedmineAPI.java
 C:\Users\dvi\Documents\GitHub\capabilityTool\src\main\java\se\bth\didd\wiptool\api\SprintNameProgress.java
 C:\Users\dvi\Documents\GitHub\capabilityTool\src\main\java\se\bth\didd\wiptool\db\ProjectDAO.java
 C:\Users\dvi\Documents\GitHub\capabilityTool\src\main\java\se\bth\didd\wiptool\db\SkillDAO.java
+C:\Users\dvi\Documents\GitHub\capabilityTool\src\main\java\se\bth\didd\wiptool\api\IssueTemplateLimitedFields.java
 C:\Users\dvi\Documents\GitHub\capabilityTool\src\main\java\se\bth\didd\wiptool\api\SprintRequirement.java
 C:\Users\dvi\Documents\GitHub\capabilityTool\src\main\java\se\bth\didd\wiptool\api\SuccessMessage.java
 C:\Users\dvi\Documents\GitHub\capabilityTool\src\main\java\se\bth\didd\wiptool\api\NewPerson.java

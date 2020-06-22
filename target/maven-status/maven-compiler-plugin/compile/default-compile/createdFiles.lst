@@ -11,6 +11,7 @@ se\bth\didd\wiptool\api\ProgrammingSkillsDetailsComparisonGraphs.class
 se\bth\didd\wiptool\api\ProjectLeaderId.class
 se\bth\didd\wiptool\configuration\LocalDateMapperFactory.class
 se\bth\didd\wiptool\api\Roles.class
+se\bth\didd\wiptool\api\CapabilityIdFiveOptionsProjectNames.class
 se\bth\didd\wiptool\api\NewPerson.class
 se\bth\didd\wiptool\api\ExistingSprint.class
 se\bth\didd\wiptool\api\CapabilityDetailsforGraphs.class
@@ -23,6 +24,7 @@ se\bth\didd\wiptool\api\SprintAsset.class
 se\bth\didd\wiptool\api\SprintRequirement.class
 se\bth\didd\wiptool\api\SprintIdProjectIdIssuesAllocated.class
 se\bth\didd\wiptool\api\CapabilityIdMeasure.class
+se\bth\didd\wiptool\api\ProjectIdCapabilityIdProficiency.class
 se\bth\didd\wiptool\api\PersonId.class
 se\bth\didd\wiptool\api\SprintQuestionnaireTemplate.class
 se\bth\didd\wiptool\api\NewProject.class
@@ -35,17 +37,22 @@ se\bth\didd\wiptool\api\SprintBriefSummary.class
 se\bth\didd\wiptool\db\CapabilityDAO.class
 se\bth\didd\wiptool\WiptoolApplication.class
 se\bth\didd\wiptool\api\Sprint.class
+se\bth\didd\wiptool\api\CapabilityIdFiveOptions.class
 se\bth\didd\wiptool\api\ProgrammingSkillValueOfPeople.class
 se\bth\didd\wiptool\api\Participants.class
+se\bth\didd\wiptool\api\PersonIdNameEmail.class
 se\bth\didd\wiptool\api\SprintRequirementsTabsTemplate.class
 se\bth\didd\wiptool\api\IssueUpdateTemplate.class
 se\bth\didd\wiptool\db\AuthDAO.class
 se\bth\didd\wiptool\api\IssueTemplate.class
 se\bth\didd\wiptool\auth\jwt\UserRoles.class
 se\bth\didd\wiptool\api\ProjectParticipants.class
+se\bth\didd\wiptool\api\IssueTemplateLimitedFields.class
 se\bth\didd\wiptool\resources\PeopleResource.class
 se\bth\didd\wiptool\db\SprintDAO.class
 se\bth\didd\wiptool\api\SprintDomain.class
+se\bth\didd\wiptool\api\IssueCategoryIdName.class
+se\bth\didd\wiptool\api\ProjectNameCapabilityFiveOptions.class
 se\bth\didd\wiptool\api\ErrorMessage.class
 se\bth\didd\wiptool\api\SprintIdProjectIdParticipants.class
 se\bth\didd\wiptool\api\NumberOfRolesInProject.class
@@ -61,9 +68,11 @@ se\bth\didd\wiptool\api\SprintComprisingIssues.class
 se\bth\didd\wiptool\api\SelectedSprintRequirement.class
 se\bth\didd\wiptool\db\OptionsDAO.class
 se\bth\didd\wiptool\resources\ProjectResource.class
+se\bth\didd\wiptool\api\Status.class
 se\bth\didd\wiptool\api\People.class
 se\bth\didd\wiptool\resources\LoginResource.class
 se\bth\didd\wiptool\api\CompanyDrivenFactorsNames.class
+se\bth\didd\wiptool\api\LoginFullName.class
 se\bth\didd\wiptool\api\AllocatedIssue.class
 se\bth\didd\wiptool\auth\jwt\JwtAuthoriser.class
 se\bth\didd\wiptool\api\RedmineProjectIdentifier.class
@@ -79,6 +88,7 @@ se\bth\didd\wiptool\api\ExistingPerson.class
 se\bth\didd\wiptool\api\UserPasswordChange.class
 se\bth\didd\wiptool\resources\SprintResource$1.class
 se\bth\didd\wiptool\api\CapabilityList.class
+se\bth\didd\wiptool\api\SharedSprint.class
 se\bth\didd\wiptool\api\SkillNameValueUser.class
 se\bth\didd\wiptool\resources\IssueResource.class
 se\bth\didd\wiptool\resources\PeopleResource$1.class
@@ -92,8 +102,10 @@ se\bth\didd\wiptool\api\CapabilityIdProficiency.class
 se\bth\didd\wiptool\configuration\WiptoolConfiguration.class
 se\bth\didd\wiptool\api\RolesOfPeopleSprint.class
 se\bth\didd\wiptool\resources\dto\LoginResponse.class
+se\bth\didd\wiptool\api\SprintIdSprintName.class
 se\bth\didd\wiptool\auth\jwt\User.class
 se\bth\didd\wiptool\resources\CapabilityResource.class
+se\bth\didd\wiptool\resources\RolesResource$1.class
 se\bth\didd\wiptool\api\PeopleSummary.class
 se\bth\didd\wiptool\api\SprintRequirementNameLevel.class
 se\bth\didd\wiptool\auth\Secrets.class
@@ -101,3 +113,4 @@ se\bth\didd\wiptool\resources\OptionsResource.class
 se\bth\didd\wiptool\auth\jwt\JwtAuthenticator.class
 se\bth\didd\wiptool\resources\RolesResource.class
 se\bth\didd\wiptool\db\IssuesDAO.class
+se\bth\didd\wiptool\api\IssuesTemplateForRedmineAPI.class
