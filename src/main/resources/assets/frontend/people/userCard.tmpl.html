@@ -19,8 +19,10 @@ md-card md-card-title {
                 <span class="md-headline"> <img src="photos/user.svg" align="middle"  width="50px" height="50px" /> {{name}}</span>
               </div>
               <div style="width:40%;">
-                <span ng-show="project" class="md-headline"> <i class="glyphicon glyphicon-flash" align="middle"  width="50px" height="50px"  style="font-size: 26px; margin-top: 5px;" ></i>
+                <span ng-show="project" ng-if="project !=1" class="md-headline"> <i class="glyphicon glyphicon-flash" align="middle"  width="50px" height="50px"  style="font-size: 26px; margin-top: 5px;" ></i>
                 Capabilities assessed in {{project}} projects</span>
+                <span ng-show="project" ng-if="project ==1" class="md-headline"> <i class="glyphicon glyphicon-flash" align="middle"  width="50px" height="50px"  style="font-size: 26px; margin-top: 5px;" ></i>
+                Capabilities assessed in {{project}} project</span>
                 </div>
               </div>
         </md-card-title-text>
