@@ -84,6 +84,6 @@ How to start the Web application
     * Update  `issueIdCutOff` and `projectIdCutOff`, which correspond to the issueId and projectId below which synchronization can be ignored.  
   * Now using command line, change to `capabilityTool` directory and make sure you have `pom.xml` file for building the Web application. 
   * Run `mvn clean package` to build the Web application. This generates a .jar file under target folder.
-  * Start the application with `java -jar target/wiptool-0.0.1-SNAPSHOT.jar server config.yml`.
+  * Start the application with `java -jar target/wiptool-v1.0.0-rc.jar server config.yml`.
   * Access the Web application from a browser using the url `http://localhost:8080` ( In the case of accessing the application from another system, use IP address of the system running the tool instead of localhost) and login using the default credentials supplied in the configuration file([config.yml](https://github.com/vvksdatta/capabilityTool/blob/master/config.yml)).
   * Now, click on `User` > `My page` > `My details` > `Edit` and update the `apiAccessKey`of the current user.
