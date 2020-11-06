@@ -382,6 +382,45 @@ public interface RedmineDAO {
 	@SqlUpdate("DELETE FROM SPRINTCOMPRISINGISSUES WHERE redmineSprintIdentifier NOT IN (:redmineSprintIdentifier)")
 	void deleteNonExistingSprintsFromSprintComprisingIssuesTable(
 			@Bind("redmineSprintIdentifier") String redmineSprintIdentifier);
+	
+	@SqlUpdate("DELETE FROM SPRINTCOMPRISINGISSUES WHERE projectId = :projectIdDelete")
+	void deleteEntriesInSprintComprisingIssuesTable(@Bind("projectIdDelete") int projectIdDelete);
+	
+	@SqlUpdate("DELETE FROM ISSUES WHERE projectId = :projectIdDelete")
+	void deleteEntriesInIssuesTable(@Bind("projectIdDelete") int projectIdDelete);
+	
+	@SqlUpdate("DELETE FROM ASSETSINASPRINT WHERE projectId = :projectIdDelete")
+	void deleteEntriesInAssetsInSprintTable(@Bind("projectIdDelete") int projectIdDelete);
+	
+	@SqlUpdate("DELETE FROM development_env_in_a_sprint WHERE projectId = :projectIdDelete")
+	void deleteEntriesInDevEnvTable(@Bind("projectIdDelete") int projectIdDelete);
+	
+	@SqlUpdate("DELETE FROM domainsinasprint WHERE projectId = :projectIdDelete")
+	void deleteEntriesInDoaminsInSprintTable(@Bind("projectIdDelete") int projectIdDelete);
+	
+	@SqlUpdate("DELETE FROM projectparticipation WHERE projectId = :projectIdDelete")
+	void deleteEntriesInProjectParticipationTable(@Bind("projectIdDelete") int projectIdDelete);
+	
+	@SqlUpdate("DELETE FROM sprintparticipation WHERE projectId = :projectIdDelete")
+	void deleteEntriesInSprintParticipationTable(@Bind("projectIdDelete") int projectIdDelete);
+	
+	@SqlUpdate("DELETE FROM sprintquestionnaire WHERE projectId = :projectIdDelete")
+	void deleteEntriesInSprintQuestionnaireTable(@Bind("projectIdDelete") int projectIdDelete);
+
+	@SqlUpdate("DELETE FROM sharedsprints WHERE parentprojectid = :projectIdDelete or associatedprojectid = :projectIdDelete")
+	void deleteEntriesInSharedSprintsTable(@Bind("projectIdDelete") int projectIdDelete);
+	
+	@SqlUpdate("DELETE FROM requirementsselectedforsprint WHERE projectId = :projectIdDelete")
+	void deleteEntriesInReQSprintTable(@Bind("projectIdDelete") int projectIdDelete);
+	
+	@SqlUpdate("DELETE FROM assessmentofcapabilities WHERE projectId = :projectIdDelete")
+	void deleteEntriesInCapTable(@Bind("projectIdDelete") int projectIdDelete);
+
+	@SqlUpdate("DELETE FROM SPRINTS WHERE projectId = :projectIdDelete")
+	void deleteEntriesInSPRINTSTable(@Bind("projectIdDelete") int projectIdDelete);
+	
+	@SqlUpdate("DELETE FROM PROJECTS WHERE projectId = :projectIdDelete")
+	void deleteEntriesInPROJECTSTable(@Bind("projectIdDelete") int projectIdDelete);
 
 	@SqlUpdate("DELETE FROM SPRINTCOMPRISINGISSUES WHERE projectId < :projectCutOff")
 	void deleteIssuesInSprintComprisingIssuesTablebelowProjectCutOffId(@Bind("projectCutOff") int projectCutOff);

@@ -35,7 +35,6 @@ import com.taskadapter.redmineapi.bean.Project;
 import com.taskadapter.redmineapi.bean.Role;
 import com.taskadapter.redmineapi.bean.User;
 import com.taskadapter.redmineapi.bean.Version;
-
 import se.bth.didd.wiptool.api.IssueCategoryIdName;
 import se.bth.didd.wiptool.api.IssueTemplate;
 import se.bth.didd.wiptool.api.IssueUpdateTemplate;
@@ -187,11 +186,43 @@ public class Redmine {
 			}
 			redmineDAO.updateRoleStatus(role.getId(), generatedRandomString);
 		}
-
+		/*
+		 * Delete routines for projects that are either archived or deleted from Redmine
+		 */
+		List<Integer> existingProjectsList = new ArrayList<Integer>();
+		List<Integer> nonExistingProjectsList = new ArrayList<Integer>();
+		List<Project> projects = redmineManager.getProjectManager().getProjects();
+		List<ProjectIdName> existingProjectsOnDB = redmineDAO.getListOfProjects();
+		for (ProjectIdName eachProject : existingProjectsOnDB) {
+			Boolean exists = false;
+			for (Project redmineProject : projects) {
+				if (eachProject.getProjectId() == redmineProject.getId()) {
+					exists = true;
+					existingProjectsList.add(eachProject.getProjectId());
+				}
+			}
+			if (exists.equals(false)) {
+				nonExistingProjectsList.add(eachProject.getProjectId());
+			}
+		}
+		for (Integer eachProjectId : nonExistingProjectsList) {
+			redmineDAO.deleteEntriesInSprintComprisingIssuesTable(eachProjectId);
+			redmineDAO.deleteEntriesInAssetsInSprintTable(eachProjectId);
+			redmineDAO.deleteEntriesInDevEnvTable(eachProjectId);
+			redmineDAO.deleteEntriesInDoaminsInSprintTable(eachProjectId);
+			redmineDAO.deleteEntriesInProjectParticipationTable(eachProjectId);
+			redmineDAO.deleteEntriesInSprintParticipationTable(eachProjectId);
+			redmineDAO.deleteEntriesInSprintQuestionnaireTable(eachProjectId);
+			redmineDAO.deleteEntriesInSharedSprintsTable(eachProjectId);
+			redmineDAO.deleteEntriesInCapTable(eachProjectId);
+			redmineDAO.deleteEntriesInReQSprintTable(eachProjectId);
+			redmineDAO.deleteEntriesInIssuesTable(eachProjectId);
+			redmineDAO.deleteEntriesInSPRINTSTable(eachProjectId);
+			redmineDAO.deleteEntriesInPROJECTSTable(eachProjectId);
+		}
 		/* update projects,sprints etc */
 		int projectCutOff = Integer.parseInt(projectIdCutOff);
 		int issueCutOff = Integer.parseInt(issueIdCutOff);
-		List<Project> projects = redmineManager.getProjectManager().getProjects();
 		for (Project redmineProject : projects) {
 			if (redmineProject.getId() >= projectCutOff) {
 
@@ -1232,7 +1263,7 @@ public class Redmine {
 							if (eachIssue.getIssueEstimatedTime() != null) {
 								/*
 								 * Similar to percentage of done, we also push
-								 * estimatedtime value for each issue, to an
+								 * estimated time value for each issue, to an
 								 * array
 								 */
 								countEstimatedTimeOfIssues.add(eachIssue.getIssueEstimatedTime());
