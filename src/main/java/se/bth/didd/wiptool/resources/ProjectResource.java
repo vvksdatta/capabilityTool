@@ -358,30 +358,28 @@ public class ProjectResource {
 	@PUT
 	@Path("/updateProjectParticipants/{projectId}/{userId}")
 	public Response updateProjectParticipants(@Auth User user, List<RolesOfPeople> rolesOfPeople,
-			@PathParam("projectId") Integer projectId, @PathParam("userId") Integer userId) throws RedmineException, SQLException {
+			@PathParam("projectId") Integer projectId, @PathParam("userId") Integer userId)
+			throws RedmineException, SQLException {
 		String apiKey;
 		try {
-			 apiKey = projectDAO.getApiKeyOfUser(userId).get(0);
+			apiKey = projectDAO.getApiKeyOfUser(userId).get(0);
 		} catch (Exception e1) {
 			System.out.println(e1);
 			return Response.status(Status.BAD_REQUEST).entity(e1).build();
 		}
 		RedmineManager redmineManager = RedmineManagerFactory.createWithApiKey(redmineUrl, apiKey);
 		MembershipManager membershipManager = redmineManager.getMembershipManager();
-
 		try {
-
 			List<Membership> members = membershipManager.getMemberships(projectId);
 			for (Membership member : members) {
-
-				membershipManager.delete(member);
-
+				try {
+					membershipManager.delete(member);
+				} catch (Exception e) {
+					continue;
+				}
 			}
-
 			projectDAO.deleteAllParticipants(projectId);
-
 			for (RolesOfPeople person : rolesOfPeople) {
-
 				Collection<Role> allRoles = Arrays.asList(new Role[] { RoleFactory.create(person.getRoleId()), });
 				try {
 					membershipManager.createMembershipForUser(projectId, person.getPersonId(), allRoles);
@@ -392,8 +390,12 @@ public class ProjectResource {
 					}
 
 				} catch (Exception e) {
-					System.out.println(e);
-					e.printStackTrace();
+					// System.out.println(e);
+					// e.printStackTrace();
+					if (projectDAO.ifPersonParticipatesInProject(projectId, person.getPersonId(),
+							person.getRoleId()) == false) {
+						projectDAO.insertIntoProjectParticipation(projectId, person.getPersonId(), person.getRoleId());
+					}
 				}
 			}
 
