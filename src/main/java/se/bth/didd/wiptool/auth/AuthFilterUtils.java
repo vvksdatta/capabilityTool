@@ -38,7 +38,7 @@ public class AuthFilterUtils {
 				.setVerificationKey(new HmacKey(Secrets.JWT_SECRET_KEY)).build();
 
 		return new JwtAuthFilter.Builder<User>().setJwtConsumer(consumer).setRealm("realm").setPrefix("Bearer")
-				.setUnauthorizedHandler((s, s1) -> Response.status(Response.Status.BAD_REQUEST).build())
+				.setUnauthorizedHandler((s, s1) -> Response.status(Response.Status.UNAUTHORIZED).build())
 				.setAuthenticator(new JwtAuthenticator()).setAuthorizer(new JwtAuthoriser()).buildAuthFilter();
 	}
 }

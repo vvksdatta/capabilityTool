@@ -1,9 +1,12 @@
 (function() {
   var app = angular.module('appCtrl', ['ui.router', 'ngMessages', 'ngStorage', 'rzModule', 'ui.bootstrap', 'ngAnimate', 'data-table', 'ncy-angular-breadcrumb', 'base64', 'ngSanitize', 'dndLists', 'ngDragDrop', 'ngMaterial', 'chart.js', 'duScroll']);
-  app.service('authInterceptor', function($q) {
+  app.service('authInterceptor', function($q, alertFactory) {
     var service = this;
     service.responseError = function(response) {
       if (response.status == "401") {
+        var $string = "Access token expired! Please login again";
+        var optionalDelay = 800000;
+        alertFactory.addAuto('danger', $string, optionalDelay);
         window.location = "/#/login";
       }
       return $q.reject(response);

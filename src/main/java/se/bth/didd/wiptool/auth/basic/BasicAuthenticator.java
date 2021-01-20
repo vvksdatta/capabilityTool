@@ -24,7 +24,6 @@ public class BasicAuthenticator implements Authenticator<BasicCredentials, Princ
 			}
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
-			
 			e.printStackTrace();
 		}
 		return Optional.empty();
