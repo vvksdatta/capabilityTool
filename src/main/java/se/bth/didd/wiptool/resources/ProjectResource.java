@@ -26,11 +26,14 @@ import com.taskadapter.redmineapi.MembershipManager;
 import com.taskadapter.redmineapi.RedmineException;
 import com.taskadapter.redmineapi.RedmineManager;
 import com.taskadapter.redmineapi.RedmineManagerFactory;
+import com.taskadapter.redmineapi.TimeEntryManager;
 import com.taskadapter.redmineapi.bean.Membership;
 import com.taskadapter.redmineapi.bean.Project;
 import com.taskadapter.redmineapi.bean.ProjectFactory;
 import com.taskadapter.redmineapi.bean.Role;
 import com.taskadapter.redmineapi.bean.RoleFactory;
+import com.taskadapter.redmineapi.bean.TimeEntry;
+
 import io.dropwizard.auth.Auth;
 import se.bth.didd.wiptool.api.Projects;
 import se.bth.didd.wiptool.api.ProjectsList;
@@ -43,6 +46,7 @@ import se.bth.didd.wiptool.api.ErrorMessage;
 import se.bth.didd.wiptool.api.NewProject;
 import se.bth.didd.wiptool.api.NumberOfRolesInProject;
 import se.bth.didd.wiptool.api.ProjectIdName;
+import se.bth.didd.wiptool.api.ProjectIdProjectNameIssueId;
 import se.bth.didd.wiptool.api.ProjectParticipants;
 import se.bth.didd.wiptool.api.ProjectSummary;
 import se.bth.didd.wiptool.db.ProjectDAO;
@@ -232,6 +236,38 @@ public class ProjectResource {
 		}
 
 		return Response.ok(listOfProjects).build();
+	}
+	
+	@GET
+	@Path("getDetailsOfProjectsWithTimeLogs/{userId}")
+	public Response getDeatilsOfProjectsWithTimeLogs(@Auth User user, @PathParam("userId") int userId) {
+		String apiKey;
+		try {
+			 apiKey = projectDAO.getApiKeyOfUser(userId).get(0);
+		} catch (Exception e1) {
+			System.out.println(e1);
+			return Response.status(Status.BAD_REQUEST).entity(e1).build();
+		}
+		RedmineManager redmineManager = RedmineManagerFactory.createWithApiKey(redmineUrl, apiKey);
+		TimeEntryManager timeEntryManager = redmineManager.getTimeEntryManager();
+		Calendar cal = Calendar.getInstance();
+		cal.add(Calendar.YEAR, -2); // to get previous 2 years 
+		java.util.Date dateTwoYearsBack = cal.getTime();
+		try {
+			List<TimeEntry> allTimeEntryDetails = timeEntryManager.getTimeEntries();
+			ArrayList<ProjectIdProjectNameIssueId> listOfIssues = new ArrayList<ProjectIdProjectNameIssueId>();
+		for(TimeEntry eachTimeEntry : allTimeEntryDetails) {
+			if(eachTimeEntry.getUpdatedOn().after(dateTwoYearsBack)) {
+				ProjectIdProjectNameIssueId eachIssueDetail = new ProjectIdProjectNameIssueId( eachTimeEntry.getProjectId(),eachTimeEntry.getProjectName(), eachTimeEntry.getIssueId());
+				listOfIssues.add(eachIssueDetail);
+			}
+		}
+		return Response.ok(listOfIssues).build();
+		
+		} catch (RedmineException e1) {
+			System.out.println(e1);
+			return Response.status(Status.BAD_REQUEST).entity(e1).build();
+		}
 	}
 
 	@GET
