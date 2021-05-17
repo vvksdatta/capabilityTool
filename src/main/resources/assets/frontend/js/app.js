@@ -2514,7 +2514,7 @@
         alert("Invalid data");
         return;
       }
-      var fileName = "ActiveProjects_";
+      var fileName = "ProjectTimeReports_";
       //this will remove the blank-spaces from the title and replace it with an underscore
       fileName += ReportTitle.replace(/ /g, "_");
       var uri = 'data:text/csv;charset=utf-8,' + escape(CSV);
@@ -2546,8 +2546,19 @@
           $scope.projectDetails = response.data;
         }).then(function() {
           if ($scope.projectDetails.length != 0) {
-            var listOfProjects = JSON.stringify($scope.projectDetails);
-            var current = new Date();
+            var projectDetailsList = [];
+            const dateOptions = {month: 'long', day: 'numeric', year: 'numeric' };
+            angular.forEach($scope.projectDetails, function(value, key) {
+               var projectDetails = {};
+                projectDetails.projectId = value.projectId;
+                projectDetails.projectName = value.projectName;
+                projectDetails.issueId = value.issueId;
+                projectDetails.hours = value.hours;
+                var spentOn = new Date(value.spentOn);
+                projectDetails.spentOn = spentOn.toLocaleDateString(dateOptions);
+                projectDetailsList.push(projectDetails);
+            });
+            var listOfProjects = JSON.stringify(projectDetailsList);
             JSONToCSVConvertor(listOfProjects, "_" + getDateString(), true);
           }
         })
@@ -2573,7 +2584,6 @@
               }
             });
           }
-
           function existsInArray(arr, item) {
             for (var i = 0; i < arr.length; i++)
               if (arr[i].projectId === item.projectId) return true;

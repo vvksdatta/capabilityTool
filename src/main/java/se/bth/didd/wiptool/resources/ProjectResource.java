@@ -258,8 +258,16 @@ public class ProjectResource {
 			ArrayList<ProjectIdProjectNameIssueId> listOfIssues = new ArrayList<ProjectIdProjectNameIssueId>();
 		for(TimeEntry eachTimeEntry : allTimeEntryDetails) {
 			if(eachTimeEntry.getUpdatedOn().after(dateTwoYearsBack)) {
-				ProjectIdProjectNameIssueId eachIssueDetail = new ProjectIdProjectNameIssueId( eachTimeEntry.getProjectId(),eachTimeEntry.getProjectName(), eachTimeEntry.getIssueId());
-				listOfIssues.add(eachIssueDetail);
+				if(eachTimeEntry.getProjectId() != null && eachTimeEntry.getProjectName() != null && eachTimeEntry.getIssueId() != null){
+					ProjectIdProjectNameIssueId eachIssueDetail = new ProjectIdProjectNameIssueId( eachTimeEntry.getProjectId(),eachTimeEntry.getProjectName(), eachTimeEntry.getIssueId(), eachTimeEntry.getHours(), eachTimeEntry.getSpentOn());
+					listOfIssues.add(eachIssueDetail);
+				}
+				else {
+					//This will be the case where the time reporting was done at project level (instead of issue level). So, the issueId field will be indicated as 0
+					ProjectIdProjectNameIssueId eachIssueDetail = new ProjectIdProjectNameIssueId( eachTimeEntry.getProjectId(),eachTimeEntry.getProjectName(), 0, eachTimeEntry.getHours(), eachTimeEntry.getSpentOn());
+					listOfIssues.add(eachIssueDetail);
+				}
+				
 			}
 		}
 		return Response.ok(listOfIssues).build();

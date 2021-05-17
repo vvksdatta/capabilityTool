@@ -1,5 +1,7 @@
 package se.bth.didd.wiptool.api;
 
+import java.util.Date;
+
 import javax.validation.constraints.NotNull;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -17,12 +19,22 @@ public class ProjectIdProjectNameIssueId {
 	@JsonProperty
 	@NotNull
 	public int issueId;
-
-	public ProjectIdProjectNameIssueId(int projectId, String projectName, int issueId) {
+	
+	@JsonProperty
+	@NotNull
+	public double hours;
+	
+	@JsonProperty
+	@NotNull
+	public Date spentOn;
+	
+	public ProjectIdProjectNameIssueId(int projectId, String projectName, int issueId, double hours, Date spentOn) {
 		super();
 		this.projectId = projectId;
 		this.projectName = projectName;
 		this.issueId = issueId;
+		this.hours = hours;
+		this.spentOn = spentOn;
 	}
 
 	public int getProjectId() {
@@ -48,5 +60,22 @@ public class ProjectIdProjectNameIssueId {
 	public void setIssueId(int issueId) {
 		this.issueId = issueId;
 	}
+
+	public double getHours() {
+		return hours;
+	}
+
+	public void setHours(double hours) {
+		this.hours = hours;
+	}
+
+	public Date getSpentOn() {
+		return spentOn;
+	}
+
+	public void setSpentOn(Date spentOn) {
+		this.spentOn = spentOn;
+	}
+	
 	
 }
