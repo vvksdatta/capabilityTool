@@ -39,6 +39,7 @@ import se.bth.didd.wiptool.api.IssueCategoryIdName;
 import se.bth.didd.wiptool.api.IssueTemplate;
 import se.bth.didd.wiptool.api.IssueUpdateTemplate;
 import se.bth.didd.wiptool.api.IssuesTemplateForRedmineAPI;
+import se.bth.didd.wiptool.api.ProjectId;
 import se.bth.didd.wiptool.api.ProjectIdName;
 import se.bth.didd.wiptool.api.ProjectLeaderId;
 import se.bth.didd.wiptool.api.Projects;
@@ -538,6 +539,7 @@ public class Redmine {
 								 * list of sprints. If false, add as a new
 								 * sprint
 								 */
+							
 								if (redmineDAO.ifSprintExists(sprint.getProjectId(), sprint.getId()) != true) {
 									Sprint newSprint = new Sprint();
 									newSprint.setProjectId(sprint.getProjectId());
@@ -553,7 +555,6 @@ public class Redmine {
 									// details to
 									// database");
 								}
-
 								if (redmineDAO.IfsprintAssociationExists(sprint.getProjectId(), sprint.getId(),
 										redmineProject.getId()) != true) {
 									SharedSprint sharedSprint = new SharedSprint();
@@ -719,6 +720,7 @@ public class Redmine {
 						 * fetch all the issues using custom params and add to
 						 * the list of issues
 						 */
+						
 						List<IssuesTemplateForRedmineAPI> listOfIssues = new ArrayList<IssuesTemplateForRedmineAPI>();
 						if (redmineLastUpdatedTime.size() != 0) {
 							String redmineLastUpdatedTimeStamp = formatDate
@@ -789,9 +791,9 @@ public class Redmine {
 						}
 
 						for (IssuesTemplateForRedmineAPI issue : listOfIssues) {
-
+							
 							if (issue.getId() >= issueCutOff) {
-
+								
 								if (redmineDAO.ifIssueExistsInProject(issue.getProject().getId(),
 										issue.getId()) == true) {
 									/*
@@ -849,7 +851,7 @@ public class Redmine {
 
 									// if issue already allocated to another
 									// sprint..delete it
-
+									
 									List<SprintComprisingIssues> sprintDetails = redmineDAO
 											.getSprintAssociatedWithIssue(issue.getId());
 									for (SprintComprisingIssues eachIssue : sprintDetails) {
@@ -875,7 +877,7 @@ public class Redmine {
 									}
 									/* update the issue with latest details */
 									redmineDAO.updateIssuesModifications(updateIssue);
-
+									
 									if (issue.getFixed_version() != null) {
 										se.bth.didd.wiptool.api.Status issueTargetVersion = issue.getFixed_version();
 										if (redmineDAO.ifSprintExists(issue.getProject().getId(),
@@ -908,6 +910,36 @@ public class Redmine {
 												}
 											}
 										}
+										/*Here there is no entry in the sprintcomprisingissues table for given projectID and 
+										 * sprintID. So, we check whether issues are associated to a sprint which is associated
+										 *  with the project's subproject.  */
+										
+										
+										else {
+											List<Integer> projectIdentifier= redmineDAO.geProjectIdFromSprintId(issueTargetVersion.getId());
+											if(redmineDAO.IfsprintAssociationExists(projectIdentifier.get(0), issueTargetVersion.getId(),
+												redmineProject.getId()) == true) {
+												updateIssue.setProjectId(projectIdentifier.get(0));
+												redmineDAO.insertIntoIssuesTable(updateIssue);
+												redmineDAO.InsertIntoSprintComprisingIssuesTable(projectIdentifier.get(0), issueTargetVersion.getId(), issue.getId());
+												
+												if (issue.getAssigned_to() != null) {
+													if (redmineDAO.ifPersonParticipatesInSprint(projectIdentifier.get(0),
+															issueTargetVersion.getId(),
+															issue.getAssigned_to().getId()) != true) {
+
+														redmineDAO.InsertIntoSprintParticipationTable(
+																projectIdentifier.get(0), issueTargetVersion.getId(),
+																issue.getAssigned_to().getId());
+														
+													}
+													else {
+														redmineDAO.updateIdentifiersInSprintparticipation(projectIdentifier.get(0), issueTargetVersion.getId(), issue.getAssigned_to().getId(), generatedRandomString, generatedRandomString, generatedRandomString);
+													}
+												}
+												
+										}
+									}
 									}
 
 									else {
@@ -958,6 +990,7 @@ public class Redmine {
 									 * association with project (projectId)
 									 * hasn't been updated yet
 									 */
+									
 									IssueTemplate newIssue = new IssueTemplate();
 									newIssue.setProjectId(issue.getProject().getId());
 									newIssue.setIssueId(issue.getId());

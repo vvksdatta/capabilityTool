@@ -298,6 +298,9 @@ public interface RedmineDAO {
 
 	@SqlQuery("select projectId, projectName from PROJECTS")
 	List<ProjectIdName> getListOfProjects();
+	
+	@SqlQuery("select projectId from SPRINTS where sprintId = :sprintId")
+	List<Integer> geProjectIdFromSprintId(@Bind("sprintId") int sprintId);
 
 	@SqlQuery("select projectLeader from PROJECTS where projectId = :projectId")
 	List<ProjectLeaderId> getProjectLeader(@Bind("projectId") int projectId);

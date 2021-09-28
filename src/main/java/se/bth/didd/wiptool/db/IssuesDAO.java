@@ -21,7 +21,7 @@ public interface IssuesDAO {
 			+ ":issueLastUpdate, 'new', 'new')")
 	void insertIntoIssuesTable(@BindBean IssueTemplate issue);
 
-	@SqlQuery("select * from ISSUES RIGHT JOIN (select issueId from sprintcomprisingissues where sprintId=:sprintId and projectid =:projectId) AS TableA ON TableA.issueId = ISSUES.issueId where"
+	@SqlQuery("select * from ISSUES RIGHT JOIN (select issueId, projectid from sprintcomprisingissues where sprintId=:sprintId and projectid =:projectId) AS TableA ON TableA.issueId = ISSUES.issueId and TableA.projectId = ISSUES.projectId where"
 			+ " ISSUES.issueCategory !='null'")
 	List<IssueTemplate> getSpecialIssuesInSprint(@Bind("sprintId") int sprintId, @Bind("projectId") int projectId);
 

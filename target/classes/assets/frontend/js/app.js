@@ -2514,7 +2514,7 @@
         alert("Invalid data");
         return;
       }
-      var fileName = "ActiveProjects_";
+      var fileName = "ProjectTimeReports_";
       //this will remove the blank-spaces from the title and replace it with an underscore
       fileName += ReportTitle.replace(/ /g, "_");
       var uri = 'data:text/csv;charset=utf-8,' + escape(CSV);
@@ -2584,7 +2584,6 @@
               }
             });
           }
-
           function existsInArray(arr, item) {
             for (var i = 0; i < arr.length; i++)
               if (arr[i].projectId === item.projectId) return true;
