@@ -10,6 +10,7 @@ import se.bth.didd.wiptool.api.Projects;
 import se.bth.didd.wiptool.api.ProjectsList;
 import se.bth.didd.wiptool.api.Roles;
 import se.bth.didd.wiptool.api.RolesOfPeople;
+import se.bth.didd.wiptool.api.CapabilitiesOfProject;
 import se.bth.didd.wiptool.api.ProjectIdName;
 import se.bth.didd.wiptool.api.ProjectParticipants;
 import se.bth.didd.wiptool.api.ProjectSummary;
@@ -48,6 +49,9 @@ public interface ProjectDAO {
 
 	@SqlQuery("select TableA.roleId, rolesDB.roleName from rolesDB RIGHT JOIN (select DISTINCT roleId from projectparticipation where projectId =:projectId) AS TableA ON TableA.roleId = rolesDB.roleId")
 	List<Roles> getDistinctRolesInProject(@Bind("projectId") int projectId);
+
+	@SqlQuery("select assessmentOfCapabilities.projectId, assessmentOfCapabilities.personId, TableA.capabilityName, assessmentOfCapabilities.proficiency, assessmentOfCapabilities.updatedBy, assessmentOfCapabilities.lastUpdate from assessmentOfCapabilities right join (select capabilityId, capabilityName from capabilityDb)AS TableA ON TableA.capabilityId = assessmentOfCapabilities.capabilityId where assessmentOfCapabilities.projectId = :projectId")
+	List<CapabilitiesOfProject> getCapabilitiesofProject(@Bind("projectId") int projectId);
 
 	@SqlUpdate("update PROJECTS set parentProjectId = :parentProjectId, projectName = :projectName, projectDescription = :projectDescription,"
 			+ " projectEndDate = :projectEndDate, projectStartDate = :projectStartDate, projectLeader = :projectLeader, "

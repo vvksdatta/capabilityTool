@@ -44,6 +44,7 @@ import se.bth.didd.wiptool.api.RolesOfPeople;
 import se.bth.didd.wiptool.api.SuccessMessage;
 import se.bth.didd.wiptool.auth.jwt.User;
 import se.bth.didd.wiptool.auth.jwt.UserRoles;
+import se.bth.didd.wiptool.api.CapabilitiesOfProject;
 import se.bth.didd.wiptool.api.ErrorMessage;
 import se.bth.didd.wiptool.api.NewProject;
 import se.bth.didd.wiptool.api.NumberOfRolesInProject;
@@ -242,6 +243,18 @@ public class ProjectResource {
 	}
 	
 	@GET
+	@Path("getCapabilitiesOfProject/{projectId}") 
+	public Response getCapabilitiesOfProject(@Auth User user, @PathParam("projectId") int projectId) {
+		try {
+			List<CapabilitiesOfProject> capabilityDetails = projectDAO.getCapabilitiesofProject(projectId);
+			return Response.ok(capabilityDetails).build();
+		} catch (Exception e1) {
+			System.out.println(e1);
+			return Response.status(Status.BAD_REQUEST).entity(e1).build();
+		}
+	}
+
+	@GET
 	@Path("getDetailsOfProjectsWithTimeLogs/{userId}")
 	public Response getDeatilsOfProjectsWithTimeLogs(@Auth User user, @PathParam("userId") int userId) {
 		String apiKey;
@@ -427,6 +440,7 @@ public class ProjectResource {
 		return Response.ok().entity(createNewProject).build();
 	}
 
+	
 	@RolesAllowed({ UserRoles.ROLE_ONE })
 	@PUT
 	@Path("/setProjectParticipants/{projectId}/{userId}")

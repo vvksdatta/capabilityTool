@@ -10100,6 +10100,81 @@
           $scope.editform.projectLeader.$error.selection = true;
         }
       };
+          function JSONToCSVConvertor(JSONData, ReportTitle, ShowLabel) {
+            var arrData = typeof JSONData != 'object' ? JSON.parse(JSONData) : JSONData;
+            var CSV = 'sep=,' + '\r\n';
+            if (ShowLabel) {
+              var row = "";
+              for (var index in arrData[0]) {
+                row += index + ',';
+              }
+              row = row.slice(0, -1);
+              CSV += row + '\r\n';
+            }
+            for (var i = 0; i < arrData.length; i++) {
+              var row = "";
+              for (var index in arrData[i]) {
+                row += '"' + arrData[i][index] + '",';
+              }
+              row.slice(0, row.length - 1);
+              CSV += row + '\r\n';
+            }
+
+            if (CSV == '') {
+              alert("Invalid data");
+              return;
+            }
+            var fileName = "ProjectTimeReports_";
+            //this will remove the blank-spaces from the title and replace it with an underscore
+            fileName += ReportTitle.replace(/ /g, "_");
+            var uri = 'data:text/csv;charset=utf-8,' + escape(CSV);
+            var link = document.createElement("a");
+            link.href = uri;
+            link.style = "visibility:hidden";
+            link.download = fileName + ".csv";
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+          }
+
+          function getDateString() {
+            const date = new Date();
+            const year = date.getFullYear();
+            const month = `${date.getMonth() + 1}`.padStart(2, '0');
+            const day = `${date.getDate()}`.padStart(2, '0');
+            return `${year}${month}${day}`
+          }
+          $scope.downloadCapabilities = function(project) {
+            $scope.loading = true;
+            $http.get('/api/projects/getCapabilitiesOfProject/'+project.projectId).then(function(response) {
+                $scope.capabilityDetails = response.data;
+              }).then(function() {
+                $scope.loading = false;
+                if ($scope.capabilityDetails.length != 0) {
+                  var capabilityDetailsList = [];
+                  const dateOptions = {month: 'long', day: 'numeric', year: 'numeric' };
+                  angular.forEach($scope.projectDetails, function(value, key) {
+                     var capabilityDetails = {};
+                      capabilityDetails.projectId = value.projectId;
+                      capabilityDetails.personId = value.personId;
+                      capabilityDetails.capabilityName = value.capabilityName;
+                      capabilityDetails.proficiency = value.proficiency;
+                      capabilityDetails.updatedBy = value.updatedBy;
+                      var spentOn = new Date(value.lastUpdate);
+                      capabilityDetails.lastUpdate = spentOn.toLocaleDateString(dateOptions);
+                      capabilityDetailsList.push(capabilityDetails);
+                  });
+                  var listOfProjects = JSON.stringify(capabilityDetailsList);
+                  JSONToCSVConvertor(CapabilitiesOfProject, "_" + project.projectName+ "_"+ getDateString(), true);
+                }
+              })
+              .catch(function(response, status) {
+                var optionalDelay = 800000;
+                var $string = "Error in downloading capabilities of project";
+                alertFactory.addAuto('danger', $string, optionalDelay);
+              })
+          }
+
       $scope.editProjectParticipants = function() {
         $state.go('management.projects.editProjectParticipants', currentProject);
       };
