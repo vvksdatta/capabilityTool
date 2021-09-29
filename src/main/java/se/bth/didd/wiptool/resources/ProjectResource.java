@@ -22,11 +22,13 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 import com.github.rkmk.container.FoldingList;
+import com.taskadapter.redmineapi.Include;
 import com.taskadapter.redmineapi.MembershipManager;
 import com.taskadapter.redmineapi.RedmineException;
 import com.taskadapter.redmineapi.RedmineManager;
 import com.taskadapter.redmineapi.RedmineManagerFactory;
 import com.taskadapter.redmineapi.TimeEntryManager;
+import com.taskadapter.redmineapi.bean.Issue;
 import com.taskadapter.redmineapi.bean.Membership;
 import com.taskadapter.redmineapi.bean.Project;
 import com.taskadapter.redmineapi.bean.ProjectFactory;
@@ -45,6 +47,7 @@ import se.bth.didd.wiptool.auth.jwt.UserRoles;
 import se.bth.didd.wiptool.api.ErrorMessage;
 import se.bth.didd.wiptool.api.NewProject;
 import se.bth.didd.wiptool.api.NumberOfRolesInProject;
+import se.bth.didd.wiptool.api.PersonIdEstimatedHours;
 import se.bth.didd.wiptool.api.ProjectIdName;
 import se.bth.didd.wiptool.api.ProjectIdProjectNameIssueId;
 import se.bth.didd.wiptool.api.ProjectParticipants;
@@ -243,7 +246,7 @@ public class ProjectResource {
 	public Response getDeatilsOfProjectsWithTimeLogs(@Auth User user, @PathParam("userId") int userId) {
 		String apiKey;
 		try {
-			 apiKey = projectDAO.getApiKeyOfUser(userId).get(0);
+			apiKey = projectDAO.getApiKeyOfUser(userId).get(0);
 		} catch (Exception e1) {
 			System.out.println(e1);
 			return Response.status(Status.BAD_REQUEST).entity(e1).build();
@@ -251,27 +254,92 @@ public class ProjectResource {
 		RedmineManager redmineManager = RedmineManagerFactory.createWithApiKey(redmineUrl, apiKey);
 		TimeEntryManager timeEntryManager = redmineManager.getTimeEntryManager();
 		Calendar cal = Calendar.getInstance();
-		cal.add(Calendar.YEAR, -2); // to get previous 2 years 
+		cal.add(Calendar.YEAR, -2); // to get previous 2 years
 		java.util.Date dateTwoYearsBack = cal.getTime();
 		try {
 			List<TimeEntry> allTimeEntryDetails = timeEntryManager.getTimeEntries();
 			ArrayList<ProjectIdProjectNameIssueId> listOfIssues = new ArrayList<ProjectIdProjectNameIssueId>();
-		for(TimeEntry eachTimeEntry : allTimeEntryDetails) {
-			if(eachTimeEntry.getUpdatedOn().after(dateTwoYearsBack)) {
-				if(eachTimeEntry.getProjectId() != null && eachTimeEntry.getProjectName() != null && eachTimeEntry.getIssueId() != null){
-					ProjectIdProjectNameIssueId eachIssueDetail = new ProjectIdProjectNameIssueId( eachTimeEntry.getProjectId(),eachTimeEntry.getProjectName(), eachTimeEntry.getIssueId(), eachTimeEntry.getHours(), eachTimeEntry.getSpentOn());
-					listOfIssues.add(eachIssueDetail);
+			Map<Integer, PersonIdEstimatedHours> uniqueIssueIds = new HashMap<Integer, PersonIdEstimatedHours>();
+
+			for (TimeEntry eachTimeEntry : allTimeEntryDetails) {
+				if (eachTimeEntry.getIssueId() != null) {
+					uniqueIssueIds.putIfAbsent(eachTimeEntry.getIssueId(), null);
 				}
-				else {
-					//This will be the case where the time reporting was done at project level (instead of issue level). So, the issueId field will be indicated as 0
-					ProjectIdProjectNameIssueId eachIssueDetail = new ProjectIdProjectNameIssueId( eachTimeEntry.getProjectId(),eachTimeEntry.getProjectName(), 0, eachTimeEntry.getHours(), eachTimeEntry.getSpentOn());
-					listOfIssues.add(eachIssueDetail);
-				}
-				
 			}
-		}
-		return Response.ok(listOfIssues).build();
-		
+
+			for (Integer issueId : uniqueIssueIds.keySet()) {
+
+				Issue issue = redmineManager.getIssueManager().getIssueById(issueId, Include.relations);
+				if (issue.getAssigneeId() != null && issue.getEstimatedHours() != null) {
+
+					PersonIdEstimatedHours personIdEstimatedHours = new PersonIdEstimatedHours(issue.getAssigneeId(),
+							issue.getEstimatedHours());
+					uniqueIssueIds.putIfAbsent(issueId, personIdEstimatedHours);
+
+				} else if (issue.getAssigneeId() == null && issue.getEstimatedHours() != null) {
+					PersonIdEstimatedHours personIdEstimatedHours = new PersonIdEstimatedHours(0,
+							issue.getEstimatedHours());
+					uniqueIssueIds.putIfAbsent(issueId, personIdEstimatedHours);
+				} else if (issue.getAssigneeId() != null && issue.getEstimatedHours() == null) {
+					PersonIdEstimatedHours personIdEstimatedHours = new PersonIdEstimatedHours(issue.getAssigneeId(),
+							0.0);
+					uniqueIssueIds.putIfAbsent(issueId, personIdEstimatedHours);
+				} else if (issue.getAssigneeId() == null && issue.getEstimatedHours() == null) {
+					PersonIdEstimatedHours personIdEstimatedHours = new PersonIdEstimatedHours(0, 0.0);
+					uniqueIssueIds.putIfAbsent(issueId, personIdEstimatedHours);
+				}
+			}
+			for (TimeEntry eachTimeEntry : allTimeEntryDetails) {
+				if (eachTimeEntry.getUpdatedOn().after(dateTwoYearsBack)) {
+					if (eachTimeEntry.getProjectId() != null && eachTimeEntry.getProjectName() != null
+							&& eachTimeEntry.getIssueId() != null) {
+						if (uniqueIssueIds.get(eachTimeEntry.getIssueId()).getPersonId() != 0
+								&& uniqueIssueIds.get(eachTimeEntry.getIssueId()).getEstimatedHours() != 0.0) {
+							ProjectIdProjectNameIssueId eachIssueDetail = new ProjectIdProjectNameIssueId(
+									eachTimeEntry.getProjectId(), eachTimeEntry.getProjectName(),
+									eachTimeEntry.getIssueId(),
+									uniqueIssueIds.get(eachTimeEntry.getIssueId()).getPersonId(),
+									uniqueIssueIds.get(eachTimeEntry.getIssueId()).getEstimatedHours(),
+									eachTimeEntry.getHours(), eachTimeEntry.getSpentOn());
+							listOfIssues.add(eachIssueDetail);
+						} else if (uniqueIssueIds.get(eachTimeEntry.getIssueId()).getPersonId() == 0
+								&& uniqueIssueIds.get(eachTimeEntry.getIssueId()).getEstimatedHours() != 0.0) {
+							ProjectIdProjectNameIssueId eachIssueDetail = new ProjectIdProjectNameIssueId(
+									eachTimeEntry.getProjectId(), eachTimeEntry.getProjectName(),
+									eachTimeEntry.getIssueId(), 0,
+									uniqueIssueIds.get(eachTimeEntry.getIssueId()).getEstimatedHours(),
+									eachTimeEntry.getHours(), eachTimeEntry.getSpentOn());
+							listOfIssues.add(eachIssueDetail);
+						} else if (uniqueIssueIds.get(eachTimeEntry.getIssueId()).getPersonId() != 0
+								&& uniqueIssueIds.get(eachTimeEntry.getIssueId()).getEstimatedHours() == 0.0) {
+							ProjectIdProjectNameIssueId eachIssueDetail = new ProjectIdProjectNameIssueId(
+									eachTimeEntry.getProjectId(), eachTimeEntry.getProjectName(),
+									eachTimeEntry.getIssueId(),
+									uniqueIssueIds.get(eachTimeEntry.getIssueId()).getPersonId(), 0,
+									eachTimeEntry.getHours(), eachTimeEntry.getSpentOn());
+							listOfIssues.add(eachIssueDetail);
+						} else if (uniqueIssueIds.get(eachTimeEntry.getIssueId()).getPersonId() == 0
+								&& uniqueIssueIds.get(eachTimeEntry.getIssueId()).getEstimatedHours() == 0.0) {
+							ProjectIdProjectNameIssueId eachIssueDetail = new ProjectIdProjectNameIssueId(
+									eachTimeEntry.getProjectId(), eachTimeEntry.getProjectName(),
+									eachTimeEntry.getIssueId(), 0, 0, eachTimeEntry.getHours(),
+									eachTimeEntry.getSpentOn());
+							listOfIssues.add(eachIssueDetail);
+						}
+					} else {
+						// This will be the case where the time reporting was done at project level
+						// (instead of issue level). So, the issueId field will be indicated as 0
+						ProjectIdProjectNameIssueId eachIssueDetail = new ProjectIdProjectNameIssueId(
+								eachTimeEntry.getProjectId(), eachTimeEntry.getProjectName(), 0, 0, 0,
+								eachTimeEntry.getHours(), eachTimeEntry.getSpentOn());
+						listOfIssues.add(eachIssueDetail);
+					}
+
+				}
+			}
+
+			return Response.ok(listOfIssues).build();
+
 		} catch (RedmineException e1) {
 			System.out.println(e1);
 			return Response.status(Status.BAD_REQUEST).entity(e1).build();

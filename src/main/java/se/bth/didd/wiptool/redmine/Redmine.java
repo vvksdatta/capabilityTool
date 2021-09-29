@@ -39,7 +39,6 @@ import se.bth.didd.wiptool.api.IssueCategoryIdName;
 import se.bth.didd.wiptool.api.IssueTemplate;
 import se.bth.didd.wiptool.api.IssueUpdateTemplate;
 import se.bth.didd.wiptool.api.IssuesTemplateForRedmineAPI;
-import se.bth.didd.wiptool.api.ProjectId;
 import se.bth.didd.wiptool.api.ProjectIdName;
 import se.bth.didd.wiptool.api.ProjectLeaderId;
 import se.bth.didd.wiptool.api.Projects;

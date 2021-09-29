@@ -2542,9 +2542,11 @@
       $state.go("management.sprints.editSprint.existingSprint", sprint);
     };
     $scope.downloadProjects = function() {
+      $scope.loading = true;
       $http.get('/api/projects/getDetailsOfProjectsWithTimeLogs/' + $localStorage.currentUser.userId).then(function(response) {
           $scope.projectDetails = response.data;
         }).then(function() {
+          $scope.loading = false;
           if ($scope.projectDetails.length != 0) {
             var projectDetailsList = [];
             const dateOptions = {month: 'long', day: 'numeric', year: 'numeric' };
@@ -2553,7 +2555,9 @@
                 projectDetails.projectId = value.projectId;
                 projectDetails.projectName = value.projectName;
                 projectDetails.issueId = value.issueId;
-                projectDetails.hours = value.hours;
+                projectDetails.personId = value.personId;
+                projectDetails.estimatedHours = value.estimatedHours;
+                projectDetails.hoursSpent = value.hoursSpent;
                 var spentOn = new Date(value.spentOn);
                 projectDetails.spentOn = spentOn.toLocaleDateString(dateOptions);
                 projectDetailsList.push(projectDetails);

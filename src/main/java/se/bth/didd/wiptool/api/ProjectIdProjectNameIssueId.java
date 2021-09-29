@@ -10,7 +10,7 @@ public class ProjectIdProjectNameIssueId {
 	
 	
 	@NotNull
-	public int projectId;
+	public Integer projectId;
 	
 	@NotNull
 	@JsonProperty
@@ -18,30 +18,29 @@ public class ProjectIdProjectNameIssueId {
 
 	@JsonProperty
 	@NotNull
-	public int issueId;
+	public Integer issueId;
 	
 	@JsonProperty
 	@NotNull
-	public double hours;
+	public Integer personId;
+	
+	@JsonProperty
+	@NotNull
+	public double estimatedHours;
+	
+	@JsonProperty
+	@NotNull
+	public double hoursSpent;
 	
 	@JsonProperty
 	@NotNull
 	public Date spentOn;
-	
-	public ProjectIdProjectNameIssueId(int projectId, String projectName, int issueId, double hours, Date spentOn) {
-		super();
-		this.projectId = projectId;
-		this.projectName = projectName;
-		this.issueId = issueId;
-		this.hours = hours;
-		this.spentOn = spentOn;
-	}
 
-	public int getProjectId() {
+	public Integer getProjectId() {
 		return projectId;
 	}
 
-	public void setProjectId(int projectId) {
+	public void setProjectId(Integer projectId) {
 		this.projectId = projectId;
 	}
 
@@ -53,20 +52,36 @@ public class ProjectIdProjectNameIssueId {
 		this.projectName = projectName;
 	}
 
-	public int getIssueId() {
+	public Integer getIssueId() {
 		return issueId;
 	}
 
-	public void setIssueId(int issueId) {
+	public void setIssueId(Integer issueId) {
 		this.issueId = issueId;
 	}
 
-	public double getHours() {
-		return hours;
+	public Integer getPersonId() {
+		return personId;
 	}
 
-	public void setHours(double hours) {
-		this.hours = hours;
+	public void setPersonId(Integer personId) {
+		this.personId = personId;
+	}
+
+	public double getEstimatedHours() {
+		return estimatedHours;
+	}
+
+	public void setEstimatedHours(double estimatedHours) {
+		this.estimatedHours = estimatedHours;
+	}
+
+	public double getHoursSpent() {
+		return hoursSpent;
+	}
+
+	public void setHoursSpent(double hoursSpent) {
+		this.hoursSpent = hoursSpent;
 	}
 
 	public Date getSpentOn() {
@@ -74,6 +89,28 @@ public class ProjectIdProjectNameIssueId {
 	}
 
 	public void setSpentOn(Date spentOn) {
+		this.spentOn = spentOn;
+	}
+
+	public ProjectIdProjectNameIssueId(Integer projectId, String projectName, Integer issueId, Integer personId,
+			double estimatedHours, double hoursSpent, Date spentOn) {
+		super();
+		this.projectId = projectId;
+		this.projectName = projectName;
+		this.issueId = issueId;
+		this.personId = personId;
+		this.estimatedHours = estimatedHours;
+		this.hoursSpent = hoursSpent;
+		this.spentOn = spentOn;
+	}
+
+	public ProjectIdProjectNameIssueId(Integer projectId, String projectName, Integer issueId, double hoursSpent,
+			Date spentOn) {
+		super();
+		this.projectId = projectId;
+		this.projectName = projectName;
+		this.issueId = issueId;
+		this.hoursSpent = hoursSpent;
 		this.spentOn = spentOn;
 	}
 	
